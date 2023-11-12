@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+	<storageModule moduleId="org.eclipse.cdt.core.settings">
+		<cconfiguration id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979" moduleId="org.eclipse.cdt.core.settings" name="Default">
+				<externalSettings/>
+				<extensions>
+					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
+					<extension id="org.eclipse.cdt.core.GASErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.MakeErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
+				</extensions>
+			</storageModule>
+			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+				<configuration artifactName="${ProjName}" buildProperties="" description="" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979" name="Default" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="org.eclipse.cdt.build.core.emptycfg">
+					<folderInfo id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775" name="/" resourcePath="">
+						<toolChain id="com.telink.tc32eclipse.toolchain.TC32Win.base.1233489413" name="TC32-GCC Toolchain" superClass="com.telink.tc32eclipse.toolchain.TC32Win.base">
+							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash.1853442872" name="Generate binary file for Flash memory" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash"/>
+							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.objdump.1675910784" name="Generate Extended Listing (Source + generated Assembler)" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.objdump"/>
+							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.size.2125403575" name="Print Size" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.size"/>
+							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="com.telink.tc32eclipse.targetplatform.TC32.947266539" name="TC32 Cross-Target" osList="all" superClass="com.telink.tc32eclipse.targetplatform.TC32"/>
+							<builder id="com.telink.tc32eclipse.target.builder.TC32Win.base.164976323" keepEnvironmentInBuildfile="false" managedBuildOn="false" name="GNU Make Builder" parallelBuildOn="true" parallelizationNumber="optimal" superClass="com.telink.tc32eclipse.target.builder.TC32Win.base"/>
+							<tool id="com.telink.tc32eclipse.tool.assembler.TC32Win.base.620942320" name="TC32 CC/Assembler" superClass="com.telink.tc32eclipse.tool.assembler.TC32Win.base">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.telink.tc32eclipse.asm.option.include.paths.96219339" name="#include paths for preprocessor(-I)" superClass="com.telink.tc32eclipse.asm.option.include.paths" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/z03mmc/SDK/platform/chip_8258}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/includes}&quot;"/>
+								</option>
+								<inputType id="com.telink.tc32eclipse.tool.assembler.input.497173766" superClass="com.telink.tc32eclipse.tool.assembler.input"/>
+							</tool>
+							<tool id="com.telink.tc32eclipse.tool.compiler.TC32Win.base.1839982702" name="TC32 Compiler" superClass="com.telink.tc32eclipse.tool.compiler.TC32Win.base">
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.telink.tc32eclipse.compiler.option.incpath.358755447" name="Include Paths (-I)" superClass="com.telink.tc32eclipse.compiler.option.incpath" useByScannerDiscovery="false" valueType="includePath">
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/includes}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/common}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/custom_zcl}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/platform}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/proj}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/af}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/include}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/bdb/includes}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/common/includes}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/ota}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/zbapi}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/zbhci}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/zcl}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/zigbee/zdo}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/SDK/platform/chip_8258}&quot;"/>
+								</option>
+								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="com.telink.tc32eclipse.compiler.option.def.465038847" name="Define Syms (-D)" superClass="com.telink.tc32eclipse.compiler.option.def" useByScannerDiscovery="false" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="MCU_CORE_8258=1"/>
+									<listOptionValue builtIn="false" value="END_DEVICE=1"/>
+									<listOptionValue builtIn="false" value="MCU_STARTUP_8258=1"/>
+								</option>
+								<inputType id="com.telink.tc32eclipse.compiler.TC32Win.input.1226291045" name="C Source Files" superClass="com.telink.tc32eclipse.compiler.TC32Win.input"/>
+							</tool>
+							<tool id="com.telink.tc32eclipse.tool.linker.TC32Win.base.460686542" name="TC32 C Linker" superClass="com.telink.tc32eclipse.tool.linker.TC32Win.base"/>
+							<tool id="com.telink.tc32eclipse.tool.archiver.TC32Win.base.610844007" name="TC32 Archiver" superClass="com.telink.tc32eclipse.tool.archiver.TC32Win.base"/>
+						</toolChain>
+					</folderInfo>
+				</configuration>
+			</storageModule>
+			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule moduleId="ilg.gnuarmeclipse.managedbuild.packs"/>
+		</cconfiguration>
+	</storageModule>
+	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
+		<project id="z03mmc.null.436213536" name="z03mmc"/>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
+	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Default">
+			<resource resourceType="PROJECT" workspacePath="/z03mmc"/>
+		</configuration>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775;com.telink.tc32eclipse.tool.compiler.TC32Win.base.1839982702;com.telink.tc32eclipse.compiler.TC32Win.input.1226291045">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+	<storageModule moduleId="org.eclipse.cdt.core.language.mapping">
+		<project-mappings>
+			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cHeader" language="org.eclipse.cdt.core.gcc"/>
+		</project-mappings>
+	</storageModule>
+	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+		<buildTargets>
+			<target name="all" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>all</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="install" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>install</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="clean" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>clean</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="flash" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>flash</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="reset" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>reset</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="test_damp" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>test_damp</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="info" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>info</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="erase" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>erase</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+			<target name="flash_ble" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+				<buildCommand>make</buildCommand>
+				<buildArguments>-j24</buildArguments>
+				<buildTarget>flash_ble</buildTarget>
+				<stopOnError>true</stopOnError>
+				<useDefaultCommand>true</useDefaultCommand>
+				<runAllBuilders>true</runAllBuilders>
+			</target>
+		</buildTargets>
+	</storageModule>
+</cproject>
