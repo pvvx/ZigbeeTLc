@@ -76,6 +76,7 @@ extern "C" {
 
 
 // I2C
+#define USE_SENSOR_ID		1
 #define I2C_CLOCK			100000 // Hz
 
 #define I2C_SCL 	GPIO_PC2
