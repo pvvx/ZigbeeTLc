@@ -21,7 +21,6 @@ Firmware readiness level - Beta versions 0.1.0.3. Additional tests are required.
 7. Press Start Flashing. Wait for the firmware to finish.
 8. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 3 seconds.
 
-A brief description of the installed Zigbee firmware version is in this [repository](https://github.com/pvvx/z03mmc).
 In the future, you can update [Zigbee LYWSD03MMC firmware to the version from devbis] (https://github.com/devbis/z03mmc).
 
 ---
