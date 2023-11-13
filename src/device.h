@@ -20,7 +20,7 @@ typedef struct{
 typedef struct{
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerKeyEvt;
-	u32 bindTime;
+///	u32 bindTime;
 	u32 keyPressedTime;
 	u32 readSensorTime; // read sensor timer
 
@@ -177,5 +177,17 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status);
 nv_sts_t zcl_thermostatDisplayMode_save(void);
 nv_sts_t zcl_thermostatDisplayMode_restore(void);
 
+void scan_task(void);
+s32 scan_task_timer(void *arg);
+extern ev_timer_event_t *deviceAppTimerEvt;
+
+
+#if 1
+#define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1MS);
+#define pm_wait_us(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1US);
+#else
+#define pm_wait_ms(t) sleep_us((t)*1000);
+#define pm_wait_us(t) sleep_us(t);
+#endif
 
 #endif /* _DEVICE_H_ */

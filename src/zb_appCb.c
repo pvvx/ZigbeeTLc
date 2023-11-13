@@ -82,13 +82,17 @@ ev_timer_event_t *deviceRejoinBackoffTimerEvt = NULL;
  * FUNCTIONS
  */
 s32 sensorDevice_bdbNetworkSteerStart(void *arg){
+
 	bdb_networkSteerStart();
 
 	steerTimerEvt = NULL;
 	return -1;
 }
+
 #if REJOIN_FAILURE_TIMER
+
 s32 sensorDevice_rejoinBackoff(void *arg){
+
 	if(zb_isDeviceFactoryNew()){
 		deviceRejoinBackoffTimerEvt = NULL;
 		return -1;
@@ -97,6 +101,7 @@ s32 sensorDevice_rejoinBackoff(void *arg){
     zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
     return 0;
 }
+
 #endif
 
 /*********************************************************************
@@ -139,10 +144,11 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 			if(steerTimerEvt){
 				TL_ZB_TIMER_CANCEL(&steerTimerEvt);
 			}
+			///time_soff = 0;
 			steerTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
 		}
 	}
-#if 1 // REJOIN_FAILURE_TIMER
+#if REJOIN_FAILURE_TIMER
 	else
 	{
 		if(joinedNetwork){
@@ -166,8 +172,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
-			light_blink_start(2, 200, 200);
-
+			light_blink_start(5, 300, 300);
 			zb_setPollRate(DEFAULT_POLL_RATE);
 
 			if(steerTimerEvt){
@@ -176,14 +181,20 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			if(deviceRejoinBackoffTimerEvt){
 				TL_ZB_TIMER_CANCEL(&deviceRejoinBackoffTimerEvt);
 			}
-
+			if(deviceAppTimerEvt) {
+				TL_ZB_TIMER_CANCEL(&deviceAppTimerEvt);
+			}
 #ifdef ZCL_POLL_CTRL
 		    sensorDevice_zclCheckInStart();
 #endif
 #ifdef ZCL_OTA
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
 #endif
+#if BOARD == BOARD_MHO_C401N
+			show_connected_symbol(true);
+#else
 			show_ble_symbol(false);
+#endif
 			break;
 		case BDB_COMMISSION_STA_IN_PROGRESS:
 			break;
@@ -201,8 +212,17 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 				if(steerTimerEvt){
 					TL_ZB_TIMER_CANCEL(&steerTimerEvt);
 				}
+#if REJOIN_FAILURE_TIMER
+				steerTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter + 60000);
+#else
 				steerTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
+#endif
+#if BOARD == BOARD_MHO_C401N
+				show_connected_symbol(false);
+#else
 				show_ble_symbol(true);
+#endif
+				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
 			}
 			break;
 		case BDB_COMMISSION_STA_FORMATION_FAILURE:
@@ -220,18 +240,28 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 #endif
-			app_task();
+#if BOARD == BOARD_MHO_C401N
+			show_connected_symbol(false);
+#else
+			show_ble_symbol(true);
+#endif
+			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
 			if(!zb_isDeviceFactoryNew()){
-#if 1// REJOIN_FAILURE_TIMER
+#if REJOIN_FAILURE_TIMER
                 // sleep for 3 minutes before reconnect if rejoin failed
-                deviceRejoinBackoffTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 3 * 60 * 1000);
+                deviceRejoinBackoffTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 360 * 1000);
 #else
 				zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 #endif
 			}
-			app_task();
+#if BOARD == BOARD_MHO_C401N
+			show_connected_symbol(false);
+#else
+			show_ble_symbol(true);
+#endif
+			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
 			break;
 		default:
 			break;
@@ -243,8 +273,6 @@ extern void sensorDevice_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 ide
 void zbdemo_bdbIdentifyCb(u8 endpoint, u16 srcAddr, u16 identifyTime){
 	sensorDevice_zclIdentifyCmdHandler(endpoint, srcAddr, identifyTime);
 }
-
-
 
 #ifdef ZCL_OTA
 void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)

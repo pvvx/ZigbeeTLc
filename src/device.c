@@ -92,11 +92,12 @@ bdb_commissionSetting_t g_bdbCommissionSetting = {
  */
 
 //const scomfort_t def_cmf = {
-_attribute_data_retention_ scomfort_t cmf = {
+scomfort_t cmf = {
     .t = {2100,2600}, // x0.01 C
     .h = {3000,6000}  // x0.01 %
 };
 
+ev_timer_event_t *deviceAppTimerEvt = NULL;
 
 /**********************************************************************
  * FUNCTIONS
@@ -126,7 +127,7 @@ u8 is_comfort(s16 t, u16 h) {
 	return ret;
 }
 
-void read_sensor_and_save() {
+void read_sensor_and_save(void) {
 	read_sensor();
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	if (g_zcl_thermostatUICfgAttrs.displayMode == 2) {
@@ -200,26 +201,40 @@ void user_app_init(void)
 #if ZCL_OTA_SUPPORT
     ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, &sensorDevice_otaInfo, &sensorDevice_otaCb);
 #endif
-    if(!zb_isDeviceJoinedNwk())
-    	g_sensorAppCtx.bindTime = clock_time() | 1;
     // read sensors
 	read_sensor_and_save();
 }
 
-void app_task(void)
-{
-	tack_keys();
-
+/**********************************************************************
+ * FUNCTIONS
+ */
+s32 scan_task_timer(void *arg) {
 	if(clock_time_exceed(g_sensorAppCtx.readSensorTime, READ_SENSOR_TIMER*1000)){
 		read_sensor_and_save();
 	}
+#ifdef USE_EPD
+	task_lcd();
+#endif
+    return 0;
+}
 
+/**********************************************************************
+ * FUNCTIONS
+ */
+
+void app_task(void)
+{
+	task_keys();
+	scan_task_timer(NULL);
 	if(bdb_isIdle()){
 		// report handler
 		if(zb_isDeviceJoinedNwk()){
+#if BOARD == BOARD_MHO_C401N
+			show_connected_symbol(true);
+#else
 			if(!g_sensorAppCtx.timerLedEvt)
 				show_ble_symbol(false);
-			g_sensorAppCtx.bindTime = 0;
+#endif
 			if(zcl_reportingEntryActiveNumGet()){
 				reportNoMinLimit();
 				//start report timer
@@ -228,17 +243,17 @@ void app_task(void)
 				//stop report timer
 			}
 		} else {
+#if BOARD == BOARD_MHO_C401N
+			show_connected_symbol(false);
+#else
 			if(!g_sensorAppCtx.timerLedEvt)
 				show_ble_symbol(true);
-			if(g_sensorAppCtx.bindTime) {
-				if(clock_time_exceed(g_sensorAppCtx.bindTime,	45 *1000 * 1000)) { // 45 sec
-					show_blink_screen();
-					drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_PAD, 0);
-//					drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER | PM_WAKEUP_SRC_PAD, 600*1000); // 600 sec
-				}
-			}
+#endif
 		}
 #if PM_ENABLE
+#ifdef USE_EPD
+		task_lcd();
+#endif
 		drv_pm_lowPowerEnter();
 #endif
 	}
@@ -256,6 +271,10 @@ void sensorDeviceSysException(void)
 	show_small_number(T_evtExcept[1], false);
 #endif
 	update_lcd();
+#ifdef USE_EPD
+	while(task_lcd())
+		sleep_us(USE_EPD*1000);
+#endif
 	drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, 0, 20*1000);
 #else
 	zb_resetDevice();
@@ -306,6 +325,7 @@ void populate_date_code() {
 
 
 void populate_hw_version() {
+#if BOARD == BOARD_LYWSD03MMC
 /*
  HW  | LCD I2C addr | SHTxxx I2C addr | Note
 -----|--------------|-----------------|---------
@@ -329,8 +349,10 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
     } else if (i2c_address_lcd == B19_I2C_ADDR) {
         g_zcl_basicAttrs.hwVersion = 19;
     }
+#else
+	g_zcl_basicAttrs.hwVersion = sensor_version;
+#endif
 }
-
 /*********************************************************************
  * @fn      user_init
  *
@@ -354,8 +376,6 @@ void user_init(bool isRetention)
 
 	if(!isRetention){
 
-//		test_first_ota();
-
 		/* Populate properties with compiled-in values */
 		populate_sw_build();
 		populate_date_code();
@@ -364,6 +384,7 @@ void user_init(bool isRetention)
 		stack_init();
 
 		init_lcd();
+
 		init_sensor();
 
 		populate_hw_version();
@@ -433,8 +454,14 @@ void user_init(bool isRetention)
 		/* Initialize BDB */
 		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;
 		bdb_init((af_simple_descriptor_t *)&sensorDevice_simpleDesc, &g_bdbCommissionSetting, &g_zbDemoBdbCb, repower);
+
+		deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
+
 	}else{
 		/* Re-config phy when system recovery from deep sleep with retention */
 		mac_phyReconfig();
 	}
+#ifdef USE_EPD
+//	task_lcd();
+#endif
 }

@@ -240,16 +240,6 @@ startup_state_e drv_platform_init(void)
 	ZB_RADIO_INIT();
 	ZB_TIMER_INIT();
 
-#if defined(MCU_CORE_8258)
-	if(flash_is_zb()){
-#if (!VOLTAGE_DETECT_ENABLE) || !defined(VOLTAGE_DETECT_ENABLE)
-//		voltage_detect_init(VOLTAGE_DETECT_ADC_PIN);
-		flash_safe_voltage_set(BATTERY_SAFETY_THRESHOLD);
-#endif
-		flash_unlock_mid13325e();  //add it for the flash which sr is expired
-	}
-#endif
-
 	return state;
 }
 

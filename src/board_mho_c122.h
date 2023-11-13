@@ -35,7 +35,7 @@
 #define PB0_FUNC			AS_GPIO
 
 
-#define I2C_CLOCK			100000 // Hz
+#define I2C_CLOCK	100000 // Hz
 #define I2C_SCL 	GPIO_PC2
 #define I2C_SDA 	GPIO_PC3
 #define I2C_GROUP 	I2C_GPIO_GROUP_C2C3

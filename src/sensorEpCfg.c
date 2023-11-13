@@ -34,7 +34,12 @@
 #elif BOARD == BOARD_MHO_C122
 
 #define ZCL_BASIC_MFG_NAME     {9,'M','i','a','M','i','a','o','C','e'} // MiaoMiaoCe
-#define ZCL_BASIC_MODEL_ID	   {7,'M','H','O','-','1','2','2'} // MHO-C122
+#define ZCL_BASIC_MODEL_ID	   {8,'M','H','O','-','C','1','2','2'} // MHO-C122
+
+#elif BOARD == BOARD_MHO_C401N
+
+#define ZCL_BASIC_MFG_NAME     {9,'M','i','a','M','i','a','o','C','e'} // MiaoMiaoCe
+#define ZCL_BASIC_MODEL_ID	   {9,'M','H','O','-','C','4','0','1','N'} // MHO-C401N
 
 #else
 #error "Define BOARD!"

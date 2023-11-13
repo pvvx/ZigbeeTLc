@@ -38,7 +38,7 @@ extern "C" {
  * Product Information
  */
 /* Debug mode config */
-#define	DEBUG_ENABLE					1 // lcd = DeviceSysException
+#define	DEBUG_ENABLE					0 // lcd = DeviceSysException
 
 #define	UART_PRINTF_MODE				0
 #define USB_PRINTF_MODE         		0
@@ -62,6 +62,8 @@ extern "C" {
 	#include "board_cgdk2.h"
 #elif BOARD == BOARD_MHO_C122
 	#include "board_mho_c122.h"
+#elif BOARD == BOARD_MHO_C401N
+#include "board_mho_c401n.h"
 #endif
 
 #define READ_SENSOR_TIMER 	10000 // ms
@@ -109,8 +111,6 @@ extern "C" {
 #define ZCL_OTA_SUPPORT								1
 #define REJOIN_FAILURE_TIMER						1
 
-
-// for consistency
 // for consistency
 #if ZCL_RELATIVE_HUMIDITY_SUPPORT
 #define ZCL_RELATIVE_HUMIDITY
@@ -121,7 +121,7 @@ extern "C" {
 #define NV_ITEM_ZCL_THERMOSTAT_UI_CFG       (NV_ITEM_APP_GP_TRANS_TABLE + 1)    // see sdk/proj/drivers/drv_nv.h
 #endif
 
-#define DEFAULT_POLL_RATE							(10 * (4 * POLL_RATE_QUARTERSECONDS))
+#define DEFAULT_POLL_RATE					(10 * (4 * POLL_RATE_QUARTERSECONDS))
 
 /**********************************************************************
  * Stack configuration

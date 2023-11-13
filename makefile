@@ -92,6 +92,7 @@ ASM_FLAGS := \
 
 INCLUDE_PATHS := -I$(SRC_PATH) -I$(SRC_PATH)/includes -I$(SRC_PATH)/common  -I$(SRC_PATH)/custom_zcl\
 -I$(SDK_PATH)/platform \
+-I$(SDK_PATH)/platform/chip_8258 \
 -I$(SDK_PATH)/proj \
 -I$(SDK_PATH)/proj/common \
 -I$(SDK_PATH)/zigbee/af \
@@ -209,10 +210,10 @@ stop:
 go:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -m
 
-TADDR?=0x08425e0
+TADDR?=0x076000
 TLEN?=128
 test_damp:
-	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z10 -c -g ds $(TADDR) $(TLEN)
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z10 -c -g df $(TADDR) $(TLEN)
 
 
 install: $(SDK_FLAGS) $(TC32_PATH)$(TST_FILE)

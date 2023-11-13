@@ -88,10 +88,10 @@
 
 //Contents of the rejoin interval in seconds
 #define ZDO_REJOIN_TIMES							5 // =5
-#define	ZDO_REJOIN_DURATION							1  // =6
-#define ZDO_REJOIN_BACKOFF_TIME						120 // =30
-#define ZDO_MAX_REJOIN_BACKOFF_TIME					600 // =90
-#define ZDO_REJOIN_BACKOFF_ITERATION				3  // =8
+#define	ZDO_REJOIN_DURATION							0  // =6
+#define ZDO_REJOIN_BACKOFF_TIME						45 // =30
+#define ZDO_MAX_REJOIN_BACKOFF_TIME					180 // =90
+#define ZDO_REJOIN_BACKOFF_ITERATION				0  // =8
 
 /******************************************************************************************************************************/
 

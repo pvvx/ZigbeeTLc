@@ -11,6 +11,7 @@ $(OUT_PATH)$(SRC_DIR)/device.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_03mmc.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_cgdk2.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_mho_c122.o \
+$(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/sensorEpCfg.o \
 $(OUT_PATH)$(SRC_DIR)/sensors.o \
 $(OUT_PATH)$(SRC_DIR)/zb_appCb.o \
@@ -20,6 +21,7 @@ $(OUT_PATH)$(SRC_DIR)/zcl_sensorCb.o \
 $(OUT_PATH)$(SRC_DIR)/reporting.o \
 $(OUT_PATH)$(SRC_DIR)/drv_hw.o \
 $(OUT_PATH)$(SRC_DIR)/drv_flash.o \
+$(OUT_PATH)$(SRC_DIR)/flash.o \
 $(OUT_PATH)$(SRC_DIR)/common/main.o \
 $(OUT_PATH)$(SRC_DIR)/common/factory_reset.o \
 $(OUT_PATH)$(SRC_DIR)/common/firmwareEncryptChk.o \

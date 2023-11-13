@@ -2,13 +2,13 @@
 
 Under construction...
 
-Currently supported devices: LYWSD03MMC, CGDK2, MHO-C122
+Currently supported devices: LYWSD03MMC, CGDK2, MHO-C122, MHO-C401N
 
-In developing: MHO-C401, MJWSD05MMC, CGG1, TS0201_TZ3000, TS0202_TZ3000
+In developing: MHO-C401(old), MJWSD05MMC, CGG1-M, TS0201_TZ3000, TS0202_TZ3000
 
-Уровень готовности прошивок - Beta version. Требуются дополнительные тесты.
+Уровень готовности прошивок - Beta version 0.1.0.3 Требуются дополнительные тесты.
 
-Firmware readiness level - Beta versions. Additional tests are required.
+Firmware readiness level - Beta versions 0.1.0.3. Additional tests are required.
 
 
 ## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
@@ -26,25 +26,18 @@ In the future, you can update [Zigbee LYWSD03MMC firmware to the version from de
 
 ---
 
-## Attention: Without registration in the Zigbee network, the thermometer does not work. Registration of the thermometer in the Zigbee network is carried out by closing the “reset” contacts to ground on the LYWSD03MMC board, and on sensors with a button - by pressing the button and holding it for 3 seconds or when turning on the power. To save energy, the registration time is limited by turning off the thermometer after 45 seconds.
-
-Внимание: Без регистрации в сети Zigbee термометр не работает. Регистрация термометра в сети Zigbee осуществляется замыканием контактов «сброса» на массу на плате LYWSD03MMC, а на датчиках с кнопкой — нажатием кнопки и удерживанием ее в течение 3 секунд или при включении питания. В целях экономии электроэнергии время регистрации ограничено отключением термометра через 45 секунд.
-
 ## Indication on LCD screen
 
 A solid "BT" icon indicates a connection loss or the thermometer is not registered with the Zigbee network.
 
 The flashing "BT" icon is called by the identification command.
 
-The “---” indication indicates that the thermometer’s registration time on the network has expired. To resume registration of the thermometer on the network, you must re-enable registration.
 
 **Индикация на LCD экране:**
 
 Длительно отображаемый значок “BT” обозначает потерю связи или отсутствие регистрации термометра в сети Zigbee.
 
 Мигающий значок “BT” вызывается по команде identify.
-
-Индикация “---“ говорит о том, что время регистрации термометра в сети вышло. Для возобновления регистрации термометра в сети требуется повторить регистрацию.
 
 
 ## Current additions
@@ -57,7 +50,8 @@ The “---” indication indicates that the thermometer’s registration time on
 
 4. Оптимизировано потребление при опросе контакта "reset" или кнопки.
 
-Итоговое среднее потребление LYWSD03MC B1.4 при измерении от источника 3.3В от 14 до 26 мкА в зависимости от динамики изменений температуры и влажности. (Для сравнения: Вариант с BLE потребляет 14 мкА при default настройках и постоянной передаче всех измеренных значений каждые 10 секунд. Дальность связи в режиме BLE LongRange составляет до 1 км по прямой, для Zigbee - сотни метров.)
+Итоговое среднее потребление LYWSD03MC B1.4 при измерении от источника 3.3В от 14 до 26 мкА в зависимости от динамики изменений температуры и влажности. Это в 1.5 раза меньше [варинта fw](https://github.com/devbis/z03mmc) от @devbis.
+(Для сравнения с BLE версией: Вариант с BLE потребляет 14 мкА при default настройках и постоянной передаче всех измеренных значений каждые 10 секунд. Дальность связи в режиме BLE LongRange составляет до 1 км по прямой, для Zigbee - сотни метров.)
 
 Zigbee OTA для прошивки в 128 килобайт выполняется 677 секунд со средним потреблением около 1 мА. Это затраты энергии в 5.4 мА·ч от батареи.
 

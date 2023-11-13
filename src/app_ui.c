@@ -86,7 +86,9 @@ s32 zclLightTimerCb(void *arg)
 		light_off();
 		interval = g_sensorAppCtx.ledOffTime;
 	}
-
+#ifdef USE_EPD
+		interval <<= 2;
+#endif
 	return interval;
 }
 
@@ -107,7 +109,9 @@ void light_blink_start(u8 times, u16 ledOnTime, u16 ledOffTime)
 		}
 		g_sensorAppCtx.ledOnTime = ledOnTime;
 		g_sensorAppCtx.ledOffTime = ledOffTime;
-
+#ifdef USE_EPD
+		interval <<= 2;
+#endif
 		g_sensorAppCtx.timerLedEvt = TL_ZB_TIMER_SCHEDULE(zclLightTimerCb, NULL, interval);
 	}
 }
@@ -142,14 +146,20 @@ static s32 keyTimerCb(void *arg)
 					g_sensorAppCtx.keyPressedTime,
 					3000 * 1000)) { // 3 sec
 			g_sensorAppCtx.keyPressedTime = clock_time();
-			g_sensorAppCtx.bindTime = clock_time() | 1;
-			light_off();
-			tl_bdbReset2FN();
-#if PM_ENABLE
-//			drv_pm_sleep(PM_SLEEP_MODE_DEEP_WITH_RETENTION, 0, 1000); // 1 sec
+#if BOARD == BOARD_MHO_C401N
+			show_connected_symbol(false);
+			update_lcd();
 #else
-//			zb_resetDevice();
+			//show_ble_symbol(true);
+			show_blink_screen();
 #endif
+
+			tl_bdbReset2FN();
+#ifdef USE_EPD
+			while(task_lcd())
+				pm_wait_ms(USE_EPD);
+#endif
+			zb_resetDevice();
 		} else {
 			g_sensorAppCtx.keyPressed = button_on;
 			return 0;
@@ -160,13 +170,12 @@ static s32 keyTimerCb(void *arg)
 	return -1;
 }
 
-void tack_keys(void) {
+void task_keys(void) {
 	u8 button_on = gpio_read(BUTTON1)? 0 : 1;
 	if(button_on) {
 		// button on
 		if(!g_sensorAppCtx.keyPressed) {
 			// event button on
-			light_on();
 			g_sensorAppCtx.keyPressedTime = clock_time();
 			if(!g_sensorAppCtx.timerKeyEvt)
 				g_sensorAppCtx.timerKeyEvt

@@ -87,7 +87,7 @@ enum {
 #define BOARD_LYWSD03MMC_B14	0
 #define BOARD_MHO_C401			1
 #define BOARD_CGG1				2
-#define BOARD_LYWSD03MMC		3
+//#define BOARD_LYWSD03MMC		3 // ver devbis
 #define BOARD_LYWSD03MMC_B19	3
 #define BOARD_LYWSD03MMC_B16	4
 #define BOARD_LYWSD03MMC_B17	5
@@ -95,12 +95,13 @@ enum {
 #define BOARD_CGG1N				7 // 2022
 #define BOARD_MHO_C401N			8 // 2022
 #define BOARD_MJWSD05MMC		9
+#define BOARD_LYWSD03MMC		10
 #define BOARD_LYWSD03MMC_B15	10
 #define BOARD_MHO_C122			11
 
 /* Board define */
 #ifndef BOARD
-#define BOARD						BOARD_MHO_C122 // BOARD_LYWSD03MMC or BOARD_CGDK2
+#define BOARD						  BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122
 #endif
 
 /* Chip IDs */
@@ -111,17 +112,3 @@ enum {
 #define TLSR_8278							0x04
 #define TLSR_B91							0x05
 
-/* Image types */
-#if (BOOT_LOADER_MODE)
-	#define IMAGE_TYPE_BOOT_FLAG			1
-#else
-	#define IMAGE_TYPE_BOOT_FLAG			0
-#endif
-#define IMAGE_TYPE_BOOTLOADER				(0xFF)
-#define IMAGE_TYPE_GW						(0x00 | (IMAGE_TYPE_BOOT_FLAG << 7))
-#define IMAGE_TYPE_LIGHT					(0x01 | (IMAGE_TYPE_BOOT_FLAG << 7))
-#define IMAGE_TYPE_SWITCH					(0x02 | (IMAGE_TYPE_BOOT_FLAG << 7))
-#define IMAGE_TYPE_CONTACT_SENSOR			(0x03 | (IMAGE_TYPE_BOOT_FLAG << 7))
-
-// leave image type the same as for contact sensor to allow updating it with sample firmware if needed
-#define IMAGE_TYPE_TEMP_HUMIDITY			(0x03 | (IMAGE_TYPE_BOOT_FLAG << 7))

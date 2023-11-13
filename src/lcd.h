@@ -19,6 +19,14 @@ void show_small_number_x10(s16 number, bool percent);
 #else
 void show_small_number(s16 number, bool percent);
 #endif
+#if BOARD == BOARD_MHO_C401N
+void show_connected_symbol(bool state);
+#endif
 void show_smiley(u8 state);
 void show_ble_symbol(bool state);
 void show_blink_screen(void);
+
+#ifdef USE_EPD
+int task_lcd(void);
+#endif
+
