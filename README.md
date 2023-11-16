@@ -2,9 +2,9 @@
 
 Under construction...
 
-Currently supported devices: LYWSD03MMC, CGDK2, MHO-C122, MHO-C401N, TS0201_TZ3000
+Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000/)
 
-In developing: MHO-C401(old), MJWSD05MMC, CGG1-M, TS0202_TZ3000
+In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000)
 
 Уровень готовности прошивок - Beta version 0.1.0.4 Требуются дополнительные тесты.
 
