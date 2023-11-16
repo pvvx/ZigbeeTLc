@@ -8,7 +8,9 @@ typedef struct _i2c_utr_t {
 } i2c_utr_t;
 
 void init_i2c(void);
-unsigned char test_i2c_device(unsigned char address);
-int send_i2c(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataLen);
+unsigned char scan_i2c_addr(unsigned char address);
 int send_i2c_byte(unsigned char i2c_addr, unsigned char cmd);
+int send_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataLen);
+int read_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, int dataLen);
+
 int I2CBusUtr(void * outdata, i2c_utr_t *tr, unsigned int wrlen);

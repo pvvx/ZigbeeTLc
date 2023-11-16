@@ -2,13 +2,13 @@
 
 Under construction...
 
-Currently supported devices: LYWSD03MMC, CGDK2, MHO-C122, MHO-C401N
+Currently supported devices: LYWSD03MMC, CGDK2, MHO-C122, MHO-C401N, TS0201_TZ3000
 
-In developing: MHO-C401(old), MJWSD05MMC, CGG1-M, TS0201_TZ3000, TS0202_TZ3000
+In developing: MHO-C401(old), MJWSD05MMC, CGG1-M, TS0202_TZ3000
 
-Уровень готовности прошивок - Beta version 0.1.0.3 Требуются дополнительные тесты.
+Уровень готовности прошивок - Beta version 0.1.0.4 Требуются дополнительные тесты.
 
-Firmware readiness level - Beta versions 0.1.0.3. Additional tests are required.
+Firmware readiness level - Beta versions 0.1.0.4. Additional tests are required.
 
 
 ## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
@@ -49,6 +49,8 @@ The flashing "BT" icon is called by the identification command.
 
 4. Оптимизировано потребление при опросе контакта "reset" или кнопки.
 
+5. Ещё оптимизировано потребление и исправлен report. 
+
 Итоговое среднее потребление LYWSD03MC B1.4 при измерении от источника 3.3В от 14 до 26 мкА в зависимости от динамики изменений температуры и влажности. Это в 1.5 раза меньше [варинта fw](https://github.com/devbis/z03mmc) от @devbis.
 (Для сравнения с BLE версией: Вариант с BLE потребляет 14 мкА при default настройках и постоянной передаче всех измеренных значений каждые 10 секунд. Дальность связи в режиме BLE LongRange составляет до 1 км по прямой, для Zigbee - сотни метров.)
 
@@ -66,6 +68,7 @@ make
 
 Out log:
 ```
+Warning: Undefined symbol 'cmf'!
 Warning: Undefined symbol 'ss_apsmeSwitchKeyReq'!
 Warning: Undefined symbol 'ss_apsmeTransportKeyReq'!
 Warning: Undefined symbol 'tl_zbNwkBeaconPayloadUpdate'!
@@ -73,22 +76,22 @@ Warning: Undefined symbol 'tl_zbNwkBeaconPayloadUpdate'!
  Section|          Description| Start (hex)|   End (hex)|Used space
 -------------------------------------------------------------------
  ramcode|   Resident Code SRAM|           0|        1510|    5392
-    text|           Code Flash|        1510|       1F304|  122356
+    text|           Code Flash|        1510|       1E844|  119604
   rodata| Read Only Data Flash|           0|           0|       0
- cusdata|          Custom SRAM|      8452EC|      8452EC|       0
+ cusdata|          Custom SRAM|      8451DC|      8451DC|       0
       nc|   Wasteful Area SRAM|      841510|      841600|     240
    ictag|     Cache Table SRAM|      841600|      841700|     256
   icdata|      Cache Data SRAM|      841700|      841F00|    2048
-    data|       Init Data SRAM|      841F00|      8420C8|     456
-     bss|        BSS Data SRAM|      8420D0|      8452EC|   12828
- irq_stk|        BSS Data SRAM|      8420D0|      8422D0|     512
-    cbss| Custom BSS Data SRAM|      8452EC|      8452EC|       0
-   stack|       CPU Stack SRAM|      8452EC|      850000|   44308
-   flash|       Bin Size Flash|           0|       1F4CC|  128204
+    data|       Init Data SRAM|      841F00|      8420A0|     416
+     bss|        BSS Data SRAM|      8420A0|      8451DC|   12604
+ irq_stk|        BSS Data SRAM|      8420A0|      8422A0|     512
+    cbss| Custom BSS Data SRAM|      8451DC|      8451DC|       0
+   stack|       CPU Stack SRAM|      8451DC|      850000|   44580
+   flash|       Bin Size Flash|           0|       1E9E4|  125412
 -------------------------------------------------------------------
 Start Load SRAM : 0 (ICtag: 0x0)
-Total Used SRAM : 21228 from 65536
-Total Free SRAM : 240 + stack[44308] = 44548
+Total Used SRAM : 20956 from 65536
+Total Free SRAM : 240 + stack[44580] = 44820
 ```
 
 Под Window, после импорта в ‘Telink IoT Studio’, выполнить “make install” или в папке проекта:

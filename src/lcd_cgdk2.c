@@ -7,15 +7,8 @@
 #include "app_i2c.h"
 #include "lcd.h"
 #include "device.h"
-#include "sensor.h"
+#include <sensors.h>
 
-#if 1
-#define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1MS);
-#define pm_wait_us(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1US);
-#else
-#define pm_wait_ms(t) sleep_us((t)*1000);
-#define pm_wait_us(t) sleep_us(t);
-#endif
 
 #define CGDK2_I2C_ADDR		0x3E // BU9792AFUV
 
@@ -25,7 +18,7 @@ u8 display_buff[LCD_BUF_SIZE];
 u8 display_cmp_buff[LCD_BUF_SIZE];
 
 // #define lcd_send_i2c_byte(a)  send_i2c_byte(i2c_address_lcd, a)
-#define lcd_send_i2c_buf(b, a)  send_i2c(i2c_address_lcd, (u8 *) b, a)
+#define lcd_send_i2c_buf(b, a)  send_i2c_bytes(i2c_address_lcd, (u8 *) b, a)
 
 
 /*
@@ -192,7 +185,7 @@ void show_reboot_screen(void) {
 }
 
 void init_lcd(void){
-	i2c_address_lcd = (u8) test_i2c_device(CGDK2_I2C_ADDR << 1);
+	i2c_address_lcd = scan_i2c_addr(CGDK2_I2C_ADDR << 1);
 	if (i2c_address_lcd) { // LCD CGDK2_I2C_ADDR ?
 //		if(cfg.flg2.screen_off) {
 //			lcd_send_i2c_byte(0xEA); // BU9792AFUV reset

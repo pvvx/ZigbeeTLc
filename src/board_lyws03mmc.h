@@ -15,28 +15,23 @@ extern "C" {
 #define SHOW_SMILEY
 
 // BUTTON
-#define BUTTON1               		GPIO_PA5  // reset test point
-#define PA5_FUNC			  		AS_GPIO
-#define PA5_OUTPUT_ENABLE	  		0
-#define PA5_INPUT_ENABLE	  		1
-#define	PULL_WAKEUP_SRC_PA5	  		PM_PIN_PULLUP_10K
+#define BUTTON1				GPIO_PA5  // reset test point
+#define PA5_FUNC			AS_GPIO
+#define PA5_OUTPUT_ENABLE	0
+#define PA5_INPUT_ENABLE	1
+#define	PULL_WAKEUP_SRC_PA5	PM_PIN_PULLUP_10K
 
-/*
-#define BUTTON2               		GPIO_PA6  // P8 test point
-#define PA6_FUNC			  		AS_GPIO
-#define PA6_OUTPUT_ENABLE	  		0
-#define PA6_INPUT_ENABLE	  		1
-#define	PULL_WAKEUP_SRC_PA6	  		PM_PIN_PULLUP_1M
-*/
+#define	USE_DISPLAY			1
+#define LCD_BUF_SIZE		6
+#define	PULL_WAKEUP_SRC_PB6	PM_PIN_PULLUP_10K
 
-#define	PULL_WAKEUP_SRC_PB6	  		PM_PIN_PULLUP_10K
+#define I2C_CLOCK			400000 // Hz
+#define SENSOR_TYPE 		SENSOR_SHTXX
+#define USE_SENSOR_ID		1
 
-#define I2C_CLOCK					400000 // Hz
-#define LCD_BUF_SIZE	6
-
-#define I2C_SCL 	GPIO_PC2
-#define I2C_SDA 	GPIO_PC3
-#define I2C_GROUP 	I2C_GPIO_GROUP_C2C3
+#define I2C_SCL 			GPIO_PC2
+#define I2C_SDA 			GPIO_PC3
+#define I2C_GROUP 			I2C_GPIO_GROUP_C2C3
 #define PULL_WAKEUP_SRC_PC2	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
 

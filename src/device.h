@@ -20,9 +20,10 @@ typedef struct{
 typedef struct{
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerKeyEvt;
-///	u32 bindTime;
+	u32 secTimeTik;
 	u32 keyPressedTime;
-	u32 readSensorTime; // read sensor timer
+	u32 readSensorTime; // read sensor timer (tik)
+	u16 reportupsec; // report add (sec)
 
 	u16 ledOnTime;
 	u16 ledOffTime;
@@ -178,7 +179,7 @@ nv_sts_t zcl_thermostatDisplayMode_save(void);
 nv_sts_t zcl_thermostatDisplayMode_restore(void);
 
 void scan_task(void);
-s32 scan_task_timer(void *arg);
+s32 sensors_task(void *arg);
 extern ev_timer_event_t *deviceAppTimerEvt;
 
 

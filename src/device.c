@@ -15,7 +15,7 @@
 #include "app_ui.h"
 #include "zcl_relative_humidity.h"
 #include "app_i2c.h"
-#include "sensor.h"
+#include "sensors.h"
 #include "lcd.h"
 #include "reporting.h"
 #include "ext_ota.h"
@@ -35,7 +35,7 @@
  */
 app_ctx_t g_sensorAppCtx;
 extern u8 lcd_version;
-extern u8 sensor_version;
+//extern u8 sensor_version;
 
 
 #ifdef ZCL_OTA
@@ -90,14 +90,14 @@ bdb_commissionSetting_t g_bdbCommissionSetting = {
 /**********************************************************************
  * LOCAL VARIABLES
  */
-
+#if	USE_DISPLAY
 //const scomfort_t def_cmf = {
 scomfort_t cmf = {
     .t = {2100,2600}, // x0.01 C
     .h = {3000,6000}  // x0.01 %
 };
-
 ev_timer_event_t *deviceAppTimerEvt = NULL;
+#endif
 
 /**********************************************************************
  * FUNCTIONS
@@ -127,6 +127,8 @@ u8 is_comfort(s16 t, u16 h) {
 	return ret;
 }
 
+
+#if	USE_DISPLAY
 void read_sensor_and_save(void) {
 	read_sensor();
 #ifdef ZCL_THERMOSTAT_UI_CFG
@@ -167,7 +169,31 @@ void read_sensor_and_save(void) {
     update_lcd();
 
     g_sensorAppCtx.readSensorTime = clock_time();
+    while(g_sensorAppCtx.readSensorTime - g_sensorAppCtx.secTimeTik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
+//    	g_sensorAppCtx.UTC_time++;
+    	g_sensorAppCtx.reportupsec++;
+    	g_sensorAppCtx.secTimeTik += CLOCK_16M_SYS_TIMER_CLK_1S;
+    }
 }
+#else
+void read_sensor_and_save(void) {
+	if (read_sensor()) {
+		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
+		g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
+	}
+	g_zcl_powerAttrs.batteryVoltage = (u8)(measured_data.battery_mv / 100);
+	measured_data.battery_level = (measured_data.battery_mv - BATTERY_SAFETY_THRESHOLD)/4;
+    if(measured_data.battery_level > 200)
+    	measured_data.battery_level = 200;
+    g_zcl_powerAttrs.batteryPercentage = (u8)measured_data.battery_level;
+    g_sensorAppCtx.readSensorTime = clock_time();
+    while(g_sensorAppCtx.readSensorTime - g_sensorAppCtx.secTimeTik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
+//    	g_sensorAppCtx.UTC_time++;
+    	g_sensorAppCtx.reportupsec++;
+    	g_sensorAppCtx.secTimeTik += CLOCK_16M_SYS_TIMER_CLK_1S;
+    }
+}
+#endif
 
 /*********************************************************************
  * @fn      user_app_init
@@ -208,7 +234,7 @@ void user_app_init(void)
 /**********************************************************************
  * FUNCTIONS
  */
-s32 scan_task_timer(void *arg) {
+s32 sensors_task(void *arg) {
 	if(clock_time_exceed(g_sensorAppCtx.readSensorTime, READ_SENSOR_TIMER*1000)){
 		read_sensor_and_save();
 	}
@@ -224,30 +250,42 @@ s32 scan_task_timer(void *arg) {
 
 void app_task(void)
 {
+	u16 rep_uptime_sec;
 	task_keys();
-	scan_task_timer(NULL);
+	sensors_task(NULL);
 	if(bdb_isIdle()){
 		// report handler
 		if(zb_isDeviceJoinedNwk()){
+#if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
 			show_connected_symbol(true);
 #else
 			if(!g_sensorAppCtx.timerLedEvt)
 				show_ble_symbol(false);
 #endif
-			if(zcl_reportingEntryActiveNumGet()){
-				reportNoMinLimit();
-				//start report timer
-				app_reportAttrTimerStart();
-			}else{
-				//stop report timer
+#else
+			if(!g_sensorAppCtx.timerLedEvt)
+				light_off();
+#endif
+			u8 r = irq_disable();
+			rep_uptime_sec = g_sensorAppCtx.reportupsec;
+			if(rep_uptime_sec > 7)
+				g_sensorAppCtx.reportupsec = 0;
+			irq_restore(r);
+			if(rep_uptime_sec > 7) {
+				app_chk_report(rep_uptime_sec);
 			}
 		} else {
+#if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
 			show_connected_symbol(false);
 #else
 			if(!g_sensorAppCtx.timerLedEvt)
 				show_ble_symbol(true);
+#endif
+#else
+			if(!g_sensorAppCtx.timerLedEvt)
+				gpio_write(GPIO_LED, LED_ON);
 #endif
 		}
 #if PM_ENABLE
@@ -337,20 +375,31 @@ B1.9 | 0x3E         | 0x44   (SHT4x)  |
 B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 */
     if (i2c_address_lcd == B14_I2C_ADDR) {
-        if (sensor_version == 0)
+        if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) // sensor_version == 0)
             g_zcl_basicAttrs.hwVersion = 14;
-        else if (sensor_version == 1)
-            g_zcl_basicAttrs.hwVersion = 20;
+        else // if (sensor_i2c_addr == (SHT4x_I2C_ADDR << 1))
+            g_zcl_basicAttrs.hwVersion = 20; // or 17
     } else if (i2c_address_lcd == B16_I2C_ADDR) {
-        if (sensor_version == 0)
+        if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) // (sensor_version == 0)
             g_zcl_basicAttrs.hwVersion = 15;
-        else if (sensor_version == 1)
+        else //  if (sensor_version == 1)
             g_zcl_basicAttrs.hwVersion = 16;
     } else if (i2c_address_lcd == B19_I2C_ADDR) {
         g_zcl_basicAttrs.hwVersion = 19;
     }
 #else
-	g_zcl_basicAttrs.hwVersion = sensor_version;
+#if SENSOR_TYPE == SENSOR_SHTXX
+    if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1))
+    	g_zcl_basicAttrs.hwVersion = 2;
+    else
+    	g_zcl_basicAttrs.hwVersion = 1;
+
+#elif SENSOR_TYPE == SENSOR_CHT8305
+    if(sensor_i2c_addr != 0)
+    	g_zcl_basicAttrs.hwVersion = 1 + ((sensor_i2c_addr >> 1) & 3);
+
+
+#endif
 #endif
 }
 /*********************************************************************
@@ -382,9 +431,9 @@ void user_init(bool isRetention)
 
 		/* Initialize Stack */
 		stack_init();
-
+#if	USE_DISPLAY
 		init_lcd();
-
+#endif
 		init_sensor();
 
 		populate_hw_version();
@@ -408,7 +457,49 @@ void user_init(bool isRetention)
 			g_bdbCommissionSetting.linkKey.tcLinkKey.keyType = g_sensorAppCtx.tcLinkKey.keyType;
 			g_bdbCommissionSetting.linkKey.tcLinkKey.key = g_sensorAppCtx.tcLinkKey.key;
 		}
-
+#if BOARD == BOARD_TS0201_TZ3000
+		/* Set default reporting configuration */
+		reportableChange[0] = 0;
+        bdb_defaultReportingCfg(
+			SENSOR_DEVICE_ENDPOINT,
+			HA_PROFILE_ID,
+			ZCL_CLUSTER_GEN_POWER_CFG,
+			ZCL_ATTRID_BATTERY_VOLTAGE,
+			60,
+			3600,
+			(u8 *)&reportableChange[0]
+		);
+        reportableChange[1] = 0;
+        bdb_defaultReportingCfg(
+			SENSOR_DEVICE_ENDPOINT,
+			HA_PROFILE_ID,
+			ZCL_CLUSTER_GEN_POWER_CFG,
+			ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
+			60,
+			3600,
+			(u8 *)&reportableChange[1]
+		);
+        reportableChange[2] = 10;
+		bdb_defaultReportingCfg(
+			SENSOR_DEVICE_ENDPOINT,
+			HA_PROFILE_ID,
+			ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
+			ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,
+			9,
+			120,
+			(u8 *)&reportableChange[2]
+		);
+        reportableChange[3] = 50;
+		bdb_defaultReportingCfg(
+			SENSOR_DEVICE_ENDPOINT,
+			HA_PROFILE_ID,
+			ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
+			ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,
+			9,
+			120,
+			(u8 *)&reportableChange[3]
+		);
+#else
 		/* Set default reporting configuration */
 		reportableChange[0] = 0;
         bdb_defaultReportingCfg(
@@ -450,13 +541,13 @@ void user_init(bool isRetention)
 			120,
 			(u8 *)&reportableChange[3]
 		);
-
+#endif
 		/* Initialize BDB */
 		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;
 		bdb_init((af_simple_descriptor_t *)&sensorDevice_simpleDesc, &g_bdbCommissionSetting, &g_zbDemoBdbCb, repower);
-
-		deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
-
+#if	USE_DISPLAY
+		deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER);
+#endif
 	}else{
 		/* Re-config phy when system recovery from deep sleep with retention */
 		mac_phyReconfig();

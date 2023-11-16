@@ -1,5 +1,6 @@
 
 PROJECT_NAME ?= z03mmc
+VERSION_BIN ?=
 
 TEL_CHIP := $(POJECT_DEF) -DMCU_CORE_8258=1 -DEND_DEVICE=1 -D__PROJECT_TL_CONTACT_SENSOR_8258__=1 -DMCU_STARTUP_8258 -DMIMIC_HEIMAN=0
 
@@ -120,8 +121,8 @@ LS_INCLUDE := -L$(SDK_PATH)/platform/lib -L$(SDK_PATH)/zigbee/lib/tc32 -L$(SDK_P
 
 # Add inputs and outputs from these tool invocations to the build variables
 LST_FILE := $(OUT_PATH)/$(PROJECT_NAME).lst
-BIN_FILE := $(BIN_PATH)/$(PROJECT_NAME).bin
-OTA_FILE := $(BIN_PATH)/$(PROJECT_NAME).ota
+BIN_FILE := $(BIN_PATH)/$(PROJECT_NAME)$(VERSION_BIN).bin
+OTA_FILE := $(BIN_PATH)/$(PROJECT_NAME).zigbee
 ELF_FILE := $(OUT_PATH)/$(PROJECT_NAME).elf
 
 SIZEDUMMY := sizedummy
@@ -158,8 +159,7 @@ $(BIN_FILE): $(ELF_FILE)
 $(OTA_FILE): $(BIN_FILE)
 	@echo 'Create OTA image'
 	@echo ' '
-	@$(PYTHON) $(MAKE_PATH)/zigbee_ota.py $(BIN_FILE) -p $(BIN_PATH)
-	@echo 'Finished building: $@'
+	@$(PYTHON) $(MAKE_PATH)/zigbee_ota.py $(BIN_FILE) -p $(BIN_PATH) -n $(PROJECT_NAME) 
 	@echo ' '
 
 

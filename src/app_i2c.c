@@ -17,7 +17,7 @@ void init_i2c(void) {
     reg_spi_sp  &= ~FLD_SPI_ENABLE;   //force PADs act as I2C; i2c and spi share the hardware of IC
 }
 
-unsigned char test_i2c_device(unsigned char address){
+unsigned char scan_i2c_addr(unsigned char address){
 	unsigned char r = irq_disable();
 
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
@@ -50,7 +50,7 @@ int send_i2c_byte(unsigned char i2c_addr, unsigned char cmd) {
 }
 
 _I2C_SEG_
-int send_i2c(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataLen) {
+int send_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataLen) {
 	int err = 0;
 	unsigned char r = irq_disable();
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
@@ -75,6 +75,36 @@ int send_i2c(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataLen) {
 	irq_restore(r);
 	return err;
 }
+
+_I2C_SEG_
+int read_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, int dataLen) {
+	int ret = -1;
+	int size = dataLen;
+	unsigned char *p = dataBuf;
+	unsigned char r = irq_disable();
+	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
+			init_i2c();
+	reg_i2c_id = i2c_addr | FLD_I2C_WRITE_READ_BIT;
+	reg_i2c_ctrl = FLD_I2C_CMD_START | FLD_I2C_CMD_ID | FLD_I2C_CMD_READ_ID;
+    while(reg_i2c_status & FLD_I2C_CMD_BUSY);
+	ret = reg_i2c_status & FLD_I2C_NAK;
+	if(ret == 0) {
+		while(size) {
+			size--;
+			if(!size)
+				reg_i2c_ctrl = FLD_I2C_CMD_DI | FLD_I2C_CMD_READ_ID | FLD_I2C_CMD_ACK;
+			else
+				reg_i2c_ctrl = FLD_I2C_CMD_DI | FLD_I2C_CMD_READ_ID;
+			while(reg_i2c_status & FLD_I2C_CMD_BUSY);
+			*p++ = reg_i2c_di;
+		}
+	}
+	reg_i2c_ctrl = FLD_I2C_CMD_STOP;
+    while(reg_i2c_status & FLD_I2C_CMD_BUSY);
+    irq_restore(r);
+    return ret;
+}
+
 
 /* Universal I2C/SMBUS read-write transaction
  * wrlen = 0..127 ! */

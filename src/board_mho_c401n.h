@@ -24,9 +24,9 @@ extern "C" {
 // GPIO_PD2 - used EPD_SDA
 // GPIO_PD7 - used EPD_RST
 
-#define USE_EPD			50 // while(task_lcd()) pm_wait_ms(50 ms);
-
-#define LCD_BUF_SIZE	16
+#define	USE_DISPLAY			1
+#define USE_EPD				50 // while(task_lcd()) pm_wait_ms(50 ms);
+#define LCD_BUF_SIZE		16
 
 #define EPD_RST2			GPIO_PB7 // should be high
 #define PULL_WAKEUP_SRC_PB7 PM_PIN_PULLUP_1M
@@ -74,14 +74,14 @@ extern "C" {
 #define PB6_FUNC			AS_GPIO
 #define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_1M
 
-
 // I2C
+#define SENSOR_TYPE 		SENSOR_SHTXX
 #define USE_SENSOR_ID		1
 #define I2C_CLOCK			100000 // Hz
 
-#define I2C_SCL 	GPIO_PC2
-#define I2C_SDA 	GPIO_PC3
-#define I2C_GROUP 	I2C_GPIO_GROUP_C2C3
+#define I2C_SCL 			GPIO_PC2
+#define I2C_SDA 			GPIO_PC3
+#define I2C_GROUP 			I2C_GPIO_GROUP_C2C3
 #define PULL_WAKEUP_SRC_PC2	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
 

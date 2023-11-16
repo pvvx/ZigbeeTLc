@@ -198,7 +198,8 @@ static void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRs
  */
 static void sensorDevice_zclCfgReportCmd(u8 endpoint, u16 clusterId, zclCfgReportCmd_t *pCfgReportCmd)
 {
-    for(u8 i = 0; i < pCfgReportCmd->numAttr; i++) {
+#if 0
+	for(u8 i = 0; i < pCfgReportCmd->numAttr; i++) {
         for (u8 ii = 0; ii < ZCL_REPORTING_TABLE_NUM; ii++) {
             if (app_reporting[ii].pEntry->used) {
                 if (app_reporting[ii].pEntry->endPoint == endpoint && app_reporting[ii].pEntry->attrID == pCfgReportCmd->attrList[i].attrID) {
@@ -213,6 +214,7 @@ static void sensorDevice_zclCfgReportCmd(u8 endpoint, u16 clusterId, zclCfgRepor
             }
         }
     }
+#endif
 }
 /*********************************************************************
  * @fn      sensorDevice_zclCfgReportRspCmd

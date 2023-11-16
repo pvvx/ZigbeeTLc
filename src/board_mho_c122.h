@@ -27,24 +27,25 @@
 #define PA5_INPUT_ENABLE	  		1
 #define	PULL_WAKEUP_SRC_PA5	  		PM_PIN_PULLUP_10K
 
-#define SHL_ADC_VBAT	   B0P  // "B0P" in adc.h
-#define GPIO_VBAT		GPIO_PB0 // missing pin on case TLSR8251F512ET24
-#define PB0_INPUT_ENABLE	1
-#define PB0_DATA_OUT		1
-#define PB0_OUTPUT_ENABLE	1
-#define PB0_FUNC			AS_GPIO
+#define	USE_DISPLAY			3
+#define SHOW_SMILEY
+#define LCD_BUF_SIZE		6
+#define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_10K // LCD ?
 
-
-#define I2C_CLOCK	100000 // Hz
-#define I2C_SCL 	GPIO_PC2
-#define I2C_SDA 	GPIO_PC3
-#define I2C_GROUP 	I2C_GPIO_GROUP_C2C3
+#define I2C_CLOCK			100000 // Hz
+#define SENSOR_TYPE 		SENSOR_SHTXX
+#define I2C_SCL 			GPIO_PC2
+#define I2C_SDA 			GPIO_PC3
+#define I2C_GROUP 			I2C_GPIO_GROUP_C2C3
 #define PULL_WAKEUP_SRC_PC2	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
 
-#define SHOW_SMILEY
-#define LCD_BUF_SIZE	6
-#define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_10K // LCD
+#define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef
+#define GPIO_VBAT			GPIO_PC5 // missing pin on case TLSR825x
+#define PC5_INPUT_ENABLE	0
+#define PC5_DATA_OUT		1
+#define PC5_OUTPUT_ENABLE	1
+#define PC5_FUNC			AS_GPIO
 
 // UART
 #if ZBHCI_UART

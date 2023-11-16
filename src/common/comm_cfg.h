@@ -99,16 +99,18 @@ enum {
 #define BOARD_LYWSD03MMC_B15	10
 #define BOARD_MHO_C122			11
 
+#define BOARD_TS0201_TZ3000		17
+
 /* Board define */
 #ifndef BOARD
-#define BOARD						  BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122
+#define BOARD					BOARD_TS0201_TZ3000 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_TS0201_TZ3000
 #endif
 
 /* Chip IDs */
-#define TLSR_8267							0x00
-#define TLSR_8269							0x01
-#define TLSR_8258_512K						0x02
-#define TLSR_8258_1M						0x03
-#define TLSR_8278							0x04
-#define TLSR_B91							0x05
+#define TLSR_8267				0x00
+#define TLSR_8269				0x01
+#define TLSR_8258_512K			0x02
+#define TLSR_8258_1M			0x03
+#define TLSR_8278				0x04
+#define TLSR_B91				0x05
 

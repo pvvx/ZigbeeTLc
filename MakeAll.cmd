@@ -2,17 +2,20 @@
 @set SWVER=_v0103
 @del /Q .\bin
 make -s -j clean
-make -s -j PROJECT_NAME=Z03MMC%SWVER% POJECT_DEF="-DBOARD=BOARD_LYWSD03MMC"
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=Z03MMC POJECT_DEF="-DBOARD=BOARD_LYWSD03MMC"
 @if not exist "bin\Z03MMC%SWVER%.bin" goto :error
 make -s -j clean
-make -s -j PROJECT_NAME=ZCGDK2%SWVER% POJECT_DEF="-DBOARD=BOARD_CGDK2"
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZCGDK2 POJECT_DEF="-DBOARD=BOARD_CGDK2"
 @if not exist "bin\ZCGDK2%SWVER%.bin" goto :error
 make -s -j clean
-make -s -j PROJECT_NAME=ZMHOC122%SWVER% POJECT_DEF="-DBOARD=BOARD_MHO_C122"
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZMHOC122 POJECT_DEF="-DBOARD=BOARD_MHO_C122"
 @if not exist "bin\ZMHOC122%SWVER%.bin" goto :error
 make -s -j clean
-make -s -j PROJECT_NAME=ZMHOC401N%SWVER% POJECT_DEF="-DBOARD=BOARD_MHO_C401N"
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZMHOC401N POJECT_DEF="-DBOARD=BOARD_MHO_C401N"
 @if not exist "bin\ZMHOC122%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTS0201Z3000 POJECT_DEF="-DBOARD=BOARD_TS0201_TZ3000"
+@if not exist "bin\ZTS0201Z3000%SWVER%.bin" goto :error
 @exit
 :error
 echo "Error!"

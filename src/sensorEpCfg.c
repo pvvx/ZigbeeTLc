@@ -41,6 +41,11 @@
 #define ZCL_BASIC_MFG_NAME     {9,'M','i','a','M','i','a','o','C','e'} // MiaoMiaoCe
 #define ZCL_BASIC_MODEL_ID	   {9,'M','H','O','-','C','4','0','1','N'} // MHO-C401N
 
+#elif BOARD == BOARD_TS0201_TZ3000
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {6,'T','S','0','2','0','1'} // TS0201
+
 #else
 #error "Define BOARD!"
 #endif // BOARD

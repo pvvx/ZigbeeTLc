@@ -3,82 +3,80 @@
 
 extern void reportAttr(reportCfgInfo_t *pEntry);
 
-app_reporting_t app_reporting[ZCL_REPORTING_TABLE_NUM];
-
-static s32 app_reportMinAttrTimerCb(void *arg) {
-    app_reporting_t *app_reporting = (app_reporting_t*)arg;
-    reportCfgInfo_t *pEntry = app_reporting->pEntry;
-
-    zclAttrInfo_t *pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
-    if(!pAttrEntry){
-        //should not happen.
-        ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
-        app_reporting->timerReportMinEvt = NULL;
-        return -1;
-    }
-
-    if (pEntry->minInterval == pEntry->maxInterval) {
-        reportAttr(pEntry);
-        app_reporting->time_posted = clock_time();
-    } else {
-        if(zcl_analogDataType(pAttrEntry->type)) {
-        	if(reportableChangeValueChk(pAttrEntry->type,
-                pAttrEntry->data, pEntry->prevData, pEntry->reportableChange)) {
-                reportAttr(pEntry);
-                app_reporting->time_posted = clock_time();
-        	}
-        } else {
-            u8 len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
-            len = (len>8) ? (8):(len);
-        	if(memcmp(pEntry->prevData, pAttrEntry->data, len) != SUCCESS) {
-                reportAttr(pEntry);
-                app_reporting->time_posted = clock_time();
-        	}
-        }
-    }
-    return 0;
-}
-
-static s32 app_reportMaxAttrTimerCb(void *arg) {
-    app_reporting_t *app_reporting = (app_reporting_t*)arg;
-    reportCfgInfo_t *pEntry = app_reporting->pEntry;
-
-    if (clock_time_exceed(app_reporting->time_posted, pEntry->minInterval*1000*1000)) {
-        if (app_reporting->timerReportMinEvt) {
-            TL_ZB_TIMER_CANCEL(&app_reporting->timerReportMinEvt);
-        }
-        reportAttr(pEntry);
-    }
-
-    return 0;
-}
-
-void app_reportAttrTimerStart() {
-    if(zcl_reportingEntryActiveNumGet()) {
-        for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++) {
-            reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
-            app_reporting[i].pEntry = pEntry;
-            if(pEntry->used && (pEntry->maxInterval != 0xFFFF) && (pEntry->minInterval || pEntry->maxInterval)){
-                if(zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)) {
-                    if (!app_reporting[i].timerReportMinEvt) {
-                        if (pEntry->minInterval && pEntry->maxInterval && pEntry->minInterval <= pEntry->maxInterval) {
-                            app_reporting[i].timerReportMinEvt = TL_ZB_TIMER_SCHEDULE(app_reportMinAttrTimerCb, &app_reporting[i], pEntry->minInterval*1000);
-                        }
-                    }
-                    if (!app_reporting[i].timerReportMaxEvt) {
-                        if (pEntry->maxInterval) {
-                            if (pEntry->minInterval < pEntry->maxInterval) {
-                                if (pEntry->maxInterval != pEntry->minInterval && pEntry->maxInterval > pEntry->minInterval) {
-                                    app_reporting[i].timerReportMaxEvt = TL_ZB_TIMER_SCHEDULE(app_reportMaxAttrTimerCb, &app_reporting[i], pEntry->maxInterval*1000);
-                                }
-                            }
-                        } else {
-                            app_reportMinAttrTimerCb(&app_reporting[i]);
-                        }
-
-                    }
-                }
-            }
-        }
-    }
+/*********************************************************************
+ * @fn      app_chk_report
+ *
+ * @brief	check if there is report.
+ *
+ * @param   NULL
+ *
+ * @return	NULL
+ */
+void app_chk_report(u16 uptime_sec) {
+	if(zcl_reportingEntryActiveNumGet()){
+		zclAttrInfo_t *pAttrEntry = NULL;
+		u16 len = 0;
+		bool flg_report = false;
+		bool flg_chk_attr = false;
+		for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
+			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
+			if(pEntry->used && (pEntry->maxInterval != 0xFFFF)) {
+				flg_report = false;
+				// used
+				if(pEntry->minInterval == 0) {
+					// there is no minimum limit
+					flg_chk_attr = true;
+				} else if (pEntry->minInterval || pEntry->maxInterval) {
+					if(pEntry->minIntCnt > uptime_sec)
+						pEntry->minIntCnt -= uptime_sec;
+					else
+						pEntry->minIntCnt = 0;
+					if(pEntry->maxIntCnt > uptime_sec)
+						pEntry->maxIntCnt -= uptime_sec;
+					else
+						pEntry->maxIntCnt = 0;
+					if(!pEntry->minIntCnt) {
+						flg_chk_attr = true;
+					} else if(!pEntry->maxIntCnt) {
+						pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
+						if(!pAttrEntry){
+							// should not happen.
+							ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
+							return;
+						}
+						flg_report = true;
+					}
+				}
+				if(flg_chk_attr || flg_report) {
+					pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
+					if(!pAttrEntry){
+						// should not happen.
+						ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
+						return;
+					}
+				}
+				if(flg_chk_attr) {
+					// report pAttrEntry
+					if(zcl_analogDataType(pAttrEntry->type)) {
+						if(reportableChangeValueChk(pAttrEntry->type, pAttrEntry->data, pEntry->prevData, pEntry->reportableChange)) {
+							flg_report = true;
+						}
+					} else {
+						len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
+						len = (len>8) ? (8):(len);
+						if(memcmp(pEntry->prevData, pAttrEntry->data, len) != SUCCESS) {
+							flg_report = true;
+						}
+					}
+				}
+				if(flg_report) {
+					reportAttr(pEntry);
+					pEntry->minIntCnt = pEntry->minInterval;
+					pEntry->maxIntCnt = pEntry->maxInterval;
+				}
+			}
+		}
+	} else {
+		// no report
+	}
 }

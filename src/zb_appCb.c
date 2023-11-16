@@ -172,7 +172,11 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
+#if BOARD == BOARD_TS0201_TZ3000
+			light_blink_start(7, 500, 500);
+#else
 			light_blink_start(5, 300, 300);
+#endif
 			zb_setPollRate(DEFAULT_POLL_RATE);
 
 			if(steerTimerEvt){
@@ -181,19 +185,23 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			if(deviceRejoinBackoffTimerEvt){
 				TL_ZB_TIMER_CANCEL(&deviceRejoinBackoffTimerEvt);
 			}
+#if	USE_DISPLAY
 			if(deviceAppTimerEvt) {
 				TL_ZB_TIMER_CANCEL(&deviceAppTimerEvt);
 			}
+#endif
 #ifdef ZCL_POLL_CTRL
 		    sensorDevice_zclCheckInStart();
 #endif
 #ifdef ZCL_OTA
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
 #endif
+#if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
 			show_connected_symbol(true);
 #else
 			show_ble_symbol(false);
+#endif
 #endif
 			break;
 		case BDB_COMMISSION_STA_IN_PROGRESS:
@@ -217,12 +225,14 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 				steerTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
 #endif
+#if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
 				show_connected_symbol(false);
 #else
 				show_ble_symbol(true);
 #endif
-				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
+				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER);
+#endif
 			}
 			break;
 		case BDB_COMMISSION_STA_FORMATION_FAILURE:
@@ -240,12 +250,14 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 #endif
+#if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
 			show_connected_symbol(false);
 #else
 			show_ble_symbol(true);
 #endif
-			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
+			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER);
+#endif
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
 			if(!zb_isDeviceFactoryNew()){
@@ -256,12 +268,14 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 				zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 #endif
 			}
+#if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
 			show_connected_symbol(false);
 #else
 			show_ble_symbol(true);
 #endif
-			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(scan_task_timer, NULL, READ_SENSOR_TIMER);
+			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER);
+#endif
 			break;
 		default:
 			break;

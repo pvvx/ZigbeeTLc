@@ -13,7 +13,8 @@ $(OUT_PATH)$(SRC_DIR)/lcd_cgdk2.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_mho_c122.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/sensorEpCfg.o \
-$(OUT_PATH)$(SRC_DIR)/sensors.o \
+$(OUT_PATH)$(SRC_DIR)/sensors_shtxx.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_cht8305.o \
 $(OUT_PATH)$(SRC_DIR)/zb_appCb.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_thermostat_ui_cfg.o \
@@ -24,10 +25,11 @@ $(OUT_PATH)$(SRC_DIR)/drv_flash.o \
 $(OUT_PATH)$(SRC_DIR)/flash.o \
 $(OUT_PATH)$(SRC_DIR)/common/main.o \
 $(OUT_PATH)$(SRC_DIR)/common/factory_reset.o \
-$(OUT_PATH)$(SRC_DIR)/common/firmwareEncryptChk.o \
 $(OUT_PATH)$(SRC_DIR)/common/module_test.o \
 $(OUT_PATH)$(SRC_DIR)/cstartup_8258.o \
 $(OUT_PATH)$(SRC_DIR)/ext_ota.o
+
+#$(OUT_PATH)$(SRC_DIR)/common/firmwareEncryptChk.o \
 
 # Each subdirectory must supply rules for building sources it contributes
 $(OUT_PATH)$(SRC_DIR)/%.o: $(PROJECT_PATH)$(SRC_DIR)/%.c

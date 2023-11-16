@@ -100,7 +100,7 @@ const u8 lcd_init_b19[]	=	{
 
 const u8 display_numbers[16] = {0xF5,0x05,0xD3,0x97,0x27,0xb6,0xf6,0x15,0xf7,0xb7,0x77,0xe6,0xf0,0xc7,0xf2,0x72};
 
-#define lcd_send_i2c_buf(b, a)  send_i2c(i2c_address_lcd, (u8 *) b, a)
+#define lcd_send_i2c_buf(b, a)  send_i2c_bytes(i2c_address_lcd, (u8 *) b, a)
 
 /* B1.5, B1.6 (UART LCD)
   u8 * p = display_buff; */
@@ -231,7 +231,7 @@ void show_reboot_screen(void) {
 }
 
 void init_lcd(void){
-	i2c_address_lcd = (u8) test_i2c_device(B14_I2C_ADDR << 1);
+	i2c_address_lcd = scan_i2c_addr(B14_I2C_ADDR << 1);
 	if (i2c_address_lcd) { // B1.4, B1.7, B2.0
 // 		GPIO_PB6 set in app_config.h!
 //		gpio_setup_up_down_resistor(GPIO_PB6, PM_PIN_PULLUP_10K); // LCD on low temp needs this, its an unknown pin going to the LCD controller chip
@@ -239,7 +239,7 @@ void init_lcd(void){
 		lcd_send_i2c_buf((u8 *) lcd_init_cmd_b14, sizeof(lcd_init_cmd_b14));
 		lcd_send_i2c_buf((u8 *) lcd_init_clr_b14, sizeof(lcd_init_clr_b14));
 	} else {
-		i2c_address_lcd = (u8) test_i2c_device(B19_I2C_ADDR << 1);
+		i2c_address_lcd = scan_i2c_addr(B19_I2C_ADDR << 1);
 		if (i2c_address_lcd) { // B1.9
 			lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));
 			lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));

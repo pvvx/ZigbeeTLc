@@ -55,7 +55,11 @@ extern "C" {
 
 #define CLOCK_SYS_CLOCK_HZ  		24000000 //48000000
 
+#define SENSOR_SHTXX	1
+#define SENSOR_CHT8305	2
+
 /* Board include */
+#if defined(BOARD)
 #if (BOARD == BOARD_LYWSD03MMC)
 	#include "board_lyws03mmc.h"
 #elif (BOARD == BOARD_CGDK2)
@@ -64,7 +68,16 @@ extern "C" {
 	#include "board_mho_c122.h"
 #elif BOARD == BOARD_MHO_C401N
 #include "board_mho_c401n.h"
+#elif BOARD == BOARD_TS0201_TZ3000
+#include "board_ts0201_tz3000.h"
+#else
+#error "Define BOARD!"
 #endif
+#else
+#error "Define BOARD!"
+#endif
+
+#define VOLTAGE_DETECT_ADC_PIN GPIO_VBAT
 
 #define READ_SENSOR_TIMER 	10000 // ms
 
@@ -79,14 +92,6 @@ extern "C" {
  * such as VCC.
  */
 #define VOLTAGE_DETECT_ENABLE						0
-
-#if defined(MCU_CORE_826x)
-	#define VOLTAGE_DETECT_ADC_PIN					0
-#elif defined(MCU_CORE_8258) || defined(MCU_CORE_8278)
-	#define VOLTAGE_DETECT_ADC_PIN					GPIO_PC5
-#elif defined(MCU_CORE_B91)
-	#define VOLTAGE_DETECT_ADC_PIN					ADC_GPIO_PB0
-#endif
 
 /* Watch dog module */
 #define MODULE_WATCHDOG_ENABLE						0
@@ -106,7 +111,7 @@ extern "C" {
 //#define ZCL_IAS_ZONE_SUPPORT						1
 #define ZCL_TEMPERATURE_MEASUREMENT_SUPPORT			1
 #define ZCL_RELATIVE_HUMIDITY_SUPPORT   			1
-#define ZCL_THERMOSTAT_UI_CFG_SUPPORT				1
+#define ZCL_THERMOSTAT_UI_CFG_SUPPORT				USE_DISPLAY
 //#define ZCL_POLL_CTRL_SUPPORT						1
 #define ZCL_OTA_SUPPORT								1
 #define REJOIN_FAILURE_TIMER						1

@@ -47,7 +47,7 @@ u8 display_cmp_buff[LCD_BUF_SIZE];
 u8 i2c_address_lcd; // = 0x78; // B1.4 uses Address 0x78 and B1.9 uses 0x7c
 
 #define lcd_send_i2c_byte(a)  send_i2c_byte(lcd_i2c_addr, a)
-#define lcd_send_i2c_buf(b, a)  send_i2c(i2c_address_lcd, (u8 *) b, a)
+#define lcd_send_i2c_buf(b, a)  send_i2c_bytes(i2c_address_lcd, (u8 *) b, a)
 
 #define LCD_SYM_H	0b01100111	// "H"
 #define LCD_SYM_i	0b00000100	// "i"
@@ -126,7 +126,7 @@ void send_to_lcd(void){
 }
 
 void init_lcd(void){
-	lcd_i2c_addr = (u8) test_i2c_device(B14_I2C_ADDR << 1);
+	lcd_i2c_addr = scan_i2c_addr(B14_I2C_ADDR << 1);
 	if (lcd_i2c_addr) {
 // 		GPIO_PB6 set in app_config.h!
 //		gpio_setup_up_down_resistor(GPIO_PB6, PM_PIN_PULLUP_10K); // LCD on low temp needs this, its an unknown pin going to the LCD controller chip

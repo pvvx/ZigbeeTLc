@@ -56,6 +56,8 @@ def main(args):
             head, tail = os.path.split(args.input_file)
             if args.path:
                 head = args.path
+            if args.name:
+                tail = args.name
             if args.output_title:
                 name = args.output_title
             else:
@@ -79,6 +81,7 @@ if __name__ == '__main__':
     parser.add_argument("-ot", '--output-title', help="replace original file name with the string")
     parser.add_argument("-o", '--output', help="output file")
     parser.add_argument("-p", '--path', help="path to output file")
+    parser.add_argument("-n", '--name', help="short name output file")
     # sync with g_zcl_basicAttrs.stackVersion
     parser.add_argument("-s", '--ota-version', type=int, help="OTA stack version", default=2)
     parser.add_argument("-v", '--set-version', type=lambda x: int(x, 0), help="Override version from BIN")

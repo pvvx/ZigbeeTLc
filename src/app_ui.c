@@ -28,11 +28,11 @@
  */
 #include "tl_common.h"
 #include "device.h"
+#include "sensors.h"
 #include "zb_api.h"
 #include "zcl_include.h"
 #include "lcd.h"
 #include "app_ui.h"
-#include "sensor.h"
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -47,7 +47,7 @@
 /**********************************************************************
  * LOCAL FUNCTIONS
  */
-
+#if	USE_DISPLAY
 void light_on(void)
 {
     show_ble_symbol(true);
@@ -65,6 +65,24 @@ void light_init(void)
     show_ble_symbol(false);
     update_lcd();
 }
+#else
+void light_on(void)
+{
+	gpio_write(GPIO_LED, LED_ON);
+	gpio_setup_up_down_resistor(GPIO_LED, PM_PIN_PULLUP_10K);
+}
+
+void light_off(void)
+{
+	gpio_write(GPIO_LED, LED_OFF);
+	gpio_setup_up_down_resistor(GPIO_LED, PM_PIN_UP_DOWN_FLOAT);
+}
+
+void light_init(void)
+{
+	light_off();
+}
+#endif
 
 s32 zclLightTimerCb(void *arg)
 {
@@ -146,6 +164,7 @@ static s32 keyTimerCb(void *arg)
 					g_sensorAppCtx.keyPressedTime,
 					3000 * 1000)) { // 3 sec
 			g_sensorAppCtx.keyPressedTime = clock_time();
+#if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
 			show_connected_symbol(false);
 			update_lcd();
@@ -153,6 +172,9 @@ static s32 keyTimerCb(void *arg)
 			//show_ble_symbol(true);
 			show_blink_screen();
 #endif
+#else
+			light_on();
+#endif // USE_DISPLAY
 
 			tl_bdbReset2FN();
 #ifdef USE_EPD
@@ -174,6 +196,9 @@ void task_keys(void) {
 	u8 button_on = gpio_read(BUTTON1)? 0 : 1;
 	if(button_on) {
 		// button on
+#if	!USE_DISPLAY
+		light_on();
+#endif
 		if(!g_sensorAppCtx.keyPressed) {
 			// event button on
 			g_sensorAppCtx.keyPressedTime = clock_time();

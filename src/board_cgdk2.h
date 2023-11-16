@@ -39,19 +39,10 @@ extern "C" {
 #define PC4_FUNC			AS_GPIO
 #define PULL_WAKEUP_SRC_PC4 PM_PIN_PULLUP_1M
 
-
-/*
-#define GPIO_TRG			GPIO_PB1
-#define PB1_INPUT_ENABLE	1
-#define PB1_DATA_OUT		0
-#define PB1_OUTPUT_ENABLE	0
-#define PB1_FUNC			AS_GPIO
-#define PULL_WAKEUP_SRC_PB1	PM_PIN_PULLDOWN_100K
-*/
-
 #define I2C_CLOCK			100000 // Hz
-
-#define LCD_BUF_SIZE	18
+#define	USE_DISPLAY			2
+#define LCD_BUF_SIZE		18
+#define SENSOR_TYPE 		SENSOR_SHTXX
 
 #define I2C_SCL 	GPIO_PC0
 #define I2C_SDA 	GPIO_PC1
@@ -61,12 +52,12 @@ extern "C" {
 
 #define USE_SENSOR_ID		1
 
-#define SHL_ADC_VBAT		B0P // "B0P" see in adc.h ADC_InputPchTypeDef
-#define GPIO_VBAT			GPIO_PB0 // missing pin on case TLSR8253F512ET32
-#define PB0_INPUT_ENABLE	1
-#define PB0_DATA_OUT		1
-#define PB0_OUTPUT_ENABLE	1
-#define PB0_FUNC			AS_GPIO
+#define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef
+#define GPIO_VBAT			GPIO_PC5 // missing pin on case TLSR8251F512ET24
+#define PC5_INPUT_ENABLE	0
+#define PC5_DATA_OUT		1
+#define PC5_OUTPUT_ENABLE	1
+#define PC5_FUNC			AS_GPIO
 
 // UART
 #if ZBHCI_UART

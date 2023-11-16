@@ -24,7 +24,7 @@
  *******************************************************************************************************/
 
 #include "tl_common.h"
-#include "sensor.h"
+#include "sensors.h"
 
 /*
  * system clock configuration
@@ -131,7 +131,7 @@ void voltage_detect_init(u32 detectPin)
 }
 
 
-#if 1 //VOLTAGE_DETECT_ENABLE
+#if 1 // VOLTAGE_DETECT_ENABLE
 void voltage_detect(bool powerOn)
 {
 	u16 voltage = drv_get_adc_data();
@@ -139,9 +139,9 @@ void voltage_detect(bool powerOn)
 	//printf("VDD: %d\n", voltage);
 	if(voltage < BATTERY_SAFETY_THRESHOLD){
 #if PM_ENABLE
-			drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, 0, 60*1000);
+		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, 0, 60*1000);
 #else
-			SYSTEM_RESET();
+		SYSTEM_RESET();
 #endif
 	}
 }
