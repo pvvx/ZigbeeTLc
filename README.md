@@ -23,6 +23,8 @@ Firmware readiness level - Beta versions 0.1.0.4. Additional tests are required.
 
 In the future, you can update [Zigbee LYWSD03MMC firmware to the version from devbis](https://github.com/devbis/z03mmc).
 
+* BLE firmware for [TS0201_TZ3000](https://github.com/pvvx/BLE_THSensor)
+
 ---
 
 ## Indication on LCD screen
