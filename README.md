@@ -102,7 +102,10 @@ git clone https://github.com/devbis/tl_zigbee_sdk.git -b 3.6.8.5 --depth 1 ./SDK
 
 ---
 
-Zigbee LYWSD03MC is based on the original work of @devbis. 
+
+The start of the project with Zigbee on TLSR825x was inspired by the following original works:
+
+* https://github.com/slacky1965/watermeter_zed
 
 * https://github.com/devbis/z03mmc
 
