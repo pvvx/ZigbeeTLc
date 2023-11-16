@@ -35,18 +35,12 @@ void app_chk_report(u16 uptime_sec) {
 						pEntry->maxIntCnt -= uptime_sec;
 					else
 						pEntry->maxIntCnt = 0;
-					if(!pEntry->minIntCnt) {
-						flg_chk_attr = true;
-					} else if(!pEntry->maxIntCnt) {
-						pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
-						if(!pAttrEntry){
-							// should not happen.
-							ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
-							return;
-						}
+					if(!pEntry->maxIntCnt) {
 						flg_report = true;
+					} else if(!pEntry->minIntCnt) {
+						flg_chk_attr = true;
 					}
-				}
+ 				}
 				if(flg_chk_attr || flg_report) {
 					pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
 					if(!pAttrEntry){
