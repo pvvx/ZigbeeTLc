@@ -49,9 +49,11 @@ The flashing "BT" icon is called by the identification command.
 
 3. Оптимизировано потребление при отключении координатора или потере связи. Выполняя _rejoin_, при нарушении связи термометр потребляет достатчно много. Следите за работой вашего координатора сети - Zigbee не любит (практически не переносит) отключений координатора.
 
-4. Оптимизировано потребление при опросе контакта "reset" или кнопки.
+4. Consumption has been optimized when polling the reset button or contact.
 
-5. Ещё оптимизировано потребление и исправлен report. 
+5. Additional adjustments to consumption consumption and correction of the report transmission functions algorithm.
+
+6. Correspondence of transmitted and displayed measurements (correct rounding).
 
 Итоговое среднее потребление LYWSD03MC B1.4 при измерении от источника 3.3В от 14 до 26 мкА в зависимости от динамики изменений температуры и влажности. Это в 1.5 раза меньше [варинта fw](https://github.com/devbis/z03mmc) от @devbis.
 (Для сравнения с BLE версией: Вариант с BLE потребляет 14 мкА при default настройках и постоянной передаче всех измеренных значений каждые 10 секунд. Дальность связи в режиме BLE LongRange составляет до 1 км по прямой, для Zigbee - сотни метров.)

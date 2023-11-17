@@ -134,19 +134,19 @@ void read_sensor_and_save(void) {
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	if (g_zcl_thermostatUICfgAttrs.displayMode == 2) {
 		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
-		show_big_number_x10((measured_data.temp * 9 / 50) + 320, 2); // convert C to F
+		show_big_number_x10(((measured_data.temp * 9 + 25) / 50) + 320, 2); // convert C to F
 	} else
 		g_zcl_thermostatUICfgAttrs.displayMode = 1;
-		show_big_number_x10(measured_data.temp / 10, 1);
+		show_big_number_x10((measured_data.temp + 5) / 10, 1);
 #else
 	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
 
-	show_big_number_x10(measured_data.temp / 10, 1);
+	show_big_number_x10((measured_data.temp  + 5) / 10, 1);
 #endif
 	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
     g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
 
-    g_zcl_powerAttrs.batteryVoltage = (u8)(measured_data.battery_mv / 100);
+    g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.battery_mv + 50) / 100);
     // batteryPercentage = level in zigbee sepulkas
     measured_data.battery_level = (measured_data.battery_mv - BATTERY_SAFETY_THRESHOLD)/4;
     if(measured_data.battery_level > 200)
@@ -155,10 +155,10 @@ void read_sensor_and_save(void) {
 
 
 #if BOARD == BOARD_CGDK2
-    show_small_number_x10(measured_data.humi / 10, 1);
+    show_small_number_x10((measured_data.humi + 5)/ 10, 1);
     show_battery_symbol(true);
 #else
-    show_small_number(measured_data.humi / 100, 1);
+    show_small_number((measured_data.humi + 50) / 100, 1);
     show_battery_symbol(g_zcl_powerAttrs.batteryPercentage < 10);
 #endif
 #if defined(SHOW_SMILEY)
@@ -181,7 +181,7 @@ void read_sensor_and_save(void) {
 		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
 		g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
 	}
-	g_zcl_powerAttrs.batteryVoltage = (u8)(measured_data.battery_mv / 100);
+	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.battery_mv + 50) / 100);
 	measured_data.battery_level = (measured_data.battery_mv - BATTERY_SAFETY_THRESHOLD)/4;
     if(measured_data.battery_level > 200)
     	measured_data.battery_level = 200;
