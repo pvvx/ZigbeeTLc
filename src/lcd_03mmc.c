@@ -3,7 +3,7 @@
 #if BOARD == BOARD_LYWSD03MMC
 #include "chip_8258/timer.h"
 
-#include "app_i2c.h"
+#include "i2c_drv.h"
 #include "lcd.h"
 #include "device.h"
 
@@ -293,7 +293,7 @@ __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol)
 				number = -number;
 				display_buff[5] = 2; // "-"
 			}
-			number = (number / 10) + ((number % 10) > 5); // round(div 10)
+			number = (number + 5) / 10; // round(div 10)
 		} else { // show: -9.9..199.9
 			display_buff[4] = 0x08; // point
 			if (number < 0){

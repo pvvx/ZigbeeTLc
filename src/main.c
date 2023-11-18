@@ -24,15 +24,16 @@
  *******************************************************************************************************/
 
 #include "zb_common.h"
+#include "ext_ota.h"
+#include "chip_8258/register.h"
 
 extern void user_init(bool isRetention);
-extern void test_first_ota(void);
 
 /*
  * main:
  * */
 int main(void){
-    g_zb_txPowerSet = RF_POWER_INDEX_P1p99dBm;
+    g_zb_txPowerSet = RF_TX_POWER_DEF; // RF_POWER_INDEX_P1p99dBm;
 	startup_state_e state = drv_platform_init();
 
 	u8 isRetention = (state == SYSTEM_DEEP_RETENTION) ? 1 : 0;
@@ -64,7 +65,7 @@ int main(void){
 	while(1){
 #if VOLTAGE_DETECT_ENABLE
 		if(clock_time_exceed(tick, 200 * 1000)) { // 200 ms
-			voltage_detect(0);
+			batery_detect();
 			tick = clock_time();
 		}
 #endif

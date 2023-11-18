@@ -25,26 +25,92 @@
 
 #pragma once
 
-#include "common/comm_cfg.h"
+/**********************************************************************
+ * User configuration whether to use boot loader mode.
+ *
+ * NOTE:
+ * We do not recommend using BootLoader mode on 512K flash chips,
+ * because in boot loader mode, it can only support up to 196k firmware
+ * according to the current default Flash Map.
+ *
+ * Please refer to the drv_nv.h file, and check if the firmware size
+ * exceeds the maximum limit.
+ *
+ * The user can configure the CHIP_TYPE used by the corresponding
+ * project in the version.h file according to the actual size
+ * of the flash at hand.
+ *
+ * If BOOT_LOADER_MODE is 0, it means that the SDK uses Normal Mode,
+ * hardware multi-address (0x0000 or 0x40000) startup mode.
+ * If BOOT_LOADER_MODE is 1, it means that the SDK uses Boot Loader Mode.
+ *
+ * Normal mode is used by default.
+ */
+#define BOOT_LOADER_MODE					0
+
+/* Boot loader address. */
+#define BOOT_LOADER_IMAGE_ADDR				0x0
+
+/* APP image address. */
+#if (BOOT_LOADER_MODE)
+	#define APP_IMAGE_ADDR					0x8000
+#else
+	#define APP_IMAGE_ADDR					0x0
+#endif
+
+/* Board ID */
+//#define BOARD_LYWSD03MMC_B14		0 // number used for BLE firmware
+#define BOARD_MHO_C401				1
+#define BOARD_CGG1					2
+//#define BOARD_LYWSD03MMC_B19		3 // number used for BLE firmware
+//#define BOARD_LYWSD03MMC_DEVBIS	3 // ver https://github.com/devbis/z03mmc
+//#define BOARD_LYWSD03MMC_B16		4 // number used for BLE firmware
+//#define BOARD_WATERMETER			4 // ver https://github.com/slacky1965/watermeter_zed
+//#define BOARD_LYWSD03MMC_B17		5 // number used for BLE firmware
+#define BOARD_CGDK2					6
+#define BOARD_CGG1N					7 // 2022
+#define BOARD_MHO_C401N				8 // 2022
+#define BOARD_MJWSD05MMC			9
+//#define BOARD_LYWSD03MMC_B15		10 // number used for BLE firmware
+#define BOARD_LYWSD03MMC			10
+#define BOARD_MHO_C122				11
+// 13..15 - number used for BLE firmware - https://github.com/pvvx/ATC_MiThermometer
+#define BOARD_TNK					16 // Water tank controller (not yet published at the moment)
+#define BOARD_TS0201_TZ3000			17
+#define BOARD_TS0202_TZ3000			18 // ?
+// 19.. not yet appointed
+
+/* Board define */
+#ifndef BOARD
+#define BOARD					BOARD_TS0201_TZ3000 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_TS0201_TZ3000
+#endif
+
+/* Chip IDs */
+#define TLSR_8267				0x00
+#define TLSR_8269				0x01
+#define TLSR_8258_512K			0x02
+#define TLSR_8258_1M			0x03
+#define TLSR_8278				0x04
+#define TLSR_B91				0x05
 
 #if defined(MCU_CORE_826x)
 	#if (CHIP_8269)
-		#define CHIP_TYPE					TLSR_8269
+		#define CHIP_TYPE		TLSR_8269
 	#else
-		#define CHIP_TYPE					TLSR_8267
+		#define CHIP_TYPE		TLSR_8267
 	#endif
 #elif defined(MCU_CORE_8258)
-		#define CHIP_TYPE					TLSR_8258_512K	//TLSR_8258_1M
+		#define CHIP_TYPE		TLSR_8258_512K	//TLSR_8258_1M
 #elif defined(MCU_CORE_8278)
-		#define CHIP_TYPE					TLSR_8278
+		#define CHIP_TYPE		TLSR_8278
 #elif defined(MCU_CORE_B91)
-		#define CHIP_TYPE					TLSR_B91
+		#define CHIP_TYPE		TLSR_B91
 #endif
 
-#define APP_RELEASE							0x01	//BCD app release "0.1"
-#define APP_BUILD							0x06	//BCD app build "0.2"
-#define STACK_RELEASE						0x30	//BCD stack release 3.0
-#define STACK_BUILD							0x01	//BCD stack build 01
+#define APP_RELEASE				0x01	//BCD app release "0.1"
+#define APP_BUILD				0x07	//BCD app build "0.2"
+#define STACK_RELEASE			0x30	//BCD stack release 3.0
+#define STACK_BUILD				0x01	//BCD stack build 01
 
 /*********************************************************************************************
  * During OTA upgrade, the upgraded device will check the rules of the following three fields.

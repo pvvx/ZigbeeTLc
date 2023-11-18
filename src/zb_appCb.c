@@ -36,8 +36,6 @@
 #include "app_ui.h"
 #include "lcd.h"
 
-extern void app_task(void);
-
 /**********************************************************************
  * LOCAL CONSTANTS
  */

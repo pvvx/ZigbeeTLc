@@ -1,5 +1,4 @@
 #pragma once
-#include <stdint.h>
 
 #define SHTC3_I2C_ADDR		0x70
 #define SHT4x_I2C_ADDR		0x44

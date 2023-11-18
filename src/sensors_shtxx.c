@@ -3,7 +3,7 @@
 #include "app_cfg.h"
 #include "chip_8258/timer.h"
 
-#include "app_i2c.h"
+#include "i2c_drv.h"
 #include "device.h"
 #include "sensors.h"
 
@@ -172,7 +172,7 @@ int read_sensor_cb(void) {
 #else
 	reg_i2c_id = sensor_i2c_addr | FLD_I2C_WRITE_READ_BIT;
 #endif
-	i = 512;
+	i = 128;
 	do {
 		unsigned char r = irq_disable();
 		reg_i2c_ctrl = FLD_I2C_CMD_ID | FLD_I2C_CMD_START;
@@ -204,11 +204,11 @@ int read_sensor_cb(void) {
 			while (reg_i2c_status & FLD_I2C_CMD_BUSY);
 			if (crc == data && _temp != 0xffff) {
 				irq_restore(r);
-				measured_data.temp = ((int32_t)(17500*_temp) >> 16) - 4500; // x 0.01 C
+				measured_data.temp = ((s32)(17500*_temp) >> 16) - 4500; // x 0.01 C
 				if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1))
-					measured_data.humi = ((uint32_t)(10000*_humi) >> 16); // x 0.01 %
+					measured_data.humi = ((u32)(10000*_humi) >> 16); // x 0.01 %
 				 else
-					measured_data.humi = ((uint32_t)(12500*_humi) >> 16) - 600; // x 0.01 %
+					measured_data.humi = ((u32)(12500*_humi) >> 16) - 600; // x 0.01 %
 				if (measured_data.humi < 0) measured_data.humi = 0;
 				else if (measured_data.humi > 9999) measured_data.humi = 9999;
 				// measured_data.count++;
@@ -233,13 +233,11 @@ void start_measure_sensor_deep_sleep(void) {
 		send_sensor_word(SHTC3_WAKEUP); //	Wake-up command of the sensor
 		sleep_us(SHTC3_WAKEUP_us - 5);	// 240 us
 		send_sensor_word(SHTC3_MEASURE);
-		voltage_detect_init(VOLTAGE_DETECT_ADC_PIN);
-		voltage_detect(0);
+		battery_detect();
 		pm_wait_us(SHTC3_MEASURE_us);
 	} else if (sensor_i2c_addr) {
 		send_sensor_byte(SHT4x_MEASURE_HI);
-		voltage_detect_init(VOLTAGE_DETECT_ADC_PIN);
-		voltage_detect(0);
+		battery_detect();
 		pm_wait_us(SHT4x_MEASURE_HI_us);
 	} else
 		return;

@@ -8,6 +8,9 @@
 
 #ifndef BOARD_MHO_C122_H_
 #define BOARD_MHO_C122_H_
+
+#define RF_TX_POWER_DEF RF_POWER_INDEX_P1p99dBm
+
 // TLSR8251F512ET24
 // GPIO_PA5 - DM, free, (TRG)
 // GPIO_PA6 - DP, free, (RDS)

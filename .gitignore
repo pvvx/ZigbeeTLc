@@ -1,5 +1,4 @@
-/build/
-.idea
+.build
 .vscode
 .SDK
 ./tools/widows/

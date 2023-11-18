@@ -18,4 +18,6 @@
 #endif
 #endif
 
+void battery_detect(void);
+
 #endif /* SRC_SENSORS_H_ */

@@ -1,7 +1,7 @@
 #include "tl_common.h"
-#include "types.h"
-#include "app_cfg.h"
-#include "app_i2c.h"
+#include "chip_8258/register.h"
+//#include "app_cfg.h"
+#include "i2c_drv.h"
 
 #define _I2C_SEG_
 

@@ -61,8 +61,9 @@ endif
 endif
 
 #LNK_FLAG := -Wl,-nostartfiles -Wl,-nostdlib -Wl,--gc-sections -Wl,-uss_apsmeSwitchKeyReq -fshort-enums -nostartfiles -fno-rtti -fno-exceptions -fno-use-cxa-atexit -fno-threadsafe-statics
+# -uss_apsmeSwitchKeyReq
 
-LNK_FLAGS := --gc-sections -uss_apsmeSwitchKeyReq -nostartfiles
+LNK_FLAGS := --gc-sections -nostartfiles
 
 GCC_FLAGS := \
 -O2 \
@@ -117,7 +118,7 @@ LS_INCLUDE := -L$(SDK_PATH)/platform/lib -L$(SDK_PATH)/zigbee/lib/tc32 -L$(SDK_P
 -include $(MAKE_PATH)/platform.mk
 -include $(MAKE_PATH)/proj.mk
 -include $(MAKE_PATH)/zigbee.mk
--include $(MAKE_PATH)/zbhci.mk
+#-include $(MAKE_PATH)/zbhci.mk
 
 # Add inputs and outputs from these tool invocations to the build variables
 LST_FILE := $(OUT_PATH)/$(PROJECT_NAME).lst
@@ -210,10 +211,10 @@ stop:
 go:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -m
 
-TADDR?=0x076000
+TADDR?=0x00842388
 TLEN?=128
 test_damp:
-	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z10 -c -g df $(TADDR) $(TLEN)
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z10 -c -g ds $(TADDR) $(TLEN)
 
 
 install: $(SDK_FLAGS) $(TC32_PATH)$(TST_FILE)

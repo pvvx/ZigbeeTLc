@@ -162,6 +162,14 @@ extern scomfort_t cmf;
 /**********************************************************************
  * FUNCTIONS
  */
+#if 1
+#define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1MS);
+#define pm_wait_us(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1US);
+#else
+#define pm_wait_ms(t) sleep_us((t)*1000);
+#define pm_wait_us(t) sleep_us(t);
+#endif
+
 void sensorDevice_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg);
 
 status_t sensorDevice_basicCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
@@ -181,14 +189,5 @@ nv_sts_t zcl_thermostatDisplayMode_restore(void);
 void scan_task(void);
 s32 sensors_task(void *arg);
 extern ev_timer_event_t *deviceAppTimerEvt;
-
-
-#if 1
-#define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1MS);
-#define pm_wait_us(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1US);
-#else
-#define pm_wait_ms(t) sleep_us((t)*1000);
-#define pm_wait_us(t) sleep_us(t);
-#endif
 
 #endif /* _DEVICE_H_ */

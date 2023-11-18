@@ -14,7 +14,7 @@
 
 #include "app_ui.h"
 #include "zcl_relative_humidity.h"
-#include "app_i2c.h"
+#include "chip_8258/timer.h"
 #include "sensors.h"
 #include "lcd.h"
 #include "reporting.h"
@@ -34,9 +34,6 @@
  * GLOBAL VARIABLES
  */
 app_ctx_t g_sensorAppCtx;
-extern u8 lcd_version;
-//extern u8 sensor_version;
-
 
 #ifdef ZCL_OTA
 extern ota_callBack_t sensorDevice_otaCb;
@@ -119,7 +116,8 @@ void stack_init(void)
 	zb_zdoCbRegister((zdo_appIndCb_t *)&appCbLst);
 }
 
-_attribute_ram_code_
+#if	USE_DISPLAY
+
 u8 is_comfort(s16 t, u16 h) {
 	u8 ret = 0;
 	if (t >= cmf.t[0] && t <= cmf.t[1] && h >= cmf.h[0] && h <= cmf.h[1])
@@ -128,7 +126,6 @@ u8 is_comfort(s16 t, u16 h) {
 }
 
 
-#if	USE_DISPLAY
 void read_sensor_and_save(void) {
 	read_sensor();
 #ifdef ZCL_THERMOSTAT_UI_CFG
@@ -176,6 +173,7 @@ void read_sensor_and_save(void) {
     }
 }
 #else
+
 void read_sensor_and_save(void) {
 	if (read_sensor()) {
 		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
@@ -193,6 +191,7 @@ void read_sensor_and_save(void) {
     	g_sensorAppCtx.secTimeTik += CLOCK_16M_SYS_TIMER_CLK_1S;
     }
 }
+
 #endif
 
 /*********************************************************************
@@ -206,7 +205,6 @@ void read_sensor_and_save(void) {
  */
 void user_app_init(void)
 {
-	// factoryRst_init();
 #if ZCL_POLL_CTRL_SUPPORT
 	af_powerDescPowerModeUpdate(POWER_MODE_RECEIVER_COMES_PERIODICALLY);
 #else
@@ -531,7 +529,7 @@ void user_init(bool isRetention)
 			120,
 			(u8 *)&reportableChange[2]
 		);
-        reportableChange[3] = 100;
+        reportableChange[3] = 50;
 		bdb_defaultReportingCfg(
 			SENSOR_DEVICE_ENDPOINT,
 			HA_PROFILE_ID,

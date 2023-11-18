@@ -8,6 +8,9 @@
 
 #ifndef BOARD_TS0201_TZ3000_H_
 #define BOARD_TS0201_TZ3000_H_
+
+#define RF_TX_POWER_DEF RF_POWER_INDEX_P3p01dBm
+
 // TLSR825x 1M Flash
 // GPIO_PA7 - SWS, free, (debug TX)
 // GPIO_PB4 - LED (to GND)

@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+#define RF_TX_POWER_DEF RF_POWER_INDEX_P1p99dBm
+
 // TLSR8253F512ET32
 // GPIO_PA0 - free, UART_RX, pcb mark "TP3", (Reed Switch, input)
 // GPIO_PA1 - free
@@ -44,9 +46,9 @@ extern "C" {
 #define LCD_BUF_SIZE		18
 #define SENSOR_TYPE 		SENSOR_SHTXX
 
-#define I2C_SCL 	GPIO_PC0
-#define I2C_SDA 	GPIO_PC1
-#define I2C_GROUP 	I2C_GPIO_GROUP_C0C1
+#define I2C_SCL 			GPIO_PC0
+#define I2C_SDA 			GPIO_PC1
+#define I2C_GROUP 			I2C_GPIO_GROUP_C0C1
 #define PULL_WAKEUP_SRC_PC0	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC1	PM_PIN_PULLUP_10K
 
@@ -68,7 +70,6 @@ extern "C" {
 #if UART_PRINTF_MODE
 	#define	DEBUG_INFO_TX_PIN	    GPIO_SWS //print
 #endif
-
 
 /* Disable C linkage for C++ Compilers: */
 #if defined(__cplusplus)

@@ -4,7 +4,7 @@
 #include "app_cfg.h"
 #include "chip_8258/timer.h"
 
-#include "app_i2c.h"
+#include "i2c_drv.h"
 #include "device.h"
 #include "sensors.h"
 
@@ -65,8 +65,7 @@ extern void voltage_detect(bool powerOn);
 __attribute__((optimize("-Os"))) int read_sensor(void) {
 	u32 _temp, i = 3;
 	u8 reg_data[4];
-	voltage_detect_init(VOLTAGE_DETECT_ADC_PIN);
-	voltage_detect(0);
+	battery_detect();
 	if (sensor_i2c_addr != 0) {
 		while(i--) {
 			if (read_i2c_bytes(sensor_i2c_addr, reg_data, sizeof(reg_data)) == 0) {

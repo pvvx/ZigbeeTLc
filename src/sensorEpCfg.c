@@ -115,7 +115,7 @@ const af_simple_descriptor_t sensorDevice_simpleDesc =
 	HA_PROFILE_ID,                      	/* Application profile identifier */
 	HA_DEV_TEMPERATURE_SENSOR,              /* Application device identifier */
 	SENSOR_DEVICE_ENDPOINT,         		/* Endpoint */
-	0,                                  	/* Application device version */
+	1,										/* Application device version */
 	0,										/* Reserved */
 	sensorDevice_IN_CLUSTER_NUM,           	/* Application input cluster count */
 	sensorDevice_OUT_CLUSTER_NUM,          	/* Application output cluster count */

@@ -12,6 +12,8 @@
 extern "C" {
 #endif
 
+#define RF_TX_POWER_DEF RF_POWER_INDEX_P1p99dBm
+
 #define SHOW_SMILEY
 
 // BUTTON

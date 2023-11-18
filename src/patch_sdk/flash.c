@@ -508,7 +508,7 @@ int flash_read_mid_uid_with_check(unsigned int *flash_mid, unsigned char *flash_
  * @param[in]	none.
  * @return		1 - is zb flash;   0 - is not zb flash.
  */
-unsigned char flash_is_zb(void)
+inline unsigned char flash_is_zb(void)
 {
 	unsigned int flash_mid  = flash_read_mid();
 	if((flash_mid == 0x13325E)||(flash_mid == 0x14325E))
@@ -516,6 +516,27 @@ unsigned char flash_is_zb(void)
 	return 0;
 }
 
+static inline unsigned char _flash_get_vdd_f_calib_value(void)
+{
+	unsigned int mid = flash_read_mid();
+	unsigned char dcdc_flash_volatage = 0;
+	switch((mid & 0xff0000) >> 16)
+	{
+	case(FLASH_SIZE_512K):
+		flash_read_page(0x771c0, 1, &dcdc_flash_volatage);
+		break;
+	case(FLASH_SIZE_1M):
+		flash_read_page(0xfe1c0, 1, &dcdc_flash_volatage);
+		break;
+	case(FLASH_SIZE_2M):
+		flash_read_page(0x1fe1c0, 1, &dcdc_flash_volatage);
+		break;
+	default:
+		dcdc_flash_volatage = 0xff;
+		break;
+	}
+	return dcdc_flash_volatage;
+}
 /**
  * @brief		This function serves to calibration the flash voltage(VDD_F),if the flash has the calib_value,we will use it,either will
  * 				trim vdd_f to 1.95V(2b'111 the max) if the flash is zb.
@@ -524,7 +545,7 @@ unsigned char flash_is_zb(void)
  */
 void flash_vdd_f_calib(void)
 {
-	unsigned char calib_value = flash_get_vdd_f_calib_value();
+	unsigned char calib_value = _flash_get_vdd_f_calib_value();
 	if((0xff == calib_value) || (0 != (calib_value & 0xf8)))
 	{
 		if(flash_is_zb())
