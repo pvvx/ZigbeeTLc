@@ -23,9 +23,13 @@ Firmware readiness level - Beta versions 0.1.x.x. Additional tests are required.
 
 In the future, you can update [Zigbee LYWSD03MMC firmware to the version from devbis](https://github.com/devbis/z03mmc).
 
-* BLE firmware for [TS0201_TZ3000](https://github.com/pvvx/BLE_THSensor)
+## Zigbee OTA
 
----
+[OTA update in ZHA](https://github.com/pvvx/ZigbeeTLc/issues/7)
+
+## Display decimal places for temperature, humidity and battery charge in ZHA.
+
+[ZHA patch for more precision display of data for all Zigbee devices.](https://github.com/pvvx/ZigbeeTLc/issues/6)
 
 ## Indication on LCD screen
 
@@ -112,5 +116,9 @@ The start of the project with Zigbee on TLSR825x was inspired by the following o
 * https://github.com/slacky1965/watermeter_zed
 
 * https://github.com/devbis/z03mmc
+
+---
+
+* BLE firmware for [TS0201_TZ3000](https://github.com/pvvx/BLE_THSensor)
 
 ---
