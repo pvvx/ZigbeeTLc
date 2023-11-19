@@ -18,6 +18,8 @@
 #endif
 #endif
 
+void adc_channel_init(ADC_InputPchTypeDef p_ain); // in adc_drv.c
+u16 get_adc_mv(void); // in adc_drv.c
 void battery_detect(void);
 
 #endif /* SRC_SENSORS_H_ */

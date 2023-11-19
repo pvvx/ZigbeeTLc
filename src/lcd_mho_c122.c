@@ -14,6 +14,7 @@
 #include "lcd.h"
 #include "device.h"
 
+#define _LCD_SPEED_CODE_SEC_ _attribute_ram_code_sec_
 
 /*
  *  MHO-C122 LCD buffer:  byte.bit
@@ -97,7 +98,7 @@ const u8 display_small_numbers[] = {
 		0b01111001, // E
 		0b01111000};  // F
 
-
+_LCD_SPEED_CODE_SEC_
 void send_to_lcd(void){
 	unsigned int buff_index;
 	u8 * p = display_buff;
@@ -190,6 +191,7 @@ void show_battery_symbol(bool state){
 }
 
 /* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999 */
+_LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol){
 	display_buff[0] = 0;
 	display_buff[1] &= BIT(3); // Clear digit (except smiley contour)
@@ -232,6 +234,7 @@ __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol)
 }
 
 /* -9 .. 99 */
+_LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os"))) void show_small_number(s16 number, bool percent){
 	display_buff[4] &= LCD_SYM_BLE; //Clear digit (except BLE symbol)
 	display_buff[5] &= LCD_SYM_BAT; //Clear digit (except BAT symbol)

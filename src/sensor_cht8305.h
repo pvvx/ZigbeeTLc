@@ -55,9 +55,10 @@ struct __attribute__((packed)) _cht8305_config_t{
 
 typedef struct _measured_data_t {
 	u16	battery_mv; // mV
-	s16	temp; // x 0.01 C
-	s16	humi; // x 0.01 %
-	u16	battery_level;
+	u16	average_battery_mv; // mV
+	s16	temp; // in 0.01 C
+	s16	humi; // in 0.01 %
+	u16	battery_level; // in 0.5%
 } measured_data_t;
 
 extern u8 sensor_i2c_addr;

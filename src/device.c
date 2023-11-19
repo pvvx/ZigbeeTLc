@@ -143,13 +143,8 @@ void read_sensor_and_save(void) {
 	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
     g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
 
-    g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.battery_mv + 50) / 100);
-    // batteryPercentage = level in zigbee sepulkas
-    measured_data.battery_level = (measured_data.battery_mv - BATTERY_SAFETY_THRESHOLD)/4;
-    if(measured_data.battery_level > 200)
-    	measured_data.battery_level = 200;
+	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.average_battery_mv + 50) / 100);
     g_zcl_powerAttrs.batteryPercentage = (u8)measured_data.battery_level;
-
 
 #if BOARD == BOARD_CGDK2
     show_small_number_x10((measured_data.humi + 5)/ 10, 1);
@@ -179,11 +174,10 @@ void read_sensor_and_save(void) {
 		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
 		g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
 	}
-	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.battery_mv + 50) / 100);
-	measured_data.battery_level = (measured_data.battery_mv - BATTERY_SAFETY_THRESHOLD)/4;
-    if(measured_data.battery_level > 200)
-    	measured_data.battery_level = 200;
+
+	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.average_battery_mv + 50) / 100);
     g_zcl_powerAttrs.batteryPercentage = (u8)measured_data.battery_level;
+
     g_sensorAppCtx.readSensorTime = clock_time();
     while(g_sensorAppCtx.readSensorTime - g_sensorAppCtx.secTimeTik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
 //    	g_sensorAppCtx.UTC_time++;

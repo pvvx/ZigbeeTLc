@@ -7,6 +7,7 @@
 #include "lcd.h"
 #include "device.h"
 
+#define _LCD_SPEED_CODE_SEC_ _attribute_ram_code_sec_
 
 // UART 38400 BAUD
 #define LCD_UART_BAUD 38400
@@ -145,6 +146,7 @@ static void lcd_send_uart(u8 *p){
 	reg_uart_clk_div = 0;
 }
 
+_LCD_SPEED_CODE_SEC_
 u8 reverse(u8 revByte) {
    revByte = (revByte & 0xF0) >> 4 | (revByte & 0x0F) << 4;
    revByte = (revByte & 0xCC) >> 2 | (revByte & 0x33) << 2;
@@ -152,7 +154,7 @@ u8 reverse(u8 revByte) {
    return revByte;
 }
 
-
+_LCD_SPEED_CODE_SEC_
 void send_to_lcd(void) {
 	u8 *p = display_buff;
 	unsigned int buff_index;
@@ -270,6 +272,7 @@ void show_smiley(u8 state){/*0=off, 1=happy, 2=sad*/
 }
 
 /* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999 */
+_LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol){
 	display_buff[2] &= ~0xE0;
 	if(symbol==1)
@@ -311,6 +314,7 @@ __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol)
 }
 
 /* -9 .. 99 */
+_LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os"))) void show_small_number(s16 number, bool percent){
 	display_buff[1] = display_buff[1] & 0x08; // and battery
 	display_buff[0] = percent?0x08:0x00;

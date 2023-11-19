@@ -9,6 +9,8 @@
 #include "lcd.h"
 #include "device.h"
 
+#define _EPD_SPEED_CODE_SEC_ _attribute_ram_code_sec_
+
 #define LOW     0
 #define HIGH    1
 
@@ -138,7 +140,7 @@ void show_connected_symbol(bool state){
 		display_buff[0] &= ~BIT(0);
 }
 
-
+_EPD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
 static void epd_set_digit(u8 *buf, u8 digit, const u8 *segments) {
     // set the segments, there are up to 11 segments in a digit
@@ -161,7 +163,7 @@ static void epd_set_digit(u8 *buf, u8 digit, const u8 *segments) {
 }
 
 /* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999 */
-
+_EPD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
 void show_big_number_x10(s16 number, u8 symbol){
 
@@ -216,7 +218,7 @@ void show_big_number_x10(s16 number, u8 symbol){
 }
 
 /* -9 .. 99 */
-
+_EPD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
 void show_small_number(s16 number, bool percent){
 	display_buff[1] = 0;
@@ -248,7 +250,7 @@ void show_small_number(s16 number, bool percent){
 	}
 }
 
-
+_EPD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
 static void transmit(u8 cd, u8 data_to_send) {
     gpio_write(EPD_SCL, LOW);

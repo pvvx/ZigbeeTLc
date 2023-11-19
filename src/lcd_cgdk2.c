@@ -9,6 +9,7 @@
 #include "device.h"
 #include <sensors.h>
 
+#define _LCD_SPEED_CODE_SEC_ _attribute_ram_code_sec_
 
 #define CGDK2_I2C_ADDR		0x3E // BU9792AFUV
 
@@ -139,7 +140,7 @@ static void lcd_send_i2c_buf(u8 * dataBuf, uint32_t dataLen) {
     while (reg_i2c_status & FLD_I2C_CMD_BUSY);
 }
 */
-
+_LCD_SPEED_CODE_SEC_
 void send_to_lcd(void){
 	unsigned int buff_index;
 	u8 * p = display_buff;
@@ -168,6 +169,7 @@ void send_to_lcd(void){
 	}
 }
 
+_LCD_SPEED_CODE_SEC_
 void update_lcd(void){
 	if (memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
 		send_to_lcd();
@@ -197,6 +199,7 @@ void init_lcd(void){
 	}
 }
 
+_LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
 static void cgdk22_set_digit(u8 *buf, u8 digit, const u8 *segments) {
     // set the segments, there are up to 11 segments in a digit
@@ -282,6 +285,7 @@ void show_ble_symbol(bool state){
 }
 
 /* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999 */
+_LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os"))) void show_big_number_x10(int16_t number, u8 symbol) {
 	if(symbol==1)
 		show_temp_symbol(TMP_SYM_C);
@@ -332,6 +336,7 @@ __attribute__((optimize("-Os"))) void show_big_number_x10(int16_t number, u8 sym
 }
 
 /* number in 0.1 (-99..999) -> show:  -9.9 .. 99.9 */
+_LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os"))) void show_small_number_x10(int16_t number, bool percent){
 	display_buff[5] &= ~(BIT(0) | BIT(1) | BIT(2) | BIT(3));
 	display_buff[6] = 0;

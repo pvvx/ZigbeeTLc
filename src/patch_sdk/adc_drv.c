@@ -1,5 +1,5 @@
 #include "tl_common.h"
-#include "sensors.h"
+//#include "sensors.h"
 
 #define USE_READ_ADC_CALIBRATION	0
 #define ADC_CALIBRATION_VREF		1175
@@ -117,8 +117,10 @@ void adc_set_gpio_calib_vref(u16 x) {
 
 //==============================================================================
 
-// Process takes about 120 μs at CPU CLK 24Mhz.
-static void adc_channel_init(ADC_InputPchTypeDef p_ain) {
+#define ADC_BUF_COUNT	8
+
+_attribute_ram_code_sec_
+void adc_channel_init(ADC_InputPchTypeDef p_ain) {
 #if 0 // gpio set in app_config.h ?
 	if(p_ain == SHL_ADC_VBAT) {
 		// Set missing pin on case TLSR8251F512ET24/TLSR8253F512ET32
@@ -151,7 +153,7 @@ static void adc_channel_init(ADC_InputPchTypeDef p_ain) {
 	adc_set_mode(ADC_NORMAL_MODE);
 }
 
-// Process takes about 260 μs at CPU CLK 24Mhz.
+_attribute_ram_code_sec_
 u16 get_adc_mv(void) { // ADC_InputPchTypeDef
 	volatile unsigned int adc_dat_buf[ADC_BUF_COUNT];
 	u16 temp;
@@ -195,20 +197,5 @@ u16 get_adc_mv(void) { // ADC_InputPchTypeDef
 #else
 	return ((adc_average + adc_vref_cfg.offset) * adc_vref_cfg.vref) >> 10; // adc_vref default: 1175 (mV)
 #endif
-}
-
-
-void battery_detect(void)
-{
-	adc_channel_init(SHL_ADC_VBAT);
-	measured_data.battery_mv = get_adc_mv();
-	//printf("VDD: %d\n", voltage);
-	if(measured_data.battery_mv < BATTERY_SAFETY_THRESHOLD){
-#if PM_ENABLE
-		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, 0, 60*1000);
-#else
-		SYSTEM_RESET();
-#endif
-	}
 }
 
