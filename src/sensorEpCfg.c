@@ -267,10 +267,7 @@ const zclAttrInfo_t relative_humdity_attrTbl[] =
 #endif
 
 #ifdef ZCL_THERMOSTAT_UI_CFG
-zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs =
-{
-	.displayMode	= 0x00,
-};
+zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs;
 
 const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 {

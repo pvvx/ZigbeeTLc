@@ -1,14 +1,14 @@
 # Custom firmware for Zigbee 3.0 IoT devices on the TLSR825x chip
 
-Under construction...
-
 Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000/)
 
 In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000)
 
-Уровень готовности прошивок - Beta version 0.1.x.x Требуются дополнительные тесты.
+Уровень готовности прошивок - Beta version 0.1.x.x. 
+Стабильна от версии 0.1.1.0, но требуются дополнительные тесты.
 
-Firmware readiness level - Beta versions 0.1.x.x. Additional tests are required.
+Firmware readiness level - Beta versions 0.1.x.x.
+Stable from version 0.1.1.0, but additional tests are required
 
 
 ## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
@@ -62,6 +62,8 @@ The flashing "BT" icon is called by the identification command.
 7. Reducing firmware size: removing unnecessary code from SDK, reorganization of battery voltage measurement (ADC), ...
 
 8. Averaging battery level measurements (eliminates clutter on charts)
+
+9. Switch temperature between Celsius and Fahrenheit (ClusterID: 0x0204, Attr: 0x0000, ENUM8 = 1 in C, = 2 in F)
 
 Итоговое среднее потребление LYWSD03MC B1.4 при измерении от источника 3.3В от 14 до 26 мкА в зависимости от динамики изменений температуры и влажности. Это в 1.5 раза меньше [варинта fw](https://github.com/devbis/z03mmc) от @devbis.
 (Для сравнения с BLE версией: Вариант с BLE потребляет 14 мкА при default настройках и постоянной передаче всех измеренных значений каждые 10 секунд. Дальность связи в режиме BLE LongRange составляет до 1 км по прямой, для Zigbee - сотни метров.)

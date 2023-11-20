@@ -132,9 +132,10 @@ void read_sensor_and_save(void) {
 	if (g_zcl_thermostatUICfgAttrs.displayMode == 2) {
 		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
 		show_big_number_x10(((measured_data.temp * 9 + 25) / 50) + 320, 2); // convert C to F
-	} else
+	} else {
 		g_zcl_thermostatUICfgAttrs.displayMode = 1;
 		show_big_number_x10((measured_data.temp + 5) / 10, 1);
+	}
 #else // !ZCL_THERMOSTAT_UI_CFG
 	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
 

@@ -138,7 +138,7 @@ void light_blink_stop(void)
 {
 	if(g_sensorAppCtx.timerLedEvt){
 		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerLedEvt);
-
+		g_sensorAppCtx.timerLedEvt = NULL;
 		g_sensorAppCtx.times = 0;
 		if(g_sensorAppCtx.oriSta){
 			light_on();

@@ -30,5 +30,5 @@ _CODE_ZCL_ status_t zcl_thermostat_ui_cfg_register(u8 endpoint, u16 manuCode, u8
 	return zcl_registerCluster(endpoint, ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG, manuCode, attrNum, attrTbl, NULL, cb);
 }
 
-#endif	/*  ZCL_THERMOSTAT_UI */
+#endif	/*  ZCL_THERMOSTAT_UI_CFG */
 
