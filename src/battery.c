@@ -59,6 +59,7 @@ void battery_detect(void)
 	measured_data.battery_mv = get_adc_mv();
 	if(measured_data.battery_mv < BATTERY_SAFETY_THRESHOLD){
 #if PM_ENABLE
+		sensor_go_sleep();
 		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, 0, 60*1000);
 #else
 		SYSTEM_RESET();

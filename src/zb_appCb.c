@@ -186,6 +186,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #if	USE_DISPLAY
 			if(deviceAppTimerEvt) {
 				TL_ZB_TIMER_CANCEL(&deviceAppTimerEvt);
+				deviceAppTimerEvt = NULL;
 			}
 #endif
 #ifdef ZCL_POLL_CTRL
@@ -229,7 +230,8 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 				show_ble_symbol(true);
 #endif
-				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER);
+				if(!deviceAppTimerEvt)
+					deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			}
 			break;
@@ -254,7 +256,8 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 			show_ble_symbol(true);
 #endif
-			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER);
+			if(!deviceAppTimerEvt)
+				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
@@ -272,7 +275,8 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 			show_ble_symbol(true);
 #endif
-			deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER);
+			if(!deviceAppTimerEvt)
+				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		default:

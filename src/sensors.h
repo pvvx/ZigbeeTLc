@@ -5,8 +5,8 @@
  *      Author: pvvx
  */
 
-#ifndef SRC_SENSORS_H_
-#define SRC_SENSORS_H_
+#ifndef _SENSORS_H_
+#define _SENSORS_H_
 
 #if defined(SENSOR_TYPE)
 #if SENSOR_TYPE == SENSOR_SHTXX
@@ -16,10 +16,16 @@
 #else
 #error "Define USE_SENSOR!"
 #endif
+#else
+#error "Define USE_SENSOR!"
+#endif
+
+#if USE_SENSOR_ID
+extern u32 sensor_id;
 #endif
 
 void adc_channel_init(ADC_InputPchTypeDef p_ain); // in adc_drv.c
 u16 get_adc_mv(void); // in adc_drv.c
 void battery_detect(void);
 
-#endif /* SRC_SENSORS_H_ */
+#endif /* _SENSORS_H_ */

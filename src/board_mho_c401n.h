@@ -4,8 +4,8 @@
  * @brief   This is the header file for board_mho_c401n
  *
  *******************************************************************************************************/
-
-#pragma once
+#ifndef _BOARD_MHO_C401_H_
+#define _BOARD_MHO_C401_H_
 
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
@@ -26,7 +26,8 @@ extern "C" {
 // GPIO_PD2 - used EPD_SDA
 // GPIO_PD7 - used EPD_RST
 
-#define	USE_DISPLAY			1
+// DISPLAY
+#define	USE_DISPLAY			4
 #define USE_EPD				50 // while(task_lcd()) pm_wait_ms(50 ms);
 #define LCD_BUF_SIZE		16
 
@@ -77,9 +78,9 @@ extern "C" {
 #define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_1M
 
 // I2C
-#define SENSOR_TYPE 		SENSOR_SHTXX
-#define USE_SENSOR_ID		1
 #define I2C_CLOCK			100000 // Hz
+#define SENSOR_TYPE 		SENSOR_SHTXX
+#define USE_SENSOR_ID		0
 
 #define I2C_SCL 			GPIO_PC2
 #define I2C_SDA 			GPIO_PC3
@@ -87,6 +88,7 @@ extern "C" {
 #define PULL_WAKEUP_SRC_PC2	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
 
+// VBAT
 #define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef
 #define GPIO_VBAT			GPIO_PC5 // missing pin on case TLSR8251F512ET24
 #define PC5_INPUT_ENABLE	0
@@ -109,3 +111,5 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
+
+#endif // _BOARD_MHO_C401_H_

@@ -20,8 +20,8 @@
  *          See the License for the specific language governing permissions and
  *          limitations under the License.
  *******************************************************************************************************/
-
-#pragma once
+#ifndef _APP_CFG_H_
+#define _APP_CFG_H_
 
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
@@ -79,7 +79,8 @@ extern "C" {
 
 #define VOLTAGE_DETECT_ADC_PIN GPIO_VBAT
 
-#define READ_SENSOR_TIMER 	10000 // ms
+#define READ_SENSOR_TIMER_SEC 	10 // second
+#define READ_SENSOR_TIMER_MS 	(READ_SENSOR_TIMER_SEC*1000) // msecond
 
 /* Voltage detect module */
 /* If VOLTAGE_DETECT_ENABLE is set,
@@ -153,3 +154,5 @@ typedef enum{
 #if defined(__cplusplus)
 }
 #endif
+
+#endif // _APP_CFG_H_

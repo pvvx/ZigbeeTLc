@@ -286,7 +286,7 @@ void show_ble_symbol(bool state){
 
 /* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999 */
 _LCD_SPEED_CODE_SEC_
-__attribute__((optimize("-Os"))) void show_big_number_x10(int16_t number, u8 symbol) {
+__attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol) {
 	if(symbol==1)
 		show_temp_symbol(TMP_SYM_C);
 	else if(symbol==2)
@@ -337,7 +337,7 @@ __attribute__((optimize("-Os"))) void show_big_number_x10(int16_t number, u8 sym
 
 /* number in 0.1 (-99..999) -> show:  -9.9 .. 99.9 */
 _LCD_SPEED_CODE_SEC_
-__attribute__((optimize("-Os"))) void show_small_number_x10(int16_t number, bool percent){
+__attribute__((optimize("-Os"))) void show_small_number_x10(s16 number, bool percent){
 	display_buff[5] &= ~(BIT(0) | BIT(1) | BIT(2) | BIT(3));
 	display_buff[6] = 0;
 	display_buff[7] = 0;
@@ -393,6 +393,5 @@ void show_blink_screen(void) {
 	lcd_blink = 0xf2;
 	lcd_send_i2c_buf(&lcd_blink, 1);
 }
-
 
 #endif // BOARD == BOARD_CGDK2

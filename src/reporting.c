@@ -16,28 +16,36 @@ void app_chk_report(u16 uptime_sec) {
 	if(zcl_reportingEntryActiveNumGet()){
 		zclAttrInfo_t *pAttrEntry = NULL;
 		u16 len = 0;
-		bool flg_report = false;
-		bool flg_chk_attr = false;
+		bool flg_report, flg_chk_attr;
 		for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
 			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
+/**
+ *  @brief  If minInterval is 0, then there is no minimum limit;
+ *  		if maxInterval is 0xffff, then the configuration info for that attribute need not be maintained;
+ *  		if minInterval is 0xffff and maxInterval is 0, than back to default reporting configuration, reportable change field set to 0.
+ */
 			if(pEntry->used && (pEntry->maxInterval != 0xFFFF)) {
-				flg_report = false;
 				// used
+				flg_chk_attr = false;
+				flg_report = false;
 				if(pEntry->minInterval == 0) {
 					// there is no minimum limit
 					flg_chk_attr = true;
 				} else if (pEntry->minInterval || pEntry->maxInterval) {
+					// timer minInterval seconds
 					if(pEntry->minIntCnt > uptime_sec)
 						pEntry->minIntCnt -= uptime_sec;
 					else
 						pEntry->minIntCnt = 0;
+					// timer maxInterval seconds
 					if(pEntry->maxIntCnt > uptime_sec)
 						pEntry->maxIntCnt -= uptime_sec;
 					else
 						pEntry->maxIntCnt = 0;
-					if(!pEntry->maxIntCnt) {
+
+					if(pEntry->maxIntCnt == 0) {
 						flg_report = true;
-					} else if(!pEntry->minIntCnt) {
+					} else if(pEntry->minIntCnt == 0) {
 						flg_chk_attr = true;
 					}
  				}
@@ -57,16 +65,16 @@ void app_chk_report(u16 uptime_sec) {
 						}
 					} else {
 						len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
-						len = (len>8) ? (8):(len);
+						len = (len > 8) ? (8): (len);
 						if(memcmp(pEntry->prevData, pAttrEntry->data, len) != SUCCESS) {
 							flg_report = true;
 						}
 					}
 				}
 				if(flg_report) {
-					reportAttr(pEntry);
 					pEntry->minIntCnt = pEntry->minInterval;
 					pEntry->maxIntCnt = pEntry->maxInterval;
+					reportAttr(pEntry);
 				}
 			}
 		}

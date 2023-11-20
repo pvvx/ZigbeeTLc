@@ -1,23 +1,23 @@
-{"version": "0.1.0.8",
+{"version": "0.1.0.9",
 "bin":[
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0108.bin", 
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0109.bin", 
 "?",
 "?",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0108.bin",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0108.bin",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0108.bin",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZCGDK2_v0108.bin",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0109.bin",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0109.bin",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0109.bin",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZCGDK2_v0109.bin",
 "?",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZMHOC401N_v0108.bin",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZMHOC401N_v0109.bin",
 "?",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0108.bin",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZMHOC122_v0108.bin",
-"?",
-"?",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/Z03MMC_v0109.bin",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZMHOC122_v0109.bin",
 "?",
 "?",
 "?",
-"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZTS0201Z3000_v0108.bin"
+"?",
+"?",
+"https://raw.githubusercontent.com/pvvx/ZigbeeTLc/master/bin/ZTS0201Z3000_v0109.bin"
 ]}
 
 

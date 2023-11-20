@@ -46,6 +46,9 @@
  *
  * Normal mode is used by default.
  */
+#ifndef _VERSION_CFG_H_
+#define _VERSION_CFG_H_
+
 #define BOOT_LOADER_MODE					0
 
 /* Boot loader address. */
@@ -82,7 +85,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_TS0201_TZ3000 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_TS0201_TZ3000
+#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_TS0201_TZ3000
 #endif
 
 /* Chip IDs */
@@ -108,7 +111,7 @@
 #endif
 
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x08	//BCD app build "0.8"
+#define APP_BUILD				0x09	//BCD app build "0.8"
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01
 
@@ -124,3 +127,6 @@
 #define IS_BOOT_LOADER_IMAGE				0
 #define RESV_FOR_APP_RAM_CODE_SIZE			0
 #define IMAGE_OFFSET						APP_IMAGE_ADDR
+
+#endif // _VERSION_CFG_H_
+

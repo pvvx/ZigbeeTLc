@@ -61,7 +61,7 @@ The flashing "BT" icon is called by the identification command.
 
 7. Reducing firmware size: removing unnecessary code from SDK, reorganization of battery voltage measurement (ADC), ...
 
-8. Battery level averaging
+8. Averaging battery level measurements (eliminates clutter on charts)
 
 Итоговое среднее потребление LYWSD03MC B1.4 при измерении от источника 3.3В от 14 до 26 мкА в зависимости от динамики изменений температуры и влажности. Это в 1.5 раза меньше [варинта fw](https://github.com/devbis/z03mmc) от @devbis.
 (Для сравнения с BLE версией: Вариант с BLE потребляет 14 мкА при default настройках и постоянной передаче всех измеренных значений каждые 10 секунд. Дальность связи в режиме BLE LongRange составляет до 1 км по прямой, для Zigbee - сотни метров.)

@@ -8,7 +8,10 @@
 #include "device.h"
 #include "sensors.h"
 
+#define _SENSOR_SPEED_CODE_SEC_ _attribute_ram_code_sec_
+
 #ifndef USE_SENSOR_ID
+#warning "SET USE_SENSOR_ID!"
 #define USE_SENSOR_ID	0
 #endif
 

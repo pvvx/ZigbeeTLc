@@ -1,5 +1,5 @@
-.build
-.vscode
-.SDK
-./tools/widows/
-./tools/linux/
+build
+vscode
+SDK
+tools/widows/
+tools/linux/

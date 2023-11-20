@@ -1,4 +1,5 @@
-#pragma once
+#ifndef _I2C_DRV_H_
+#define _I2C_DRV_H_
 
 /* Universal I2C/SMBUS read-write transaction struct */
 typedef struct _i2c_utr_t {
@@ -14,3 +15,5 @@ int send_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataL
 int read_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, int dataLen);
 
 int I2CBusUtr(void * outdata, i2c_utr_t *tr, unsigned int wrlen);
+
+#endif /* _I2C_DRV_H_ */

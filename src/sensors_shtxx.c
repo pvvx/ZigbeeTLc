@@ -1,11 +1,12 @@
 #include "tl_common.h"
 #if defined(SENSOR_TYPE) && SENSOR_TYPE == SENSOR_SHTXX
-#include "app_cfg.h"
 #include "chip_8258/timer.h"
 
 #include "i2c_drv.h"
 #include "device.h"
 #include "sensors.h"
+
+#define _SENSOR_SPEED_CODE_SEC_ _attribute_ram_code_sec_
 
 // Sensor SHTC3 https://www.sensirion.com/fileadmin/user_upload/customers/sensirion/Dokumente/2_Humidity_Sensors/Datasheets/Sensirion_Humidity_Sensors_SHTC3_Datasheet.pdf
 //#define SHTC3_I2C_ADDR		0x70
@@ -34,7 +35,7 @@
 #define CRC_POLYNOMIAL  0x131 // P(x) = x^8 + x^5 + x^4 + 1 = 100110001
 
 #ifndef USE_SENSOR_ID
-#define USE_SENSOR_ID	0
+#error "Define USE_SENSOR_ID!"
 #endif
 
 u8 sensor_i2c_addr;
@@ -57,7 +58,6 @@ static void send_sensor_word(u16 cmd) {
 }
 
 static void send_sensor_byte(u8 cmd) {
-
 	unsigned char r = irq_disable();
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 			init_i2c();
@@ -84,7 +84,8 @@ static void soft_reset_sensor(void) {
 	}
 }
 
-u8 sensor_crc(u8 crc) {
+_SENSOR_SPEED_CODE_SEC_
+static u8 sensor_crc(u8 crc) {
 	int i;
 	for(i = 8; i > 0; i--) {
 		if (crc & 0x80)
@@ -104,7 +105,7 @@ u32 get_sensor_id(void) {
 	if(sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) {
 		if(!I2CBusUtr(&buf_id, (i2c_utr_t *)&utr_c3_gid, sizeof(utr_c3_gid) - 3)
 			&& buf_id[2] == sensor_crc(buf_id[1] ^ sensor_crc(buf_id[0] ^ 0xff))) { // = 0x5b
-			id = (buf_id[0] << 8) | buf_id[1]; // = 0x8708
+			id = (buf_id[0] << 8) | buf_id[1]; // = 0x0887
 		}
 	} else if(sensor_i2c_addr)	{
 		if(!send_i2c_byte(sensor_i2c_addr, SHT4x_GET_ID)) {
@@ -149,32 +150,32 @@ void init_sensor(void) {
 #if USE_SENSOR_ID
 	sensor_id = get_sensor_id();
 #endif
+	if(sensor_i2c_addr && sensor_i2c_addr != (SHTC3_I2C_ADDR << 1))
+		send_sensor_byte(SHT4x_MEASURE_HI);
 }
 
+_SENSOR_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
-int read_sensor_cb(void) {
+static int read_sensor_cb(void) {
 	u16 _temp;
 	u16 _humi;
 	u8 data, crc; // calculated checksum
 	int i;
-	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
-		init_i2c();
-	if (sensor_i2c_addr == 0) {
-		if(check_sensor())
-			sensor_go_sleep();
+	if (sensor_i2c_addr == 0)
 		return 0;
-	}
-#if USE_SENSOR_ID
-	if(sensor_id)
-		reg_i2c_id = sensor_i2c_addr | FLD_I2C_WRITE_READ_BIT;
-	else
-		reg_i2c_id = FLD_I2C_WRITE_READ_BIT;
-#else
-	reg_i2c_id = sensor_i2c_addr | FLD_I2C_WRITE_READ_BIT;
-#endif
 	i = 128;
 	do {
 		unsigned char r = irq_disable();
+		if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
+			init_i2c();
+#if USE_SENSOR_ID
+		if(sensor_id)
+			reg_i2c_id = sensor_i2c_addr | FLD_I2C_WRITE_READ_BIT;
+		else
+			reg_i2c_id = FLD_I2C_WRITE_READ_BIT;
+#else
+		reg_i2c_id = sensor_i2c_addr | FLD_I2C_WRITE_READ_BIT;
+#endif
 		reg_i2c_ctrl = FLD_I2C_CMD_ID | FLD_I2C_CMD_START;
 		while (reg_i2c_status & FLD_I2C_CMD_BUSY);
 		if (reg_i2c_status & FLD_I2C_NAK) {
@@ -221,32 +222,30 @@ int read_sensor_cb(void) {
 		irq_restore(r);
 	} while (i--);
 	soft_reset_sensor();
-	sensor_go_sleep();
+	// Sleep command of the sensor = sensor_go_sleep();
+	if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1))
+		send_sensor_word(SHTC3_GO_SLEEP); // Sleep command of the sensor
+	else if(sensor_i2c_addr)
+		send_sensor_byte(SHT4x_MEASURE_HI);
 	return 0;
 }
 
-extern void voltage_detect_init(u32 detectPin);
-extern void voltage_detect(bool powerOn);
-
-void start_measure_sensor_deep_sleep(void) {
+int read_sensor(void) {
+	int re = 0;
 	if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) {
 		send_sensor_word(SHTC3_WAKEUP); //	Wake-up command of the sensor
-		sleep_us(SHTC3_WAKEUP_us - 5);	// 240 us
+//		sleep_us(SHTC3_WAKEUP_us - 5);	// 240 us
+		battery_detect();
 		send_sensor_word(SHTC3_MEASURE);
-		battery_detect();
 		pm_wait_us(SHTC3_MEASURE_us);
-	} else if (sensor_i2c_addr) {
-		send_sensor_byte(SHT4x_MEASURE_HI);
+		re = read_sensor_cb();
+	} else if (sensor_i2c_addr) { //  if (sensor_i2c_addr == (SHT4x_I2C_ADDR << 1)) {
+		re = read_sensor_cb();
 		battery_detect();
-		pm_wait_us(SHT4x_MEASURE_HI_us);
+		send_sensor_byte(SHT4x_MEASURE_HI);
 	} else
-		return;
-	//timer_measure_cb = clock_time() | 1;
-}
-
-int read_sensor(void) {
-	start_measure_sensor_deep_sleep();
-  	return read_sensor_cb();
+		init_sensor();
+	return re;
 }
 
 #endif //  defined(SENSOR_TYPE) && SENSOR_TYPE == SENSOR_SHTXX

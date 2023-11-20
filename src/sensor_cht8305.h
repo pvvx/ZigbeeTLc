@@ -1,6 +1,6 @@
-#pragma once
-#include <stdint.h>
 
+#ifndef _SENSORS_CHT8305_H_
+#define _SENSORS_CHT8305_H_
 
 // Timing
 #define SENSOR_POWER_TIMEOUT_ms  	5
@@ -65,9 +65,10 @@ extern u8 sensor_i2c_addr;
 extern u32 sensor_id;
 extern measured_data_t measured_data;
 
-void init_sensor(void);
-//void start_measure_sensor(void);
-int read_sensor(void);
-//int read_sensor_cb(void);
+#define sensor_go_sleep()
 
+void init_sensor(void);
+int read_sensor(void);
+
+#endif // _SENSORS_CHT8305_H_
 

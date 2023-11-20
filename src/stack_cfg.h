@@ -22,9 +22,8 @@
  *          limitations under the License.
  *
  *******************************************************************************************************/
-
-#pragma once
-
+#ifndef _STACK_CFG_H_
+#define _STACK_CFG_H_
 
 /**
  *  @brief  Working channel
@@ -106,4 +105,4 @@
 #endif
 
 
-
+#endif // _STACK_CFG_H_

@@ -1,7 +1,5 @@
-#pragma once
-
-#include <stdbool.h>
-#include <stdint.h>
+#ifndef _LCD_H_
+#define _LCD_H_
 
 // LCD controller I2C address
 #define B14_I2C_ADDR		0x3C
@@ -30,3 +28,4 @@ void show_blink_screen(void);
 int task_lcd(void);
 #endif
 
+#endif // _LCD_H_

@@ -1,11 +1,11 @@
 /********************************************************************************************************
- * @file    board_8258_03mmc.h
+ * @file    board_lyws03mmc.h
  *
  * @brief   This is the header file for board_8258_lywsd03mmc
  *
  *******************************************************************************************************/
-
-#pragma once
+#ifndef _BOARD_LYWS03MMC_H_
+#define _BOARD_LYWS03MMC_H_
 
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
@@ -23,13 +23,15 @@ extern "C" {
 #define PA5_INPUT_ENABLE	1
 #define	PULL_WAKEUP_SRC_PA5	PM_PIN_PULLUP_10K
 
+// DISPLAY
 #define	USE_DISPLAY			1
 #define LCD_BUF_SIZE		6
 #define	PULL_WAKEUP_SRC_PB6	PM_PIN_PULLUP_10K
 
+// I2C
 #define I2C_CLOCK			400000 // Hz
 #define SENSOR_TYPE 		SENSOR_SHTXX
-#define USE_SENSOR_ID		1
+#define USE_SENSOR_ID		0
 
 #define I2C_SCL 			GPIO_PC2
 #define I2C_SDA 			GPIO_PC3
@@ -38,6 +40,7 @@ extern "C" {
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
 
 #define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_10K // LCD
+
 
 #define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef
 #define GPIO_VBAT			GPIO_PC5 // missing pin on case TLSR8251F512ET24
@@ -61,3 +64,5 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
+
+#endif // _BOARD_LYWS03MMC_H_

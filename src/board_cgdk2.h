@@ -4,8 +4,8 @@
  * @brief   This is the header file for board_cgdk2
  *
  *******************************************************************************************************/
-
-#pragma once
+#ifndef _BOARD_CGDK2_H_
+#define _BOARD_CGDK2_H_
 
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
@@ -41,10 +41,14 @@ extern "C" {
 #define PC4_FUNC			AS_GPIO
 #define PULL_WAKEUP_SRC_PC4 PM_PIN_PULLUP_1M
 
-#define I2C_CLOCK			100000 // Hz
+// DISPLAY
 #define	USE_DISPLAY			2
 #define LCD_BUF_SIZE		18
+
+// I2C
+#define I2C_CLOCK			100000 // Hz
 #define SENSOR_TYPE 		SENSOR_SHTXX
+#define USE_SENSOR_ID		1
 
 #define I2C_SCL 			GPIO_PC0
 #define I2C_SDA 			GPIO_PC1
@@ -52,8 +56,7 @@ extern "C" {
 #define PULL_WAKEUP_SRC_PC0	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC1	PM_PIN_PULLUP_10K
 
-#define USE_SENSOR_ID		1
-
+// VBAT
 #define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef
 #define GPIO_VBAT			GPIO_PC5 // missing pin on case TLSR8251F512ET24
 #define PC5_INPUT_ENABLE	0
@@ -75,3 +78,5 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
+
+#endif // _BOARD_CGDK2_H_

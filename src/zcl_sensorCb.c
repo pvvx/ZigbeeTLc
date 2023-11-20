@@ -2,8 +2,9 @@
  * INCLUDES
  */
 #include "tl_common.h"
-#include "zb_api.h"
+//#include "zb_api.h"
 #include "zcl_include.h"
+//#include "zcl_config.h"
 #include "zcl_thermostat_ui_cfg.h"
 #include "device.h"
 #include "app_ui.h"
@@ -23,18 +24,18 @@
  * LOCAL FUNCTIONS
  */
 #ifdef ZCL_READ
-static void sensorDevice_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd);
+void sensorDevice_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd);
 #endif
 #ifdef ZCL_WRITE
-static void sensorDevice_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd);
-static void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd);
+void sensorDevice_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd);
+void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd);
 #endif
 #ifdef ZCL_REPORT
-static void sensorDevice_zclCfgReportCmd(u8 endpoint, u16 clusterId, zclCfgReportCmd_t *pCfgReportCmd);
-static void sensorDevice_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *pCfgReportRspCmd);
-static void sensorDevice_zclReportCmd(u16 clusterId, zclReportCmd_t *pReportCmd);
+void sensorDevice_zclCfgReportCmd(u8 endpoint, u16 clusterId, zclCfgReportCmd_t *pCfgReportCmd);
+void sensorDevice_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *pCfgReportRspCmd);
+void sensorDevice_zclReportCmd(u16 clusterId, zclReportCmd_t *pReportCmd);
 #endif
-static void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspCmd);
+void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspCmd);
 
 /**********************************************************************
  * GLOBAL VARIABLES
@@ -66,14 +67,14 @@ void sensorDevice_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg)
 	switch(pInHdlrMsg->hdr.cmd)
 	{
 #ifdef ZCL_READ
-		case ZCL_CMD_READ_RSP:
-			sensorDevice_zclReadRspCmd(cluster, pInHdlrMsg->attrCmd);
-			break;
+//		case ZCL_CMD_READ_RSP:
+//			sensorDevice_zclReadRspCmd(cluster, pInHdlrMsg->attrCmd);
+//			break;
 #endif
 #ifdef ZCL_WRITE
-		case ZCL_CMD_WRITE_RSP:
-			sensorDevice_zclWriteRspCmd(cluster, pInHdlrMsg->attrCmd);
-			break;
+//		case ZCL_CMD_WRITE_RSP:
+//			sensorDevice_zclWriteRspCmd(cluster, pInHdlrMsg->attrCmd);
+//			break;
 		case ZCL_CMD_WRITE:
 			sensorDevice_zclWriteReqCmd(cluster, pInHdlrMsg->attrCmd);
 			break;
@@ -82,16 +83,16 @@ void sensorDevice_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg)
 		case ZCL_CMD_CONFIG_REPORT:
 			sensorDevice_zclCfgReportCmd(pInHdlrMsg->msg->indInfo.dst_ep, cluster, pInHdlrMsg->attrCmd);
 			break;
-		case ZCL_CMD_CONFIG_REPORT_RSP:
-			sensorDevice_zclCfgReportRspCmd(cluster, pInHdlrMsg->attrCmd);
-			break;
-		case ZCL_CMD_REPORT:
-			sensorDevice_zclReportCmd(cluster, pInHdlrMsg->attrCmd);
-			break;
+//		case ZCL_CMD_CONFIG_REPORT_RSP:
+//			sensorDevice_zclCfgReportRspCmd(cluster, pInHdlrMsg->attrCmd);
+//			break;
+//		case ZCL_CMD_REPORT:
+//			sensorDevice_zclReportCmd(cluster, pInHdlrMsg->attrCmd);
+//			break;
 #endif
-		case ZCL_CMD_DEFAULT_RSP:
-			sensorDevice_zclDfltRspCmd(cluster, pInHdlrMsg->attrCmd);
-			break;
+//		case ZCL_CMD_DEFAULT_RSP:
+//			sensorDevice_zclDfltRspCmd(cluster, pInHdlrMsg->attrCmd);
+//			break;
 		default:
 			break;
 	}
@@ -107,7 +108,7 @@ void sensorDevice_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg)
  *
  * @return  None
  */
-static void sensorDevice_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd)
+void sensorDevice_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspCmd)
 {
     //printf("sensorDevice_zclReadRspCmd\n");
 
@@ -124,7 +125,7 @@ static void sensorDevice_zclReadRspCmd(u16 clusterId, zclReadRspCmd_t *pReadRspC
  *
  * @return  None
  */
-static void sensorDevice_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd)
+void sensorDevice_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd)
 {
     //printf("sensorDevice_zclWriteRspCmd\n");
 
@@ -139,7 +140,7 @@ static void sensorDevice_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteR
  *
  * @return  None
  */
-static void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
+void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 {
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	u8 numAttr = pWriteReqCmd->numAttr;
@@ -180,7 +181,7 @@ static void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqC
  *
  * @return  None
  */
-static void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspCmd)
+void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspCmd)
 {
     //printf("sensorDevice_zclDfltRspCmd\n");
 
@@ -196,25 +197,15 @@ static void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRs
  *
  * @return  None
  */
-static void sensorDevice_zclCfgReportCmd(u8 endpoint, u16 clusterId, zclCfgReportCmd_t *pCfgReportCmd)
+void sensorDevice_zclCfgReportCmd(u8 endpoint, u16 clusterId, zclCfgReportCmd_t *pCfgReportCmd)
 {
-#if 0
-	for(u8 i = 0; i < pCfgReportCmd->numAttr; i++) {
-        for (u8 ii = 0; ii < ZCL_REPORTING_TABLE_NUM; ii++) {
-            if (app_reporting[ii].pEntry->used) {
-                if (app_reporting[ii].pEntry->endPoint == endpoint && app_reporting[ii].pEntry->attrID == pCfgReportCmd->attrList[i].attrID) {
-                    if (app_reporting[ii].timerReportMinEvt) {
-                        TL_ZB_TIMER_CANCEL(&(app_reporting[ii].timerReportMinEvt));
-                    }
-                    if (app_reporting[ii].timerReportMaxEvt) {
-                        TL_ZB_TIMER_CANCEL(&(app_reporting[ii].timerReportMaxEvt));
-                    }
-                    return;
-                }
-            }
-        }
-    }
-#endif
+	for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
+		reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
+		if(pEntry->used && pEntry->clusterID == clusterId && pEntry->endPoint == endpoint) {
+			pEntry->minIntCnt = 0;
+			pEntry->maxIntCnt = 0;
+		}
+	}
 }
 /*********************************************************************
  * @fn      sensorDevice_zclCfgReportRspCmd
@@ -225,7 +216,7 @@ static void sensorDevice_zclCfgReportCmd(u8 endpoint, u16 clusterId, zclCfgRepor
  *
  * @return  None
  */
-static void sensorDevice_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *pCfgReportRspCmd)
+void sensorDevice_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t *pCfgReportRspCmd)
 {
     //printf("sensorDevice_zclCfgReportRspCmd\n");
 
@@ -240,7 +231,7 @@ static void sensorDevice_zclCfgReportRspCmd(u16 clusterId, zclCfgReportRspCmd_t 
  *
  * @return  None
  */
-static void sensorDevice_zclReportCmd(u16 clusterId, zclReportCmd_t *pReportCmd)
+void sensorDevice_zclReportCmd(u16 clusterId, zclReportCmd_t *pReportCmd)
 {
     //printf("sensorDevice_zclReportCmd\n");
 
@@ -323,7 +314,7 @@ void sensorDevice_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTi
  *
  * @return  None
  */
-static void sensorDevice_zcltriggerCmdHandler(zcl_triggerEffect_t *pTriggerEffect)
+void sensorDevice_zcltriggerCmdHandler(zcl_triggerEffect_t *pTriggerEffect)
 {
 	u8 effectId = pTriggerEffect->effectId;
 	//u8 effectVariant = pTriggerEffect->effectVariant;
@@ -363,7 +354,7 @@ static void sensorDevice_zcltriggerCmdHandler(zcl_triggerEffect_t *pTriggerEffec
  *
  * @return  None
  */
-static void sensorDevice_zclIdentifyQueryRspCmdHandler(u8 endpoint, u16 srcAddr, zcl_identifyRspCmd_t *identifyRsp)
+void sensorDevice_zclIdentifyQueryRspCmdHandler(u8 endpoint, u16 srcAddr, zcl_identifyRspCmd_t *identifyRsp)
 {
 #if FIND_AND_BIND_SUPPORT
 	if(identifyRsp->timeout){
