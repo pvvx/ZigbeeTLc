@@ -7,6 +7,10 @@
 #ifndef _BOARD_TS0201_TZ3000_H_
 #define _BOARD_TS0201_TZ3000_H_
 
+#include "version_cfg.h"
+
+#if (BOARD == BOARD_TS0201_TZ3000)
+
 #define RF_TX_POWER_DEF RF_POWER_INDEX_P3p01dBm
 
 // TLSR825x 1M Flash
@@ -65,4 +69,5 @@
 	#define	DEBUG_INFO_TX_PIN	    GPIO_SWS //print
 #endif
 
+#endif // BOARD == BOARD_TS0201_TZ3000
 #endif /* _BOARD_TS0201_TZ3000_H_ */

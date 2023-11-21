@@ -7,6 +7,10 @@
 #ifndef _BOARD_CGDK2_H_
 #define _BOARD_CGDK2_H_
 
+#include "version_cfg.h"
+
+#if (BOARD == BOARD_CGDK2)
+
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
 extern "C" {
@@ -78,5 +82,5 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
-
+#endif // (BOARD == BOARD_CGDK2)
 #endif // _BOARD_CGDK2_H_

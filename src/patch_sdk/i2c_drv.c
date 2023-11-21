@@ -19,7 +19,6 @@ void init_i2c(void) {
 
 unsigned char scan_i2c_addr(unsigned char address){
 	unsigned char r = irq_disable();
-
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 		init_i2c();
 #if I2C_CLOCK != 100000
@@ -38,7 +37,6 @@ unsigned char scan_i2c_addr(unsigned char address){
 
 int send_i2c_byte(unsigned char i2c_addr, unsigned char cmd) {
 	unsigned char r = irq_disable();
-
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 			init_i2c();
 	reg_i2c_id = i2c_addr;

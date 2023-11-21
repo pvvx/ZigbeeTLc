@@ -2,6 +2,7 @@
 #ifndef _SENSORS_CHT8305_H_
 #define _SENSORS_CHT8305_H_
 
+#if (SENSOR_TYPE == SENSOR_CHT8305)
 // Timing
 #define SENSOR_POWER_TIMEOUT_ms  	5
 #define SENSOR_RESET_TIMEOUT_ms		5
@@ -69,6 +70,6 @@ extern measured_data_t measured_data;
 
 void init_sensor(void);
 int read_sensor(void);
-
+#endif // (SENSOR_TYPE == SENSOR_CHT8305)
 #endif // _SENSORS_CHT8305_H_
 

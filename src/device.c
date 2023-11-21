@@ -126,8 +126,8 @@ u8 is_comfort(s16 t, u16 h) {
 #endif
 
 void read_sensor_and_save(void) {
-	read_sensor();
 #if	USE_DISPLAY
+	read_sensor();
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	if (g_zcl_thermostatUICfgAttrs.displayMode == 2) {
 		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.

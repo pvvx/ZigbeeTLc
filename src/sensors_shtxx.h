@@ -1,6 +1,8 @@
 #ifndef _SENSOR_SHTXX_H_
 #define _SENSOR_SHTXX_H_
 
+#if (SENSOR_TYPE == SENSOR_SHTXX)
+
 #define SHTC3_I2C_ADDR		0x70
 #define SHT4x_I2C_ADDR		0x44
 #define SHT4xB_I2C_ADDR		0x45
@@ -21,4 +23,5 @@ void init_sensor(void);
 void sensor_go_sleep(void);
 int read_sensor(void);
 
+#endif // (SENSOR_TYPE == SENSOR_SHTXX)
 #endif // _SENSOR_SHTXX_H_

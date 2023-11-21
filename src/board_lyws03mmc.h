@@ -7,6 +7,9 @@
 #ifndef _BOARD_LYWS03MMC_H_
 #define _BOARD_LYWS03MMC_H_
 
+#include "version_cfg.h"
+
+#if (BOARD == BOARD_LYWSD03MMC)
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
 extern "C" {
@@ -64,5 +67,5 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
-
+#endif // (BOARD == BOARD_LYWSD03MMC)
 #endif // _BOARD_LYWS03MMC_H_

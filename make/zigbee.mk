@@ -33,6 +33,7 @@ $(OUT_PATH)/zigbee/zdo/zdp.o \
 $(OUT_PATH)/zigbee/zcl/zcl.o \
 $(OUT_PATH)/zigbee/zcl/zcl_nv.o \
 $(OUT_PATH)/zigbee/zcl/zcl_reporting.o \
+$(OUT_PATH)/zigbee/zcl/hvac/zcl_thermostat.o \
 $(OUT_PATH)/zigbee/zcl/smart_energy/zcl_metering.o \
 $(OUT_PATH)/zigbee/zcl/smart_energy/zcl_metering_attr.o \
 $(OUT_PATH)/zigbee/zcl/zll_commissioning/zcl_toucklink_security.o \

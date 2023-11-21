@@ -7,6 +7,10 @@
 #ifndef _BOARD_MHO_C401_H_
 #define _BOARD_MHO_C401_H_
 
+#include "version_cfg.h"
+
+#if (BOARD == BOARD_MHO_C401N)
+
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
 extern "C" {
@@ -111,5 +115,5 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
-
+#endif // BOARD == BOARD_MHO_C401N
 #endif // _BOARD_MHO_C401_H_

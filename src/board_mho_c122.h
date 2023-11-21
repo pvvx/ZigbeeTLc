@@ -7,6 +7,10 @@
 #ifndef _BOARD_MHO_C122_H_
 #define _BOARD_MHO_C122_H_
 
+#include "version_cfg.h"
+
+#if (BOARD == BOARD_MHO_C122)
+
 #define RF_TX_POWER_DEF RF_POWER_INDEX_P1p99dBm
 
 // TLSR8251F512ET24
@@ -62,4 +66,6 @@
 	#define	DEBUG_INFO_TX_PIN	    GPIO_SWS //print
 #endif
 
+#endif // (BOARD == BOARD_MHO_C122)
 #endif /* _BOARD_MHO_C122_H_ */
+

@@ -22,30 +22,6 @@
  *          limitations under the License.
  *
  *******************************************************************************************************/
-
-#pragma once
-
-/**********************************************************************
- * User configuration whether to use boot loader mode.
- *
- * NOTE:
- * We do not recommend using BootLoader mode on 512K flash chips,
- * because in boot loader mode, it can only support up to 196k firmware
- * according to the current default Flash Map.
- *
- * Please refer to the drv_nv.h file, and check if the firmware size
- * exceeds the maximum limit.
- *
- * The user can configure the CHIP_TYPE used by the corresponding
- * project in the version.h file according to the actual size
- * of the flash at hand.
- *
- * If BOOT_LOADER_MODE is 0, it means that the SDK uses Normal Mode,
- * hardware multi-address (0x0000 or 0x40000) startup mode.
- * If BOOT_LOADER_MODE is 1, it means that the SDK uses Boot Loader Mode.
- *
- * Normal mode is used by default.
- */
 #ifndef _VERSION_CFG_H_
 #define _VERSION_CFG_H_
 
@@ -85,7 +61,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000
+#define BOARD					BOARD_TS0201_TZ3000 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000
 #endif
 
 /* Chip IDs */

@@ -62,9 +62,6 @@ void init_sensor(void) {
 	}
 }
 
-extern void voltage_detect_init(u32 detectPin);
-extern void voltage_detect(bool powerOn);
-
 __attribute__((optimize("-Os"))) int read_sensor(void) {
 	u32 _temp, i = 3;
 	u8 reg_data[4];

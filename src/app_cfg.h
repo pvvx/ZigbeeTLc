@@ -60,19 +60,19 @@ extern "C" {
 
 /* Board include */
 #if defined(BOARD)
-#if (BOARD == BOARD_LYWSD03MMC)
+//#if (BOARD == BOARD_LYWSD03MMC)
 	#include "board_lyws03mmc.h"
-#elif (BOARD == BOARD_CGDK2)
+//#elif (BOARD == BOARD_CGDK2)
 	#include "board_cgdk2.h"
-#elif BOARD == BOARD_MHO_C122
+//#elif BOARD == BOARD_MHO_C122
 	#include "board_mho_c122.h"
-#elif BOARD == BOARD_MHO_C401N
+//#elif BOARD == BOARD_MHO_C401N
 #include "board_mho_c401n.h"
-#elif BOARD == BOARD_TS0201_TZ3000
+//#elif BOARD == BOARD_TS0201_TZ3000
 #include "board_ts0201_tz3000.h"
-#else
-#error "Define BOARD!"
-#endif
+//#else
+//#error "Define BOARD!"
+//#endif
 #else
 #error "Define BOARD!"
 #endif
