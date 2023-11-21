@@ -70,6 +70,8 @@ __attribute__((optimize("-Os"))) int read_sensor(void) {
 		while(i--) {
 			if (read_i2c_bytes(sensor_i2c_addr, reg_data, sizeof(reg_data)) == 0) {
 				_temp = (reg_data[0] << 8) | reg_data[1];
+				if(_temp == 0xffff)
+					break;
 				measured_data.temp = ((u32)(_temp * 16500) >> 16) - 4000; // + cfg.temp_offset * 10; // x 0.01 C
 				_temp = (reg_data[2] << 8) | reg_data[3];
 				measured_data.humi = ((u32)(_temp * 10000) >> 16); // + cfg.humi_offset * 10; // x 0.01 %

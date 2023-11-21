@@ -23,6 +23,15 @@ Stable from version 0.1.1.0, but additional tests are required
 
 In the future, you can update [Zigbee LYWSD03MMC firmware to the version from devbis](https://github.com/devbis/z03mmc).
 
+
+## Action of the button
+
+Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
+
+* Short press - send temperature, humidity and battery data.
+* Hold for 2 seconds - Switches temperature between Celsius and Fahrenheit.
+* Hold for 7 seconds - reset the binding and restart.
+
 ## Zigbee OTA
 
 [OTA update in ZHA](https://github.com/pvvx/ZigbeeTLc/issues/7)
@@ -90,8 +99,8 @@ The flashing "BT" icon is called by the identification command.
 
 9. Switch temperature between Celsius and Fahrenheit (ClusterID: 0x0204, Attr: 0x0000, ENUM8 = 1 in C, = 2 in F)
 
-Итоговое среднее потребление LYWSD03MC B1.4 при измерении от источника 3.3В от 14 до 26 мкА в зависимости от динамики изменений температуры и влажности. Это в 1.5 раза меньше [варинта fw](https://github.com/devbis/z03mmc) от @devbis.
-(Для сравнения с BLE версией: Вариант с BLE потребляет 14 мкА при default настройках и постоянной передаче всех измеренных значений каждые 10 секунд. Дальность связи в режиме BLE LongRange составляет до 1 км по прямой, для Zigbee - сотни метров.)
+10. Adding button actions (ver 0.1.1.1)
+
 
 Zigbee OTA для прошивки в 128 килобайт выполняется 677 секунд со средним потреблением около 1 мА. Это затраты энергии в 5.4 мА·ч от батареи.
 

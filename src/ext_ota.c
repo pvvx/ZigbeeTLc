@@ -60,7 +60,7 @@ void test_first_ota(void) {
 			id = head_id[2]; // = "KNLT"
 			flash_write_page(BIG_OTA2_FADDR+8, sizeof(id), (unsigned char *) &id);
 			// clear the "bootable" identifier on the current OTA segment
-#if 0
+#if 1
 			id = 0;
 			flash_write_page(OTA2_FADDR+8, 1, (unsigned char *) &id);
 #else

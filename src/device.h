@@ -188,6 +188,7 @@ nv_sts_t zcl_thermostatDisplayMode_restore(void);
 
 void scan_task(void);
 s32 sensors_task(void *arg);
+void read_sensor_and_save(void);
 extern ev_timer_event_t *deviceAppTimerEvt;
 
 #endif /* _DEVICE_H_ */

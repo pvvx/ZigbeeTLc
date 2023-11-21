@@ -360,17 +360,17 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
     if (i2c_address_lcd == B14_I2C_ADDR) {
         if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) // sensor_version == 0)
             g_zcl_basicAttrs.hwVersion = 14;
-        else // if (sensor_i2c_addr == (SHT4x_I2C_ADDR << 1))
+        else
             g_zcl_basicAttrs.hwVersion = 20; // or 17
-    } else if (i2c_address_lcd == B16_I2C_ADDR) {
+    } else if (i2c_address_lcd == (B16_I2C_ADDR << 1)) {
         if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) // (sensor_version == 0)
             g_zcl_basicAttrs.hwVersion = 15;
-        else //  if (sensor_version == 1)
+        else
             g_zcl_basicAttrs.hwVersion = 16;
-    } else if (i2c_address_lcd == B19_I2C_ADDR) {
+    } else if (i2c_address_lcd == (B19_I2C_ADDR << 1)) {
         g_zcl_basicAttrs.hwVersion = 19;
     }
-#else
+#else // BOARD != BOARD_LYWSD03MMC
 #if SENSOR_TYPE == SENSOR_SHTXX
     if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) {
 #if USE_SENSOR_ID
@@ -385,8 +385,7 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
     if(sensor_i2c_addr != 0)
     	g_zcl_basicAttrs.hwVersion = 1 + ((sensor_i2c_addr >> 1) & 3);
 
-
-#endif
+#endif // SENSOR_TYPE
 #endif
 }
 /*********************************************************************

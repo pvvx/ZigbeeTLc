@@ -8,15 +8,15 @@ extern void reportAttr(reportCfgInfo_t *pEntry);
  *
  * @brief	check if there is report.
  *
- * @param   NULL
+ * @param   time from old check in sec
  *
  * @return	NULL
  */
 void app_chk_report(u16 uptime_sec) {
-	if(zcl_reportingEntryActiveNumGet()){
-		zclAttrInfo_t *pAttrEntry = NULL;
-		u16 len = 0;
-		bool flg_report, flg_chk_attr;
+	zclAttrInfo_t *pAttrEntry = NULL;
+	u16 len;
+	bool flg_report, flg_chk_attr;
+	if(reportingTab.reportNum) {
 		for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
 			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
 /**
@@ -80,5 +80,27 @@ void app_chk_report(u16 uptime_sec) {
 		}
 	} else {
 		// no report
+	}
+}
+/*********************************************************************
+ * @fn      app_set_thb_report
+ *
+ * @brief	set temp, humi, bat is report.
+ *
+ * @param   NULL
+ *
+ * @return	NULL
+ */
+void app_set_thb_report(void) {
+	if(reportingTab.reportNum) {
+		for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
+			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
+			if(pEntry->used && (
+					pEntry->clusterID == ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT
+					|| pEntry->clusterID == ZCL_CLUSTER_MS_RELATIVE_HUMIDITY
+					|| pEntry->clusterID == ZCL_CLUSTER_GEN_POWER_CFG)) {
+				pEntry->maxIntCnt = 0;
+			}
+		}
 	}
 }

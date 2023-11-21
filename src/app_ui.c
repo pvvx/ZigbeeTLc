@@ -33,6 +33,7 @@
 #include "zcl_include.h"
 #include "lcd.h"
 #include "app_ui.h"
+#include "reporting.h"
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -158,34 +159,43 @@ static s32 keyTimerCb(void *arg)
 	u8 button_on = gpio_read(BUTTON1)? 0 : 1;
 	if(button_on) {
 		// button on
-		if(g_sensorAppCtx.keyPressed
-			&& g_sensorAppCtx.timerKeyEvt
-			&& clock_time_exceed(
-					g_sensorAppCtx.keyPressedTime,
-					3000 * 1000)) { // 3 sec
-			g_sensorAppCtx.keyPressedTime = clock_time();
+		if(g_sensorAppCtx.keyPressed && g_sensorAppCtx.timerKeyEvt) {
+#ifdef ZCL_THERMOSTAT_UI_CFG
+			if(clock_time_exceed( g_sensorAppCtx.keyPressedTime, 1900 * 1000)) { // 2 sec
+				if(g_zcl_thermostatUICfgAttrs.displayMode == 1)
+					g_zcl_thermostatUICfgAttrs.displayMode = 2;
+				else
+					g_zcl_thermostatUICfgAttrs.displayMode = 1;
+				zcl_thermostatDisplayMode_save();
+				read_sensor_and_save();
+			} else
+#endif
+			if(clock_time_exceed( g_sensorAppCtx.keyPressedTime, 6900 * 1000)) { // 7 sec
+				g_sensorAppCtx.keyPressedTime = clock_time();
 #if	USE_DISPLAY
 #if BOARD == BOARD_MHO_C401N
-			show_connected_symbol(false);
-			update_lcd();
+				show_connected_symbol(false);
+				update_lcd();
 #else
-			//show_ble_symbol(true);
-			show_blink_screen();
+				//show_ble_symbol(true);
+				show_blink_screen();
 #endif
 #else
-			light_on();
+				light_on();
 #endif // USE_DISPLAY
 
-			tl_bdbReset2FN();
+				tl_bdbReset2FN();
+
 #ifdef USE_EPD
-			while(task_lcd())
-				pm_wait_ms(USE_EPD);
+				while(task_lcd())
+					pm_wait_ms(USE_EPD);
 #endif
-			zb_resetDevice();
+				zb_resetDevice();
+			}
 		} else {
 			g_sensorAppCtx.keyPressed = button_on;
-			return 0;
 		}
+		return 0;
 	}
 	g_sensorAppCtx.timerKeyEvt = NULL;
 	g_sensorAppCtx.keyPressed = button_on;
@@ -202,6 +212,7 @@ void task_keys(void) {
 		if(!g_sensorAppCtx.keyPressed) {
 			// event button on
 			g_sensorAppCtx.keyPressedTime = clock_time();
+			app_set_thb_report();
 			if(!g_sensorAppCtx.timerKeyEvt)
 				g_sensorAppCtx.timerKeyEvt
 				= TL_ZB_TIMER_SCHEDULE(keyTimerCb, NULL, 500); // 500 ms
