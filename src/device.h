@@ -27,12 +27,13 @@ typedef struct{
 
 	u16 ledOnTime;
 	u16 ledOffTime;
-	u8 	oriSta;		//original state before blink
-	u8 	sta;		//current state in blink
-	u8 	times;		//blink times
+	u8 	oriSta;		// original state before blink
+	u8 	sta;		// current state in blink
+	u8 	times;		// blink times
 	u8  state;
 
 	u8  keyPressed;
+	u8  key1flag;
 
 	app_linkKey_info_t tcLinkKey;
 }app_ctx_t;
