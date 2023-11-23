@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF RF_POWER_INDEX_P1p99dBm
+#define RF_TX_POWER_DEF		RF_POWER_INDEX_P1p99dBm
 
 // TLSR8251F512ET24
 // GPIO_PA5 - used EPD_BUSY

@@ -4,9 +4,6 @@ Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermomet
 
 In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000)
 
-Уровень готовности прошивок - Beta version 0.1.x.x. 
-Стабильна от версии 0.1.1.0, но требуются дополнительные тесты.
-
 Firmware readiness level - Beta versions 0.1.x.x.
 Stable from version 0.1.1.0, but additional tests are required
 
@@ -22,7 +19,6 @@ Stable from version 0.1.1.0, but additional tests are required
 8. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 3 seconds.
 
 In the future, you can update [Zigbee LYWSD03MMC firmware to the version from devbis](https://github.com/devbis/z03mmc).
-
 
 ## Action of the button
 
@@ -61,6 +57,11 @@ Sample: "1141-020a-01103001-Z03MMC.zigbee"
 | 0x0211 |  TS0201-TZ3000 |
 | 0x0212 |  TS0202-TZ3000 |
 
+* To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
+
+* Zigbee OTA for 128 KB firmware takes 677 seconds with an average consumption of about 1 mA. This is an energy consumption of 5.4 mAh from the battery.
+
+
 ## Display decimal places for temperature, humidity and battery charge in ZHA.
 
 [ZHA patch for more precision display of data for all Zigbee devices.](https://github.com/pvvx/ZigbeeTLc/issues/6)
@@ -69,23 +70,15 @@ Sample: "1141-020a-01103001-Z03MMC.zigbee"
 
 A solid "BT" icon indicates a connection loss or the thermometer is not registered with the Zigbee network.
 
-The flashing "BT" icon is called by the identification command.
-
-
-**Индикация на LCD экране:**
-
-Длительно отображаемый значок “BT” обозначает потерю связи или отсутствие регистрации термометра в сети Zigbee.
-
-Мигающий значок “BT” вызывается по команде identify.
-
+The flashing "BT" icon is called by the "identify" command.
 
 ## Current additions
 
-1. Добавлена сборка проекта с помощью ‘make’ (Windows/linux) и возможность импорта 'Existing Project' в "[Telink IoT Studio](http://wiki.telink-semi.cn/wiki/IDE-and-Tools/Telink_IoT_Studio/)".
+1. Added project assembly using 'make' (Windows/linux) and the ability to import 'Existing Project' into "[Telink IoT Studio](http://wiki.telink-semi.cn/wiki/IDE-and-Tools/Telink_IoT_Studio/ )".
 
-2. Заданы интервалы по умолчанию для отчетов по температуре и влажности в 20-120 (мин-мах) секунд, reportableChange в 0.1C и 1%.
+2. Default intervals for temperature and humidity reporting are set to 30-120 (min-max) seconds, reportableChanged to 0.1C and 0.5%.
 
-3. Оптимизировано потребление при отключении координатора или потере связи. Выполняя _rejoin_, при нарушении связи термометр потребляет достатчно много. Следите за работой вашего координатора сети - Zigbee не любит (практически не переносит) отключений координатора.
+3. Consumption has been optimized when the coordinator is disconnected or connection is lost. When performing _rejoin_, if the connection is broken, the thermometer consumes quite a lot. Monitor the work of your network coordinator - Zigbee does not like (almost cannot tolerate) coordinator outages.
 
 4. Consumption has been optimized when polling the reset button or contact.
 
@@ -102,9 +95,7 @@ The flashing "BT" icon is called by the identification command.
 10. Adding button actions (ver 0.1.1.1)
 
 
-Zigbee OTA для прошивки в 128 килобайт выполняется 677 секунд со средним потреблением около 1 мА. Это затраты энергии в 5.4 мА·ч от батареи.
-
----
+## Make
 
 Для сборки под Linux выполнить:
 

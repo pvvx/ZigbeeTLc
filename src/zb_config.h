@@ -142,17 +142,5 @@
 	#define GP_SUPPORT_ENABLE					  	1
 #endif
 
-//default TX power idx.
-#if defined (MCU_CORE_826x)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_POWER_7dBm
-#elif defined(MCU_CORE_8258)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_POWER_INDEX_P10p46dBm
-#elif defined(MCU_CORE_8278)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_POWER_INDEX_P11p26dBm
-#elif defined(MCU_CORE_B91)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_POWER_INDEX_P9p11dBm
-#else
-	#define ZB_DEFAULT_TX_POWER_IDX					0/* idx = 0, means MAX TX power. */
-#endif
 
 #endif	/* ZB_CONFIG_H */
