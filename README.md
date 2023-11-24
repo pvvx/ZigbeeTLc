@@ -136,10 +136,6 @@ Total Free SRAM : 160 + stack[45096] = 45256
 git clone https://github.com/pvvx/ZigbeeTLc
 make install
 ```
-или в папке проекта:
-```
-git clone https://github.com/devbis/tl_zigbee_sdk.git -b 3.6.8.5 --depth 1 ./SDK
-```
 и произвести импорт проекта в ‘Telink IoT Studio’ как описано в 'Telink_IoT_Studio_User_Guide.pdf', глава "6 Import and build projects".
 
 В Windows возможно включить многопоточную сборку для сборки всего проекта с нуля за 2..3 сек (make -j -> 3 сек на 12-ти ядрах/24 потока).
