@@ -94,6 +94,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 10. Adding button actions (ver 0.1.1.1)
 
+11. Added Poll Control Cluster (ver 0.1.1.2)
+
 
 ## Make
 

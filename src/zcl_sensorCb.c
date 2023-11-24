@@ -142,9 +142,10 @@ void sensorDevice_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd)
  */
 void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 {
-#ifdef ZCL_THERMOSTAT_UI_CFG
+#if defined(ZCL_THERMOSTAT_UI_CFG) || defined(ZCL_POLL_CTRL)
 	u8 numAttr = pWriteReqCmd->numAttr;
 	zclWriteRec_t *attr = pWriteReqCmd->attrList;
+#ifdef ZCL_THERMOSTAT_UI_CFG
 
 	if(clusterId == ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG){
 		for(u8 i = 0; i < numAttr; i++){
@@ -154,10 +155,7 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 		}
 	}
 #endif
-
 #ifdef ZCL_POLL_CTRL
-	u8 numAttr = pWriteReqCmd->numAttr;
-	zclWriteRec_t *attr = pWriteReqCmd->attrList;
 
 	if(clusterId == ZCL_CLUSTER_GEN_POLL_CONTROL){
 		for(s32 i = 0; i < numAttr; i++){
@@ -167,6 +165,7 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 			}
 		}
 	}
+#endif
 #endif
 }
 #endif	/* ZCL_WRITE */

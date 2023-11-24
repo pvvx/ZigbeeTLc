@@ -460,7 +460,7 @@ void user_init(bool isRetention)
 			HA_PROFILE_ID,
 			ZCL_CLUSTER_GEN_POWER_CFG,
 			ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
-			359,
+			360,
 			3600,
 			(u8 *)&reportableChange[1]
 		);

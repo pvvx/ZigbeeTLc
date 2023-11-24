@@ -271,10 +271,10 @@ const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 /* Poll Control */
 zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs =
 {
-	.chkInInterval			= 0x3840,
-	.longPollInterval		= 0x14,
-	.shortPollInterval		= 0x02,
-	.fastPollTimeout		= 0x28,
+	.chkInInterval			= 3600*4, // 3600 sec, 1hr
+	.longPollInterval		= 10*4,  //  5 sec ?
+	.shortPollInterval		= 2, 	// 2 qs
+	.fastPollTimeout		= 9*4, // 9 sec
 	.chkInIntervalMin		= 0x00,
 	.longPollIntervalMin	= 0x00,
 	.fastPollTimeoutMax		= 0x00,
