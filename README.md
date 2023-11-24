@@ -102,7 +102,7 @@ The flashing "BT" icon is called by the "identify" command.
 Для сборки под Linux выполнить:
 
 ```
-git clone https://github.com/pvvx/z03mmc
+git clone https://github.com/pvvx/ZigbeeTLc
 make install
 make
 ```
@@ -131,11 +131,18 @@ Total Used SRAM : 20440 from 65536
 Total Free SRAM : 160 + stack[45096] = 45256
 ```
 
-Под Window, после импорта в ‘Telink IoT Studio’, выполнить “make install” или в папке проекта:
+Под Window, после скачивания проекта, выполнить “make install”: 
+```
+git clone https://github.com/pvvx/ZigbeeTLc
+make install
+```
+или в папке проекта:
 ```
 git clone https://github.com/devbis/tl_zigbee_sdk.git -b 3.6.8.5 --depth 1 ./SDK
 ```
-И включить многопоточную сборку для сборки всего проекта с нуля за 2..3 сек (make -j -> 3 сек на 12-ти ядрах/24 потока).
+и произвести импорт проекта в ‘Telink IoT Studio’ как описано в 'Telink_IoT_Studio_User_Guide.pdf', глава "6 Import and build projects".
+
+В Windows возможно включить многопоточную сборку для сборки всего проекта с нуля за 2..3 сек (make -j -> 3 сек на 12-ти ядрах/24 потока).
 
 ---
 
