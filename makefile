@@ -17,7 +17,7 @@ SRC_PATH ?= $(PROJECT_PATH)$(SRC_DIR)
 TEL_PATH ?= .
 # SDK_PATH: X:/Telink/tl_zigbee_sdk
 SDK_PATH ?= ./SDK
-SDK_FLAGS := $(SDK_PATH)/LICENSE.txt 
+SDK_FLAGS := $(SDK_PATH)/zigbee
 # MAKE_PATH: project all make
 MAKE_PATH ?= ./make
 
@@ -45,20 +45,13 @@ COMPILEOS = $(shell uname -o)
 LINUX_OS = GNU/Linux
 
 ifeq ($(COMPILEOS),$(LINUX_OS))
-	TOOLS_PATH := $(TEL_PATH)/tools/linux
-	TC32_PATH := $(TOOLS_PATH)/tc32/bin/
-	TST_FILE := tc32-elf-ld
 	CUR_OS := linux
+	TOOLS_PATH := $(TEL_PATH)/tools/linux
 else
-	TOOLS_PATH := $(TEL_PATH)/tools/windows
-	TST_FILE := tc32-elf-ld.exe
 	CUR_OS := windows
-ifeq ($(TOOLS_PATH)tc32/bin/tc32-elf-gcc.exe, $(wildcard $(TOOLS_PATH)tc32/bin/tc32-elf-gcc.exe))
-	TC32_PATH := $(TOOLS_PATH)/tc32/bin/
-else
-	TC32_PATH :=
+	TOOLS_PATH := $(TEL_PATH)/tools/windows
 endif
-endif
+TC32_PATH := $(TOOLS_PATH)/tc32/bin/
 
 #LNK_FLAG := -Wl,-nostartfiles -Wl,-nostdlib -Wl,--gc-sections -Wl,-uss_apsmeSwitchKeyReq -fshort-enums -nostartfiles -fno-rtti -fno-exceptions -fno-use-cxa-atexit -fno-threadsafe-statics
 # -uss_apsmeSwitchKeyReq
@@ -160,9 +153,8 @@ $(BIN_FILE): $(ELF_FILE)
 $(OTA_FILE): $(BIN_FILE)
 	@echo 'Create OTA image'
 	@echo ' '
-	@$(PYTHON) $(MAKE_PATH)/zigbee_ota.py $(BIN_FILE) -p $(BIN_PATH) -n $(PROJECT_NAME) 
+	@$(PYTHON) $(MAKE_PATH)/zigbee_ota.py $(BIN_FILE) -p $(BIN_PATH) -n $(PROJECT_NAME)
 	@echo ' '
-
 
 sizedummy: $(ELF_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrMemInfo.py -t $(TC32_PATH)tc32-elf-nm $(ELF_FILE)
@@ -174,13 +166,12 @@ clean:
 	@echo ' '
 
 pre-build:
-ifneq ($(SDK_PATH)/zigbee, $(wildcard $(SDK_PATH)/zigbee))
+ifneq ($(SDK_FLAGS), $(wildcard $(SDK_FLAGS)))
 	$(error "Please check SDK_Path")
 endif
 	@mkdir -p $(foreach s,$(OUT_DIR),$(OUT_PATH)$(s))
 	@mkdir -p $(BIN_PATH)
 	@echo ' '
-
 
 secondary-outputs: $(BIN_FILE) $(OTA_FILE) $(LST_FILE) $(SIZEDUMMY)
 
@@ -189,7 +180,7 @@ flash: $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z15 -a-50 -s we 0 $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -m i
 
-# test start from OTA BLE 
+# test start from OTA BLE
 flash_ble: $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z15 -a-50 -s i
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) es 0 1
@@ -216,21 +207,29 @@ TLEN?=128
 test_damp:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z10 -c -g ds $(TADDR) $(TLEN)
 
-
-install: $(SDK_FLAGS) $(TC32_PATH)$(TST_FILE)
-	@echo "SDK & TC32 installed. Use: make all"
+install: $(SDK_FLAGS) $(TC32_PATH)
+	@echo "SDK & TC32 installed."
+	@echo "Use: make clean"
+	@echo "     make all"
 
 $(SDK_FLAGS): $(SDK_PATH)
-ifneq ($(SDK_FLAGS), $(wildcard $(SDK_FLAGS)))
-	git clone https://github.com/devbis/tl_zigbee_sdk.git -b 3.6.8.5 --depth 1 $(SDK_PATH)
+ifneq ($(SDK_FLAGS),$(wildcard $(SDK_FLAGS)))
+	#@wget -P $(SDK_PATH) http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
+	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)
 endif
 
 $(SDK_PATH):
 	mkdir -p $(SDK_PATH)
 
-$(TC32_PATH)$(TST_FILE): $(TOOLS_PATH)
-ifneq ($(TC32_PATH)$(TST_FILE), $(wildcard $(TC32_PATH)$(TST_FILE)))
-	git clone https://github.com/devbis/tc32.git -b $(CUR_OS) $(TOOLS_PATH)/tc32
+$(TC32_PATH): $(TOOLS_PATH)
+ifneq ($(TC32_PATH),$(wildcard $(TC32_PATH)))
+ifeq (linux,$(CUR_OS))
+	#@wget -P $(TOOLS_PATH) http://shyboy.oss-cn-shenzhen.aliyuncs.com/readonly/tc32_gcc_v2.0.tar.bz2 
+	@tar -xvjf $(TOOLS_PATH)/tc32_gcc_v2.0.tar.bz2 -C $(TOOLS_PATH)
+else
+	@unzip -o $(TOOLS_PATH)/tc32.zip -d $(TOOLS_PATH)
+	@echo Use "Telink IoT Studio"! - http://wiki.telink-semi.cn/wiki/IDE-and-Tools/Telink_IoT_Studio/
+endif
 endif
 
 $(TOOLS_PATH):
