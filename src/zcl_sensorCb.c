@@ -148,7 +148,7 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 #ifdef ZCL_THERMOSTAT_UI_CFG
 
 	if(clusterId == ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG){
-		for(u8 i = 0; i < numAttr; i++){
+		for(int i = 0; i < numAttr; i++){
 			if(attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_TEMPERATUREDISPLAYMODE){
 				zcl_thermostatDisplayMode_save();
 			}
@@ -158,7 +158,7 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 #ifdef ZCL_POLL_CTRL
 
 	if(clusterId == ZCL_CLUSTER_GEN_POLL_CONTROL){
-		for(s32 i = 0; i < numAttr; i++){
+		for(int i = 0; i < numAttr; i++){
 			if(attr[i].attrID == ZCL_ATTRID_CHK_IN_INTERVAL){
 				sensorDevice_zclCheckInStart();
 				return;

@@ -18,8 +18,12 @@ typedef struct{
 }app_linkKey_info_t;
 
 typedef struct{
+#if	USE_DISPLAY
+	ev_timer_event_t *timerTaskEvt;
+#endif
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerKeyEvt;
+
 	u32 secTimeTik;
 	u32 keyPressedTime;
 	u32 readSensorTime; // read sensor timer (tik)
@@ -190,6 +194,5 @@ nv_sts_t zcl_thermostatDisplayMode_restore(void);
 void scan_task(void);
 s32 sensors_task(void *arg);
 void read_sensor_and_save(void);
-extern ev_timer_event_t *deviceAppTimerEvt;
 
 #endif /* _DEVICE_H_ */

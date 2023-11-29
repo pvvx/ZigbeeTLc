@@ -184,9 +184,9 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 				TL_ZB_TIMER_CANCEL(&deviceRejoinBackoffTimerEvt);
 			}
 #if	USE_DISPLAY
-			if(deviceAppTimerEvt) {
-				TL_ZB_TIMER_CANCEL(&deviceAppTimerEvt);
-				deviceAppTimerEvt = NULL;
+			if(g_sensorAppCtx.timerTaskEvt) {
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
+				g_sensorAppCtx.timerTaskEvt = NULL;
 			}
 #endif
 #ifdef ZCL_POLL_CTRL
@@ -230,8 +230,8 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 				show_ble_symbol(true);
 #endif
-				if(!deviceAppTimerEvt)
-					deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+				if(!g_sensorAppCtx.timerTaskEvt)
+					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			}
 			break;
@@ -256,8 +256,8 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 			show_ble_symbol(true);
 #endif
-			if(!deviceAppTimerEvt)
-				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+			if(!g_sensorAppCtx.timerTaskEvt)
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
@@ -275,8 +275,8 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #else
 			show_ble_symbol(true);
 #endif
-			if(!deviceAppTimerEvt)
-				deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+			if(!g_sensorAppCtx.timerTaskEvt)
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		default:

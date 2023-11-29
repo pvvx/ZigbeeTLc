@@ -87,9 +87,6 @@ bdb_commissionSetting_t g_bdbCommissionSetting = {
 /**********************************************************************
  * LOCAL VARIABLES
  */
-#if	USE_DISPLAY
-ev_timer_event_t *deviceAppTimerEvt = NULL;
-#endif
 
 /**********************************************************************
  * FUNCTIONS
@@ -245,9 +242,9 @@ void app_task(void)
 			if(!g_sensorAppCtx.timerLedEvt)
 				show_ble_symbol(false);
 #endif
-			if(deviceAppTimerEvt) {
-				TL_ZB_TIMER_CANCEL(&deviceAppTimerEvt);
-				deviceAppTimerEvt = NULL;
+			if(g_sensorAppCtx.timerTaskEvt) {
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
+				g_sensorAppCtx.timerTaskEvt = NULL;
 			}
 #else // !USE_DISPLAY
 			if(!g_sensorAppCtx.timerLedEvt)
@@ -302,10 +299,10 @@ void sensorDeviceSysException(void)
 #endif
 }
 
-char int_to_hex(u8 num){
-	char digits[] = "0123456789ABCDEF";
-	if (num > 15) return digits[0];
-	return digits[num];
+char int_to_hex(u8 num) {
+	const char * hex_ascii = {"0123456789ABCDEF"};
+	if (num > 15) return hex_ascii[0];
+	return hex_ascii[num];
 }
 
 void populate_sw_build() {
@@ -357,7 +354,7 @@ B1.7 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 B1.9 | 0x3E         | 0x44   (SHT4x)  |
 B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 */
-    if (i2c_address_lcd == B14_I2C_ADDR) {
+    if (i2c_address_lcd == B14_I2C_ADDR << 1) {
         if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) // sensor_version == 0)
             g_zcl_basicAttrs.hwVersion = 14;
         else
@@ -488,7 +485,7 @@ void user_init(bool isRetention)
 		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;
 		bdb_init((af_simple_descriptor_t *)&sensorDevice_simpleDesc, &g_bdbCommissionSetting, &g_zbDemoBdbCb, repower);
 #if	USE_DISPLAY
-		deviceAppTimerEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+///		g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 	} else {
 		/* Re-config phy when system recovery from deep sleep with retention */

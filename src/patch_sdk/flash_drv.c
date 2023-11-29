@@ -41,6 +41,12 @@ void flash_write(u32 addr, u32 len, u8 *buf){
 	flash_write_page(addr, len, buf);
 }
 
+
+
+void flash_read(u32 addr, u32 len, u8 *buf){
+	flash_read_page(addr, len, buf);
+}
+
 bool flash_writeWithCheck(u32 addr, u32 len, u8 *buf){
 	s32 toalLen = (s32)len;
 	s8 copyLen = 48;
@@ -63,7 +69,7 @@ bool flash_writeWithCheck(u32 addr, u32 len, u8 *buf){
 
 	while(toalLen > 0){
 		wLen = (toalLen > copyLen) ? copyLen : toalLen;
-		flash_read(sAddr, wLen, pTemp);
+		flash_read_page(sAddr, wLen, pTemp);
 		if(memcmp(pTemp, pSrc, wLen)){
 			return FALSE;
 		}
@@ -74,10 +80,6 @@ bool flash_writeWithCheck(u32 addr, u32 len, u8 *buf){
 	return TRUE;
 }
 
-
-void flash_read(u32 addr, u32 len, u8 *buf){
-	flash_read_page(addr, len, buf);
-}
 
 void flash_erase(u32 addr){
 #if (MODULE_WATCHDOG_ENABLE)
