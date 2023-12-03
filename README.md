@@ -100,7 +100,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 11. Added Poll Control Cluster (ver 0.1.1.2)
 
-12. Ver 0.1.1.3: According to the "ZigBee Cluster Library Specification" the "Thermostat Temperature Conversion" values have been corrected. Added On/Off smiley.  (ClusterID: 0x0204 (Thermostat User Interface Configuration), Attr: 0x0000 (TemperatureDisplayMode), ENUM8 = 0 in C, = 1 in F, Attr: 0x0002 (ScheduleProgrammingVisibility), ENUM8 = 0 show smiley On,  = 1 show smiley Off)
+12. Ver 0.1.1.4: According to the "ZigBee Cluster Library Specification" the "Thermostat Temperature Conversion" values have been corrected. Added On/Off smiley.  (ClusterID: 0x0204 (Thermostat User Interface Configuration), Attr: 0x0000 (TemperatureDisplayMode), ENUM8 = 0 in C, = 1 in F, Attr: 0x0002 (ScheduleProgrammingVisibility), ENUM8 = 0 show smiley On,  = 1 show smiley Off)
 
 
 
