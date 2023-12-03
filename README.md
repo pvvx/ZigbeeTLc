@@ -7,7 +7,8 @@ In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](ht
 Firmware readiness level - Beta versions 0.1.x.x.
 Stable from version 0.1.1.0, but additional tests are required
 
-Home Assistant with ZHA does not have functions for additional configuration of Zigbee devices. Until this changes, there can be no additions to the firmware.
+* Home Assistant with ZHA does not have functions for additional configuration of Zigbee devices. Until this changes, there can be no additions to the firmware.
+* Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
 
 ## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
 
