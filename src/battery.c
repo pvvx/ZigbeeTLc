@@ -60,7 +60,7 @@ void battery_detect(void)
 	if(measured_data.battery_mv < BATTERY_SAFETY_THRESHOLD){
 #if PM_ENABLE
 		sensor_go_sleep();
-		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, 0, 60*1000);
+		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 60*1000);
 #else
 		SYSTEM_RESET();
 #endif

@@ -258,7 +258,8 @@ zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs;
 
 const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 {
-	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TEMPERATUREDISPLAYMODE,       ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.displayMode },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TEMPERATUREDISPLAYMODE,       ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_SCHEDULEPROGRAMMINGVISIBILITY,   ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.showSmiley },
 
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
 };
@@ -350,13 +351,16 @@ nv_sts_t zcl_thermostatDisplayMode_save(void)
 	st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
 
 	if(st == NV_SUCC){
-		if((zcl_nv_thermostatUiCfg.displayMode != g_zcl_thermostatUICfgAttrs.displayMode)){
-			zcl_nv_thermostatUiCfg.displayMode = g_zcl_thermostatUICfgAttrs.displayMode;
+		if(zcl_nv_thermostatUiCfg.TemperatureDisplayMode != g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode
+			|| zcl_nv_thermostatUiCfg.showSmiley != g_zcl_thermostatUICfgAttrs.showSmiley){
+			zcl_nv_thermostatUiCfg.TemperatureDisplayMode = g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode;
+			zcl_nv_thermostatUiCfg.showSmiley = g_zcl_thermostatUICfgAttrs.showSmiley;
 
 			st = nv_flashWriteNew(1, NV_MODULE_ZCL, NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
 		}
 	}else if(st == NV_ITEM_NOT_FOUND){
-		zcl_nv_thermostatUiCfg.displayMode = g_zcl_thermostatUICfgAttrs.displayMode;
+		zcl_nv_thermostatUiCfg.TemperatureDisplayMode = g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode;
+		zcl_nv_thermostatUiCfg.showSmiley = g_zcl_thermostatUICfgAttrs.showSmiley;
 
 		st = nv_flashWriteNew(1, NV_MODULE_ZCL, NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
 	}
@@ -388,7 +392,8 @@ nv_sts_t zcl_thermostatDisplayMode_restore(void)
 	st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
 
 	if(st == NV_SUCC){
-		g_zcl_thermostatUICfgAttrs.displayMode = zcl_nv_thermostatUiCfg.displayMode;
+		g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode = zcl_nv_thermostatUiCfg.TemperatureDisplayMode;
+		g_zcl_thermostatUICfgAttrs.showSmiley = zcl_nv_thermostatUiCfg.showSmiley;
 	}
 #else
 	st = NV_ENABLE_PROTECT_ERROR;

@@ -163,35 +163,30 @@ static s32 keyTimerCb(void *arg)
 #ifdef ZCL_THERMOSTAT_UI_CFG
 			if(!g_sensorAppCtx.key1flag && clock_time_exceed( g_sensorAppCtx.keyPressedTime, 1900 * 1000)) { // 2 sec
 				g_sensorAppCtx.key1flag = 1;
-				if(g_zcl_thermostatUICfgAttrs.displayMode == 1)
-					g_zcl_thermostatUICfgAttrs.displayMode = 2;
-				else
-					g_zcl_thermostatUICfgAttrs.displayMode = 1;
+				if(g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode != 1)
+					g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode = 0;
 				zcl_thermostatDisplayMode_save();
 				read_sensor_and_save();
 			} else
 #endif
 			if(clock_time_exceed( g_sensorAppCtx.keyPressedTime, 6900 * 1000)) { // 7 sec
 				g_sensorAppCtx.keyPressedTime = clock_time();
-#if	USE_DISPLAY
-#if BOARD == BOARD_MHO_C401N
-				show_connected_symbol(false);
-				update_lcd();
-#else
-				//show_ble_symbol(true);
-				show_blink_screen();
-#endif
-#else
-				light_on();
-#endif // USE_DISPLAY
-
 				tl_bdbReset2FN();
-
+#if	USE_DISPLAY
 #ifdef USE_EPD
 				while(task_lcd())
 					pm_wait_ms(USE_EPD);
 #endif
-				zb_resetDevice();
+				show_blink_screen();
+#ifdef USE_EPD
+				while(task_lcd())
+					pm_wait_ms(USE_EPD);
+#endif
+#else
+				light_on();
+#endif // USE_DISPLAY
+				//	zb_resetDevice();
+				drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_PAD | PM_WAKEUP_SRC_TIMER, 5*1000);
 			}
 		} else {
 			g_sensorAppCtx.keyPressed = button_on;

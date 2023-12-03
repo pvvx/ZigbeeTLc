@@ -94,11 +94,14 @@ The flashing "BT" icon is called by the "identify" command.
 
 8. Averaging battery level measurements (eliminates clutter on charts)
 
-9. Switch temperature between Celsius and Fahrenheit (ClusterID: 0x0204, Attr: 0x0000, ENUM8 = 1 in C, = 2 in F)
+9. Switch temperature between Celsius and Fahrenheit
 
 10. Adding button actions (ver 0.1.1.1)
 
 11. Added Poll Control Cluster (ver 0.1.1.2)
+
+12. Ver 0.1.1.3: According to the "ZigBee Cluster Library Specification" the "Thermostat Temperature Conversion" values have been corrected. Added On/Off smiley.  (ClusterID: 0x0204 (Thermostat User Interface Configuration), Attr: 0x0000 (TemperatureDisplayMode), ENUM8 = 0 in C, = 1 in F, Attr: 0x0002 (ScheduleProgrammingVisibility), ENUM8 = 0 show smiley On,  = 1 show smiley Off)
+
 
 
 ## Make

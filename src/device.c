@@ -126,11 +126,11 @@ void read_sensor_and_save(void) {
 #if	USE_DISPLAY
 	read_sensor();
 #ifdef ZCL_THERMOSTAT_UI_CFG
-	if (g_zcl_thermostatUICfgAttrs.displayMode == 2) {
+	if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode == 1) {
 		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
 		show_big_number_x10(((measured_data.temp * 9 + 25) / 50) + 320, 2); // convert C to F
 	} else {
-		g_zcl_thermostatUICfgAttrs.displayMode = 1;
+		g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode = 0;
 		show_big_number_x10((measured_data.temp + 5) / 10, 1);
 	}
 #else // !ZCL_THERMOSTAT_UI_CFG
@@ -152,7 +152,14 @@ void read_sensor_and_save(void) {
     show_battery_symbol(g_zcl_powerAttrs.batteryPercentage < 10);
 #endif // BOARD == BOARD_CGDK2
 #ifdef SHOW_SMILEY
-    show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
+#ifdef ZCL_THERMOSTAT_UI_CFG
+    if(g_zcl_thermostatUICfgAttrs.showSmiley == 0)
+    	show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
+    else
+      	show_smiley(0);
+#else
+	show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
+#endif // ZCL_THERMOSTAT_UI_CFG
 #endif // SHOW_SMILEY
     update_lcd();
 #else // !USE_DISPLAY
