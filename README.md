@@ -25,8 +25,10 @@ In the future, you can update [Zigbee LYWSD03MMC firmware to the version from de
 Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
 
 * Short press - send temperature, humidity and battery data.
-* Hold for 2 seconds - Switches temperature between Celsius and Fahrenheit.
-* Hold for 7 seconds - reset the binding and restart.
+* Hold for 2 seconds - Switches temperature between Celsius and Fahrenheit. The change will immediately appear on the screen.
+* Hold for 7 seconds - reset the binding and restart. The screen will briefly display “---” (for devices using a screen with fast refresh capabilities, not E-Ink). After restarting, the thermometer will wait forever for registration. Jerking the battery won't change anything.
+
+* After flashing from BLE, the thermometer is already in standby mode for registration in the Zigbee network.
 
 ## Zigbee OTA
 
