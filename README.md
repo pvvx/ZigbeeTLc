@@ -104,7 +104,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 12. Ver 0.1.1.4: According to the "ZigBee Cluster Library Specification" the "Thermostat Temperature Conversion" values have been corrected. Added On/Off smiley.  (ClusterID: 0x0204 (Thermostat User Interface Configuration), Attr: 0x0000 (TemperatureDisplayMode), ENUM8 = 0 in C, = 1 in F, Attr: 0x0002 (ScheduleProgrammingVisibility), ENUM8 = 0 show smiley On,  = 1 show smiley Off)
 
-13. Ver 0.1.1.5: Description of the HVAC cluster
+13. Ver 0.1.1.5: Description of the HVAC cluster ([for ZHA](https://github.com/pvvx/ZigbeeTLc/issues/28))
 
 
 ## Make
