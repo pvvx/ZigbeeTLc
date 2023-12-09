@@ -17,7 +17,6 @@ extern "C" {
 
 #define RF_TX_POWER_DEF		RF_POWER_INDEX_P1p99dBm
 
-#define SHOW_SMILEY
 
 // BUTTON
 #define BUTTON1				GPIO_PA5  // reset test point
@@ -27,6 +26,7 @@ extern "C" {
 #define	PULL_WAKEUP_SRC_PA5	PM_PIN_PULLUP_10K
 
 // DISPLAY
+#define SHOW_SMILEY			1
 #define	USE_DISPLAY			1
 #define LCD_BUF_SIZE		6
 #define	PULL_WAKEUP_SRC_PB6	PM_PIN_PULLUP_10K

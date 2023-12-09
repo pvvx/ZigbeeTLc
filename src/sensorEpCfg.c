@@ -86,6 +86,9 @@ const u16 sensorDevice_outClusterList[] =
 #ifdef ZCL_OTA
     ZCL_CLUSTER_OTA,
 #endif
+#ifdef ZCL_THERMOSTAT_UI_CFG
+	ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG
+#endif
 };
 
 /**
@@ -317,7 +320,6 @@ const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 	{ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,	MANUFACTURER_CODE_NONE, ZCL_RELATIVE_HUMIDITY_ATTR_NUM, 		relative_humdity_attrTbl,	zcl_relative_humidity_register, 	NULL},
 #endif
 #ifdef ZCL_THERMOSTAT_UI_CFG
-	// typo in SDK
 	{ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG, MANUFACTURER_CODE_NONE, ZCL_THERMOSTAT_UI_CFG_ATTR_NUM, thermostat_ui_cfg_attrTbl,	zcl_thermostat_ui_cfg_register, 	NULL},
 #endif
 #ifdef ZCL_POLL_CTRL

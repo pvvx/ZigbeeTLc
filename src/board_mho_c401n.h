@@ -31,6 +31,7 @@ extern "C" {
 // GPIO_PD7 - used EPD_RST
 
 // DISPLAY
+#define SHOW_SMILEY			1
 #define	USE_DISPLAY			4
 #define USE_EPD				50 // while(task_lcd()) pm_wait_ms(50 ms);
 #define LCD_BUF_SIZE		16
@@ -70,8 +71,6 @@ extern "C" {
 #define PC4_DATA_OUT		0
 #define PC4_OUTPUT_ENABLE	1
 #define PC4_FUNC			AS_GPIO
-
-#define SHOW_SMILEY
 
 // BUTTON
 #define BUTTON1 			GPIO_PB6	// Reed Switch, input, pcb mark "P5"

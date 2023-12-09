@@ -49,10 +49,6 @@ extern "C" {
 /* PA */
 #define PA_ENABLE						0
 
-/* BDB */
-#define TOUCHLINK_SUPPORT				0
-#define FIND_AND_BIND_SUPPORT			0
-
 #define CLOCK_SYS_CLOCK_HZ  		24000000 //48000000
 
 #define SENSOR_SHTXX	1
@@ -114,8 +110,13 @@ extern "C" {
 #define ZCL_RELATIVE_HUMIDITY_SUPPORT   			1
 #define ZCL_THERMOSTAT_UI_CFG_SUPPORT				USE_DISPLAY
 #define ZCL_POLL_CTRL_SUPPORT						1
-//#define ZCL_GROUP_SUPPORT							1
+#define ZCL_GROUP_SUPPORT							1
 #define ZCL_OTA_SUPPORT								1
+#define TOUCHLINK_SUPPORT							1
+#define FIND_AND_BIND_SUPPORT						1
+#if TOUCHLINK_SUPPORT
+#define ZCL_ZLL_COMMISSIONING_SUPPORT				1
+#endif
 #define REJOIN_FAILURE_TIMER						1
 
 // for consistency

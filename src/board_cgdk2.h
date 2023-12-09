@@ -46,6 +46,7 @@ extern "C" {
 #define PULL_WAKEUP_SRC_PC4 PM_PIN_PULLUP_1M
 
 // DISPLAY
+#define SHOW_SMILEY			0
 #define	USE_DISPLAY			2
 #define LCD_BUF_SIZE		18
 

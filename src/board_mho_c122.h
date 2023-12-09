@@ -32,8 +32,9 @@
 #define PA5_INPUT_ENABLE	  		1
 #define	PULL_WAKEUP_SRC_PA5	  		PM_PIN_PULLUP_10K
 
+// DISPLAY
+#define SHOW_SMILEY			1
 #define	USE_DISPLAY			3
-#define SHOW_SMILEY
 #define LCD_BUF_SIZE		6
 #define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_10K // LCD ?
 

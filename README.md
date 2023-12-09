@@ -76,6 +76,8 @@ A solid "BT" icon indicates a connection loss or the thermometer is not register
 
 The flashing "BT" icon is called by the "identify" command.
 
+[ZHA: Switch temperature between Celsius and Fahrenheit, Show smiley](https://github.com/pvvx/ZigbeeTLc/issues/28)
+
 ## Current additions
 
 1. Added project assembly using 'make' (Windows/linux) and the ability to import 'Existing Project' into "[Telink IoT Studio](http://wiki.telink-semi.cn/wiki/IDE-and-Tools/Telink_IoT_Studio/ )".
@@ -102,6 +104,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 12. Ver 0.1.1.4: According to the "ZigBee Cluster Library Specification" the "Thermostat Temperature Conversion" values have been corrected. Added On/Off smiley.  (ClusterID: 0x0204 (Thermostat User Interface Configuration), Attr: 0x0000 (TemperatureDisplayMode), ENUM8 = 0 in C, = 1 in F, Attr: 0x0002 (ScheduleProgrammingVisibility), ENUM8 = 0 show smiley On,  = 1 show smiley Off)
 
+13. Ver 0.1.1.5: Description of the HVAC cluster
 
 
 ## Make
