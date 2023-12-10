@@ -9,6 +9,12 @@ Stable from version 0.1.1.0, but additional tests are required
 
 * Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
 
+
+## Tests, validation and options are required with solution descriptions to support users with Zigbee features in Home Assistant:
+
+1. Touchlink commissioning 
+2. ZCL_GROUP
+
 ## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
 
 1. Go to the [Over-the-air Webupdater Page TelinkMiFlasher.html](https://pvvx.github.io/ATC_MiThermometer/TelinkMiFlasher.html)
