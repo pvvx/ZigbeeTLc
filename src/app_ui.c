@@ -165,7 +165,7 @@ static s32 keyTimerCb(void *arg)
 				g_sensorAppCtx.key1flag = 1;
 				if(g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode != 1)
 					g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode = 0;
-				zcl_thermostatDisplayMode_save();
+				zcl_thermostatConfig_save();
 				read_sensor_and_save();
 			} else
 #endif

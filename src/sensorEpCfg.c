@@ -264,6 +264,9 @@ const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TEMPERATUREDISPLAYMODE,       ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode },
 	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_SCHEDULEPROGRAMMINGVISIBILITY,   ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.showSmiley },
 
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP,   ZCL_DATA_TYPE_INT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.temp_offset },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI,   ZCL_DATA_TYPE_INT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.humi_offset },
+
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
 };
 
@@ -332,9 +335,11 @@ u8 SENSOR_DEVICE_CB_CLUSTER_NUM = (sizeof(g_sensorDeviceClusterList)/sizeof(g_se
 /**********************************************************************
  * FUNCTIONS
  */
-
+#if NV_ENABLE
+	zcl_thermostatUICfgAttr_t zcl_nv_thermostatUiCfg;
+#endif
 /*********************************************************************
- * @fn      zcl_thermostatDisplayMode_save
+ * @fn      zcl_thermostatConfig_save
  *
  * @brief
  *
@@ -342,40 +347,25 @@ u8 SENSOR_DEVICE_CB_CLUSTER_NUM = (sizeof(g_sensorDeviceClusterList)/sizeof(g_se
  *
  * @return
  */
-nv_sts_t zcl_thermostatDisplayMode_save(void)
+nv_sts_t zcl_thermostatConfig_save(void)
 {
 	nv_sts_t st = NV_SUCC;
 
 #ifdef ZCL_THERMOSTAT_UI_CFG
 #if NV_ENABLE
-	zcl_nv_thermostatUiCfg_t zcl_nv_thermostatUiCfg;
-
-	st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
-
-	if(st == NV_SUCC){
-		if(zcl_nv_thermostatUiCfg.TemperatureDisplayMode != g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode
-			|| zcl_nv_thermostatUiCfg.showSmiley != g_zcl_thermostatUICfgAttrs.showSmiley){
-			zcl_nv_thermostatUiCfg.TemperatureDisplayMode = g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode;
-			zcl_nv_thermostatUiCfg.showSmiley = g_zcl_thermostatUICfgAttrs.showSmiley;
-
-			st = nv_flashWriteNew(1, NV_MODULE_ZCL, NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
-		}
-	}else if(st == NV_ITEM_NOT_FOUND){
-		zcl_nv_thermostatUiCfg.TemperatureDisplayMode = g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode;
-		zcl_nv_thermostatUiCfg.showSmiley = g_zcl_thermostatUICfgAttrs.showSmiley;
-
-		st = nv_flashWriteNew(1, NV_MODULE_ZCL, NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
+	if(memcmp(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs))) {
+		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
+		st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
 	}
 #else
 	st = NV_ENABLE_PROTECT_ERROR;
 #endif
 #endif
-
 	return st;
 }
 
 /*********************************************************************
- * @fn      zcl_thermostatDisplayMode_restore
+ * @fn      zcl_thermostatConfig_restore
  *
  * @brief
  *
@@ -383,24 +373,20 @@ nv_sts_t zcl_thermostatDisplayMode_save(void)
  *
  * @return
  */
-nv_sts_t zcl_thermostatDisplayMode_restore(void)
+nv_sts_t zcl_thermostatConfig_restore(void)
 {
 	nv_sts_t st = NV_SUCC;
 
 #ifdef ZCL_THERMOSTAT_UI_CFG
 #if NV_ENABLE
-	zcl_nv_thermostatUiCfg_t zcl_nv_thermostatUiCfg;
-
 	st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
 
 	if(st == NV_SUCC){
-		g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode = zcl_nv_thermostatUiCfg.TemperatureDisplayMode;
-		g_zcl_thermostatUICfgAttrs.showSmiley = zcl_nv_thermostatUiCfg.showSmiley;
+		memcpy(&g_zcl_thermostatUICfgAttrs, &zcl_nv_thermostatUiCfg, sizeof(g_zcl_thermostatUICfgAttrs));
 	}
 #else
 	st = NV_ENABLE_PROTECT_ERROR;
 #endif
 #endif
-
 	return st;
 }

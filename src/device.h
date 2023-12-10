@@ -103,6 +103,8 @@ typedef struct {
 typedef struct {
 	u8 TemperatureDisplayMode;
 	u8 showSmiley;
+	s8 temp_offset;
+	s8 humi_offset;
 }zcl_thermostatUICfgAttr_t;
 
 
@@ -124,13 +126,6 @@ typedef struct _comfort_t {
 	u16 h[2];
 } scomfort_t;
 
-/**
- *  @brief Defined for saving thermostat attributes
- */
-typedef struct {
-	u8 TemperatureDisplayMode;
-	u8 showSmiley;
-} zcl_nv_thermostatUiCfg_t;
 
 /**********************************************************************
  * GLOBAL VARIABLES
@@ -190,8 +185,11 @@ void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);
 void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status);
 
-nv_sts_t zcl_thermostatDisplayMode_save(void);
-nv_sts_t zcl_thermostatDisplayMode_restore(void);
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP	0x0100
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI	0x0101
+
+nv_sts_t zcl_thermostatConfig_save(void);
+nv_sts_t zcl_thermostatConfig_restore(void);
 
 void scan_task(void);
 s32 sensors_task(void *arg);

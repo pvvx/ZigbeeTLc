@@ -146,12 +146,13 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 	u8 numAttr = pWriteReqCmd->numAttr;
 	zclWriteRec_t *attr = pWriteReqCmd->attrList;
 #ifdef ZCL_THERMOSTAT_UI_CFG
-
 	if(clusterId == ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG){
 		for(int i = 0; i < numAttr; i++){
 			if(attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_TEMPERATUREDISPLAYMODE
-					|| attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_SCHEDULEPROGRAMMINGVISIBILITY){
-				zcl_thermostatDisplayMode_save();
+					|| attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_SCHEDULEPROGRAMMINGVISIBILITY
+					|| attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP
+					|| attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI){
+				zcl_thermostatConfig_save();
 			}
 		}
 	}
