@@ -7,7 +7,6 @@ In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](ht
 Firmware readiness level - Beta versions 0.1.x.x.
 Stable from version 0.1.1.0, but additional tests are required
 
-* Home Assistant with ZHA does not have functions for additional configuration of Zigbee devices. Until this changes, there can be no additions to the firmware.
 * Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
 
 ## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
@@ -19,8 +18,6 @@ Stable from version 0.1.1.0, but additional tests are required
 5. Now you can press the Zigbee Firmware button to directly flash the `Zigbee Firmware`:<br>Alternatively you can choose a specific firmware binary (i.e. the original firmware) via the file chooser. Example: in the file name field paste "https://github.com/devbis/z03mmc/releases/download/1.0.6/1141-0203-10063001-z03mmc.zigbee".
 7. Press Start Flashing. Wait for the firmware to finish.
 8. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 3 seconds.
-
-In the future, you can update [Zigbee LYWSD03MMC firmware to the version from devbis](https://github.com/devbis/z03mmc).
 
 ## Action of the button
 
@@ -38,12 +35,12 @@ Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
 
 Before flashing the firmware, check the compliance of the “Manufacturer Code” and “Image Type” between the OTA file and those issued by the Zigbee device.
 
-Sample: "1141-020a-01103001-Z03MMC.zigbee" 
+Sample: "1141-020a-01233001-Z03MMC.zigbee" 
 
 | Manufacturer Code | Image Type | File Version | Stack Version | Name | Ext OTA |
 | -- | -- | -- | -- | -- | -- |
-| 1141 | 020a | 0110 | 3001 | Z03MMC | zigbee |
-| 0x1141 - Telink | 0x02 - TLSR825x, 0x0a - Xiaomi LYWSD03MMC | App release 0.1, App build 1.0 | Zigbee v3.0, Release 0.1 |  Z03MMC | OTA |
+| 1141 | 020a | 0123 | 3001 | Z03MMC | zigbee |
+| 0x1141 - Telink | 0x02 - TLSR825x, 0x0a - Xiaomi LYWSD03MMC | App release 0.1, App build 2.3 | Zigbee v3.0, Release 0.1 |  Z03MMC | OTA |
 
 |Image Type| Device, note |
 | -- | -- |
@@ -57,7 +54,7 @@ Sample: "1141-020a-01103001-Z03MMC.zigbee"
 | 0x0209 |  MJWSD05MMC |
 | 0x020A |  LYWSD03MMC ver https://github.com/pvvx/ZigbeeTLc |
 | 0x020B |  MHO-C122 |
-| 0x0210 |  Water Tank sensors |
+| 0x0210 |  Water Tank sensors (not published) |
 | 0x0211 |  TS0201-TZ3000 |
 | 0x0212 |  TS0202-TZ3000 |
 
@@ -109,7 +106,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 ## Make
 
-Для сборки под Linux выполнить:
+To build under Linux, run:
 
 ```
 git clone https://github.com/pvvx/ZigbeeTLc
@@ -141,14 +138,14 @@ Total Used SRAM : 20440 from 65536
 Total Free SRAM : 160 + stack[45096] = 45256
 ```
 
-Под Window, после скачивания проекта, выполнить “make install”: 
+Under Window, after downloading the project, run “make install”:
 ```
 git clone https://github.com/pvvx/ZigbeeTLc
 make install
 ```
-и произвести импорт проекта в ‘Telink IoT Studio’ как описано в 'Telink_IoT_Studio_User_Guide.pdf', глава "6 Import and build projects".
+and import the project into 'Telink IoT Studio' as described in 'Telink_IoT_Studio_User_Guide.pdf', chapter "6 Import and build projects".
 
-В Windows возможно включить многопоточную сборку для сборки всего проекта с нуля за 2..3 сек (make -j -> 3 сек на 12-ти ядрах/24 потока).
+On Windows, it is possible to enable multi-threaded assembly to build the entire project from scratch in 2..3 seconds (make -j -> 3 seconds on 12 cores/24 threads).
 
 ---
 
