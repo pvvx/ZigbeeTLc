@@ -23,7 +23,7 @@ Stable from version 0.1.1.0, but additional tests are required
 4. After connection is established a _Do Acivation_ button appears. Press this button to start the decryption key process.
 5. Now you can press the Zigbee Firmware button to directly flash the `Zigbee Firmware`:<br>Alternatively you can choose a specific firmware binary (i.e. the original firmware) via the file chooser. Example: in the file name field paste "https://github.com/devbis/z03mmc/releases/download/1.0.6/1141-0203-10063001-z03mmc.zigbee".
 7. Press Start Flashing. Wait for the firmware to finish.
-8. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 3 seconds.
+8. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 7..8 seconds.
 
 ## Action of the button
 
