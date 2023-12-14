@@ -62,19 +62,19 @@
 const u16 sensorDevice_inClusterList[] =
 {
 	ZCL_CLUSTER_GEN_BASIC,
-	ZCL_CLUSTER_GEN_IDENTIFY,
 	ZCL_CLUSTER_GEN_POWER_CFG,
-#ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
-    ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
+	ZCL_CLUSTER_GEN_IDENTIFY,
+#ifdef ZCL_POLL_CTRL
+	ZCL_CLUSTER_GEN_POLL_CONTROL,
 #endif
 #ifdef ZCL_TEMPERATURE_MEASUREMENT
 	ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
 #endif
+#ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
+    ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
+#endif
 #ifdef ZCL_IAS_ZONE
 	ZCL_CLUSTER_SS_IAS_ZONE,
-#endif
-#ifdef ZCL_POLL_CTRL
-	ZCL_CLUSTER_GEN_POLL_CONTROL,
 #endif
 };
 
@@ -83,6 +83,9 @@ const u16 sensorDevice_inClusterList[] =
  */
 const u16 sensorDevice_outClusterList[] =
 {
+#ifdef ZCL_GROUP
+	ZCL_CLUSTER_GEN_GROUPS,
+#endif
 #ifdef ZCL_OTA
     ZCL_CLUSTER_OTA,
 #endif
@@ -258,14 +261,38 @@ const zclAttrInfo_t relative_humdity_attrTbl[] =
 
 #ifdef ZCL_THERMOSTAT_UI_CFG
 zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs;
+const zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgDefault = {
+		.temp_offset = 0,
+		.humi_offset = 0,
+#if	USE_DISPLAY
+		.TemperatureDisplayMode = 0,
+#if SHOW_SMILEY
+		.showSmiley = 0,
+		.temp_comfort_min = 20,
+		.temp_comfort_max = 25,
+		.humi_comfort_min = 40,
+		.humi_comfort_max = 60
+#endif
+#endif
+};
 
 const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 {
+#if	USE_DISPLAY
 	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TEMPERATUREDISPLAYMODE,       ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode },
+#endif
+#if SHOW_SMILEY
 	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_SCHEDULEPROGRAMMINGVISIBILITY,   ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.showSmiley },
-
+#endif
 	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP,   ZCL_DATA_TYPE_INT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.temp_offset },
 	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI,   ZCL_DATA_TYPE_INT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.humi_offset },
+#if	SHOW_SMILEY
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_T,   ZCL_DATA_TYPE_INT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.temp_comfort_min },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_T,   ZCL_DATA_TYPE_INT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.temp_comfort_max },
+
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_H,   ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.humi_comfort_min },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_H,   ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.humi_comfort_max },
+#endif
 
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
 };
@@ -309,12 +336,18 @@ const zclAttrInfo_t pollCtrl_attrTbl[] =
 const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 {
 	{ZCL_CLUSTER_GEN_BASIC,			MANUFACTURER_CODE_NONE, ZCL_BASIC_ATTR_NUM, 	basic_attrTbl,  	zcl_basic_register,		sensorDevice_basicCb},
-	{ZCL_CLUSTER_GEN_IDENTIFY,		MANUFACTURER_CODE_NONE, ZCL_IDENTIFY_ATTR_NUM,	identify_attrTbl,	zcl_identify_register,	sensorDevice_identifyCb},
 #ifdef ZCL_POWER_CFG
 	{ZCL_CLUSTER_GEN_POWER_CFG,		MANUFACTURER_CODE_NONE,	ZCL_POWER_CFG_ATTR_NUM,	powerCfg_attrTbl,	zcl_powerCfg_register,	sensorDevice_powerCfgCb},
 #endif
-#ifdef ZCL_IAS_ZONE
-	{ZCL_CLUSTER_SS_IAS_ZONE,		MANUFACTURER_CODE_NONE, ZCL_IASZONE_ATTR_NUM,	iasZone_attrTbl,	zcl_iasZone_register,	sensorDevice_iasZoneCb},
+	{ZCL_CLUSTER_GEN_IDENTIFY,		MANUFACTURER_CODE_NONE, ZCL_IDENTIFY_ATTR_NUM,	identify_attrTbl,	zcl_identify_register,	sensorDevice_identifyCb},
+#ifdef ZCL_GROUP
+	{ZCL_CLUSTER_GEN_GROUPS,		MANUFACTURER_CODE_NONE,	0, 						NULL,  				zcl_group_register,		sensorDevice_groupCb},
+#endif
+#ifdef ZCL_POLL_CTRL
+	{ZCL_CLUSTER_GEN_POLL_CONTROL,  MANUFACTURER_CODE_NONE, ZCL_POLLCTRL_ATTR_NUM, 	pollCtrl_attrTbl,   zcl_pollCtrl_register,	sensorDevice_pollCtrlCb},
+#endif
+#ifdef ZCL_THERMOSTAT_UI_CFG
+	{ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG, MANUFACTURER_CODE_NONE, ZCL_THERMOSTAT_UI_CFG_ATTR_NUM, thermostat_ui_cfg_attrTbl,	zcl_thermostat_ui_cfg_register, 	NULL},
 #endif
 #ifdef ZCL_TEMPERATURE_MEASUREMENT
 	{ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,	MANUFACTURER_CODE_NONE, ZCL_TEMPERATURE_MEASUREMENT_ATTR_NUM, temperature_measurement_attrTbl, 	zcl_temperature_measurement_register, 	NULL},
@@ -322,11 +355,8 @@ const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 #ifdef ZCL_RELATIVE_HUMIDITY
 	{ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,	MANUFACTURER_CODE_NONE, ZCL_RELATIVE_HUMIDITY_ATTR_NUM, 		relative_humdity_attrTbl,	zcl_relative_humidity_register, 	NULL},
 #endif
-#ifdef ZCL_THERMOSTAT_UI_CFG
-	{ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG, MANUFACTURER_CODE_NONE, ZCL_THERMOSTAT_UI_CFG_ATTR_NUM, thermostat_ui_cfg_attrTbl,	zcl_thermostat_ui_cfg_register, 	NULL},
-#endif
-#ifdef ZCL_POLL_CTRL
-	{ZCL_CLUSTER_GEN_POLL_CONTROL,  MANUFACTURER_CODE_NONE, ZCL_POLLCTRL_ATTR_NUM, 	pollCtrl_attrTbl,   zcl_pollCtrl_register,	sensorDevice_pollCtrlCb},
+#ifdef ZCL_IAS_ZONE
+	{ZCL_CLUSTER_SS_IAS_ZONE,		MANUFACTURER_CODE_NONE, ZCL_IASZONE_ATTR_NUM,	iasZone_attrTbl,	zcl_iasZone_register,	sensorDevice_iasZoneCb},
 #endif
 };
 
@@ -356,6 +386,9 @@ nv_sts_t zcl_thermostatConfig_save(void)
 	if(memcmp(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs))) {
 		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
 		st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
+#if SHOW_SMILEY
+		set_comfort();
+#endif
 	}
 #else
 	st = NV_ENABLE_PROTECT_ERROR;
@@ -383,7 +416,12 @@ nv_sts_t zcl_thermostatConfig_restore(void)
 
 	if(st == NV_SUCC){
 		memcpy(&g_zcl_thermostatUICfgAttrs, &zcl_nv_thermostatUiCfg, sizeof(g_zcl_thermostatUICfgAttrs));
+	} else {
+		memcpy(&g_zcl_thermostatUICfgAttrs, &g_zcl_thermostatUICfgDefault, sizeof(g_zcl_thermostatUICfgAttrs));
 	}
+#if SHOW_SMILEY
+	set_comfort();
+#endif
 #else
 	st = NV_ENABLE_PROTECT_ERROR;
 #endif

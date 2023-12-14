@@ -146,22 +146,15 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 	u8 numAttr = pWriteReqCmd->numAttr;
 	zclWriteRec_t *attr = pWriteReqCmd->attrList;
 #ifdef ZCL_THERMOSTAT_UI_CFG
-	if(clusterId == ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG){
-		for(int i = 0; i < numAttr; i++){
-			if(attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_TEMPERATUREDISPLAYMODE
-					|| attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_SCHEDULEPROGRAMMINGVISIBILITY
-					|| attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP
-					|| attr[i].attrID == ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI){
-				zcl_thermostatConfig_save();
-			}
-		}
-	}
+	if(clusterId == ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG) {
+		zcl_thermostatConfig_save();
+	} else
 #endif
 #ifdef ZCL_POLL_CTRL
 
 	if(clusterId == ZCL_CLUSTER_GEN_POLL_CONTROL){
 		for(int i = 0; i < numAttr; i++){
-			if(attr[i].attrID == ZCL_ATTRID_CHK_IN_INTERVAL){
+			if(attr[i].attrID == ZCL_ATTRID_CHK_IN_INTERVAL) {
 				sensorDevice_zclCheckInStart();
 				return;
 			}
@@ -693,3 +686,98 @@ status_t sensorDevice_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 	return status;
 }
 #endif	/* ZCL_POLL_CTRL */
+
+#ifdef ZCL_GROUP
+/*********************************************************************
+ * @fn      sensorDevice_zclAddGroupRspCmdHandler
+ *
+ * @brief   Handler for ZCL add group response command.
+ *
+ * @param   pAddGroupRsp
+ *
+ * @return  None
+ */
+static void sensorDevice_zclAddGroupRspCmdHandler(zcl_addGroupRsp_t *pAddGroupRsp)
+{
+
+}
+
+/*********************************************************************
+ * @fn      sensorDevice_zclViewGroupRspCmdHandler
+ *
+ * @brief   Handler for ZCL view group response command.
+ *
+ * @param   pViewGroupRsp
+ *
+ * @return  None
+ */
+static void sensorDevice_zclViewGroupRspCmdHandler(zcl_viewGroupRsp_t *pViewGroupRsp)
+{
+
+}
+
+/*********************************************************************
+ * @fn      sensorDevice_zclRemoveGroupRspCmdHandler
+ *
+ * @brief   Handler for ZCL remove group response command.
+ *
+ * @param   pRemoveGroupRsp
+ *
+ * @return  None
+ */
+static void sensorDevice_zclRemoveGroupRspCmdHandler(zcl_removeGroupRsp_t *pRemoveGroupRsp)
+{
+
+}
+
+/*********************************************************************
+ * @fn      sensorDevice_zclGetGroupMembershipRspCmdHandler
+ *
+ * @brief   Handler for ZCL get group membership response command.
+ *
+ * @param   pGetGroupMembershipRsp
+ *
+ * @return  None
+ */
+static void sensorDevice_zclGetGroupMembershipRspCmdHandler(zcl_getGroupMembershipRsp_t *pGetGroupMembershipRsp)
+{
+
+}
+
+/*********************************************************************
+ * @fn      sensorDevice_groupCb
+ *
+ * @brief   Handler for ZCL Group command.
+ *
+ * @param   pAddrInfo
+ * @param   cmdId
+ * @param   cmdPayload
+ *
+ * @return  status_t
+ */
+status_t sensorDevice_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload)
+{
+	if(pAddrInfo->dstEp == SENSOR_DEVICE_ENDPOINT){
+		if(pAddrInfo->dirCluster == ZCL_FRAME_SERVER_CLIENT_DIR){
+			switch(cmdId){
+				case ZCL_CMD_GROUP_ADD_GROUP_RSP:
+					sensorDevice_zclAddGroupRspCmdHandler((zcl_addGroupRsp_t *)cmdPayload);
+					break;
+				case ZCL_CMD_GROUP_VIEW_GROUP_RSP:
+					sensorDevice_zclViewGroupRspCmdHandler((zcl_viewGroupRsp_t *)cmdPayload);
+					break;
+				case ZCL_CMD_GROUP_REMOVE_GROUP_RSP:
+					sensorDevice_zclRemoveGroupRspCmdHandler((zcl_removeGroupRsp_t *)cmdPayload);
+					break;
+				case ZCL_CMD_GROUP_GET_MEMBERSHIP_RSP:
+					sensorDevice_zclGetGroupMembershipRspCmdHandler((zcl_getGroupMembershipRsp_t *)cmdPayload);
+					break;
+				default:
+					break;
+			}
+		}
+	}
+
+	return ZCL_STA_SUCCESS;
+}
+#endif	/* ZCL_GROUP */

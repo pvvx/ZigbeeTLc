@@ -81,7 +81,7 @@ A solid "BT" icon indicates a connection loss or the thermometer is not register
 
 The flashing "BT" icon is called by the "identify" command.
 
-[ZHA: Switch temperature between Celsius and Fahrenheit, Show smiley](https://github.com/pvvx/ZigbeeTLc/issues/28)
+[ZHA: Switch temperature between Celsius and Fahrenheit, Show smiley, Comfort parameters](https://github.com/pvvx/ZigbeeTLc/issues/28)
 
 
 ## Setting offsets for temperature and humidity.
@@ -117,6 +117,8 @@ The flashing "BT" icon is called by the "identify" command.
 13. Ver 0.1.1.5: Description of the HVAC cluster ([for ZHA](https://github.com/pvvx/ZigbeeTLc/issues/28))
 
 13. Ver 0.1.1.6: Setting offsets for temperature and humidity.
+
+14. Ver 0.1.1.7: Add Comfort parameters
 
 
 ## Make

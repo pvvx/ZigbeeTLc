@@ -1,4 +1,4 @@
-@set SWVER=_v0116
+@set SWVER=_v0117
 @del /Q .\bin
 wsl make -s clean
 wsl make -s VERSION_BIN=%SWVER% PROJECT_NAME=Z03MMC POJECT_DEF="-DBOARD=BOARD_LYWSD03MMC"

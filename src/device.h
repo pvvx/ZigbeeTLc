@@ -101,10 +101,16 @@ typedef struct {
  *  @brief Defined for thermostat UI config cluster attributes
  */
 typedef struct {
-	u8 TemperatureDisplayMode;
-	u8 showSmiley;
 	s8 temp_offset;
 	s8 humi_offset;
+#if	USE_DISPLAY
+	u8 TemperatureDisplayMode;
+	u8 showSmiley;
+	s8 temp_comfort_min;
+	s8 temp_comfort_max;
+	u8 humi_comfort_min;
+	u8 humi_comfort_max;
+#endif
 }zcl_thermostatUICfgAttr_t;
 
 
@@ -179,6 +185,7 @@ status_t sensorDevice_identifyCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 status_t sensorDevice_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t sensorDevice_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t sensorDevice_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
+status_t sensorDevice_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void sensorDevice_zclCheckInStart(void);
 
 void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
@@ -187,6 +194,10 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status);
 
 #define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP	0x0100
 #define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI	0x0101
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_T	0x0102
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_T	0x0103
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_H	0x0104
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_H	0x0105
 
 nv_sts_t zcl_thermostatConfig_save(void);
 nv_sts_t zcl_thermostatConfig_restore(void);
@@ -194,5 +205,6 @@ nv_sts_t zcl_thermostatConfig_restore(void);
 void scan_task(void);
 s32 sensors_task(void *arg);
 void read_sensor_and_save(void);
+void set_comfort(void);
 
 #endif /* _DEVICE_H_ */

@@ -108,12 +108,18 @@ void stack_init(void)
 	zb_zdoCbRegister((zdo_appIndCb_t *)&appCbLst);
 }
 
-#if USE_DISPLAY && SHOW_SMILEY
-//const scomfort_t def_cmf = {
-scomfort_t cmf = {
-    .t = {2100,2600}, // x0.01 C
-    .h = {3000,6000}  // x0.01 %
-};
+#if SHOW_SMILEY
+
+scomfort_t cmf;
+
+void set_comfort(void) {
+	cmf.t[0] = g_zcl_thermostatUICfgAttrs.temp_comfort_min *100;
+	cmf.t[1] = g_zcl_thermostatUICfgAttrs.temp_comfort_max *100;
+	cmf.h[0] = g_zcl_thermostatUICfgAttrs.humi_comfort_min *100;
+	cmf.h[1] = g_zcl_thermostatUICfgAttrs.humi_comfort_max *100;
+}
+
+
 u8 is_comfort(s16 t, u16 h) {
 	u8 ret = 0;
 	if (t >= cmf.t[0] && t <= cmf.t[1] && h >= cmf.h[0] && h <= cmf.h[1])
@@ -126,11 +132,10 @@ void read_sensor_and_save(void) {
 #if	USE_DISPLAY
 	read_sensor();
 #ifdef ZCL_THERMOSTAT_UI_CFG
-	if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode == 1) {
+	if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode) {
 		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
 		show_big_number_x10(((measured_data.temp * 9 + 25) / 50) + 320, 2); // convert C to F
 	} else {
-		g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode = 0;
 		show_big_number_x10((measured_data.temp + 5) / 10, 1);
 	}
 #else // !ZCL_THERMOSTAT_UI_CFG

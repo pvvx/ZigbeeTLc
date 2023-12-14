@@ -125,6 +125,14 @@ u32 get_sensor_id(void) {
 }
 #endif
 
+static void sensor_ms_end(void) {
+	// Sleep command of the sensor = sensor_go_sleep();
+	if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1))
+		send_sensor_word(SHTC3_GO_SLEEP); // Sleep command of the sensor
+	else if(sensor_i2c_addr)
+		send_sensor_byte(SHT4x_MEASURE_HI);
+}
+
 static int check_sensor(void) {
 	sensor_i2c_addr = scan_i2c_addr(SHTC3_I2C_ADDR << 1);
 	if(!sensor_i2c_addr) {
@@ -150,8 +158,7 @@ void init_sensor(void) {
 #if USE_SENSOR_ID
 	sensor_id = get_sensor_id();
 #endif
-	if(sensor_i2c_addr && sensor_i2c_addr != (SHTC3_I2C_ADDR << 1))
-		send_sensor_byte(SHT4x_MEASURE_HI);
+	sensor_ms_end();
 }
 
 _SENSOR_SPEED_CODE_SEC_
@@ -223,10 +230,7 @@ static int read_sensor_cb(void) {
 	} while (i--);
 	soft_reset_sensor();
 	// Sleep command of the sensor = sensor_go_sleep();
-	if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1))
-		send_sensor_word(SHTC3_GO_SLEEP); // Sleep command of the sensor
-	else if(sensor_i2c_addr)
-		send_sensor_byte(SHT4x_MEASURE_HI);
+	sensor_ms_end();
 	return 0;
 }
 
