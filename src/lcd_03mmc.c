@@ -139,7 +139,7 @@ static void lcd_send_uart(u8 *p){
 	// start send DMA
 	reg_dma_tx_rdy0 |= FLD_DMA_CHN_UART_TX; // start tx
 	// wait send (3.35 ms), sleep?
-	pm_wait_us(3330); // 13 bytes * 10 bits / 38400 baud = 0.0033854 sec = 3.4 ms power ~3 mA
+	sleep_us(3330); // 13 bytes * 10 bits / 38400 baud = 0.0033854 sec = 3.4 ms power ~3 mA
 	//while (reg_dma_tx_rdy0 & FLD_DMA_CHN_UART_TX); ?
 	while (!(reg_uart_status1 & FLD_UART_TX_DONE));
 	// set low/off power UART

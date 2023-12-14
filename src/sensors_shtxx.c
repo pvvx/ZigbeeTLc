@@ -241,7 +241,7 @@ int read_sensor(void) {
 //		sleep_us(SHTC3_WAKEUP_us - 5);	// 240 us
 		battery_detect();
 		send_sensor_word(SHTC3_MEASURE);
-		pm_wait_us(SHTC3_MEASURE_us);
+		pm_wait_us(SHTC3_MEASURE_us); // TODO: pm_wait sleep?
 		re = read_sensor_cb();
 	} else if (sensor_i2c_addr) { //  if (sensor_i2c_addr == (SHT4x_I2C_ADDR << 1)) {
 		re = read_sensor_cb();
