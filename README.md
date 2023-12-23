@@ -4,6 +4,8 @@ Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/
 
 Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000/)
 
+Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
+
 In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000)
 
 Firmware readiness level - Beta versions 0.1.x.x.
@@ -68,7 +70,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
-* Zigbee OTA for 128 KB firmware takes 677 seconds with an average consumption of about 1 mA. This is an energy consumption of 5.4 mAh from the battery.
+* Zigbee OTA for 128 KB firmware takes 677 seconds with an average consumption of about 1 mA.
 
 
 ## Display decimal places for temperature, humidity and battery charge in ZHA.
