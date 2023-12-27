@@ -122,6 +122,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 14. Ver 0.1.1.7: Add Comfort parameters
 
+15. Ver 0.1.1.8: Easy version. Options disabled: "Groups", "TouchLink", "Find and Bind".
+
 
 ## Make
 

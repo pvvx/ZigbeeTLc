@@ -110,7 +110,14 @@ void stack_init(void)
 
 #if SHOW_SMILEY
 
+#ifdef ZCL_THERMOSTAT_UI_CFG
 scomfort_t cmf;
+#else
+scomfort_t cmf = {
+		2000, 2500,
+		4000, 6000
+};
+#endif
 
 void set_comfort(void) {
 	cmf.t[0] = g_zcl_thermostatUICfgAttrs.temp_comfort_min *100;
@@ -238,7 +245,7 @@ s32 sensors_task(void *arg) {
 /**********************************************************************
  * FUNCTIONS
  */
-
+u8 flg_cnt;
 void app_task(void)
 {
 	u16 rep_uptime_sec;
@@ -284,9 +291,13 @@ void app_task(void)
 #ifdef USE_EPD
 		task_lcd();
 #endif
-		drv_pm_lowPowerEnter();
+		if(flg_cnt)
+			flg_cnt--;
+		else
+			drv_pm_lowPowerEnter();
 #endif
-	}
+	} else
+		flg_cnt = 1;
 }
 
 
@@ -480,7 +491,7 @@ void user_init(bool isRetention)
 			ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
 			ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,
 			30,
-			120,
+			180,
 			(u8 *)&reportableChange[2]
 		);
         reportableChange[3] = 50;
@@ -490,7 +501,7 @@ void user_init(bool isRetention)
 			ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
 			ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,
 			30,
-			120,
+			180,
 			(u8 *)&reportableChange[3]
 		);
 		/* Initialize BDB */
