@@ -385,7 +385,7 @@ nv_sts_t zcl_thermostatConfig_save(void)
 #if NV_ENABLE
 	if(memcmp(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs))) {
 		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
-		st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
+		st = nv_flashWriteNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
 #if SHOW_SMILEY
 		set_comfort();
 #endif

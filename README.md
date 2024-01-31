@@ -124,6 +124,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 15. Ver 0.1.1.8: Easy version. Options disabled: "Groups", "TouchLink", "Find and Bind".
 
+16. Ver 0.1.1.9: Fix configuration saving error
 
 ## Make
 

@@ -56,8 +56,11 @@
 // 13..15 - number used for BLE firmware - https://github.com/pvvx/ATC_MiThermometer
 #define BOARD_TNK					16 // Water tank controller (not yet published at the moment)
 #define BOARD_TS0201_TZ3000			17
-#define BOARD_TS0202_TZ3000			18 // ?
-// 19.. not yet appointed
+#define BOARD_TS0202_TZ3000			18
+#define BOARD_THB2					19 // https://github.com/pvvx/THB2
+#define BOARD_BTH01					20 // https://github.com/pvvx/THB2
+#define BOARD_TH05					21 // https://github.com/pvvx/THB2
+// 22.. not yet appointed
 
 /* Board define */
 #ifndef BOARD
@@ -87,7 +90,7 @@
 #endif
 
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x18	//BCD app build "1.7"
+#define APP_BUILD				0x19	//BCD app build "1.7"
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01
 
