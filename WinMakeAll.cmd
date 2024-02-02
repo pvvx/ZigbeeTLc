@@ -5,6 +5,7 @@
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=Z03MMC POJECT_DEF="-DBOARD=BOARD_LYWSD03MMC"
 @if not exist "bin\Z03MMC%SWVER%.bin" goto :error
+@python3 make/zb_bin_ota.py bin\Z03MMC%SWVER%.bin bin\Z03MMC%SWVER% -m0x1141 -i0x0201 -v0x09993001 -s"Zigbee ver:devis to ZigbeeTLc"
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZCGDK2 POJECT_DEF="-DBOARD=BOARD_CGDK2"
 @if not exist "bin\ZCGDK2%SWVER%.bin" goto :error
