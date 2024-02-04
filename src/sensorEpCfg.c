@@ -12,27 +12,27 @@
  */
 #if BOARD == BOARD_LYWSD03MMC
 
-#define ZCL_BASIC_MFG_NAME     {6,'X','i','a','o','m','i'}
+#define ZCL_BASIC_MFG_NAME     {11,'X','i','a','o','m','i','/','p','v','v','x'}
 #define ZCL_BASIC_MODEL_ID	   {10,'L','Y','W','S','D','0','3','M','M','C'}
 
 #elif BOARD == BOARD_CGDK2
 
-#define ZCL_BASIC_MFG_NAME     {8,'Q','i','n','g','p','i','n','g'} // Qingping
+#define ZCL_BASIC_MFG_NAME     {13,'Q','i','n','g','p','i','n','g''/','p','v','v','x'} // Qingping
 #define ZCL_BASIC_MODEL_ID	   {5,'C','G','D','K','2'} // CGDK2
 
 #elif BOARD == BOARD_MHO_C122
 
-#define ZCL_BASIC_MFG_NAME     {9,'M','i','a','M','i','a','o','C','e'} // MiaoMiaoCe
+#define ZCL_BASIC_MFG_NAME     {14,'M','i','a','M','i','a','o','C','e''/','p','v','v','x'} // MiaoMiaoCe
 #define ZCL_BASIC_MODEL_ID	   {8,'M','H','O','-','C','1','2','2'} // MHO-C122
 
 #elif BOARD == BOARD_MHO_C401N
 
-#define ZCL_BASIC_MFG_NAME     {9,'M','i','a','M','i','a','o','C','e'} // MiaoMiaoCe
+#define ZCL_BASIC_MFG_NAME     {14,'M','i','a','M','i','a','o','C','e''/','p','v','v','x'} // MiaoMiaoCe
 #define ZCL_BASIC_MODEL_ID	   {9,'M','H','O','-','C','4','0','1','N'} // MHO-C401N
 
 #elif BOARD == BOARD_TS0201_TZ3000
 
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MFG_NAME     {10,'T','u','y','a''/','p','v','v','x'} // Tuya
 #define ZCL_BASIC_MODEL_ID	   {6,'T','S','0','2','0','1'} // TS0201
 
 #else
