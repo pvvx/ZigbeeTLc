@@ -1,4 +1,6 @@
-build
-SDK
-tools/widows/
-tools/linux/
+/build/
+.idea
+.vscode
+.SDK
+./tools/widows/
+./tools/linux/

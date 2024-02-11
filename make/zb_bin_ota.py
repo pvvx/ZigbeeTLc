@@ -52,7 +52,7 @@ def arg_auto_int(x):
 
 def main():
 	parser = argparse.ArgumentParser(description="Create Zigbee OTA file",
-		epilog="Reads a firmware image file and outputs an Zigbee OTA file")
+		epilog="Reads a firmware image file and outputs an OTA file on standard output")
 	parser.add_argument("filename", metavar="INPUT", type=str, help="Firmware image filename")
 	parser.add_argument("output", metavar="OUTPUT", type=str, help="OTA filename")
 	parser.add_argument("-m", "--manufacturer_id", metavar="MANUFACTURER_ID", type=arg_auto_int, required=True, help="Manufacturer ID")

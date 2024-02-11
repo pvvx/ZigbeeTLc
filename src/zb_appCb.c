@@ -127,7 +127,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 			zb_setPollRate(DEFAULT_POLL_RATE);
 
 #ifdef ZCL_OTA
-			ota_queryStart(15 * 60);
+			ota_queryStart(15 * 60);	// 15 m
 #endif
 
 #ifdef ZCL_POLL_CTRL
@@ -328,7 +328,6 @@ void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
 		if(deviceRejoinBackoffTimerEvt){
 			TL_ZB_TIMER_CANCEL(&deviceRejoinBackoffTimerEvt);
 		}
-    	//zb_resetDevice();
     }
 }
 
