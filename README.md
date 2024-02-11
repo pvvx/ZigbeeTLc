@@ -127,6 +127,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 16. Ver 0.1.1.9: Fix configuration saving error
 
+17. Ver 0.1.2.0: At the [request](https://github.com/pvvx/ZigbeeTLc/pull/50#issuecomment-1925906616) of @devbis, for differences in z2m, the device names have been renamed. "-z" will be added to the name Zigbee devices, "-bz" will be added to the BLE and Zigbee devices, "-zb" to the Zigbee2BLE devices.
+
 ## Make
 
 To build under Linux, run:
