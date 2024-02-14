@@ -88,7 +88,7 @@ const definition = {
             attribute: {ID: 0x0102, type: dataType.int8},
             valueMin: -127.0,
             valueMax: 127.0,
-            description: 'Comfort parameters/Temperature minimum, in 0.1°C steps.',
+            description: 'Comfort parameters/Temperature minimum, in 1°C steps.',
         }),
         numeric({
             name: 'comfort_temperature_max',
@@ -97,7 +97,7 @@ const definition = {
             attribute: {ID: 0x0103, type: dataType.int8},
             valueMin: -127.0,
             valueMax: 127.0,
-            description: 'Comfort parameters/Temperature maximum, in 0.1°C steps.',
+            description: 'Comfort parameters/Temperature maximum, in 1°C steps.',
         }),
         numeric({
             name: 'comfort_humidity_min',
