@@ -36,7 +36,7 @@ Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
 
 ## Z2M
 
-Use [External convertors](https://github.com/pvvx/ZigbeeTLc/z2m)
+Use [External convertors](https://github.com/pvvx/ZigbeeTLc/tree/master/z2m)
 
 ## Zigbee OTA
 
