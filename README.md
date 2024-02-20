@@ -14,12 +14,6 @@ Stable from version 0.1.1.0, but additional tests are required
 * Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
 * [Average consumption](https://github.com/pvvx/ZigbeeTLc/issues/37#issuecomment-1937844181) for Xiaomi LYWSD03MMC HW: B1.4 - ~15 uA.
 
-
-## Tests, validation and options are required with solution descriptions to support users with Zigbee features in Home Assistant:
-
-1. Touchlink commissioning 
-2. ZCL_GROUP
-
 ## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
 
 1. Go to the [Over-the-air Webupdater Page TelinkMiFlasher.html](https://pvvx.github.io/ATC_MiThermometer/TelinkMiFlasher.html)
@@ -39,6 +33,10 @@ Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
 * Hold for 7 seconds - reset the binding and restart. The screen will briefly display “---” (for devices using a screen with fast refresh capabilities, not E-Ink). After restarting, the thermometer will wait forever for registration. Jerking the battery won't change anything.
 
 * After flashing from BLE, the thermometer is already in standby mode for registration in the Zigbee network.
+
+## Z2M
+
+Use [External convertors](https://github.com/pvvx/ZigbeeTLc/z2m)
 
 ## Zigbee OTA
 
