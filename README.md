@@ -26,6 +26,8 @@ Stable from version 0.1.1.0, but additional tests are required
 6. Press Start Flashing. Wait for the firmware to finish.
 7. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 7..8 seconds.
 
+* TS0201 is flashed in BLE version via Zigbee OTA. File [1141-d3a3-00993001-TS0201_v45.zigbee](https://github.com/pvvx/BLE_THSensor/raw/master/source/TS0201/bin/1141-d3a3-00993001-TS0201_v45.zigbee)
+
 ## Action of the button
 
 Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
@@ -65,17 +67,14 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x0209 |  MJWSD05MMC |
 | 0x020A |  LYWSD03MMC ver https://github.com/pvvx/ZigbeeTLc |
 | 0x020B |  MHO-C122 |
-| 0x0210 |  TB-03F-Kit (DIY) |
 | 0x0211 |  TS0201-TZ3000 |
-| 0x0212 |  Water Tank sensors (not published) |
-| 0x0216 |  TH03Z |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
 * Zigbee OTA for 128 KB firmware takes 677 seconds with an average consumption of about 1 mA.
 
 
-## Display decimal places for temperature, humidity and battery charge in ZHA
+## Display decimal places for temperature, humidity and battery charge in ZHA.
 
 [ZHA patch for more precision display of data for all Zigbee devices.](https://github.com/pvvx/ZigbeeTLc/issues/6)
 
@@ -88,7 +87,7 @@ The flashing "BT" icon is called by the "identify" command.
 [ZHA: Switch temperature between Celsius and Fahrenheit, Show smiley, Comfort parameters](https://github.com/pvvx/ZigbeeTLc/issues/28)
 
 
-## Setting offsets for temperature and humidity
+## Setting offsets for temperature and humidity.
 
 [ZHA: Setting offsets for temperature and humidity](https://github.com/pvvx/ZigbeeTLc/issues/30)
 
