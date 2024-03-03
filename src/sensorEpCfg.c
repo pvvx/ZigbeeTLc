@@ -35,6 +35,11 @@
 #define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
 #define ZCL_BASIC_MODEL_ID	   {8,'T','S','0','2','0','1','-','z'} // TS0201
 
+#elif BOARD == BOARD_TH03Z
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {7,'T','H','0','3','Z','-','z'} // TH03Z
+
 #else
 #error "Define BOARD!"
 #endif // BOARD

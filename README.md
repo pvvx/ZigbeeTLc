@@ -4,6 +4,8 @@ Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/
 
 Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000/)
 
+Added trial version for [TH03Z](https://pvvx.github.io/TH03Z/)
+
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
 In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000)
@@ -63,16 +65,17 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x0209 |  MJWSD05MMC |
 | 0x020A |  LYWSD03MMC ver https://github.com/pvvx/ZigbeeTLc |
 | 0x020B |  MHO-C122 |
-| 0x0210 |  Water Tank sensors (not published) |
+| 0x0210 |  TB-03F-Kit (DIY) |
 | 0x0211 |  TS0201-TZ3000 |
-| 0x0212 |  TS0202-TZ3000 |
+| 0x0212 |  Water Tank sensors (not published) |
+| 0x0216 |  TH03Z |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
 * Zigbee OTA for 128 KB firmware takes 677 seconds with an average consumption of about 1 mA.
 
 
-## Display decimal places for temperature, humidity and battery charge in ZHA.
+## Display decimal places for temperature, humidity and battery charge in ZHA
 
 [ZHA patch for more precision display of data for all Zigbee devices.](https://github.com/pvvx/ZigbeeTLc/issues/6)
 
@@ -85,7 +88,7 @@ The flashing "BT" icon is called by the "identify" command.
 [ZHA: Switch temperature between Celsius and Fahrenheit, Show smiley, Comfort parameters](https://github.com/pvvx/ZigbeeTLc/issues/28)
 
 
-## Setting offsets for temperature and humidity.
+## Setting offsets for temperature and humidity
 
 [ZHA: Setting offsets for temperature and humidity](https://github.com/pvvx/ZigbeeTLc/issues/30)
 

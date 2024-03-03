@@ -1,5 +1,5 @@
 #include "tl_common.h"
-#if defined(SENSOR_TYPE) && SENSOR_TYPE == SENSOR_SHTXX
+#if defined(SENSOR_TYPE) && SENSOR_TYPE == SENSOR_SHTC3_4X
 #include "chip_8258/timer.h"
 
 #include "i2c_drv.h"
@@ -252,4 +252,4 @@ int read_sensor(void) {
 	return re;
 }
 
-#endif //  defined(SENSOR_TYPE) && SENSOR_TYPE == SENSOR_SHTXX
+#endif //  defined(SENSOR_TYPE) && SENSOR_TYPE == SENSOR_SHTC3_4X

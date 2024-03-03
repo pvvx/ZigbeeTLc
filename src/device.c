@@ -284,7 +284,7 @@ void app_task(void)
 #endif
 #else
 			if(!g_sensorAppCtx.timerLedEvt)
-				gpio_write(GPIO_LED, LED_ON);
+				light_on();
 #endif
 		}
 #if PM_ENABLE
@@ -391,7 +391,7 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
         g_zcl_basicAttrs.hwVersion = 19;
     }
 #else // BOARD != BOARD_LYWSD03MMC
-#if SENSOR_TYPE == SENSOR_SHTXX
+#if SENSOR_TYPE == SENSOR_SHTC3_4X
     if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) {
 #if USE_SENSOR_ID
     	g_zcl_basicAttrs.hwVersion = 2 + (sensor_id == 0);
@@ -417,10 +417,10 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
  *
  * @return  None
  */
-u16 reportableChange[4];
-
 void user_init(bool isRetention)
 {
+	u32 reportableChange;
+
 #if PA_ENABLE
 	rf_paInit(PA_TX, PA_RX);
 #endif
@@ -464,7 +464,7 @@ void user_init(bool isRetention)
 			g_bdbCommissionSetting.linkKey.tcLinkKey.key = g_sensorAppCtx.tcLinkKey.key;
 		}
 		/* Set default reporting configuration */
-		reportableChange[0] = 0;
+		reportableChange = 0;
         bdb_defaultReportingCfg(
 			SENSOR_DEVICE_ENDPOINT,
 			HA_PROFILE_ID,
@@ -472,9 +472,9 @@ void user_init(bool isRetention)
 			ZCL_ATTRID_BATTERY_VOLTAGE,
 			360,
 			3600,
-			(u8 *)&reportableChange[0]
+			(u8 *)&reportableChange
 		);
-        reportableChange[1] = 0;
+        reportableChange = 0;
         bdb_defaultReportingCfg(
 			SENSOR_DEVICE_ENDPOINT,
 			HA_PROFILE_ID,
@@ -482,9 +482,9 @@ void user_init(bool isRetention)
 			ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
 			360,
 			3600,
-			(u8 *)&reportableChange[1]
+			(u8 *)&reportableChange
 		);
-        reportableChange[2] = 10;
+        reportableChange = 10;
 		bdb_defaultReportingCfg(
 			SENSOR_DEVICE_ENDPOINT,
 			HA_PROFILE_ID,
@@ -492,9 +492,9 @@ void user_init(bool isRetention)
 			ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,
 			30,
 			180,
-			(u8 *)&reportableChange[2]
+			(u8 *)&reportableChange
 		);
-        reportableChange[3] = 50;
+        reportableChange = 50;
 		bdb_defaultReportingCfg(
 			SENSOR_DEVICE_ENDPOINT,
 			HA_PROFILE_ID,
@@ -502,7 +502,7 @@ void user_init(bool isRetention)
 			ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,
 			30,
 			180,
-			(u8 *)&reportableChange[3]
+			(u8 *)&reportableChange
 		);
 		/* Initialize BDB */
 		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;

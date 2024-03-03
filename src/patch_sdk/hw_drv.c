@@ -25,6 +25,7 @@
 
 #include "tl_common.h"
 #include "sensors.h"
+#include "ext_ota.h"
 
 extern void drv_calib_adc_verf(void);
 /*
@@ -104,6 +105,8 @@ startup_state_e drv_platform_init(void)
 	clock_init(SYS_CLOCK_VALUE);
 	/* Get system ticks per US, must be after the clock is initialized. */
 	sysTimerPerUs = sys_tick_per_us;
+	if(state == SYSTEM_BOOT)
+		tuya_zigbee_ota();
 	gpio_init(TRUE);
 
 #if UART_PRINTF_MODE

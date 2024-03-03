@@ -70,7 +70,11 @@ void light_init(void)
 void light_on(void)
 {
 	gpio_write(GPIO_LED, LED_ON);
+#if LED_ON == 1
 	gpio_setup_up_down_resistor(GPIO_LED, PM_PIN_PULLUP_10K);
+#else
+	gpio_setup_up_down_resistor(GPIO_LED, PM_PIN_PULLDOWN_100K);
+#endif
 }
 
 void light_off(void)

@@ -8,8 +8,6 @@
 #ifndef SRC_EXT_OTA_H_
 #define SRC_EXT_OTA_H_
 
-
-void test_first_ota(void);
-
+void tuya_zigbee_ota(void);
 
 #endif /* SRC_EXT_OTA_H_ */

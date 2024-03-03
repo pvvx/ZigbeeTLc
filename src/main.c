@@ -33,11 +33,16 @@ extern void user_init(bool isRetention);
  * main:
  * */
 int main(void){
+#if ZIGBEE_TUYA_OTA
+	if(*(u32 *)(0x08008) == 0x544c4e4b) {
+		clock_init(SYS_CLK_24M_Crystal);
+		tuya_zigbee_ota();
+	}
+#endif
     g_zb_txPowerSet = RF_TX_POWER_DEF; // RF_POWER_INDEX_P1p99dBm;
 	startup_state_e state = drv_platform_init();
 
 	u8 isRetention = (state == SYSTEM_DEEP_RETENTION) ? 1 : 0;
-	if(!isRetention) test_first_ota();
 
 	os_init(isRetention);
 

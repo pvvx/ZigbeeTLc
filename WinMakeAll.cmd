@@ -17,6 +17,9 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZMHOC401N POJECT_DEF="-DBOARD=BOARD_
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTS0201Z3000 POJECT_DEF="-DBOARD=BOARD_TS0201_TZ3000"
 @if not exist "bin\ZTS0201Z3000%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTH03Z POJECT_DEF="-DBOARD=BOARD_TH03Z"
+@if not exist "bin\ZTH03Z%SWVER%.bin" goto :error
 @exit
 :error
 echo "Error!"

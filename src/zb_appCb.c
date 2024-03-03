@@ -170,11 +170,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
-#if BOARD == BOARD_TS0201_TZ3000
 			light_blink_start(7, 500, 500);
-#else
-			light_blink_start(5, 300, 300);
-#endif
 			zb_setPollRate(DEFAULT_POLL_RATE);
 
 			if(steerTimerEvt){

@@ -51,8 +51,9 @@ extern "C" {
 
 #define CLOCK_SYS_CLOCK_HZ  		24000000 //48000000
 
-#define SENSOR_SHTXX	1
+#define SENSOR_SHTC3_4X	1
 #define SENSOR_CHT8305	2
+#define SENSOR_SHT30	3
 
 /* Board include */
 #if defined(BOARD)
@@ -66,11 +67,17 @@ extern "C" {
 #include "board_mho_c401n.h"
 //#elif BOARD == BOARD_TS0201_TZ3000
 #include "board_ts0201_tz3000.h"
+//#elif BOARD == BOARD_TH03Z
+#include "board_th03z.h"
 //#else
 //#error "Define BOARD!"
 //#endif
 #else
 #error "Define BOARD!"
+#endif
+
+#ifndef ZIGBEE_TUYA_OTA
+#define ZIGBEE_TUYA_OTA 	0
 #endif
 
 #define VOLTAGE_DETECT_ADC_PIN GPIO_VBAT
