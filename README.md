@@ -68,6 +68,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x020A |  LYWSD03MMC ver https://github.com/pvvx/ZigbeeTLc |
 | 0x020B |  MHO-C122 |
 | 0x0211 |  TS0201-TZ3000 |
+| 0x0216 |  TH03Z |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
