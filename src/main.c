@@ -32,10 +32,13 @@ extern void user_init(bool isRetention);
 /*
  * main:
  * */
+#if ZIGBEE_TUYA_OTA
+_attribute_ram_code_sec_
+#endif
 int main(void){
 #if ZIGBEE_TUYA_OTA
 	if(*(u32 *)(0x08008) == 0x544c4e4b) {
-		clock_init(SYS_CLK_24M_Crystal);
+		//clock_init(SYS_CLK_24M_Crystal);
 		tuya_zigbee_ota();
 	}
 #endif

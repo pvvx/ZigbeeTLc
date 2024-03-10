@@ -284,7 +284,8 @@ void app_task(void)
 #endif
 #else
 			if(!g_sensorAppCtx.timerLedEvt)
-				light_on();
+				light_blink_start(1, 50, 10000);
+				//gpio_write(GPIO_LED, LED_ON); // - не включать PIN_PULLUP/PULLDOWN !
 #endif
 		}
 #if PM_ENABLE
