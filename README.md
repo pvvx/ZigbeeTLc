@@ -96,7 +96,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 1. Added project assembly using 'make' (Windows/linux) and the ability to import 'Existing Project' into "[Telink IoT Studio](http://wiki.telink-semi.cn/wiki/IDE-and-Tools/Telink_IoT_Studio/ )".
 
-2. Default intervals for temperature and humidity reporting are set to 30-120 (min-max) seconds, reportableChanged to 0.1C and 0.5%.
+2. Default intervals for temperature and humidity reporting are set to 30-180 (min-max) seconds, reportableChanged to 0.1C and 0.5%.
 
 3. Consumption has been optimized when the coordinator is disconnected or connection is lost. When performing _rejoin_, if the connection is broken, the thermometer consumes quite a lot. Monitor the work of your network coordinator - Zigbee does not like (almost cannot tolerate) coordinator outages.
 
