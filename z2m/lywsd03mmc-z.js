@@ -5,7 +5,7 @@
 // https://raw.githubusercontent.com/devbis/z03mmc/master/converters/lywsd03mmc.js
 
 const {
-    batteryPercentage,
+    battery,
     temperature,
     humidity,
     enumLookup,
@@ -41,7 +41,7 @@ const definition = {
                 'hvacUserInterfaceCfg',
             ],
         }),
-        batteryPercentage(),
+        battery({percentage: true}),
         temperature({reporting: {min: 10, max: 300, change: 10}}),
         humidity({reporting: {min: 10, max: 300, change: 50}}),
         enumLookup({
