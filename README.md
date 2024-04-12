@@ -24,8 +24,6 @@ Stable from version 0.1.1.0, but additional tests are required
 6. Press Start Flashing. Wait for the firmware to finish.
 7. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 7..8 seconds.
 
-* TS0201 is flashed in BLE version via Zigbee OTA. File [1141-d3a3-00993001-TS0201_v45.zigbee](https://github.com/pvvx/BLE_THSensor/raw/master/source/TS0201/bin/1141-d3a3-00993001-TS0201_v45.zigbee)
-
 ## Action of the button
 
 Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
