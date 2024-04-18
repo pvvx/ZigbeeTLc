@@ -83,10 +83,13 @@ The flashing "BT" icon is called by the "identify" command.
 
 [ZHA: Switch temperature between Celsius and Fahrenheit, Show smiley, Comfort parameters](https://github.com/pvvx/ZigbeeTLc/issues/28)
 
-
 ## Setting offsets for temperature and humidity, turn off the display, measurement interval.
 
 [ZHA: Setting offsets for temperature and humidity, turn off the display, measurement interval](https://github.com/pvvx/ZigbeeTLc/issues/30)
+
+## Change the device name
+
+[ZHA: Change the device name](https://github.com/pvvx/ZigbeeTLc/issues/84)
 
 ## Current additions
 
