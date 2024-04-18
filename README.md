@@ -34,6 +34,34 @@ Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
 
 * After flashing from BLE, the thermometer is already in standby mode for registration in the Zigbee network.
 
+## Additional settings
+
+_For firmware version 0.1.2.1_
+
+### ClusterID: 0x0000 (Basic)
+Attr: 0x0005, CHAR_STR (id: 0x42), ModelIdentifer (Device Name): 3..23 Chars.
+
+### ClusterID: 0x0204 (Thermostat User Interface Configuration)
+Attr: 0x0000, ENUM8 (id:0x30). 0 – Celsius, 1- Fahrenheit. Default 0.<br>
+Attr: 0x0002, ENUM8 (id:0x30). 0 - Show smiley, 1 - Don't show smiley. Default 0.<br>
+Attr: 0x0100, INT16 (id:0x29), Temperature offset, in 0.01° steps, range: -32767 (-327.67°)..32767(+327.67°). Default 0.<br>
+Attr: 0x0101, INT16 (id:0x29), Humidity offset, in 0.01% steps, range: -32767 (-327.67%)..32767(+327.67%). Default 0.<br>
+Attr: 0x0102, INT16 (id:0x29), Comfort temperature minimum, in 0.01° steps, range -32767..+32767 (-327.67° ..+327.67°). Default 2000 (20.00°C).<br>
+Attr: 0x0103, INT16 (id:0x29), Comfort temperature maximum, in 0.01° steps, range -32767..+32767 (-327.67° ..+327.67°). Default 2500 (25.00°C).<br>
+Attr: 0x0104, UINT16 (id:0x21), Comfort humidity minimum, in 1% steps, range 0..9999 (0..99.99%). Default 4000 (40.00%).<br>
+Attr: 0x0105, UINT16 (id:0x21), Comfort humidity maximum, in 1% steps, range 0..9999 (0..99.99%). Default 6000 (60.00%).<br>
+Attr: 0x0106, ENUM8 (id:0x30), Turn off the display. 1 - Display Off. Default 0 - Display On.<br>
+Attr: 0x0107, UINT8 (id:0x20), Measurement interval, range: 3..255 seconds. Default 10 seconds.
+
+•	Not on all HW variants, turning off the display leads to a significant reduction in consumption. Better results are obtained by increasing the measurement interval.
+
+### Default Report Settings
+
+Power configuration (ClusterID: 0x0001), Battery Voltage (Attr: 0x0020). Min interval 360 sec, Max interval 3600 sec, Tolerance 0.<br>
+Power configuration (ClusterID: 0x0001), Battery Percentage Remaining (Attr: 0x0021). Min interval 360 sec, Max interval 3600 sec, Tolerance 0.<br>
+Temperature Measurement (ClusterID: 0x0402), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 10 (0.1°).<br>
+Relative Humidity Measurement (ClusterID: 0x0405), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 50 (0.5%).
+
 ## Z2M
 
 Use [External convertors](https://github.com/pvvx/ZigbeeTLc/tree/master/z2m)
@@ -83,10 +111,13 @@ The flashing "BT" icon is called by the "identify" command.
 
 [ZHA: Switch temperature between Celsius and Fahrenheit, Show smiley, Comfort parameters](https://github.com/pvvx/ZigbeeTLc/issues/28)
 
+## Setting offsets for temperature and humidity, turn off the display, measurement interval.
 
-## Setting offsets for temperature and humidity.
+[ZHA: Setting offsets for temperature and humidity, turn off the display, measurement interval](https://github.com/pvvx/ZigbeeTLc/issues/30)
 
-[ZHA: Setting offsets for temperature and humidity](https://github.com/pvvx/ZigbeeTLc/issues/30)
+## Change the device name
+
+[ZHA: Change the device name](https://github.com/pvvx/ZigbeeTLc/issues/84)
 
 ## Current additions
 
@@ -125,6 +156,8 @@ The flashing "BT" icon is called by the "identify" command.
 16. Ver 0.1.1.9: Fix configuration saving error
 
 17. Ver 0.1.2.0: At the [request](https://github.com/pvvx/ZigbeeTLc/pull/50#issuecomment-1925906616) of @devbis, for differences in z2m, the device names have been renamed. "-z" will be added to the name Zigbee devices, "-bz" will be added to the [BLE and Zigbee](https://github.com/pvvx/BZdevice) devices, "-zb" to the [Zigbee2BLE](https://github.com/pvvx/Zigbee2BLE) devices.
+
+18. Ver 0.1.2.1: Disabled POLL_CTRL - some coordinators set a short polling period, which increases consumption. For temperature and humidity offsets, as well as COMFORT parameters, the resolution has been changed to 0.01 units. Added parameters: display off, sensor measurement interval. The ability to change the device name is enabled - works with all programs that support ZigBee 3.0 without rewriting configurations. Down with identifying a device by name in Z2M! Users should be able to change the names of Zigbee devices!
 
 ## Make
 
@@ -180,6 +213,6 @@ The start of the project with Zigbee on TLSR825x was inspired by the following o
 
 ---
 
-* BLE firmware for [TS0201_TZ3000](https://github.com/pvvx/BLE_THSensor)
+* BLE firmware for [TS0201_TZ3000, TH03Z](https://github.com/pvvx/BLE_THSensor)
 
 ---
