@@ -124,8 +124,8 @@ int read_sensor_cb(void) {
 			while (reg_i2c_status & FLD_I2C_CMD_BUSY);
 			if (crc == data && _temp != 0xffff) {
 				irq_restore(r);
-				measured_data.temp = ((s32)(17500 * _temp) >> 16) - 4500 + g_zcl_thermostatUICfgAttrs.temp_offset * 10; // x 0.01 C
-				measured_data.humi = ((u32)(10000 * _humi) >> 16) + g_zcl_thermostatUICfgAttrs.humi_offset * 10; // x 0.01 %
+				measured_data.temp = ((s32)(17500 * _temp) >> 16) - 4500 + g_zcl_thermostatUICfgAttrs.temp_offset; // x 0.01 C
+				measured_data.humi = ((u32)(10000 * _humi) >> 16) + g_zcl_thermostatUICfgAttrs.humi_offset; // x 0.01 %
 				if (measured_data.humi < 0) measured_data.humi = 0;
 				else if (measured_data.humi > 9999) measured_data.humi = 9999;
 				//measured_data.count++;

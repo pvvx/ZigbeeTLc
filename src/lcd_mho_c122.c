@@ -99,7 +99,7 @@ const u8 display_small_numbers[] = {
 		0b01111000};  // F
 
 _LCD_SPEED_CODE_SEC_
-void send_to_lcd(void){
+static void send_to_lcd(void){
 	unsigned int buff_index;
 	u8 * p = display_buff;
 	unsigned char r = irq_disable();
@@ -131,13 +131,15 @@ void init_lcd(void){
 	if (lcd_i2c_addr) {
 // 		GPIO_PB6 set in app_config.h!
 //		gpio_setup_up_down_resistor(GPIO_PB6, PM_PIN_PULLUP_10K); // LCD on low temp needs this, its an unknown pin going to the LCD controller chip
-		pm_wait_ms(50);
+		//pm_wait_ms(50); // LCD_INIT_DELAY()
 		lcd_send_i2c_buf((u8 *) lcd_init_cmd_b14, sizeof(lcd_init_cmd_b14));
 		lcd_send_i2c_buf((u8 *) lcd_init_clr_b14, sizeof(lcd_init_clr_b14));
 	}
 }
 
 void update_lcd(void){
+	if(g_zcl_thermostatUICfgAttrs.display_off)
+		return;
 	if (memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
 		send_to_lcd();
 		memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
@@ -268,13 +270,13 @@ void show_ota_screen(void) {
 	display_buff[0] = BIT(1); // "_"
 	display_buff[1] = BIT(1); // "_"
 	display_buff[2] = BIT(1); // "_"
-	send_to_lcd();
+	update_lcd();
 }
 
 // #define SHOW_REBOOT_SCREEN()
 void show_reboot_screen(void) {
 	memset(&display_buff, 0xff, sizeof(display_buff));
-	send_to_lcd();
+	update_lcd();
 }
 
 void show_blink_screen(void) {

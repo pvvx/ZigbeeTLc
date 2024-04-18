@@ -155,7 +155,7 @@ u8 reverse(u8 revByte) {
 }
 
 _LCD_SPEED_CODE_SEC_
-void send_to_lcd(void) {
+static void send_to_lcd(void) {
 	u8 *p = display_buff;
 	unsigned int buff_index;
 	unsigned char r = irq_disable();
@@ -216,8 +216,11 @@ void send_to_lcd(void) {
 	irq_restore(r);
 }
 
+
 void update_lcd(void){
-	if (memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
+	if(g_zcl_thermostatUICfgAttrs.display_off)
+		return;
+	if(memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
 		send_to_lcd();
 		memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
 	}
@@ -237,14 +240,19 @@ void init_lcd(void){
 	if (i2c_address_lcd) { // B1.4, B1.7, B2.0
 // 		GPIO_PB6 set in app_config.h!
 //		gpio_setup_up_down_resistor(GPIO_PB6, PM_PIN_PULLUP_10K); // LCD on low temp needs this, its an unknown pin going to the LCD controller chip
-		pm_wait_ms(50);
+		// pm_wait_ms(50); LCD_INIT_DELAY()
 		lcd_send_i2c_buf((u8 *) lcd_init_cmd_b14, sizeof(lcd_init_cmd_b14));
 		lcd_send_i2c_buf((u8 *) lcd_init_clr_b14, sizeof(lcd_init_clr_b14));
 	} else {
 		i2c_address_lcd = scan_i2c_addr(B19_I2C_ADDR << 1);
 		if (i2c_address_lcd) { // B1.9
-			lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));
-			lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));
+			if(g_zcl_thermostatUICfgAttrs.display_off) {
+				u8 cmd_lcd_off = 0xd0;
+				lcd_send_i2c_buf(&cmd_lcd_off, 1);
+			} else {
+				lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));
+				lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));
+			}
 		}
 		// else B1.5, B1.6 uses UART (i2c_address_lcd = 0)
 	}

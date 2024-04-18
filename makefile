@@ -8,7 +8,7 @@ LIBS := -ldrivers_8258 -lzb_ed
 
 #All libs: -ldrivers_826x -ldrivers_8258 -ldrivers_8278 -lsoft-fp -lfirmware_encrypt -lzb_coordinator -lzb_ed -lzb_router
 
-PGM_PORT?=COM4
+PGM_PORT?=COM14
 
 PROJECT_PATH ?= .
 SRC_DIR ?= /src

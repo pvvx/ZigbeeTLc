@@ -307,6 +307,8 @@ void init_lcd(void) {
 
 
 void update_lcd(void){
+	if(g_zcl_thermostatUICfgAttrs.display_off)
+		return;
  	if (!stage_lcd) {
 		if (memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
 			memcpy(display_cmp_buff, display_buff, sizeof(display_buff));

@@ -49,6 +49,7 @@ extern "C" {
 #define SHOW_SMILEY			0
 #define	USE_DISPLAY			2
 #define LCD_BUF_SIZE		18
+#define LCD_INIT_DELAY()
 
 // I2C
 #define I2C_CLOCK			100000 // Hz

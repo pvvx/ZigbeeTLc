@@ -73,9 +73,9 @@ __attribute__((optimize("-Os"))) int read_sensor(void) {
 				_temp = (reg_data[0] << 8) | reg_data[1];
 				if(_temp == 0xffff)
 					break;
-				measured_data.temp = ((u32)(_temp * 16500) >> 16) - 4000 + g_zcl_thermostatUICfgAttrs.temp_offset * 10; // x 0.01 C
+				measured_data.temp = ((u32)(_temp * 16500) >> 16) - 4000 + g_zcl_thermostatUICfgAttrs.temp_offset; // x 0.01 C
 				_temp = (reg_data[2] << 8) | reg_data[3];
-				measured_data.humi = ((u32)(_temp * 10000) >> 16) + g_zcl_thermostatUICfgAttrs.humi_offset * 10; // x 0.01 %
+				measured_data.humi = ((u32)(_temp * 10000) >> 16) + g_zcl_thermostatUICfgAttrs.humi_offset; // x 0.01 %
 				if (measured_data.humi < 0)
 					measured_data.humi = 0;
 				else if	(measured_data.humi > 9999)

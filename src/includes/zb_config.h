@@ -67,7 +67,7 @@
 /*******************************ZOO Default Configuration Attribute Definitions***********************************************/
 #define ZDO_PERMIT_JOIN_DURATION					0
 
-#define POLL_RATE_QUARTERSECONDS					250//1 qs = 250 ms
+#define POLL_RATE_QUARTERSECONDS					250 // 1 qs = 250 ms
 
 #define POLL_NO_DATA_MAX_COUNT						3
 

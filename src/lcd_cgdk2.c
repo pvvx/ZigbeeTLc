@@ -141,13 +141,17 @@ static void lcd_send_i2c_buf(u8 * dataBuf, uint32_t dataLen) {
 }
 */
 _LCD_SPEED_CODE_SEC_
-void send_to_lcd(void){
+static void send_to_lcd(void){
 	unsigned int buff_index;
 	u8 * p = display_buff;
 	if (i2c_address_lcd) {
 		unsigned char r = irq_disable();
 		if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 			init_i2c();
+		else {
+			gpio_setup_up_down_resistor(I2C_SCL, PM_PIN_PULLUP_10K);
+			gpio_setup_up_down_resistor(I2C_SDA, PM_PIN_PULLUP_10K);
+		}
 		reg_i2c_id = i2c_address_lcd;
 		reg_i2c_adr_dat = 0xE800; // 0xe8 - Set IC Operarion(ICSET): Do not execute Software Reset, Internal oscillator circuit; 0x00 - ADSET
 		reg_i2c_ctrl = FLD_I2C_CMD_START | FLD_I2C_CMD_ID | FLD_I2C_CMD_ADDR | FLD_I2C_CMD_DO;
@@ -171,6 +175,8 @@ void send_to_lcd(void){
 
 _LCD_SPEED_CODE_SEC_
 void update_lcd(void){
+	if(g_zcl_thermostatUICfgAttrs.display_off)
+		return;
 	if (memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
 		send_to_lcd();
 		memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
@@ -189,13 +195,14 @@ void show_reboot_screen(void) {
 void init_lcd(void){
 	i2c_address_lcd = scan_i2c_addr(CGDK2_I2C_ADDR << 1);
 	if (i2c_address_lcd) { // LCD CGDK2_I2C_ADDR ?
-//		if(cfg.flg2.screen_off) {
-//			lcd_send_i2c_byte(0xEA); // BU9792AFUV reset
-//		} else {
+		if(g_zcl_thermostatUICfgAttrs.display_off) {
+			u8 cmd_lcd_off = 0xd0;
+			lcd_send_i2c_buf(&cmd_lcd_off, 1);
+		} else {
 			lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd));
 			pm_wait_us(200);
 			show_reboot_screen();
-//		}
+		}
 	}
 }
 

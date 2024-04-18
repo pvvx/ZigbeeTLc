@@ -59,7 +59,7 @@ int main(void){
 
 	user_init(isRetention);
 
-	drv_enable_irq();
+	irq_enable(); // drv_enable_irq();
 
 #if (MODULE_WATCHDOG_ENABLE)
 	drv_wd_setInterval(600);

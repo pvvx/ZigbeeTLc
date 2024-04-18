@@ -35,6 +35,7 @@ extern "C" {
 #define	USE_DISPLAY			4
 #define USE_EPD				50 // while(task_lcd()) pm_wait_ms(50 ms);
 #define LCD_BUF_SIZE		16
+#define LCD_INIT_DELAY()
 
 #define EPD_RST2			GPIO_PB7 // should be high
 #define PULL_WAKEUP_SRC_PB7 PM_PIN_PULLUP_1M

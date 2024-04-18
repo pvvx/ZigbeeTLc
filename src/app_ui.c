@@ -110,13 +110,17 @@ s32 zclLightTimerCb(void *arg)
 		interval = g_sensorAppCtx.ledOffTime;
 	}
 #ifdef USE_EPD
-		interval <<= 2;
+	interval <<= 2;
 #endif
 	return interval;
 }
 
 void light_blink_start(u8 times, u16 ledOnTime, u16 ledOffTime)
 {
+#if	USE_DISPLAY
+	if(g_zcl_thermostatUICfgAttrs.display_off)
+		return;
+#endif
 	u32 interval = 0;
 	g_sensorAppCtx.times = times;
 
@@ -177,17 +181,19 @@ static s32 keyTimerCb(void *arg)
 				g_sensorAppCtx.keyPressedTime = clock_time();
 				tl_bdbReset2FN();
 #if	USE_DISPLAY
+				if(!g_zcl_thermostatUICfgAttrs.display_off) {
 #ifdef USE_EPD
-				while(task_lcd())
-					pm_wait_ms(USE_EPD);
+					while(task_lcd())
+						pm_wait_ms(USE_EPD);
 #endif
-				show_blink_screen();
+					show_blink_screen();
 #ifdef USE_EPD
-				while(task_lcd())
-					pm_wait_ms(USE_EPD);
+					while(task_lcd())
+						pm_wait_ms(USE_EPD);
 #endif
+				}
 #else
-				light_on();
+					light_on();
 #endif // USE_DISPLAY
 				//	zb_resetDevice();
 				drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_PAD | PM_WAKEUP_SRC_TIMER, 5*1000);

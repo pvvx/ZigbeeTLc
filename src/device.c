@@ -110,79 +110,58 @@ void stack_init(void)
 
 #if SHOW_SMILEY
 
-#ifdef ZCL_THERMOSTAT_UI_CFG
-scomfort_t cmf;
-#else
-scomfort_t cmf = {
-		2000, 2500,
-		4000, 6000
-};
-#endif
-
-void set_comfort(void) {
-	cmf.t[0] = g_zcl_thermostatUICfgAttrs.temp_comfort_min *100;
-	cmf.t[1] = g_zcl_thermostatUICfgAttrs.temp_comfort_max *100;
-	cmf.h[0] = g_zcl_thermostatUICfgAttrs.humi_comfort_min *100;
-	cmf.h[1] = g_zcl_thermostatUICfgAttrs.humi_comfort_max *100;
-}
-
-
 u8 is_comfort(s16 t, u16 h) {
 	u8 ret = 0;
-	if (t >= cmf.t[0] && t <= cmf.t[1] && h >= cmf.h[0] && h <= cmf.h[1])
+	if (t >= g_zcl_thermostatUICfgAttrs.temp_comfort_min
+		&& t <= g_zcl_thermostatUICfgAttrs.temp_comfort_max
+		&& h >= g_zcl_thermostatUICfgAttrs.humi_comfort_min
+		&& h <= g_zcl_thermostatUICfgAttrs.humi_comfort_max)
 		ret = 1;
 	return ret;
 }
 #endif
 
 void read_sensor_and_save(void) {
-#if	USE_DISPLAY
-	read_sensor();
-#ifdef ZCL_THERMOSTAT_UI_CFG
-	if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode) {
-		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
-		show_big_number_x10(((measured_data.temp * 9 + 25) / 50) + 320, 2); // convert C to F
-	} else {
-		show_big_number_x10((measured_data.temp + 5) / 10, 1);
+	if (read_sensor()) {
+		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
+	    g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
 	}
-#else // !ZCL_THERMOSTAT_UI_CFG
-	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
-
-	show_big_number_x10((measured_data.temp  + 5) / 10, 1);
-#endif // ZCL_THERMOSTAT_UI_CFG
-	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
-    g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
-
 	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.average_battery_mv + 50) / 100);
     g_zcl_powerAttrs.batteryPercentage = (u8)measured_data.battery_level;
+#if	USE_DISPLAY
+    if(!g_zcl_thermostatUICfgAttrs.display_off) {
+#ifdef ZCL_THERMOSTAT_UI_CFG
+    	if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode) {
+    		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
+    		show_big_number_x10(((measured_data.temp * 9 + 25) / 50) + 320, 2); // convert C to F
+    	} else {
+    		show_big_number_x10((measured_data.temp + 5) / 10, 1);
+    	}
+#else // !ZCL_THERMOSTAT_UI_CFG
+    	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
+
+    	show_big_number_x10((measured_data.temp  + 5) / 10, 1);
+#endif // ZCL_THERMOSTAT_UI_CFG
 
 #if BOARD == BOARD_CGDK2
-    show_small_number_x10((measured_data.humi + 5)/ 10, 1);
-    show_battery_symbol(true);
+    	show_small_number_x10((measured_data.humi + 5)/ 10, 1);
+    	show_battery_symbol(true);
 #else // BOARD != BOARD_CGDK2
-    show_small_number((measured_data.humi + 50) / 100, 1);
-    show_battery_symbol(g_zcl_powerAttrs.batteryPercentage < 10);
+    	show_small_number((measured_data.humi + 50) / 100, 1);
+    	show_battery_symbol(g_zcl_powerAttrs.batteryPercentage < 10);
 #endif // BOARD == BOARD_CGDK2
 #if SHOW_SMILEY
 #ifdef ZCL_THERMOSTAT_UI_CFG
-    if(g_zcl_thermostatUICfgAttrs.showSmiley == 0)
-    	show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
-    else
-      	show_smiley(0);
+    	if(g_zcl_thermostatUICfgAttrs.showSmiley == 0)
+    		show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
+    	else
+    		show_smiley(0);
 #else
-	show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
+    	show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
 #endif // ZCL_THERMOSTAT_UI_CFG
 #endif // SHOW_SMILEY
-    update_lcd();
-#else // !USE_DISPLAY
-	if (read_sensor()) {
-		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
-		g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
-	}
-
-	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.average_battery_mv + 50) / 100);
-    g_zcl_powerAttrs.batteryPercentage = (u8)measured_data.battery_level;
-
+    	update_lcd();
+    }
 #endif // USE_DISPLAY
     g_sensorAppCtx.readSensorTime = clock_time();
 	while(clock_time() - g_sensorAppCtx.secTimeTik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
@@ -233,11 +212,12 @@ void user_app_init(void)
  * FUNCTIONS
  */
 s32 sensors_task(void *arg) {
-	if(clock_time() - g_sensorAppCtx.readSensorTime > READ_SENSOR_TIMER_MS*CLOCK_16M_SYS_TIMER_CLK_1MS) {
+	if(clock_time() - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measure_interval) {
 		read_sensor_and_save();
 	}
 #ifdef USE_EPD
-	task_lcd();
+	if(!g_zcl_thermostatUICfgAttrs.display_off)
+		task_lcd();
 #endif
     return 0;
 }
@@ -245,52 +225,57 @@ s32 sensors_task(void *arg) {
 /**********************************************************************
  * FUNCTIONS
  */
-u8 flg_cnt;
 void app_task(void)
 {
+	static u8 flg_cnt;
 	u16 rep_uptime_sec;
 	task_keys();
 	sensors_task(NULL);
-	if(bdb_isIdle()){
+	if(bdb_isIdle()) {
 		// report handler
-		if(zb_isDeviceJoinedNwk()){
+		if(zb_isDeviceJoinedNwk()) {
 #if	USE_DISPLAY
+			if(!g_zcl_thermostatUICfgAttrs.display_off) {
 #if BOARD == BOARD_MHO_C401N
-			show_connected_symbol(true);
+				show_connected_symbol(true);
 #else
-			if(!g_sensorAppCtx.timerLedEvt)
-				show_ble_symbol(false);
+				if(!g_sensorAppCtx.timerLedEvt)
+					show_ble_symbol(false);
 #endif
-			if(g_sensorAppCtx.timerTaskEvt) {
-				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
-				g_sensorAppCtx.timerTaskEvt = NULL;
+				if(g_sensorAppCtx.timerTaskEvt) {
+					TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
+					g_sensorAppCtx.timerTaskEvt = NULL;
+				}
 			}
 #else // !USE_DISPLAY
 			if(!g_sensorAppCtx.timerLedEvt)
 				light_off();
 #endif // USE_DISPLAY
 			rep_uptime_sec = g_sensorAppCtx.reportupsec;
-			if(rep_uptime_sec > READ_SENSOR_TIMER_SEC - 1) {
+			if(rep_uptime_sec) {
 				g_sensorAppCtx.reportupsec = 0;
 				app_chk_report(rep_uptime_sec);
 			}
-		} else {
+		} else { // Device not Joined
 #if	USE_DISPLAY
+			if(!g_zcl_thermostatUICfgAttrs.display_off) {
 #if BOARD == BOARD_MHO_C401N
-			show_connected_symbol(false);
+				show_connected_symbol(false);
 #else
-			if(!g_sensorAppCtx.timerLedEvt)
-				show_ble_symbol(true);
+				if(!g_sensorAppCtx.timerLedEvt)
+					show_ble_symbol(true);
+			}
 #endif
-#else
+#else // !USE_DISPLAY
 			if(!g_sensorAppCtx.timerLedEvt)
 				light_blink_start(1, 50, 10000);
-				//gpio_write(GPIO_LED, LED_ON); // - не включать PIN_PULLUP/PULLDOWN !
+			//gpio_write(GPIO_LED, LED_ON); // - не включать PIN_PULLUP/PULLDOWN !
 #endif
 		}
 #if PM_ENABLE
 #ifdef USE_EPD
-		task_lcd();
+		if(!g_zcl_thermostatUICfgAttrs.display_off)
+			task_lcd();
 #endif
 		if(flg_cnt)
 			flg_cnt--;
@@ -300,7 +285,6 @@ void app_task(void)
 	} else
 		flg_cnt = 1;
 }
-
 
 void sensorDeviceSysException(void)
 {
@@ -436,9 +420,14 @@ void user_init(bool isRetention)
 		populate_sw_build();
 		populate_date_code();
 
+#if USE_CHG_NAME
+		read_dev_name();
+#endif
+
 		/* Initialize Stack */
 		stack_init();
 #if	USE_DISPLAY
+		LCD_INIT_DELAY();
 		init_lcd();
 #endif
 		init_sensor();

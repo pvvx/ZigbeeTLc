@@ -27,6 +27,7 @@ typedef struct{
 	u32 secTimeTik;
 	u32 keyPressedTime;
 	u32 readSensorTime; // read sensor timer (tik)
+	u32 measure_interval;
 	u16 reportupsec; // report add (sec)
 
 	u16 ledOnTime;
@@ -101,16 +102,18 @@ typedef struct {
  *  @brief Defined for thermostat UI config cluster attributes
  */
 typedef struct {
-	s8 temp_offset;
-	s8 humi_offset;
+	s16 temp_offset;
+	s16 humi_offset;
 #if	USE_DISPLAY
+	s16 temp_comfort_min;
+	s16 temp_comfort_max;
+	u16 humi_comfort_min;
+	u16 humi_comfort_max;
 	u8 TemperatureDisplayMode;
 	u8 showSmiley;
-	s8 temp_comfort_min;
-	s8 temp_comfort_max;
-	u8 humi_comfort_min;
-	u8 humi_comfort_max;
+	u8 display_off;
 #endif
+	u8 measure_interval;
 }zcl_thermostatUICfgAttr_t;
 
 
@@ -192,19 +195,14 @@ void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);
 void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status);
 
-#define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP	0x0100
-#define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI	0x0101
-#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_T	0x0102
-#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_T	0x0103
-#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_H	0x0104
-#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_H	0x0105
-
 nv_sts_t zcl_thermostatConfig_save(void);
 nv_sts_t zcl_thermostatConfig_restore(void);
+
+void read_dev_name(void);
+void save_dev_name(void);
 
 void scan_task(void);
 s32 sensors_task(void *arg);
 void read_sensor_and_save(void);
-void set_comfort(void);
 
 #endif /* _DEVICE_H_ */
