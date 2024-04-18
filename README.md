@@ -2,9 +2,7 @@
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
-Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000/)
-
-Added trial version for [TH03Z](https://pvvx.github.io/TH03Z/)
+Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/)
 
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
@@ -25,8 +23,6 @@ Stable from version 0.1.1.0, but additional tests are required
 5. Now you can press the Zigbee Firmware button to directly flash the `Zigbee Firmware`:<br>Alternatively you can choose a specific firmware binary (i.e. the original firmware) via the file chooser. Example: in the file name field paste "https://github.com/devbis/z03mmc/releases/download/1.0.6/1141-0203-10063001-z03mmc.zigbee". If the firmware file is larger than 128 kilobytes, then you will have to download BLE version 4.6 or later. BLE versions below 4.6 do not support OTA downloads with fw sizes larger than 128 kilobytes. Xiaomi firmwares, excluding MJWSD05MMC, also do not support OTA downloads with fw sizes larger than 128 kilobytes.
 6. Press Start Flashing. Wait for the firmware to finish.
 7. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 7..8 seconds.
-
-* TS0201 is flashed in BLE version via Zigbee OTA. File [1141-d3a3-00993001-TS0201_v45.zigbee](https://github.com/pvvx/BLE_THSensor/raw/master/source/TS0201/bin/1141-d3a3-00993001-TS0201_v45.zigbee)
 
 ## Action of the button
 
@@ -96,7 +92,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 1. Added project assembly using 'make' (Windows/linux) and the ability to import 'Existing Project' into "[Telink IoT Studio](http://wiki.telink-semi.cn/wiki/IDE-and-Tools/Telink_IoT_Studio/ )".
 
-2. Default intervals for temperature and humidity reporting are set to 30-120 (min-max) seconds, reportableChanged to 0.1C and 0.5%.
+2. Default intervals for temperature and humidity reporting are set to 30-180 (min-max) seconds, reportableChanged to 0.1C and 0.5%.
 
 3. Consumption has been optimized when the coordinator is disconnected or connection is lost. When performing _rejoin_, if the connection is broken, the thermometer consumes quite a lot. Monitor the work of your network coordinator - Zigbee does not like (almost cannot tolerate) coordinator outages.
 
