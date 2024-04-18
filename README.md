@@ -34,6 +34,34 @@ Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
 
 * After flashing from BLE, the thermometer is already in standby mode for registration in the Zigbee network.
 
+## Additional settings
+
+_For firmware version 0.1.2.1_
+
+### ClusterID: 0x0000 (Basic)
+Attr: 0x0005, CHAR_STR (id: 0x42), ModelIdentifer (Device Name): 3..23 Chars.
+
+### ClusterID: 0x0204 (Thermostat User Interface Configuration)
+Attr: 0x0000, ENUM8 (id:0x30). 0 – Celsius, 1- Fahrenheit. Default 0.<br>
+Attr: 0x0002, ENUM8 (id:0x30). 0 - Show smiley, 1 - Don't show smiley. Default 0.<br>
+Attr: 0x0100, INT16 (id:0x29), Temperature offset, in 0.01° steps, range: -32767 (-327.67°)..32767(+327.67°). Default 0.<br>
+Attr: 0x0101, INT16 (id:0x29), Humidity offset, in 0.01% steps, range: -32767 (-327.67%)..32767(+327.67%). Default 0.<br>
+Attr: 0x0102, INT16 (id:0x29), Comfort temperature minimum, in 0.01° steps, range -32767..+32767 (-327.67° ..+327.67°). Default 2000 (20.00°C).<br>
+Attr: 0x0103, INT16 (id:0x29), Comfort temperature maximum, in 0.01° steps, range -32767..+32767 (-327.67° ..+327.67°). Default 2500 (25.00°C).<br>
+Attr: 0x0104, UINT16 (id:0x21), Comfort humidity minimum, in 1% steps, range 0..9999 (0..99.99%). Default 4000 (40.00%).<br>
+Attr: 0x0105, UINT16 (id:0x21), Comfort humidity maximum, in 1% steps, range 0..9999 (0..99.99%). Default 6000 (60.00%).<br>
+Attr: 0x0106, ENUM8 (id:0x30), Turn off the display. 1 - Display Off. Default 0 - Display On.<br>
+Attr: 0x0107, UINT8 (id:0x20), Measurement interval, step 1 second, range: 3..255 seconds. Default 10 seconds.
+
+•	Not on all HW variants, turning off the display leads to a significant reduction in consumption. Better results are obtained by increasing the measurement interval.
+
+### Default Report Settings
+
+Power configuration (ClusterID: 0x0001), Battery Voltage (Attr: 0x0020). Min interval 360 sec, Max interval 3600 sec, Tolerance 0.<br>
+Power configuration (ClusterID: 0x0001), Battery Percentage Remaining (Attr: 0x0021). Min interval 360 sec, Max interval 3600 sec, Tolerance 0.<br>
+Temperature Measurement (ClusterID: 0x0402), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 10 (0.1°).<br>
+Relative Humidity Measurement (ClusterID: 0x0405), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 50 (0.5%).
+
 ## Z2M
 
 Use [External convertors](https://github.com/pvvx/ZigbeeTLc/tree/master/z2m)
