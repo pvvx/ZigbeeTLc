@@ -180,6 +180,6 @@ The start of the project with Zigbee on TLSR825x was inspired by the following o
 
 ---
 
-* BLE firmware for [TS0201_TZ3000](https://github.com/pvvx/BLE_THSensor)
+* BLE firmware for [TS0201_TZ3000, TH03Z](https://github.com/pvvx/BLE_THSensor)
 
 ---
