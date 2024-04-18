@@ -86,7 +86,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 ## Setting offsets for temperature and humidity, turn off the display, measurement interval.
 
-[ZHA: Setting offsets for temperature and humidity](https://github.com/pvvx/ZigbeeTLc/issues/30)
+[ZHA: Setting offsets for temperature and humidity, turn off the display, measurement interval](https://github.com/pvvx/ZigbeeTLc/issues/30)
 
 ## Current additions
 
