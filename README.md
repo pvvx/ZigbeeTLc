@@ -126,6 +126,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 17. Ver 0.1.2.0: At the [request](https://github.com/pvvx/ZigbeeTLc/pull/50#issuecomment-1925906616) of @devbis, for differences in z2m, the device names have been renamed. "-z" will be added to the name Zigbee devices, "-bz" will be added to the [BLE and Zigbee](https://github.com/pvvx/BZdevice) devices, "-zb" to the [Zigbee2BLE](https://github.com/pvvx/Zigbee2BLE) devices.
 
+18. Ver 0.1.2.1: Disabled POLL_CTRL - some coordinators set a short polling period, which increases consumption. For temperature and humidity offsets, as well as COMFORT parameters, the resolution has been changed to 0.01 units. Added parameters: display off, sensor measurement interval. The ability to change the device name is enabled.
+
 ## Make
 
 To build under Linux, run:
