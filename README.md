@@ -64,7 +64,7 @@ Relative Humidity Measurement (ClusterID: 0x0405), Measured Value (Attr: 0x0000)
 
 ## Z2M
 
-Use [External convertors](https://github.com/pvvx/ZigbeeTLc/tree/master/z2m)
+Use [External convertors](https://github.com/pvvx/ZigbeeTLc/tree/master/z2m) (for now for version 0.1.2.0)
 
 ## Zigbee OTA
 
