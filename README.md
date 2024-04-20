@@ -1,6 +1,6 @@
 # Custom firmware for Zigbee 3.0 IoT devices on the TLSR825x chip
 
-_Attention: Updating (OTA) in new versions of ZHA does not work for any Zigbee devices. There is no documentation._
+_Attention: Updating (OTA) in new versions of [ZHA does not work](https://github.com/home-assistant/core/issues/115116) for any Zigbee devices. There is no documentation._
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
