@@ -264,8 +264,9 @@ void app_task(void)
 #else
 				if(!g_sensorAppCtx.timerLedEvt)
 					show_ble_symbol(true);
-			}
+
 #endif
+			}
 #else // !USE_DISPLAY
 			if(!g_sensorAppCtx.timerLedEvt)
 				light_blink_start(1, 50, 10000);

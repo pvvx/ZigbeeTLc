@@ -4,3 +4,5 @@
 * xxxxx_vNN.bin - файлы прошивки для программатора или BLE OTA
 
 * devbis - файлы прошивок для варианта https://github.com/devbis
+
+* index.json - файл индексов на прошивки ZigbeeTlc
