@@ -1,7 +1,5 @@
 # Custom firmware for Zigbee 3.0 IoT devices on the TLSR825x chip
 
-_Attention: Updating (OTA) in new versions of [ZHA does not work](https://github.com/home-assistant/core/issues/115116) for any Zigbee devices. There is no documentation._
-
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
 Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/)
