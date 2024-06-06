@@ -65,10 +65,12 @@
 //#define BOARD_TH05D				24 // TH05_V1.3 https://github.com/pvvx/THB2
 //#define BOARD_TH05F				25 // TH05Y_V1.2 https://github.com/pvvx/THB2
 //#define BOARD_THB3				26 // https://github.com/pvvx/THB2
+#define BOARD_ZTH01   				27 // ZigBee ZTH01
+#define BOARD_ZTH02   				28 // ZigBee ZTH02
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000 or BOARD_TH03Z
+#define BOARD					BOARD_ZTH02 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000 or BOARD_TH03Z
 #endif
 
 /* Chip IDs */

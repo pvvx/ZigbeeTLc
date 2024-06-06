@@ -41,6 +41,16 @@
 #define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
 #define ZCL_BASIC_MODEL_ID	   {7,'T','H','0','3','Z','-','z'} // TH03Z
 
+#elif BOARD == BOARD_ZTH01
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {7,'Z','T','H','0','1','-','z'} // ZTH01
+
+#elif BOARD == BOARD_ZTH02
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {7,'Z','T','H','0','2','-','z'} // ZTH02
+
 #else
 #error "Define BOARD!"
 #endif // BOARD
@@ -98,9 +108,6 @@ const u16 sensorDevice_outClusterList[] =
 #ifdef ZCL_OTA
     ZCL_CLUSTER_OTA,
 #endif
-#ifdef ZCL_THERMOSTAT_UI_CFG
-//	ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG
-#endif
 };
 
 /**
@@ -151,7 +158,11 @@ const zclAttrInfo_t basic_attrTbl[] =
 	{ ZCL_ATTRID_BASIC_STACK_VER,    		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.stackVersion},
 	{ ZCL_ATTRID_BASIC_HW_VER,       		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.hwVersion},
 	{ ZCL_ATTRID_BASIC_MFR_NAME,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.manuName},
+#if USE_CHG_NAME
 	{ ZCL_ATTRID_BASIC_MODEL_ID,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,	(u8*)g_zcl_basicAttrs.modelId},
+#else
+	{ ZCL_ATTRID_BASIC_MODEL_ID,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,						(u8*)g_zcl_basicAttrs.modelId},
+#endif
 	{ ZCL_ATTRID_BASIC_POWER_SOURCE, 		ZCL_DATA_TYPE_ENUM8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.powerSource},
 	{ ZCL_ATTRID_BASIC_DEV_ENABLED,  		ZCL_DATA_TYPE_BOOLEAN,  ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_basicAttrs.deviceEnable},
 	{ ZCL_ATTRID_BASIC_SW_BUILD_ID,  		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.swBuildId},
@@ -320,11 +331,11 @@ const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 /* Poll Control */
 zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs =
 {
-		.chkInInterval			= 3600*4, // 3600 sec, 1hr
+		.chkInInterval			= 3600*4, // 3600 sec, 1 hr
 		.longPollInterval		= READ_SENSOR_TIMER_SEC*4,  //  10 sec
 		.shortPollInterval		= 2, 	// 2 qs
 		.fastPollTimeout		= READ_SENSOR_TIMER_SEC*4,  // 10 sec
-		.chkInIntervalMin		= 2*READ_SENSOR_TIMER_SEC*4, // 20 sec
+		.chkInIntervalMin		= 0, // 2*READ_SENSOR_TIMER_SEC*4, // 20 sec
 		.longPollIntervalMin	= READ_SENSOR_TIMER_SEC*4, // 10 sec
 		.fastPollTimeoutMax		= READ_SENSOR_TIMER_SEC*4 // 10 sec
 };

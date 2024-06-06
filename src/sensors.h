@@ -12,6 +12,7 @@
 #include "sensors_shtc3_4x.h"
 #include "sensors_sht30.h"
 #include "sensor_cht8305.h"
+#include "sensor_aht2x_3x.h"
 #else
 #error "Define USE_SENSOR!"
 #endif

@@ -193,7 +193,7 @@ static s32 keyTimerCb(void *arg)
 #endif
 				}
 #else
-					light_on();
+				light_on();
 #endif // USE_DISPLAY
 				//	zb_resetDevice();
 				drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_PAD | PM_WAKEUP_SRC_TIMER, 5*1000);

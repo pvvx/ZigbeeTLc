@@ -1,7 +1,6 @@
 /*
- * board_mho_c122.h
+ * board_ts0201_tz3000.h
  *
- *  Created on: 12 нояб. 2023 г.
  *      Author: pvvx
  */
 #ifndef _BOARD_TS0201_TZ3000_H_

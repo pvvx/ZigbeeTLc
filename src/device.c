@@ -390,7 +390,9 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 #elif SENSOR_TYPE == SENSOR_CHT8305
     if(sensor_i2c_addr != 0)
     	g_zcl_basicAttrs.hwVersion = 1 + ((sensor_i2c_addr >> 1) & 3);
-
+#elif SENSOR_TYPE == SENSOR_AHT2X3X
+    if(sensor_i2c_addr != 0)
+       	g_zcl_basicAttrs.hwVersion = 1;
 #endif // SENSOR_TYPE
 #endif
 }

@@ -42,7 +42,7 @@ int main(void){
 		tuya_zigbee_ota();
 	}
 #endif
-    g_zb_txPowerSet = RF_TX_POWER_DEF; // RF_POWER_INDEX_P1p99dBm;
+    // g_zb_txPowerSet = RF_TX_POWER_DEF; // RF_POWER_INDEX_P1p99dBm; mac_phy.c
 	startup_state_e state = drv_platform_init();
 
 	u8 isRetention = (state == SYSTEM_DEEP_RETENTION) ? 1 : 0;

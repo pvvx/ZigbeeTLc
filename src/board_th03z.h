@@ -1,7 +1,6 @@
 /*
- * board_mho_c122.h
+ * board_mho_th03z.h
  *
- *  Created on: 12 нояб. 2023 г.
  *      Author: pvvx
  */
 #ifndef _BOARD_TH03Z_H_
