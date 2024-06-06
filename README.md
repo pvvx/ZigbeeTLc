@@ -4,6 +4,8 @@ Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/
 
 Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/)
 
+Additional alternative firmware options for some devices with TLSR825x can be found at [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
+
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
 In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000)
@@ -154,7 +156,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 17. Ver 0.1.2.0: At the [request](https://github.com/pvvx/ZigbeeTLc/pull/50#issuecomment-1925906616) of @devbis, for differences in z2m, the device names have been renamed. "-z" will be added to the name Zigbee devices, "-bz" will be added to the [BLE and Zigbee](https://github.com/pvvx/BZdevice) devices, "-zb" to the [Zigbee2BLE](https://github.com/pvvx/Zigbee2BLE) devices.
 
-18. Ver 0.1.2.1: Disabled POLL_CTRL - some coordinators set a short polling period, which increases consumption. For temperature and humidity offsets, as well as COMFORT parameters, the resolution has been changed to 0.01 units. Added parameters: display off, sensor measurement interval. The ability to change the device name is enabled - works with all programs that support ZigBee 3.0 without rewriting configurations. Down with identifying a device by name in Z2M! Users should be able to change the names of Zigbee devices!
+18. Ver 0.1.2.1: Disabled POLL_CTRL - some programs set a [short polling period](https://github.com/home-assistant/core/blob/dev/homeassistant/components/zha/core/cluster_handlers/general.py#L603) without taking into account the Zigbee 3.0 specification, which increases consumption. For temperature and humidity offsets, as well as COMFORT parameters, the resolution has been changed to 0.01 units. Added parameters: display off, sensor measurement interval. The ability to change the device name is enabled - works with all programs that support ZigBee 3.0 without rewriting configurations. Down with identifying a device by name in Z2M! Users should be able to change the names of Zigbee devices!
 
 ## Make
 
