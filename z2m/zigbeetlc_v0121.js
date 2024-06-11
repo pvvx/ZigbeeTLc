@@ -221,7 +221,11 @@ const definitions = [
             {modelID: 'TS0201-z', manufacturerName: 'Tuya', model: 'TS0201'},
             {modelID: 'TS0201-bz', manufacturerName: 'Tuya', model: 'TS0201'},
             {modelID: 'TH03Z-z', manufacturerName: 'Tuya', model: 'TH03Z'},
-            {modelID: 'TH03Z-bz', manufacturerName: 'Tuya', model: 'TH03Z'}
+            {modelID: 'TH03Z-bz', manufacturerName: 'Tuya', model: 'TH03Z'},
+			{modelID: 'ZTH01-z', manufacturerName: 'Tuya', model: 'ZTH01'},
+            {modelID: 'ZTH01-bz', manufacturerName: 'Tuya', model: 'ZTH01'},
+			{modelID: 'ZTH02-z', manufacturerName: 'Tuya', model: 'ZTH02'},
+            {modelID: 'ZTH02-bz', manufacturerName: 'Tuya', model: 'ZTH02'}
         ],
         model: 'WSD500A',
         vendor: 'Tuya',
