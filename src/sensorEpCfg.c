@@ -289,10 +289,10 @@ const zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgDefault = {
 		.TemperatureDisplayMode = 0,
 #if SHOW_SMILEY
 		.showSmiley = 0,
-		.temp_comfort_min = 2000,  //  параметры ГОСТ, СНиП
-		.temp_comfort_max = 2500,
-		.humi_comfort_min = 4000,
-		.humi_comfort_max = 6000
+		.temp_comfort_min = 2000,  // +20.00 C  параметры ГОСТ, СНиП
+		.temp_comfort_max = 2500,  // +25.00 C
+		.humi_comfort_min = 4000,  // 40.00 %
+		.humi_comfort_max = 6000  // 60.00 %
 #endif
 #endif
 };

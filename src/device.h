@@ -102,13 +102,13 @@ typedef struct {
  *  @brief Defined for thermostat UI config cluster attributes
  */
 typedef struct {
-	s16 temp_offset;
-	s16 humi_offset;
+	s16 temp_offset;	// in 0.01 C
+	s16 humi_offset;	// in 0.01 %
 #if	USE_DISPLAY
-	s16 temp_comfort_min;
-	s16 temp_comfort_max;
-	u16 humi_comfort_min;
-	u16 humi_comfort_max;
+	s16 temp_comfort_min; // in 0.01 C
+	s16 temp_comfort_max; // in 0.01 C
+	u16 humi_comfort_min; // in 0.01 %
+	u16 humi_comfort_max; // in 0.01 %
 	u8 TemperatureDisplayMode;
 	u8 showSmiley;
 	u8 display_off;

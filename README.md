@@ -162,6 +162,9 @@ The flashing "BT" icon is called by the "identify" command.
 
 18. Ver 0.1.2.1: Disabled POLL_CTRL - some programs set a [short polling period](https://github.com/home-assistant/core/blob/dev/homeassistant/components/zha/core/cluster_handlers/general.py#L603) without taking into account the Zigbee 3.0 specification, which increases consumption. For temperature and humidity offsets, as well as COMFORT parameters, the resolution has been changed to 0.01 units. Added parameters: display off, sensor measurement interval. The ability to change the device name is enabled - works with all programs that support ZigBee 3.0 without rewriting configurations. Down with identifying a device by name in Z2M! Users should be able to change the names of Zigbee devices!
 
+19. Ver 0.1.2.2: Offset correction for SHTv3 and SHT4x sensors.
+
+
 ## Make
 
 To build under Linux, run:

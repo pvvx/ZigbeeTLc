@@ -1,6 +1,7 @@
 build
 .idea
 .vscode
+zigpy_ota
 SDK
 tools/widows
 tools/linux
