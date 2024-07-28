@@ -42,12 +42,11 @@
 None: 3.3 ?
 */
 
-u8 lcd_i2c_addr;
 u8 display_buff[LCD_BUF_SIZE];
 u8 display_cmp_buff[LCD_BUF_SIZE];
 u8 i2c_address_lcd; // = 0x78; // B1.4 uses Address 0x78 and B1.9 uses 0x7c
 
-#define lcd_send_i2c_byte(a)  send_i2c_byte(lcd_i2c_addr, a)
+#define lcd_send_i2c_byte(a)  send_i2c_byte(i2c_address_lcd, a)
 #define lcd_send_i2c_buf(b, a)  send_i2c_bytes(i2c_address_lcd, (u8 *) b, a)
 
 #define LCD_SYM_H	0b01100111	// "H"
@@ -102,15 +101,15 @@ _LCD_SPEED_CODE_SEC_
 static void send_to_lcd(void){
 	unsigned int buff_index;
 	u8 * p = display_buff;
-	unsigned char r = irq_disable();
-	if (lcd_i2c_addr) {
+	if (i2c_address_lcd) {
+		unsigned char r = irq_disable();
 		if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 			init_i2c();
 		else {
 			gpio_setup_up_down_resistor(I2C_SCL, PM_PIN_PULLUP_10K);
 			gpio_setup_up_down_resistor(I2C_SDA, PM_PIN_PULLUP_10K);
 		}
-		reg_i2c_id = lcd_i2c_addr;
+		reg_i2c_id = i2c_address_lcd;
 		reg_i2c_adr_dat = 0x4080;
 		reg_i2c_ctrl = FLD_I2C_CMD_START | FLD_I2C_CMD_ID | FLD_I2C_CMD_ADDR | FLD_I2C_CMD_DO;
 		while (reg_i2c_status & FLD_I2C_CMD_BUSY);
@@ -122,19 +121,26 @@ static void send_to_lcd(void){
 		}
 		reg_i2c_ctrl = FLD_I2C_CMD_STOP;
 		while (reg_i2c_status & FLD_I2C_CMD_BUSY);
+		irq_restore(r);
 	}
-	irq_restore(r);
+}
+
+// #define SHOW_REBOOT_SCREEN()
+void show_reboot_screen(void) {
+	memset(&display_buff, 0xff, sizeof(display_buff));
+	update_lcd();
 }
 
 void init_lcd(void){
-	lcd_i2c_addr = scan_i2c_addr(B14_I2C_ADDR << 1);
-	if (lcd_i2c_addr) {
+	i2c_address_lcd = scan_i2c_addr(B14_I2C_ADDR << 1);
+	if (i2c_address_lcd) {
 // 		GPIO_PB6 set in app_config.h!
 //		gpio_setup_up_down_resistor(GPIO_PB6, PM_PIN_PULLUP_10K); // LCD on low temp needs this, its an unknown pin going to the LCD controller chip
-		//pm_wait_ms(50); // LCD_INIT_DELAY()
+//		pm_wait_ms(50); // LCD_INIT_DELAY()
 		lcd_send_i2c_buf((u8 *) lcd_init_cmd_b14, sizeof(lcd_init_cmd_b14));
 		lcd_send_i2c_buf((u8 *) lcd_init_clr_b14, sizeof(lcd_init_clr_b14));
 	}
+	show_reboot_screen();
 }
 
 void update_lcd(void){
@@ -273,11 +279,6 @@ void show_ota_screen(void) {
 	update_lcd();
 }
 
-// #define SHOW_REBOOT_SCREEN()
-void show_reboot_screen(void) {
-	memset(&display_buff, 0xff, sizeof(display_buff));
-	update_lcd();
-}
 
 void show_blink_screen(void) {
 	memset(&display_buff, 0, sizeof(display_buff));

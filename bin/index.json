@@ -25,10 +25,10 @@
     },
     {
         "fileVersion": 19017729,
-        "fileSize": 128818,
+        "fileSize": 128850,
         "manufacturerCode": 4417,
         "imageType": 523,
-        "sha512": "a7bfc0f90a308b2f0a335116670015640b509c27e34c7fbb9a239ed2343dfe9e1c00463ee340d0a578217a693666b437ba692c73b6285d0809755f0c8ad33644",
+        "sha512": "d72824f782ed8535a456bc0f0c18e94502029191eb00a215c6d525f85d7fd0a066784d30e5ed4be8dc21eae54badd70f3a3f83c71dda24b853aec43cdbd12055",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/master/bin/1141-020b-01223001-ZMHOC122.zigbee"
     },
     {
