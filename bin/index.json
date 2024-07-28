@@ -28,7 +28,7 @@
         "fileSize": 128850,
         "manufacturerCode": 4417,
         "imageType": 523,
-        "sha512": "d72824f782ed8535a456bc0f0c18e94502029191eb00a215c6d525f85d7fd0a066784d30e5ed4be8dc21eae54badd70f3a3f83c71dda24b853aec43cdbd12055",
+        "sha512": "65c7232dbd9aa95abe23772f2f1f4110174ceb69ab26d34dfb2a7762d889ced30ca8887e6189c2cd911a41799b9947f8aefc540f56f0ee3a58b279503f870195",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/master/bin/1141-020b-01223001-ZMHOC122.zigbee"
     },
     {
@@ -62,5 +62,13 @@
         "imageType": 540,
         "sha512": "0a0dca94f86c42f1a9168470e531be3ebc2da9a9aa3f1c636b3772f3cf2bdb77375f20b22da72faba7fd29acb50e7b38a494b6efacb5e4cef29d91687e29401c",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/master/bin/1141-021c-01223001-ZTH02Z.zigbee"
+    },
+    {
+        "fileVersion": 26816513,
+        "fileSize": 125906,
+        "manufacturerCode": 4417,
+        "imageType": 54179,
+        "sha512": "60fae4916fc0cfd9a008b0398ef4d155ebaad46aa713a306d62093b1745af84f2d58c207ebbe8c679cb1a28e04e72252e2b088cb8fc7246a1d2a3e669e893c7f",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/master/bin/1141-d3a3-01993001-TH03Zz_v0122.zigbee"
     }
 ]

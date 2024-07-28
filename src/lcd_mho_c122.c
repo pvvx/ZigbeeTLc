@@ -139,8 +139,8 @@ void init_lcd(void){
 //		pm_wait_ms(50); // LCD_INIT_DELAY()
 		lcd_send_i2c_buf((u8 *) lcd_init_cmd_b14, sizeof(lcd_init_cmd_b14));
 		lcd_send_i2c_buf((u8 *) lcd_init_clr_b14, sizeof(lcd_init_clr_b14));
+		show_reboot_screen();
 	}
-	show_reboot_screen();
 }
 
 void update_lcd(void){
