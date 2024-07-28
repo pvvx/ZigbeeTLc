@@ -215,7 +215,7 @@ install: $(SDK_FLAGS) $(TC32_PATH)
 $(SDK_FLAGS): $(SDK_PATH)
 ifneq ($(SDK_FLAGS),$(wildcard $(SDK_FLAGS)))
 	#@wget -P $(SDK_PATH) http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
-	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)
+	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)/..
 endif
 
 $(SDK_PATH):
