@@ -1,8 +1,10 @@
 
-PROJECT_NAME ?= z03mmc
-VERSION_BIN ?=
+PROJECT_NAME ?= ZTS0201Z3000
+VERSION_BIN ?= _DUALv0122
+POJECT_DEF ?= -DBOARD=BOARD_TS0201_TZ3000
 
-TEL_CHIP := $(POJECT_DEF) -DMCU_CORE_8258=1 -DEND_DEVICE=1 -DMCU_STARTUP_8258=1
+
+TEL_CHIP := $(POJECT_DEF) -DMCU_CORE_8258=1 -DEND_DEVICE=1 -DMCU_STARTUP_8258=1 
 
 LIBS := -ldrivers_8258 -lzb_ed
 
@@ -15,7 +17,7 @@ SRC_DIR ?= /src
 SRC_PATH ?= $(PROJECT_PATH)$(SRC_DIR)
 # TEL_PATH:  Telink SDK - tc32/bin/
 TEL_PATH ?= .
-# SDK_PATH: X:/Telink/tl_zigbee_sdk
+SDK_PATH := /home/herve/SDK/tl_zigbee_sdk
 SDK_PATH ?= ./SDK
 SDK_FLAGS := $(SDK_PATH)/zigbee
 # MAKE_PATH: project all make
@@ -215,7 +217,7 @@ install: $(SDK_FLAGS) $(TC32_PATH)
 $(SDK_FLAGS): $(SDK_PATH)
 ifneq ($(SDK_FLAGS),$(wildcard $(SDK_FLAGS)))
 	#@wget -P $(SDK_PATH) http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
-	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)/..
+	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)
 endif
 
 $(SDK_PATH):

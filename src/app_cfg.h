@@ -42,6 +42,7 @@ extern "C" {
 
 #define	UART_PRINTF_MODE				0
 #define USB_PRINTF_MODE         		0
+#define BAUDRATE                   115200
 
 /* PM */
 #define PM_ENABLE						1
@@ -54,6 +55,8 @@ extern "C" {
 #define SENSOR_SHTC3_4X	1
 #define SENSOR_CHT8305	2
 #define SENSOR_SHT30	3
+#define SENSOR_AHT2X3X  4
+#define SENSOR_SHTAHT2X3X 5
 
 /* Board include */
 #if defined(BOARD)
