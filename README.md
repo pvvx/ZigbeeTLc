@@ -1,21 +1,23 @@
-# Custom firmware for Zigbee 3.0 IoT devices on the TLSR825x chip
+# Custom firmware for Zigbee 3.0 IoT devices on the TLSR825x chip ; purpose of the fork is to create dual temperature sensors from one Zigbee device sensor
+
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
-Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/)
+Currently supported devices: [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000)
 
-[ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/), [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/) work with modification - [requires unsoldering an extra chip and soldering jumpers](https://github.com/pvvx/BLE_THSensor/issues/13#issuecomment-2148975619).
+#creation of the sensor 
 
-Additional alternative firmware options for some devices with TLSR825x can be found at [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
+for the time being  the configuraton supports 2 temperature sensors: one sht30 and one aht2x_3x . this is because small pcb for thoses sensors can be purchased easily
+https://www.aliexpress.com/item/32700729302.html
+https://www.aliexpress.com/item/1005001689846884.html
 
-Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
+The 2 sensors have different i2c addresses and can be wired in serial 
 
-In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000)
 
-* Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
-* [Average consumption](https://github.com/pvvx/ZigbeeTLc/issues/37#issuecomment-1937844181) for Xiaomi LYWSD03MMC HW: B1.4 - ~15 uA.
 
-## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
+## To flash the Zigbee firmware, use TLSRPGM 
+
+1. 
 
 1. Go to the [Over-the-air Webupdater Page TelinkMiFlasher.html](https://pvvx.github.io/ATC_MiThermometer/TelinkMiFlasher.html)
 2. If using Android, Windows, Linux: Ensure you enabled "experimental web platform features". Therefore copy the according link (i.e. chrome://flags/#enable-experimental-web-platform-features for Chrome), open a new browser tab, paste the copied URL. Now sten the _Experimental Web Platform features_ flag to _Enabled_. Then restart the browser.
