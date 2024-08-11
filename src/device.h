@@ -7,6 +7,8 @@
  * CONSTANT
  */
 #define SENSOR_DEVICE_ENDPOINT  0x01
+#define SENSOR2_DEVICE_ENDPOINT 0x02
+
 
 /**********************************************************************
  * TYPEDEFS
@@ -158,6 +160,12 @@ extern zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs;
 #endif
 #ifdef ZCL_TEMPERATURE_MEASUREMENT
 extern zcl_temperatureAttr_t g_zcl_temperatureAttrs;
+#endif
+#ifdef ZCL_DUAL_TEMPERATURE_MEASUREMENT
+extern const zcl_specClusterInfo_t g_sensorDevice2ClusterList[];
+extern const af_simple_descriptor_t sensorDevice2_simpleDesc;
+extern zcl_temperatureAttr_t g_zcl_temperatureAttrs2;
+extern u8 SENSOR_DEVICE_CB_CLUSTER_NUM2;
 #endif
 #ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
 extern zcl_relHumidityAttr_t g_zcl_relHumidityAttrs;

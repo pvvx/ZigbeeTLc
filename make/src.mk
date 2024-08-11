@@ -22,6 +22,7 @@ $(OUT_PATH)$(SRC_DIR)/sensors_sht30.o \
 $(OUT_PATH)$(SRC_DIR)/sensors_shtc3_4x.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_cht8305.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_aht2x_3x.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_sht30_aht2x_3x.o \
 $(OUT_PATH)$(SRC_DIR)/sensorEpCfg.o \
 $(OUT_PATH)$(SRC_DIR)/zb_appCb.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \
