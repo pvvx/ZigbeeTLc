@@ -44,7 +44,7 @@ typedef struct _measured_data_t {
 	u16	battery_mv; // mV
 	u16	average_battery_mv; // mV
 	s16	temp; // in 0.01 C
-	s16	humi; // in 0.01 %
+	s16	temp2; // in 0.01 C
 	u16	battery_level; // in 0.5%
 } measured_data_t;
 

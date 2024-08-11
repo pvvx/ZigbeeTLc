@@ -34,7 +34,7 @@
 #elif BOARD == BOARD_TS0201_TZ3000
 
 #define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {10,'T','S','0','2','0','1','-','2','s','e'} // TS0201
+#define ZCL_BASIC_MODEL_ID	   {10,'T','S','0','2','0','1','-','2','e','p'} // TS0201
 
 #elif BOARD == BOARD_TH03Z
 
@@ -131,6 +131,7 @@ const af_simple_descriptor_t sensorDevice_simpleDesc =
 	(u16 *)sensorDevice_inClusterList,    	/* Application input cluster list */
 	(u16 *)sensorDevice_outClusterList,   	/* Application output cluster list */
 };
+
 
 /* Basic */
 zcl_basicAttr_t g_zcl_basicAttrs =
@@ -279,6 +280,7 @@ const zclAttrInfo_t relative_humdity_attrTbl[] =
 #define	ZCL_RELATIVE_HUMIDITY_ATTR_NUM		 sizeof(relative_humdity_attrTbl) / sizeof(zclAttrInfo_t)
 #endif
 
+
 #ifdef ZCL_THERMOSTAT_UI_CFG
 zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs;
 const zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgDefault = {
@@ -289,7 +291,7 @@ const zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgDefault = {
 		.TemperatureDisplayMode = 0,
 #if SHOW_SMILEY
 		.showSmiley = 0,
-		.temp_comfort_min = 2000,  // +20.00 C  параметры ГОСТ, СНиП
+		.temp_comfort_min = 2000,  // +20.00 C  ?0@0<5B@K !", !8
 		.temp_comfort_max = 2500,  // +25.00 C
 		.humi_comfort_min = 4000,  // 40.00 %
 		.humi_comfort_max = 6000  // 60.00 %
@@ -387,6 +389,87 @@ const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 };
 
 u8 SENSOR_DEVICE_CB_CLUSTER_NUM = (sizeof(g_sensorDeviceClusterList)/sizeof(g_sensorDeviceClusterList[0]));
+
+
+//#define	ZCL_TEMPERATURE_MEASUREMENT_ATTR_NUM		 sizeof(temperature_measurement_attrTbl2) / sizeof(zclAttrInfo_t)
+
+//=========================================================================================
+//#pragma message("ZCL_DUAL_TEMPERATURE_MEASUREMENT is " STRINGIFY(ZCL_DUAL_TEMPERATURE_MEASUREMENT))
+#ifdef ZCL_DUAL_TEMPERATURE_MEASUREMENT
+//================================================================================================
+
+/**
+ *  @brief Definition for Incoming cluster / Sever Cluster
+ */
+const u16 sensorDevice2_inClusterList[] =
+{
+#ifdef ZCL_TEMPERATURE_MEASUREMENT
+	ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
+#endif
+#ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
+    ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
+#endif
+};
+
+/**
+ *  @brief Definition for Outgoing cluster / Client Cluster
+ */
+const u16 sensorDevice2_outClusterList[] =
+{
+};
+
+/**
+ *  @brief Definition for Server cluster number and Client cluster number
+ */
+#define sensorDevice2_IN_CLUSTER_NUM		(sizeof(sensorDevice2_inClusterList)/sizeof(sensorDevice2_inClusterList[0]))
+#define sensorDevice2_OUT_CLUSTER_NUM	0
+
+
+const af_simple_descriptor_t sensorDevice2_simpleDesc =
+{
+	HA_PROFILE_ID,                      	/* Application profile identifier */
+	HA_DEV_TEMPERATURE_SENSOR,              /* Application device identifier */
+	SENSOR2_DEVICE_ENDPOINT,         		/* Endpoint */
+	1,										/* Application device version */
+	0,										/* Reserved */
+	sensorDevice2_IN_CLUSTER_NUM,           	/* Application input cluster count */
+	sensorDevice2_OUT_CLUSTER_NUM,          	/* Application output cluster count */
+	(u16 *)sensorDevice2_inClusterList,    	/* Application input cluster list */
+	(u16 *)sensorDevice2_outClusterList,   	/* Application output cluster list */
+};
+
+zcl_temperatureAttr_t g_zcl_temperatureAttrs2 =
+{
+	.measuredValue	= 0x8000,
+	.minValue 		= -5000,
+	.maxValue		= 17500,
+	.tolerance		= 0,
+};
+const zclAttrInfo_t temperature_measurement_attrTbl2[] =
+{
+	{ ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,       	ZCL_DATA_TYPE_INT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE, (u8*)&g_zcl_temperatureAttrs2.measuredValue },
+	{ ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MINMEASUREDVALUE,      ZCL_DATA_TYPE_INT16,    ACCESS_CONTROL_READ, (u8*)&g_zcl_temperatureAttrs2.minValue },
+	{ ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MAXMEASUREDVALUE,      ZCL_DATA_TYPE_INT16,    ACCESS_CONTROL_READ, (u8*)&g_zcl_temperatureAttrs2.maxValue },
+	{ ZCL_TEMPERATURE_MEASUREMENT_ATTRID_TOLERANCE,       		ZCL_DATA_TYPE_UINT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE, (u8*)&g_zcl_temperatureAttrs2.tolerance },
+
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
+};
+
+/**
+ *  @brief Definition for second temperature sensor temperature measurement ZCL cluster
+ */
+const zcl_specClusterInfo_t g_sensorDevice2ClusterList[] =
+{
+	#ifdef ZCL_TEMPERATURE_MEASUREMENT
+		{ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,	MANUFACTURER_CODE_NONE, ZCL_TEMPERATURE_MEASUREMENT_ATTR_NUM, temperature_measurement_attrTbl2, 	zcl_temperature_measurement_register, 	NULL},
+	#endif
+
+};
+u8 SENSOR_DEVICE_CB_CLUSTER_NUM2 = (sizeof(g_sensorDevice2ClusterList)/sizeof(g_sensorDevice2ClusterList[0]));
+
+#endif
+//=====================================================================================================================
+//===================================================================================================================
 
 /**********************************************************************
  * FUNCTIONS

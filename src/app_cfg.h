@@ -90,7 +90,8 @@ extern "C" {
 
 #define READ_SENSOR_TIMER_MIN_SEC 	3 // second
 #define READ_SENSOR_TIMER_SEC 		10 // default, second
-#define DEFAULT_POLL_RATE			(g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
+//#define DEFAULT_POLL_RATE			(g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
+#define DEFAULT_POLL_RATE	30000
 #define READ_SENSOR_TIMER_MS 		DEFAULT_POLL_RATE // (READ_SENSOR_TIMER_SEC*1000) // msecond
 
 /* Voltage detect module */
@@ -122,7 +123,8 @@ extern "C" {
 #define ZCL_POWER_CFG_SUPPORT						1
 //#define ZCL_IAS_ZONE_SUPPORT						1
 #define ZCL_TEMPERATURE_MEASUREMENT_SUPPORT			1
-#define ZCL_RELATIVE_HUMIDITY_SUPPORT   			1
+#define ZCL_RELATIVE_HUMIDITY_SUPPORT   			0
+#define ZCL_DUAL_TEMPERATURE_MEASUREMENT_SUPPORT    1
 #define ZCL_THERMOSTAT_UI_CFG_SUPPORT				1
 #define ZCL_POLL_CTRL_SUPPORT						1
 #define ZCL_GROUP_SUPPORT							0
@@ -139,6 +141,10 @@ extern "C" {
 #define ZCL_RELATIVE_HUMIDITY
 #define ZCL_RELATIVE_HUMIDITY_MEASUREMENT
 #endif
+#if ZCL_DUAL_TEMPERATURE_MEASUREMENT_SUPPORT
+#define ZCL_DUAL_TEMPERATURE_MEASUREMENT
+#endif
+
 #if ZCL_THERMOSTAT_UI_CFG_SUPPORT
 #define ZCL_THERMOSTAT_UI_CFG
 #define NV_ITEM_ZCL_THERMOSTAT_UI_CFG       (NV_ITEM_APP_GP_TRANS_TABLE + 1)    // see sdk/proj/drivers/drv_nv.h

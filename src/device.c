@@ -124,8 +124,13 @@ u8 is_comfort(s16 t, u16 h) {
 void read_sensor_and_save(void) {
 	if (read_sensor()) {
 		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
-	    g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
-	}
+#ifdef ZCL_DUAL_TEMPERATURE_MEASUREMENT
+		g_zcl_temperatureAttrs2.measuredValue = measured_data.temp2;
+#endif
+#ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
+		g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
+#endif
+	    	}
 	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.average_battery_mv + 50) / 100);
     g_zcl_powerAttrs.batteryPercentage = (u8)measured_data.battery_level;
 #if	USE_DISPLAY
@@ -193,6 +198,9 @@ void user_app_init(void)
 
 	/* Register endPoint */
 	af_endpointRegister(SENSOR_DEVICE_ENDPOINT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, zcl_rx_handler, NULL);
+#ifdef ZCL_DUAL_TEMPERATURE_MEASUREMENT
+	af_endpointRegister(SENSOR2_DEVICE_ENDPOINT, (af_simple_descriptor_t *)&sensorDevice2_simpleDesc, zcl_rx_handler, NULL);
+#endif
 #if ZCL_THERMOSTAT_UI_CFG_SUPPORT
 	zcl_thermostatConfig_restore();
 #endif
@@ -200,7 +208,9 @@ void user_app_init(void)
 
 	/* Register ZCL specific cluster information */
 	zcl_register(SENSOR_DEVICE_ENDPOINT, SENSOR_DEVICE_CB_CLUSTER_NUM, (zcl_specClusterInfo_t *)g_sensorDeviceClusterList);
-
+#ifdef ZCL_DUAL_TEMPERATURE_MEASUREMENT
+    zcl_register(SENSOR2_DEVICE_ENDPOINT, SENSOR_DEVICE_CB_CLUSTER_NUM2, (zcl_specClusterInfo_t *)g_sensorDevice2ClusterList);
+#endif
 #if ZCL_OTA_SUPPORT
     ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, &sensorDevice_otaInfo, &sensorDevice_otaCb);
 #endif
@@ -213,6 +223,7 @@ void user_app_init(void)
  */
 s32 sensors_task(void *arg) {
 	if(clock_time() - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measure_interval) {
+		//printf ("\nreadSensorTask: Reading sensor; measure interval is:%d,\n",g_sensorAppCtx.measure_interval);
 		read_sensor_and_save();
 	}
 #ifdef USE_EPD
@@ -393,6 +404,8 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 #elif SENSOR_TYPE == SENSOR_AHT2X3X
     if(sensor_i2c_addr != 0)
        	g_zcl_basicAttrs.hwVersion = 1;
+#elif SENSOR_TYPE == SENSOR_SHTAHT2X3X
+    g_zcl_basicAttrs.hwVersion = (SHT30_I2C_ADDR_A <<4) + AHT2x_I2C_ADDR;
 #endif // SENSOR_TYPE
 #endif
 }
@@ -487,6 +500,18 @@ void user_init(bool isRetention)
 			180,
 			(u8 *)&reportableChange
 		);
+#ifdef ZCL_DUAL_TEMPERATURE_MEASUREMENT
+        reportableChange = 10;
+		bdb_defaultReportingCfg(
+			SENSOR2_DEVICE_ENDPOINT,
+			HA_PROFILE_ID,
+			ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
+			ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,
+			30,
+			180,
+			(u8 *)&reportableChange
+		);
+#endif
         reportableChange = 50;
 		bdb_defaultReportingCfg(
 			SENSOR_DEVICE_ENDPOINT,

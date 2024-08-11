@@ -26,7 +26,10 @@ u8 aht_sensor_i2c_addr;
 u32 aht_sensor_id; //  = (0x20<<16) | (AHT2x_I2C_ADDR << 8);
 u32 sht_sensor_id;
 
-measured_data_t measured_data;
+measured_data_t measured_data={
+	.temp = 0x8000,  // in 0.01 C
+	.temp2 = 0x8000,  // in 0.01 C
+};
 
 //_attribute_ram_code_
 static u8 aht_sensor_crc(u8 * msg, int len) {
@@ -63,26 +66,26 @@ void aht_check_sensor(void) {
 
 
 __attribute__((optimize("-Os"))) int aht_read_sensor(void) {
-	u32 _temp, _humi;
+	u32 _temp;
 	u8 data[7];
 	//
 
-	printf("aht_read_sensor: aht_sensor_i2c_addr:%d\n",aht_sensor_i2c_addr);
+	//printf("aht_read_sensor: aht_sensor_i2c_addr:%d\n",aht_sensor_i2c_addr);
 	battery_detect();
 	if (aht_sensor_i2c_addr != 0) {
 		if (read_i2c_bytes(aht_sensor_i2c_addr, data, sizeof(data)) == 0
 	    && (data[0] & 0x80) == 0
 	    && aht_sensor_crc(data, sizeof(data)) == 0) {
 			_temp = (data[3] & 0x0F) << 16 | (data[4] << 8) | data[5];
-			measured_data.temp=1000;
-			//measured_data.temp = ((u32)(_temp * 1250) >> 16) - 5000 + g_zcl_thermostatUICfgAttrs.temp_offset; // x 0.01 C
-			measured_data.humi = ((u32)(_temp * 1250) >> 16) - 5000 + g_zcl_thermostatUICfgAttrs.temp_offset; // x 0.01 C
-			//_humi = (data[1] << 12) | (data[2] << 4) | (data[3] >> 4);
-			//measured_data.humi = ((u32)(_humi * 625) >> 16) + g_zcl_thermostatUICfgAttrs.humi_offset; // x 0.01 %
+			measured_data.temp2 = ((u32)(_temp * 1250) >> 16) - 5000 + g_zcl_thermostatUICfgAttrs.temp_offset; // x 0.01 C
+			/*measured_data.humi = ((u32)(_temp * 1250) >> 16) - 5000 + g_zcl_thermostatUICfgAttrs.temp_offset; // x 0.01 C
+			_humi = (data[1] << 12) | (data[2] << 4) | (data[3] >> 4);
+			measured_data.humi = ((u32)(_humi * 625) >> 16) + g_zcl_thermostatUICfgAttrs.humi_offset; // x 0.01 %
 			if (measured_data.humi < 0)
 				measured_data.humi = 0;
 			else if (measured_data.humi > 9999)
 				measured_data.humi = 9999;
+			*/
 			// measured_data.count++;
 			if(!aht_start_measure_sensor())
 				return 1;
@@ -233,14 +236,18 @@ int sht_read_sensor(void) {
 }
 
 int read_sensor(void) {
-	int re = 0;
-    //re=sht_read_sensor();
-
-	re=aht_read_sensor();
-
-    if (re)
-	  re = sht_read_sensor_cb();
-	return re;
+	int re1 = 0;
+	int re2=0;
+	//printf("\nread_sensor in : aht_sensor_i2c_addr:%d, sht_sensori2c_addr:%d\n",aht_sensor_i2c_addr,sht_sensor_i2c_addr);
+	//printf ("read_sensor in temp1:%d,temp2:%d\n",measured_data.temp,measured_data.temp2);
+	re1=aht_read_sensor();
+	if (sht_sensor_i2c_addr) {
+			re2 = sht_read_sensor_cb();
+			battery_detect();
+		} else
+			sht_init_sensor();
+	//printf ("read_sensor out re1:%d,re2:%d, temp1:%d,temp2:%d\n",re1,re2,measured_data.temp,measured_data.temp2);
+	return re1||re2 ;
 }
 
 void init_sensor(void) {
