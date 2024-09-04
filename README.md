@@ -164,6 +164,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 19. Ver 0.1.2.2: Offset correction for SHTv3 and SHT4x sensors.
 
+20. Ver 0.1.2.3: Added the ability to change the "manufacturer name". Changing the structure of saving the model and the manufacturer name. Corrected manufacturer name "MiaoMiaoCe" for MHO-C122 and MHO-C401N.
 
 ## Make
 
