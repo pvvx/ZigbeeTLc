@@ -16,5 +16,8 @@ RUN apt-get -y update && \
     libncurses5 libncursesw5 \
     build-essential \
     python3 \
-    python-pip \
+    python3-pip \
     && rm -rf /var/lib/apt/lists*
+
+# Install pyserial for serial programmer
+RUN pip3 install pyserial

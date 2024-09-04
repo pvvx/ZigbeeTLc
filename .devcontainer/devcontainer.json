@@ -7,7 +7,9 @@
 	"runArgs": [
 		"--name",
 		"ZigbeeTLc",
-		"--rm"
+		"--rm",
+		//Use next line to forward serial port programmer to container
+		"--device=/dev/ttyUSB0"
 	],
 	"postStartCommand": "/usr/bin/git config --global --add safe.directory \"*\" && make install",
 	"customizations": {
