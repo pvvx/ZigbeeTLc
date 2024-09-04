@@ -157,7 +157,6 @@ const zclAttrInfo_t basic_attrTbl[] =
 	{ ZCL_ATTRID_BASIC_APP_VER,      		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.appVersion},
 	{ ZCL_ATTRID_BASIC_STACK_VER,    		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.stackVersion},
 	{ ZCL_ATTRID_BASIC_HW_VER,       		ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ,  						(u8*)&g_zcl_basicAttrs.hwVersion},
-	{ ZCL_ATTRID_BASIC_MFR_NAME,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ,  						(u8*)g_zcl_basicAttrs.manuName},
 #if USE_CHG_NAME
 	{ ZCL_ATTRID_BASIC_MFR_NAME,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,	(u8*)g_zcl_basicAttrs.manuName},
 	{ ZCL_ATTRID_BASIC_MODEL_ID,     		ZCL_DATA_TYPE_CHAR_STR, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,	(u8*)g_zcl_basicAttrs.modelId},
@@ -404,13 +403,14 @@ u8 SENSOR_DEVICE_CB_CLUSTER_NUM = (sizeof(g_sensorDeviceClusterList)/sizeof(g_se
 #define FLASH_DEV_NAME_ADDR  0x075000
 static const u8 modelId[] = ZCL_BASIC_MODEL_ID;
 static const u8 manuName[] = ZCL_BASIC_MFG_NAME;
+#define KEY_SAVED_NAMES 0x454D414E
 
 void read_dev_name(void) {
 	u32 tflg;
 	flash_read_page(FLASH_DEV_NAME_ADDR, sizeof(tflg), (unsigned char *) &tflg);
 	flash_read_page(FLASH_DEV_NAME_ADDR + sizeof(tflg), ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.modelId);
 	flash_read_page(FLASH_DEV_NAME_ADDR + sizeof(tflg) + ZCL_BASIC_MAX_LENGTH, ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.manuName);
-	if(tflg != 0x454D414E
+	if(tflg != KEY_SAVED_NAMES
 	    || g_zcl_basicAttrs.modelId[0] == 0
 		|| g_zcl_basicAttrs.modelId[0] >= ZCL_BASIC_MAX_LENGTH
 	    || g_zcl_basicAttrs.manuName[0] == 0
@@ -433,12 +433,12 @@ void save_dev_name(void) {
 	flash_read_page(FLASH_DEV_NAME_ADDR + sizeof(tflg), sizeof(buf), buf);
 	i = memcmp(g_zcl_basicAttrs.modelId, buf, g_zcl_basicAttrs.modelId[0] + 1);
 	i |= memcmp(g_zcl_basicAttrs.manuName, &buf[ZCL_BASIC_MAX_LENGTH], g_zcl_basicAttrs.manuName[0] + 1);
-	if(i || tflg != 0x454D414E ) {
+	if(i || tflg != KEY_SAVED_NAMES ) {
 		flash_write_status(0, 0);
 		flash_erase_sector(FLASH_DEV_NAME_ADDR);
 		flash_write_page(FLASH_DEV_NAME_ADDR + sizeof(tflg), g_zcl_basicAttrs.modelId[0] + 1, g_zcl_basicAttrs.modelId);
 		flash_write_page(FLASH_DEV_NAME_ADDR  + sizeof(tflg) + ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.manuName[0] + 1, g_zcl_basicAttrs.manuName);
-		tflg = 0x454D414E;
+		tflg = KEY_SAVED_NAMES;
 		flash_write_page(FLASH_DEV_NAME_ADDR, sizeof(tflg), (unsigned char *) &tflg);
 	}
 }
