@@ -244,9 +244,9 @@ _LCD_SPEED_CODE_SEC_
 void show_smiley(u8 state){
 	display_buff[3] &= ~(BIT(0) | BIT(2) | BIT(4));
 	if(state == 1)
-		display_buff[2] |= BIT(0) | BIT(4);
+		display_buff[3] |= BIT(0) | BIT(4);
 	else if(state == 2)
-		display_buff[2] |= BIT(2) | BIT(4);
+		display_buff[3] |= BIT(2) | BIT(4);
 }
 
 _LCD_SPEED_CODE_SEC_
