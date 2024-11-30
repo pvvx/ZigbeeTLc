@@ -48,46 +48,38 @@
 /**********************************************************************
  * LOCAL FUNCTIONS
  */
-#if	USE_DISPLAY
 void light_on(void)
 {
+#if USE_DISPLAY
     show_ble_symbol(true);
     update_lcd();
-}
-
-void light_off(void)
-{
-    show_ble_symbol(false);
-    update_lcd();
-}
-
-void light_init(void)
-{
-    show_ble_symbol(false);
-    update_lcd();
-}
-#else
-void light_on(void)
-{
+#endif
+#ifdef  GPIO_LED
 	gpio_write(GPIO_LED, LED_ON);
 #if LED_ON == 1
 	gpio_setup_up_down_resistor(GPIO_LED, PM_PIN_PULLUP_10K);
 #else
 	gpio_setup_up_down_resistor(GPIO_LED, PM_PIN_PULLDOWN_100K);
 #endif
+#endif
 }
 
 void light_off(void)
 {
+#if USE_DISPLAY
+    show_ble_symbol(false);
+    update_lcd();
+#endif
+#ifdef  GPIO_LED
 	gpio_write(GPIO_LED, LED_OFF);
 	gpio_setup_up_down_resistor(GPIO_LED, PM_PIN_UP_DOWN_FLOAT);
+#endif
 }
 
 void light_init(void)
 {
 	light_off();
 }
-#endif
 
 s32 zclLightTimerCb(void *arg)
 {
@@ -117,7 +109,7 @@ s32 zclLightTimerCb(void *arg)
 
 void light_blink_start(u8 times, u16 ledOnTime, u16 ledOffTime)
 {
-#if	USE_DISPLAY
+#if	USE_DISPLAY && (!defined(USE_BLINK_LED))
 	if(g_zcl_thermostatUICfgAttrs.display_off)
 		return;
 #endif
@@ -192,6 +184,9 @@ static s32 keyTimerCb(void *arg)
 						pm_wait_ms(USE_EPD);
 #endif
 				}
+#ifdef USE_BLINK_LED
+				light_on();
+#endif
 #else
 				light_on();
 #endif // USE_DISPLAY
@@ -212,7 +207,7 @@ void task_keys(void) {
 	u8 button_on = gpio_read(BUTTON1)? 0 : 1;
 	if(button_on) {
 		// button on
-#if	!USE_DISPLAY
+#if	(!USE_DISPLAY) || defined(USE_BLINK_LED)
 		light_on();
 #endif
 		if(!g_sensorAppCtx.keyPressed) {

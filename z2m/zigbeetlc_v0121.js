@@ -113,6 +113,7 @@ const definitions = [
         fingerprint: [
             {modelID: 'LYWSD03MMC-z', manufacturerName: 'Xiaomi', model: 'LYWSD03MMC'},
             {modelID: 'LYWSD03MMC-bz', manufacturerName: 'Xiaomi', model: 'LYWSD03MMC'},
+            {modelID: 'TH03-z', manufacturerName: 'Sonoff', model: 'TH03'},
             {modelID: 'MHO-C122-z', manufacturerName: 'MiaoMiaoCe', model: 'MHO-C122'},
             {modelID: 'MHO-C122-bz', manufacturerName: 'MiaoMiaoCe', model: 'MHO-C122'},
             {modelID: 'MHO-C401N-z', manufacturerName: 'MiaoMiaoCe', model: 'MHO-C401N'},

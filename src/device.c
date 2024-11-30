@@ -247,6 +247,11 @@ void app_task(void)
 					g_sensorAppCtx.timerTaskEvt = NULL;
 				}
 			}
+#ifdef USE_BLINK_LED
+			if(!g_sensorAppCtx.timerLedEvt)
+				light_off();
+#endif // USE_BLINK_LED
+
 #else // !USE_DISPLAY
 			if(!g_sensorAppCtx.timerLedEvt)
 				light_off();
@@ -267,11 +272,15 @@ void app_task(void)
 
 #endif
 			}
+#ifdef USE_BLINK_LED
+			if(!g_sensorAppCtx.timerLedEvt)
+				light_blink_start(1, 50, 10000);
+#endif // USE_BLINK_LED
 #else // !USE_DISPLAY
 			if(!g_sensorAppCtx.timerLedEvt)
 				light_blink_start(1, 50, 10000);
 			//gpio_write(GPIO_LED, LED_ON); // - не включать PIN_PULLUP/PULLDOWN !
-#endif
+#endif // USE_DISPLAY
 		}
 #if PM_ENABLE
 #ifdef USE_EPD

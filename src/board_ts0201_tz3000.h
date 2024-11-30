@@ -16,7 +16,9 @@
 
 // TLSR825x 1M Flash
 // GPIO_PA7 - SWS, free, (debug TX)
+// GPIO_PB1 - TX
 // GPIO_PB4 - LED (to GND)
+// GPIO_PB7 - RX
 // GPIO_PC0 - KEY (to GND)
 // GPIO_PC2 - SDA, used I2C
 // GPIO_PC3 - SCL, used I2C

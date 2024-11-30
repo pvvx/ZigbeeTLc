@@ -4,7 +4,7 @@ Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/
 
 Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/)
 
-[ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/), [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/) work with modification - [requires unsoldering an extra chip and soldering jumpers](https://github.com/pvvx/BLE_THSensor/issues/13#issuecomment-2148975619).
+[ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/), [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/) work with modification - [requires unsoldering an extra chip and soldering jumpers](https://github.com/pvvx/BLE_THSensor/issues/13#issuecomment-2148975619), [TH03](https://pvvx.github.io/TS0201_TZ3000_TH03).
 
 Additional alternative firmware options for some devices with TLSR825x can be found at [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
 
@@ -96,6 +96,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x0216 |  TH03Z |
 | 0x021b |  ZTH01 |
 | 0x021c |  ZTH02 |
+| 0x021e |  TH03 |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
@@ -165,6 +166,9 @@ The flashing "BT" icon is called by the "identify" command.
 19. Ver 0.1.2.2: Offset correction for SHTv3 and SHT4x sensors.
 
 20. Ver 0.1.2.3: Added the ability to change the "manufacturer name". Changing the structure of saving the model and the manufacturer name. Corrected manufacturer name "MiaoMiaoCe" for MHO-C122 and MHO-C401N.
+
+21. Added firmware for [TH03](https://pvvx.github.io/TS0201_TZ3000_TH03).
+
 
 ## Make
 

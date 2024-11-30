@@ -70,6 +70,7 @@ extern "C" {
 //#elif BOARD == BOARD_TH03Z
 #include "board_th03z.h"
 #include "board_zth01_02.h"
+#include "board_zth03.h"
 //#else
 //#error "Define BOARD!"
 //#endif
