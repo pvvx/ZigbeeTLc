@@ -56,6 +56,11 @@
 #define ZCL_BASIC_MFG_NAME     {6,'S','o','n','o','f','f'} // Sonoff
 #define ZCL_BASIC_MODEL_ID	   {6,'T','H','0','3','-','z'} // TH03
 
+#elif BOARD == BOARD_LKTMZL02
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {10,'L','K','T','M','Z','L','0','2','-','z'} // LKTMZL02
+
 #else
 #error "Define BOARD!"
 #endif // BOARD

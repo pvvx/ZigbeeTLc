@@ -71,6 +71,7 @@ extern "C" {
 #include "board_th03z.h"
 #include "board_zth01_02.h"
 #include "board_zth03.h"
+#include "board_lktmzl02.h"
 //#else
 //#error "Define BOARD!"
 //#endif

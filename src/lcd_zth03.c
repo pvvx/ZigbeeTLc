@@ -265,7 +265,8 @@ void show_battery_symbol(bool state){
 		display_buff[3] &= ~BIT(6);
 }
 
-/* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999 */
+/* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999
+   symbol 0 - none, 1 - C, 2 - F  */
 _LCD_SPEED_CODE_SEC_
 __attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol){
 	display_buff[3] &= ~BIT(6); // "bat"

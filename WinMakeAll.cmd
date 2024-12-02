@@ -29,11 +29,15 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTH03Z POJECT_DEF="-DBOARD=BOARD_TH0
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=TH03Z POJECT_DEF="-DBOARD=BOARD_ZTH03"
 @if not exist "bin\TH03Z%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZL02 POJECT_DEF="-DBOARD=BOARD_LKTMZL02"
+@if not exist "bin\ZL02%SWVER%.bin" goto :error
 python3 make\zb_bin_ota.py bin\ZTS0201Z3000%SWVER%.bin bin\TS0201z%SWVER% -m0x1141 -i0xd3a3 -v0x01983001 -s"Tuya to ZigbeeTlc"
 python3 make\zb_bin_ota.py bin\ZTH01Z%SWVER%.bin bin\TH01Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 python3 make\zb_bin_ota.py bin\ZTH02Z%SWVER%.bin bin\TH02Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 python3 make\zb_bin_ota.py bin\ZTH03Z%SWVER%.bin bin\TH03Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 python3 make\zb_bin_ota.py bin\TH03Z%SWVER%.bin bin\TH03Zz%SWVER% -m0x1286 -i0x0202 -v0x10993607 -s"Sonoff to ZigbeeTlc"
+python3 make\zb_bin_ota.py bin\ZL02%SWVER%.bin bin\ZL02Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 @exit
 :error
 echo "Error!"

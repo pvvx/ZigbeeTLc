@@ -148,7 +148,11 @@ void read_sensor_and_save(void) {
     	show_battery_symbol(true);
 #else // BOARD != BOARD_CGDK2
     	show_small_number((measured_data.humi + 50) / 100, 1);
+#if BOARD == BOARD_LKTMZL02
+    	show_battery_symbol(true);
+#else
     	show_battery_symbol(g_zcl_powerAttrs.batteryPercentage < 10);
+#endif
 #endif // BOARD == BOARD_CGDK2
 #if SHOW_SMILEY
 #ifdef ZCL_THERMOSTAT_UI_CFG
