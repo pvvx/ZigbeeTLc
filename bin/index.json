@@ -9,6 +9,14 @@
     },
     {
         "fileVersion": 19083265,
+        "fileSize": 129250,
+        "manufacturerCode": 4417,
+        "imageType": 513,
+        "sha512": "d476fa933ecbafc189f34eb70b61605cca222be06b920a6c1eda2ab6c74d12e42cd5a5d9ebc9eab8a724a8e2554e94c26a99ccb8bd21eeaf752b8d6804e007fa",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/master/bin/1141-0208-01233001-ZMHOC401.zigbee"
+    },
+    {
+        "fileVersion": 19083265,
         "fileSize": 128770,
         "manufacturerCode": 4417,
         "imageType": 520,

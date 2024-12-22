@@ -4,12 +4,12 @@
  * @brief   This is the header file for board_mho_c401n
  *
  *******************************************************************************************************/
-#ifndef _BOARD_MHO_C401N_H_
-#define _BOARD_MHO_C401N_H_
+#ifndef _BOARD_MHO_C401_H_
+#define _BOARD_MHO_C401_H_
 
 #include "version_cfg.h"
 
-#if (BOARD == BOARD_MHO_C401N)
+#if (BOARD == BOARD_MHO_C401)
 
 /* Enable C linkage for C++ Compilers: */
 #if defined(__cplusplus)
@@ -32,46 +32,46 @@ extern "C" {
 
 // DISPLAY
 #define SHOW_SMILEY			1
-#define	USE_DISPLAY			4
+#define	USE_DISPLAY			7
 #define USE_EPD				50 // while(task_lcd()) pm_wait_ms(50 ms);
-#define LCD_BUF_SIZE		16
+#define LCD_BUF_SIZE		18
 #define LCD_INIT_DELAY()
 
-#define EPD_RST2			GPIO_PB7 // should be high
-#define PULL_WAKEUP_SRC_PB7 PM_PIN_PULLUP_1M
-
-#define EPD_RST 			GPIO_PD7 // should be high
-#define PULL_WAKEUP_SRC_PD7 PM_PIN_PULLUP_1M
-#define PD7_INPUT_ENABLE	1
-#define PD7_DATA_OUT		1
-#define PD7_OUTPUT_ENABLE	1
-#define PD7_FUNC			AS_GPIO
+#define EPD_SHD				GPIO_PC4 // should be high
+#define PULL_WAKEUP_SRC_PC4 PM_PIN_PULLUP_10K
 
 #define EPD_BUSY			GPIO_PA5
 #define PULL_WAKEUP_SRC_PA5 PM_PIN_PULLUP_1M
 #define PA5_INPUT_ENABLE	1
 #define PA5_FUNC			AS_GPIO
 
-#define EPD_CSB				GPIO_PA6
+#define EPD_RST				GPIO_PA6
 #define PULL_WAKEUP_SRC_PA6 PM_PIN_PULLUP_1M
 #define PA6_INPUT_ENABLE	1
 #define PA6_DATA_OUT		1
 #define PA6_OUTPUT_ENABLE	1
 #define PA6_FUNC			AS_GPIO
 
-#define EPD_SDA				GPIO_PD2
-#define PULL_WAKEUP_SRC_PD2 PM_PIN_PULLDOWN_100K
+#define EPD_CSB				GPIO_PD2
+#define PULL_WAKEUP_SRC_PD2 PM_PIN_PULLUP_1M
 #define PD2_INPUT_ENABLE	1
 #define PD2_DATA_OUT		1
 #define PD2_OUTPUT_ENABLE	1
 #define PD2_FUNC			AS_GPIO
 
-#define EPD_SCL				GPIO_PC4
-#define PULL_WAKEUP_SRC_PC4 PM_PIN_PULLDOWN_100K // PM_PIN_PULLUP_1M
-#define PC4_INPUT_ENABLE	1
-#define PC4_DATA_OUT		0
-#define PC4_OUTPUT_ENABLE	1
-#define PC4_FUNC			AS_GPIO
+#define EPD_SDA				GPIO_PB7
+#define PULL_WAKEUP_SRC_PB7 PM_PIN_PULLDOWN_100K // PM_PIN_PULLUP_1M
+#define PB7_INPUT_ENABLE	1
+#define PB7_DATA_OUT		1
+#define PB7_OUTPUT_ENABLE	1
+#define PB7_FUNC			AS_GPIO
+
+#define EPD_SCL				GPIO_PD7
+#define PULL_WAKEUP_SRC_PD7 PM_PIN_PULLDOWN_100K // PM_PIN_PULLUP_1M
+#define PD7_INPUT_ENABLE	1
+#define PD7_DATA_OUT		0
+#define PD7_OUTPUT_ENABLE	1
+#define PD7_FUNC			AS_GPIO
 
 // BUTTON
 #define BUTTON1 			GPIO_PB6	// Reed Switch, input, pcb mark "P5"
@@ -115,5 +115,5 @@ extern "C" {
 #if defined(__cplusplus)
 }
 #endif
-#endif // BOARD == BOARD_MHO_C401N
-#endif // _BOARD_MHO_C401N_H_
+#endif // BOARD == BOARD_MHO_C401
+#endif // _BOARD_MHO_C401_H_

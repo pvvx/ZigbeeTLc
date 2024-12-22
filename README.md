@@ -2,7 +2,7 @@
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
-Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/)
+Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/),  [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/)
 
 [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/), [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/) work with modification - [requires unsoldering an extra chip and soldering jumpers](https://github.com/pvvx/BLE_THSensor/issues/13#issuecomment-2148975619), [TH03](https://pvvx.github.io/TS0201_TZ3000_TH03), [LKTMZL02](https://pvvx.github.io/LKTMZL02).
 
@@ -10,7 +10,7 @@ Additional alternative firmware options for some devices with TLSR825x can be fo
 
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
-In developing: [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000), ...
+In developing: [MJWSD05MMC](https://pvvx.github.io/MJWSD05MMC), [CGG1-M](https://pvvx.github.io/CGG1), [TS0202_TZ3000](https://pvvx.github.io/TS0202_TZ3000), ...
 
 * Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
 * [Average consumption](https://github.com/pvvx/ZigbeeTLc/issues/37#issuecomment-1937844181) for Xiaomi LYWSD03MMC HW: B1.4 - ~15 uA.

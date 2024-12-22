@@ -57,24 +57,16 @@ extern "C" {
 
 /* Board include */
 #if defined(BOARD)
-//#if (BOARD == BOARD_LYWSD03MMC)
-	#include "board_lyws03mmc.h"
-//#elif (BOARD == BOARD_CGDK2)
-	#include "board_cgdk2.h"
-//#elif BOARD == BOARD_MHO_C122
-	#include "board_mho_c122.h"
-//#elif BOARD == BOARD_MHO_C401N
+#include "board_lyws03mmc.h"
+#include "board_cgdk2.h"
+#include "board_mho_c122.h"
+#include "board_mho_c401.h"
 #include "board_mho_c401n.h"
-//#elif BOARD == BOARD_TS0201_TZ3000
 #include "board_ts0201_tz3000.h"
-//#elif BOARD == BOARD_TH03Z
 #include "board_th03z.h"
 #include "board_zth01_02.h"
 #include "board_zth03.h"
 #include "board_lktmzl02.h"
-//#else
-//#error "Define BOARD!"
-//#endif
 #else
 #error "Define BOARD!"
 #endif

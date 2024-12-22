@@ -174,15 +174,7 @@ static s32 keyTimerCb(void *arg)
 				tl_bdbReset2FN();
 #if	USE_DISPLAY
 				if(!g_zcl_thermostatUICfgAttrs.display_off) {
-#ifdef USE_EPD
-					while(task_lcd())
-						pm_wait_ms(USE_EPD);
-#endif
 					show_blink_screen();
-#ifdef USE_EPD
-					while(task_lcd())
-						pm_wait_ms(USE_EPD);
-#endif
 				}
 #ifdef USE_BLINK_LED
 				light_on();

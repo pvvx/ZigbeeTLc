@@ -9,7 +9,6 @@
 u8 i2c_address_lcd;
 
 void init_lcd(void);
-void update_lcd();
 void show_battery_symbol(bool state);
 void show_big_number_x10(s16 number, u8 symbol);
 #if BOARD == BOARD_CGDK2
@@ -17,8 +16,12 @@ void show_small_number_x10(s16 number, bool percent);
 #else
 void show_small_number(s16 number, bool percent);
 #endif
-#if BOARD == BOARD_MHO_C401N
+#if (BOARD == BOARD_MHO_C401N) || (BOARD == BOARD_MHO_C401)
 void show_connected_symbol(bool state);
+#define update_lcd() task_lcd()
+u8 stage_lcd;
+#else
+void update_lcd();
 #endif
 void show_smiley(u8 state);
 void show_ble_symbol(bool state);

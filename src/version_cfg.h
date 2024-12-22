@@ -39,7 +39,7 @@
 
 /* Board ID */
 //#define BOARD_LYWSD03MMC_B14		0 // number used for BLE firmware
-//#define BOARD_MHO_C401			1
+#define BOARD_MHO_C401				1
 //#define BOARD_CGG1				2
 //#define BOARD_LYWSD03MMC_B19		3 // number used for BLE firmware
 //#define BOARD_LYWSD03MMC_DEVBIS	3 // ver https://github.com/devbis/z03mmc
@@ -73,7 +73,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_LKTMZL02 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000 or BOARD_TH03Z ..
+#define BOARD					BOARD_MHO_C401N // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000 or BOARD_TH03Z ..
 #endif
 
 /* Chip IDs */

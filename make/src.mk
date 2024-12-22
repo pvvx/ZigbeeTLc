@@ -18,6 +18,7 @@ $(OUT_PATH)$(SRC_DIR)/lcd_cgdk2.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_mho_c122.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zth03.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_lktmzl02.o \
+$(OUT_PATH)$(SRC_DIR)/epd_mho_c401.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/battery.o \
 $(OUT_PATH)$(SRC_DIR)/sensors_sht30.o \

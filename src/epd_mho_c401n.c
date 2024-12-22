@@ -46,7 +46,7 @@ None: 0.1..0.3, 0.5..0.7, 2.3..2.7, 4.3..4.7, 5.1, 5,3, 5.5, 5.7, 6.1, 6.3, 6.7,
 
 u8 display_buff[LCD_BUF_SIZE];
 u8 display_cmp_buff[LCD_BUF_SIZE];
-volatile u8 stage_lcd;
+u8 stage_lcd;
 u8 epd_updated;
 u16 lcd_refresh_cnt;
 
@@ -304,29 +304,8 @@ void init_lcd(void) {
 	display_buff[15] = 0;
 }
 
-
-
-void update_lcd(void){
-	if(g_zcl_thermostatUICfgAttrs.display_off)
-		return;
- 	if (!stage_lcd) {
-		if (memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
-			memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
-			if (lcd_refresh_cnt)
-				lcd_refresh_cnt--;
-			else {
-				lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
-			    epd_updated = 0;
-			}
-			stage_lcd = 1; // Update/Init, stage 1
-		}
-	}
-}
-
-
-__attribute__((optimize("-Os"))) int _task_lcd(void) {
-	if(gpio_read(EPD_BUSY)) {
-//		unsigned char r = irq_disable();
+__attribute__((optimize("-Os"))) int task_lcd(void) {
+	while (gpio_read(EPD_BUSY)) {
 		switch (stage_lcd) {
 		case 1: // Update/Init, stage 1
 			transmit_blk(0, T_LUT_ping, sizeof(T_LUT_ping));
@@ -362,27 +341,37 @@ __attribute__((optimize("-Os"))) int _task_lcd(void) {
 			transmit(0, 0x028);
 			transmit(0, 0x0AD);
 		default:
-			stage_lcd = 0;
+			if(!g_zcl_thermostatUICfgAttrs.display_off
+			&& memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
+				memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
+				if (lcd_refresh_cnt) {
+					lcd_refresh_cnt--;
+					stage_lcd = 1;
+				} else {
+					//init_lcd(); // pulse RST_N low for 110 microseconds
+					lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
+				    stage_lcd = 1; // Update/Init, stage 1
+				    epd_updated = 0;
+				}
+			} else
+				stage_lcd = 0;
 		}
-//		irq_restore(r);
+		if(!stage_lcd)
+			break;
+	}
 #if PM_ENABLE
-		cpu_set_gpio_wakeup(EPD_BUSY, Level_High , stage_lcd);
+	cpu_set_gpio_wakeup(EPD_BUSY, Level_High , stage_lcd != 0);
 #endif
-	}
 	return stage_lcd;
 }
-
-__attribute__((optimize("-Os"))) int task_lcd(void) {
-	while(stage_lcd != 0 && gpio_read(EPD_BUSY)) {
-		_task_lcd();
-	}
-	return stage_lcd;
-}
-
 
 void show_blink_screen(void) {
 	memset(display_buff, 0, LCD_BUF_SIZE);
-	update_lcd();
+	display_buff[1] = BIT(6);
+	display_buff[3] = BIT(6);
+	display_buff[8] = BIT(6);
+	display_buff[10] = BIT(6);
+	task_lcd();
 }
 
 #if	USE_CLOCK

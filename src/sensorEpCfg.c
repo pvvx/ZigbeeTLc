@@ -26,6 +26,11 @@
 #define ZCL_BASIC_MFG_NAME     {10,'M','i','a','o','M','i','a','o','C','e'} // MiaoMiaoCe
 #define ZCL_BASIC_MODEL_ID	   {10,'M','H','O','-','C','1','2','2','-','z'} // MHO-C122
 
+#elif BOARD == BOARD_MHO_C401
+
+#define ZCL_BASIC_MFG_NAME     {10,'M','i','a','o','M','i','a','o','C','e'} // MiaoMiaoCe
+#define ZCL_BASIC_MODEL_ID	   {10,'M','H','O','-','C','4','0','1','-','z'} // MHO-C401
+
 #elif BOARD == BOARD_MHO_C401N
 
 #define ZCL_BASIC_MFG_NAME     {10,'M','i','a','o','M','i','a','o','C','e'} // MiaoMiaoCe
