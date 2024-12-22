@@ -172,6 +172,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 22. Added firmware for [LKTMZL02](https://pvvx.github.io/LKTMZL02).
 
+23. Added firmware for [MHO-C401(old)](https://pvvx.github.io/MHO_C401).
+
 
 ## Make
 
