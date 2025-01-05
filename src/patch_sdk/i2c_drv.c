@@ -3,6 +3,8 @@
 //#include "app_cfg.h"
 #include "i2c_drv.h"
 
+#if USE_I2C_DRV
+
 #define _I2C_SEG_
 
 _I2C_SEG_
@@ -160,3 +162,5 @@ int I2CBusUtr(void * outdata, i2c_utr_t * tr, unsigned int wrlen) {
 	irq_restore(r);
 	return ret;
 }
+
+#endif // #if USE_I2C_DRV

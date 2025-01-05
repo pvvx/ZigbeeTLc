@@ -51,6 +51,7 @@
 #define PB5_DATA_OUT		LED_OFF
 
 // I2C
+#define	USE_I2C_DRV			1
 #define I2C_CLOCK	400000 // Hz
 #define SENSOR_TYPE SENSOR_AHT2X3X
 #define USE_SENSOR_ID		0

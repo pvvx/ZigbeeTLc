@@ -121,6 +121,7 @@ u8 is_comfort(s16 t, u16 h) {
 }
 #endif
 
+
 void read_sensor_and_save(void) {
 	if (read_sensor()) {
 		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
@@ -364,8 +365,8 @@ void populate_date_code() {
 }
 
 
-void populate_hw_version() {
 #if BOARD == BOARD_LYWSD03MMC
+void populate_hw_version() {
 /*
  HW  | LCD I2C addr | SHTxxx I2C addr | Note
 -----|--------------|-----------------|---------
@@ -389,26 +390,8 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
     } else if (i2c_address_lcd == (B19_I2C_ADDR << 1)) {
         g_zcl_basicAttrs.hwVersion = 19;
     }
-#else // BOARD != BOARD_LYWSD03MMC
-#if SENSOR_TYPE == SENSOR_SHTC3_4X
-    if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) {
-#if USE_SENSOR_ID
-    	g_zcl_basicAttrs.hwVersion = 2 + (sensor_id == 0);
-#else
-    	g_zcl_basicAttrs.hwVersion = 2;
-#endif
-    } else
-    	g_zcl_basicAttrs.hwVersion = 1;
-
-#elif SENSOR_TYPE == SENSOR_CHT8305
-    if(sensor_i2c_addr != 0)
-    	g_zcl_basicAttrs.hwVersion = 1 + ((sensor_i2c_addr >> 1) & 3);
-#elif SENSOR_TYPE == SENSOR_AHT2X3X
-    if(sensor_i2c_addr != 0)
-       	g_zcl_basicAttrs.hwVersion = 1;
-#endif // SENSOR_TYPE
-#endif
 }
+#endif
 /*********************************************************************
  * @fn      user_init
  *
@@ -448,7 +431,9 @@ void user_init(bool isRetention)
 #endif
 		init_sensor();
 
+#if BOARD == BOARD_LYWSD03MMC
 		populate_hw_version();
+#endif
 
 #if DEBUG_ENABLE
 		/* Register except handler for test */

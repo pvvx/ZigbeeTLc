@@ -32,6 +32,7 @@
 #define	PULL_WAKEUP_SRC_PC0	PM_PIN_PULLUP_10K
 
 // I2C Sensor
+#define	USE_I2C_DRV			1
 #define I2C_CLOCK	400000 // Hz
 #define SENSOR_TYPE SENSOR_SHT30
 #define USE_SENSOR_ID	0

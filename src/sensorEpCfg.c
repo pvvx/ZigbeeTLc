@@ -151,9 +151,13 @@ const af_simple_descriptor_t sensorDevice_simpleDesc =
 zcl_basicAttr_t g_zcl_basicAttrs =
 {
 	.zclVersion 	= 0x03,
-	.appVersion 	= 0x00,
-	.stackVersion 	= 0x02,
+	.appVersion 	= APP_BUILD,
+	.stackVersion 	= (STACK_RELEASE|STACK_BUILD),
+#if BOARD == BOARD_LYWSD03MMC
 	.hwVersion		= 0x00,
+#else
+	.hwVersion		= BOARD,
+#endif
 	.manuName		= ZCL_BASIC_MFG_NAME,
 	.modelId		= ZCL_BASIC_MODEL_ID,
 #ifdef ZCL_BASIC_SW_BUILD_ID

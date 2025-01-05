@@ -82,6 +82,7 @@ extern "C" {
 #define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_1M
 
 // I2C
+#define	USE_I2C_DRV			1
 #define I2C_CLOCK			100000 // Hz
 #define SENSOR_TYPE 		SENSOR_SHTC3_4X
 #define USE_SENSOR_ID		0

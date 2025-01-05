@@ -32,9 +32,10 @@
 #define	PULL_WAKEUP_SRC_PC0	PM_PIN_PULLUP_10K
 
 // I2C
+#define	USE_I2C_DRV			1
 #define I2C_CLOCK	100000 // Hz
 #define SENSOR_TYPE SENSOR_CHT8305
-#define USE_SENSOR_ID	0
+#define USE_SENSOR_ID		0
 
 #define I2C_SCL 	GPIO_PC2
 #define I2C_SDA 	GPIO_PC3

@@ -69,11 +69,15 @@
 #define BOARD_ZTH02   				28 // ZigBee ZTH02
 //#define BOARD_PLM1 				29  // Tuya BLE Plant monitor ECF-SGS01-A rev1.3 (BT3L Tuya module)  (not yet published at the moment)
 #define BOARD_ZTH03   				30 // ZigBee TH03
-#define BOARD_LKTMZL02				31 // ZigBee LKTMZL02 LCD 
+#define BOARD_LKTMZL02				31 // ZigBee LKTMZL02 LCD
+//#define BOARD_KEY2 				32 // KEY2(iSearching) https://github.com/pvvx/THB2
+//#define BOARD_ZTH05				33 // Tuya ZigBee TS0601_TZE204 and BLE
+//#define BOARD_PHY6252				34 // Tuya BLE (not yet published at the moment)
+#define BOARD_CB3S					35 // Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja (In developing...)
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_MHO_C401N // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000 or BOARD_TH03Z ..
+#define BOARD					BOARD_MHO_C401 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000 or BOARD_TH03Z ..
 #endif
 
 /* Chip IDs */

@@ -40,6 +40,7 @@
 #define LCD_INIT_DELAY()	pm_wait_ms(50)
 
 // I2C
+#define	USE_I2C_DRV			1
 #define I2C_CLOCK			400000 // Hz
 #define SENSOR_TYPE 		SENSOR_SHTC3_4X
 #define USE_SENSOR_ID		1

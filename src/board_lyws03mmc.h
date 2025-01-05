@@ -33,8 +33,8 @@ extern "C" {
 #define PULL_WAKEUP_SRC_PD7	PM_PIN_PULLUP_1M // UART TX (B1.6)
 #define LCD_INIT_DELAY()	pm_wait_ms(50)
 
-
 // I2C
+#define	USE_I2C_DRV			1
 #define I2C_CLOCK			400000 // Hz
 #define SENSOR_TYPE 		SENSOR_SHTC3_4X
 #define USE_SENSOR_ID		0

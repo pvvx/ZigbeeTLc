@@ -1,6 +1,8 @@
 #ifndef _I2C_DRV_H_
 #define _I2C_DRV_H_
 
+#if USE_I2C_DRV
+
 /* Universal I2C/SMBUS read-write transaction struct */
 typedef struct _i2c_utr_t {
 	unsigned char mode;  // bit0..6: The byte number of the record for the new START (bit7: =1 - generate STOP/START)
@@ -15,5 +17,7 @@ int send_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataL
 int read_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, int dataLen);
 
 int I2CBusUtr(void * outdata, i2c_utr_t *tr, unsigned int wrlen);
+
+#endif // USE_I2C_DRV
 
 #endif /* _I2C_DRV_H_ */

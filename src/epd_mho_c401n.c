@@ -348,10 +348,13 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 					lcd_refresh_cnt--;
 					stage_lcd = 1;
 				} else {
-					//init_lcd(); // pulse RST_N low for 110 microseconds
+#if 1
+					init_lcd(); // pulse RST_N low for 110 microseconds
+#else
 					lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
 				    stage_lcd = 1; // Update/Init, stage 1
 				    epd_updated = 0;
+#endif
 				}
 			} else
 				stage_lcd = 0;

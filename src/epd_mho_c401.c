@@ -412,9 +412,13 @@ int task_lcd(void) {
 					lcd_refresh_cnt--;
 					flg_lcd_init = 0;
 				} else {
+#if 1
+					init_lcd(); // pulse RST_N low for 110 microseconds
+#else
 					lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
 				    epd_updated = 0;
 				    flg_lcd_init = 3;
+#endif
 				}
 				stage_lcd = 1;
 			} else {
