@@ -57,6 +57,19 @@ static void send_sensor_word(u16 cmd) {
 	irq_restore(r);
 }
 
+#if USE_SENSOR_ID && (BOARD == BOARD_CGDK2)
+static void send_bdsensor_word(u16 cmd) {
+	unsigned char r = irq_disable();
+	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
+			init_i2c();
+	reg_i2c_id = 0;
+	reg_i2c_adr_dat = cmd;
+	reg_i2c_ctrl = FLD_I2C_CMD_START | FLD_I2C_CMD_ID | FLD_I2C_CMD_ADDR | FLD_I2C_CMD_DO | FLD_I2C_CMD_STOP;
+	while (reg_i2c_status & FLD_I2C_CMD_BUSY);
+	irq_restore(r);
+}
+#endif
+
 static void send_sensor_byte(u8 cmd) {
 	unsigned char r = irq_disable();
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
@@ -175,7 +188,7 @@ static int read_sensor_cb(void) {
 		unsigned char r = irq_disable();
 		if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 			init_i2c();
-#if USE_SENSOR_ID
+#if USE_SENSOR_ID && (BOARD == BOARD_CGDK2)
 		if(sensor_id)
 			reg_i2c_id = sensor_i2c_addr | FLD_I2C_WRITE_READ_BIT;
 		else
@@ -240,7 +253,14 @@ int read_sensor(void) {
 		send_sensor_word(SHTC3_WAKEUP); //	Wake-up command of the sensor
 //		sleep_us(SHTC3_WAKEUP_us - 5);	// 240 us
 		battery_detect();
+#if USE_SENSOR_ID && (BOARD == BOARD_CGDK2)
+		if(sensor_id)
+			send_sensor_word(SHTC3_MEASURE);
+		else
+			send_bdsensor_word(SHTC3_MEASURE_CS);
+#else
 		send_sensor_word(SHTC3_MEASURE);
+#endif
 		pm_wait_us(SHTC3_MEASURE_us); // TODO: pm_wait sleep?
 		re = read_sensor_cb();
 	} else if (sensor_i2c_addr) { //  if (sensor_i2c_addr == (SHT4x_I2C_ADDR << 1)) {
