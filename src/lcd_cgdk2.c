@@ -7,7 +7,8 @@
 #include "i2c_drv.h"
 #include "lcd.h"
 #include "device.h"
-#include <sensors.h>
+#include "sensors.h"
+#include "battery.h"
 
 #define _LCD_SPEED_CODE_SEC_ _attribute_ram_code_sec_
 
@@ -265,15 +266,15 @@ void show_battery_symbol(bool state){
 	display_buff[1] &= ~(BIT(1) | BIT(2) | BIT(3) | BIT(5) | BIT(6) | BIT(7));
 	if (state) {
 		display_buff[1] |= BIT(5);
-		if (measured_data.battery_level >= 32) {
+		if (measured_battery.level >= 32) {
 			display_buff[1] |= BIT(1);
-			if (measured_data.battery_level >= 66) {
+			if (measured_battery.level >= 66) {
 				display_buff[1] |= BIT(2);
-				if (measured_data.battery_level >= 98) {
+				if (measured_battery.level >= 98) {
 					display_buff[1] |= BIT(3);
-					if (measured_data.battery_level >= 134) {
+					if (measured_battery.level >= 134) {
 						display_buff[1] |= BIT(7);
-						if (measured_data.battery_level >= 166) {
+						if (measured_battery.level >= 166) {
 							display_buff[1] |= BIT(6);
 						}
 					}

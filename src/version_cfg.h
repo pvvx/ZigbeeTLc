@@ -39,16 +39,16 @@
 
 /* Board ID */
 //#define BOARD_LYWSD03MMC_B14		0 // number used for BLE firmware
-#define BOARD_MHO_C401				1
+#define BOARD_MHO_C401				1 // SHTC3/SHT4X
 //#define BOARD_CGG1				2
 //#define BOARD_LYWSD03MMC_B19		3 // number used for BLE firmware
 //#define BOARD_LYWSD03MMC_DEVBIS	3 // ver https://github.com/devbis/z03mmc
 //#define BOARD_LYWSD03MMC_B16		4 // number used for BLE firmware
 //#define BOARD_WATERMETER			4 // ver https://github.com/slacky1965/watermeter_zed
 //#define BOARD_LYWSD03MMC_B17		5 // number used for BLE firmware
-#define BOARD_CGDK2					6
+#define BOARD_CGDK2					6 //
 //#define BOARD_CGG1N				7 // 2022
-#define BOARD_MHO_C401N				8 // 2022
+#define BOARD_MHO_C401N				8 // 2022, SHTC3/SHT4X
 //#define BOARD_MJWSD05MMC			9
 //#define BOARD_LYWSD03MMC_B15		10 // number used for BLE firmware
 #define BOARD_LYWSD03MMC			10
@@ -73,11 +73,15 @@
 //#define BOARD_KEY2 				32 // KEY2(iSearching) https://github.com/pvvx/THB2
 //#define BOARD_ZTH05				33 // Tuya ZigBee TS0601_TZE204 and BLE
 //#define BOARD_PHY6252				34 // Tuya BLE (not yet published at the moment)
-#define BOARD_CB3S					35 // Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja (In developing...)
+#define BOARD_CB3S					35  // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
+#define BOARD_HS09					36  // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
+#define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x
+#define BOARD_ZYZTH01				38  // development is not completed! Tuya ZY-ZTH02Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
+
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_MHO_C401 // BOARD_LYWSD03MMC or BOARD_CGDK2 or BOARD_MHO_C122 or BOARD_MHO_C401N or BOARD_TS0201_TZ3000 or BOARD_TH03Z ..
+#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -103,7 +107,7 @@
 #endif
 
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x23	//BCD app build "2.3"
+#define APP_BUILD				0x24	//BCD app build "2.4"
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01
 

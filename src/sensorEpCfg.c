@@ -66,6 +66,11 @@
 #define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
 #define ZCL_BASIC_MODEL_ID	   {10,'L','K','T','M','Z','L','0','2','-','z'} // LKTMZL02
 
+#elif BOARD == BOARD_ZYZTH02
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {10,'Z','Y','-','Z','T','H','0','2','-','z'} // LKTMZL02
+
 #else
 #error "Define BOARD!"
 #endif // BOARD

@@ -631,6 +631,11 @@ static status_t sensorDevice_zclPollCtrlSetLongPollIntervalCmdHandler(zcl_setLon
 
 	if((pCmd->newLongPollInterval >= 0x04) && (pCmd->newLongPollInterval <= 0x6E0000)
 		&& (pCmd->newLongPollInterval <= pPollCtrlAttr->chkInInterval) && (pCmd->newLongPollInterval >= pPollCtrlAttr->shortPollInterval)){
+#if 1	// @TODO ZHA !!!
+		if(pCmd->newLongPollInterval < (g_zcl_thermostatUICfgAttrs.measure_interval << 2))
+			pPollCtrlAttr->longPollInterval = g_zcl_thermostatUICfgAttrs.measure_interval << 2;
+		else
+#endif
 		pPollCtrlAttr->longPollInterval = pCmd->newLongPollInterval;
 		zb_setPollRate(pCmd->newLongPollInterval * POLL_RATE_QUARTERSECONDS);
 	}else{

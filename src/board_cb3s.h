@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF RF_POWER_INDEX_P1p99dBm
+#define RF_TX_POWER_DEF RF_POWER_INDEX_P3p01dBm
 
 // TLSR8258
 // GPIO_PA0 - free
@@ -61,7 +61,7 @@ extern "C" {
 #define	USE_DISPLAY			0
 
 // I2C
-#define	USE_I2C_DRV			0
+#define	USE_I2C_DRV			I2C_DRV_NONE
 
 // VBAT
 #define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef

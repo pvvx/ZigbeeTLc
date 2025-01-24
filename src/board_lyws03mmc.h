@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF		RF_POWER_INDEX_P1p99dBm
+#define RF_TX_POWER_DEF		RF_POWER_INDEX_P3p01dBm
 
 
 // BUTTON
@@ -34,17 +34,21 @@ extern "C" {
 #define LCD_INIT_DELAY()	pm_wait_ms(50)
 
 // I2C
-#define	USE_I2C_DRV			1
+#define	USE_I2C_DRV			I2C_DRV_HARD
 #define I2C_CLOCK			400000 // Hz
-#define SENSOR_TYPE 		SENSOR_SHTC3_4X
-#define USE_SENSOR_ID		0
-
 #define I2C_SCL 			GPIO_PC2
 #define I2C_SDA 			GPIO_PC3
 #define I2C_GROUP 			I2C_GPIO_GROUP_C2C3
 #define PULL_WAKEUP_SRC_PC2	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
 
+// Sensor T&H
+#define USE_SENSOR_CHT8305		0
+#define USE_SENSOR_CHT8215		0
+#define USE_SENSOR_AHT20_30		0
+#define USE_SENSOR_SHT4X		1
+#define USE_SENSOR_SHTC3		1
+#define USE_SENSOR_SHT30		0
 
 #define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef
 #define GPIO_VBAT			GPIO_PC5 // missing pin on case TLSR8251F512ET24

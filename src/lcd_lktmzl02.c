@@ -5,6 +5,7 @@
 #include "lcd.h"
 #include "device.h"
 #include "sensors.h"
+#include "battery.h"
 
 #define VKL060_I2C_ADDR		0x3E // VKL060
 
@@ -275,11 +276,11 @@ void show_battery_symbol(bool state){
 	display_buff[0] &= 0x0f;
 	if (state) {
 		display_buff[0] |= BIT(7);
-		if (measured_data.battery_level >= 50) {
+		if (measured_battery.level >= 50) {
 			display_buff[0] |= BIT(5);
-			if (measured_data.battery_level >= 100) {
+			if (measured_battery.level >= 100) {
 				display_buff[0] |= BIT(6);
-				if (measured_data.battery_level >= 160) {
+				if (measured_battery.level >= 160) {
 					display_buff[0] |= BIT(4);
 				}
 			}

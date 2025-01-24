@@ -16,6 +16,7 @@
 #include "zcl_relative_humidity.h"
 #include "chip_8258/timer.h"
 #include "sensors.h"
+#include "battery.h"
 #include "lcd.h"
 #include "reporting.h"
 #include "ext_ota.h"
@@ -123,32 +124,32 @@ u8 is_comfort(s16 t, u16 h) {
 
 
 void read_sensor_and_save(void) {
-	if (read_sensor()) {
-		g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
-	    g_zcl_relHumidityAttrs.measuredValue = measured_data.humi;
+	if (!read_sensor()) {
+		g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
+	    g_zcl_relHumidityAttrs.measuredValue = sensor_ht.humi;
 	}
-	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_data.average_battery_mv + 50) / 100);
-    g_zcl_powerAttrs.batteryPercentage = (u8)measured_data.battery_level;
+	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
+    g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;
 #if	USE_DISPLAY
     if(!g_zcl_thermostatUICfgAttrs.display_off) {
 #ifdef ZCL_THERMOSTAT_UI_CFG
     	if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode) {
     		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
-    		show_big_number_x10(((measured_data.temp * 9 + 25) / 50) + 320, 2); // convert C to F
+    		show_big_number_x10(((sensor_ht.temp * 9 + 25) / 50) + 320, 2); // convert C to F
     	} else {
-    		show_big_number_x10((measured_data.temp + 5) / 10, 1);
+    		show_big_number_x10((sensor_ht.temp + 5) / 10, 1);
     	}
 #else // !ZCL_THERMOSTAT_UI_CFG
-    	g_zcl_temperatureAttrs.measuredValue = measured_data.temp;
+    	g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
 
-    	show_big_number_x10((measured_data.temp  + 5) / 10, 1);
+    	show_big_number_x10((sensor_ht.temp  + 5) / 10, 1);
 #endif // ZCL_THERMOSTAT_UI_CFG
 
 #if BOARD == BOARD_CGDK2
-    	show_small_number_x10((measured_data.humi + 5)/ 10, 1);
+    	show_small_number_x10((sensor_ht.humi + 5)/ 10, 1);
     	show_battery_symbol(true);
 #else // BOARD != BOARD_CGDK2
-    	show_small_number((measured_data.humi + 50) / 100, 1);
+    	show_small_number((sensor_ht.humi + 50) / 100, 1);
 #if BOARD == BOARD_LKTMZL02
     	show_battery_symbol(true);
 #else
@@ -158,11 +159,11 @@ void read_sensor_and_save(void) {
 #if SHOW_SMILEY
 #ifdef ZCL_THERMOSTAT_UI_CFG
     	if(g_zcl_thermostatUICfgAttrs.showSmiley == 0)
-    		show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
+    		show_smiley(is_comfort(sensor_ht.temp, sensor_ht.humi) ? 1 : 2);
     	else
     		show_smiley(0);
 #else
-    	show_smiley(is_comfort(measured_data.temp, measured_data.humi) ? 1 : 2);
+    	show_smiley(is_comfort(sensor_ht.temp, sensor_ht.humi) ? 1 : 2);
 #endif // ZCL_THERMOSTAT_UI_CFG
 #endif // SHOW_SMILEY
     	update_lcd();
@@ -378,12 +379,12 @@ B1.9 | 0x3E         | 0x44   (SHT4x)  |
 B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 */
     if (i2c_address_lcd == B14_I2C_ADDR << 1) {
-        if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) // sensor_version == 0)
+        if (sensor_ht.sensor_type == TH_SENSOR_SHTC3)
             g_zcl_basicAttrs.hwVersion = 14;
         else
             g_zcl_basicAttrs.hwVersion = 20; // or 17
     } else if (i2c_address_lcd == (B16_I2C_ADDR << 1)) {
-        if (sensor_i2c_addr == (SHTC3_I2C_ADDR << 1)) // (sensor_version == 0)
+        if (sensor_ht.sensor_type == TH_SENSOR_SHTC3)
             g_zcl_basicAttrs.hwVersion = 15;
         else
             g_zcl_basicAttrs.hwVersion = 16;

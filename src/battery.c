@@ -8,6 +8,9 @@
 #include "tl_common.h"
 #include "device.h"
 #include "sensors.h"
+#include "battery.h"
+
+measured_battery_t measured_battery;
 
 #define _BAT_SPEED_CODE_SEC_ _attribute_ram_code_sec_ // for speed
 
@@ -23,7 +26,7 @@ struct {
 
 _BAT_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
-u16 battery_average(u16 battery_mv) {
+static u16 battery_average(u16 battery_mv) {
 	u32 i;
 	u32 summ = 0;
 	bat_average.index1++;
@@ -43,7 +46,7 @@ u16 battery_average(u16 battery_mv) {
 }
 
 __attribute__((optimize("-Os")))
-void battery_average_init(u16 battery_mv) {
+static void battery_average_init(u16 battery_mv) {
 	int i;
 	for(i = 0; i < BAT_AVERAGE_COUNT; i++)
 		bat_average.buf1[i] = battery_mv;
@@ -56,8 +59,8 @@ _BAT_SPEED_CODE_SEC_
 void battery_detect(void)
 {
 	adc_channel_init(SHL_ADC_VBAT);
-	measured_data.battery_mv = get_adc_mv();
-	if(measured_data.battery_mv < BATTERY_SAFETY_THRESHOLD){
+	measured_battery.mv = get_adc_mv();
+	if(measured_battery.mv < BATTERY_SAFETY_THRESHOLD){
 #if PM_ENABLE
 		sensor_go_sleep();
 		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 60*1000);
@@ -65,10 +68,10 @@ void battery_detect(void)
 		SYSTEM_RESET();
 #endif
 	}
-	if(!measured_data.average_battery_mv)
-		battery_average_init(measured_data.battery_mv);
-	measured_data.average_battery_mv = battery_average(measured_data.battery_mv);
-	measured_data.battery_level = (measured_data.average_battery_mv - BATTERY_SAFETY_THRESHOLD)/4;
-    if(measured_data.battery_level > 200)
-    	measured_data.battery_level = 200;
+	if(!measured_battery.average_mv)
+		battery_average_init(measured_battery.mv);
+	measured_battery.average_mv = battery_average(measured_battery.mv);
+	measured_battery.level = (measured_battery.average_mv - BATTERY_SAFETY_THRESHOLD)/4;
+    if(measured_battery.level > 200)
+    	measured_battery.level = 200;
 }

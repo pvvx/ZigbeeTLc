@@ -174,8 +174,8 @@ extern scomfort_t cmf;
  * FUNCTIONS
  */
 #if 1
-#define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1MS);
-#define pm_wait_us(t) cpu_stall_wakeup_by_timer0(t*CLOCK_16M_SYS_TIMER_CLK_1US);
+#define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*(CLOCK_SYS_CLOCK_HZ/1000));
+#define pm_wait_us(t) cpu_stall_wakeup_by_timer0(t*(CLOCK_SYS_CLOCK_HZ/1000000));
 #else
 #define pm_wait_ms(t) sleep_us((t)*1000);
 #define pm_wait_us(t) sleep_us(t);

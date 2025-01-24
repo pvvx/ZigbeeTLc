@@ -16,7 +16,7 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF RF_POWER_INDEX_P1p99dBm
+#define RF_TX_POWER_DEF RF_POWER_INDEX_P3p01dBm
 
 // TLSR8258
 // GPIO_PA0 - free (Reed Switch, input)
@@ -57,16 +57,21 @@ extern "C" {
 #define PC0_DATA_OUT		LED_OFF
 
 // I2C Sensor
-#define	USE_I2C_DRV			1
+#define	USE_I2C_DRV			I2C_DRV_HARD
 #define I2C_CLOCK			400000 // Hz
-#define SENSOR_TYPE 		SENSOR_AHT2X3X
-#define USE_SENSOR_ID		0
-
 #define I2C_SCL 			GPIO_PC2
 #define I2C_SDA 			GPIO_PC3
 #define I2C_GROUP 			I2C_GPIO_GROUP_C2C3
 #define PULL_WAKEUP_SRC_PC2	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
+
+// Sensor T&H
+#define USE_SENSOR_CHT8305		1
+#define USE_SENSOR_CHT8215		1
+#define USE_SENSOR_AHT20_30		1
+#define USE_SENSOR_SHT4X		1
+#define USE_SENSOR_SHTC3		1
+#define USE_SENSOR_SHT30		1
 
 // DISPLAY
 #define SHOW_SMILEY			1

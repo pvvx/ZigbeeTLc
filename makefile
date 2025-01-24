@@ -1,5 +1,5 @@
 
-PROJECT_NAME ?= z03mmc
+PROJECT_NAME ?= test
 VERSION_BIN ?=
 
 TEL_CHIP := $(POJECT_DEF) -DMCU_CORE_8258=1 -DEND_DEVICE=1 -DMCU_STARTUP_8258=1
@@ -8,7 +8,7 @@ LIBS := -ldrivers_8258 -lzb_ed
 
 #All libs: -ldrivers_826x -ldrivers_8258 -ldrivers_8278 -lsoft-fp -lfirmware_encrypt -lzb_coordinator -lzb_ed -lzb_router
 
-PGM_PORT?=COM14
+PGM_PORT?=COM9
 
 PROJECT_PATH ?= .
 SRC_DIR ?= /src
@@ -202,7 +202,7 @@ stop:
 go:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -m
 
-TADDR?=0x00842388
+TADDR?=0x0084291c
 TLEN?=128
 test_damp:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z10 -c -g ds $(TADDR) $(TLEN)
@@ -215,7 +215,7 @@ install: $(SDK_FLAGS) $(TC32_PATH)
 $(SDK_FLAGS): $(SDK_PATH)
 ifneq ($(SDK_FLAGS),$(wildcard $(SDK_FLAGS)))
 	#@wget -P $(SDK_PATH) http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
-	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)/..
+	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)
 endif
 
 $(SDK_PATH):

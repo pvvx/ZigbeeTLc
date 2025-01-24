@@ -51,9 +51,9 @@ extern "C" {
 
 #define CLOCK_SYS_CLOCK_HZ  		24000000 //48000000
 
-#define SENSOR_SHTC3_4X	1
-#define SENSOR_CHT8305	2
-#define SENSOR_SHT30	3
+#define I2C_DRV_NONE	0
+#define I2C_DRV_HARD	1
+#define I2C_DRV_SOFT	2
 
 /* Board include */
 #if defined(BOARD)
@@ -68,8 +68,13 @@ extern "C" {
 #include "board_zth03.h"
 #include "board_lktmzl02.h"
 #include "board_cb3s.h"
+#include "board_zyzth02.h"
 #else
 #error "Define BOARD!"
+#endif
+
+#ifndef USE_SENSOR_TH
+#define USE_SENSOR_TH  (USE_SENSOR_CHT8305 || USE_SENSOR_CHT8215 || USE_SENSOR_AHT20_30 || USE_SENSOR_SHT4X || USE_SENSOR_SHTC3 || USE_SENSOR_SHT30)
 #endif
 
 #ifndef ZIGBEE_TUYA_OTA
