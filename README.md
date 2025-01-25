@@ -176,7 +176,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 23. Added firmware for [MHO-C401(old)](https://pvvx.github.io/MHO_C401).
 
-24. Version 0.1.2.4: Test only! Do not install - wait for full test.
+24. Ver 0.1.2.4Beta. Added firmware for [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02). Prevent ZHA from incorrectly setting LongPoll to a short interval contrary to Zigbee 3.0 standards. 
 
 
 ## Make
