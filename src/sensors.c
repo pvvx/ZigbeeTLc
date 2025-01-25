@@ -681,7 +681,7 @@ static int check_sensor(void) {
 #if USE_SENSOR_SHT4X
 					// SHT4x
 					if(!send_i2c_byte(sensor_ht.i2c_addr, SHT4x_SOFT_RESET)) { // Soft reset command
-						sleep_us(SHT4x_SOFT_RESET_us);
+						pm_wait_us(SHT4x_SOFT_RESET_us);
 						if(!send_i2c_byte(sensor_ht.i2c_addr, SHT4x_GET_ID)) { // Get ID
 							pm_wait_us(SHT4x_SOFT_RESET_us);
 							if(read_i2c_bytes(sensor_ht.i2c_addr,  buf, 6) == 0
@@ -746,10 +746,10 @@ int read_sensor(void) {
 					pm_wait_us(sensor_ht.measure_timeout);
 			}
 		}
+		battery_detect();
 		if(!re && sensor_ht.read_measure) {
 			re = sensor_ht.read_measure((void *) &sensor_ht);
 		}
-		battery_detect();
 		if(sensor_ht.mode == MMODE_READ_START && !re && sensor_ht.start_measure) {
 			re = sensor_ht.start_measure((void *) &sensor_ht);
 		}

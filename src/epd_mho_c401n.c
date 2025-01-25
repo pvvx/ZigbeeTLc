@@ -296,7 +296,7 @@ static void transmit_blk(u8 cd, const u8 * pdata, size_t size_data) {
 void init_lcd(void) {
 	// pulse RST_N low for 110 microseconds
     gpio_write(EPD_RST, LOW);
-    pm_wait_us(110);
+    sleep_us(110);
 	lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
     stage_lcd = 1; // Update/Init, stage 1
     epd_updated = 0;
@@ -323,7 +323,7 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 			transmit(0, 0x040);
 			transmit(0, 0x0A9);
 			transmit(0, 0x0A8);
-			transmit_blk(1, display_buff, sizeof(display_buff));
+			transmit_blk(1, display_cmp_buff, sizeof(display_cmp_buff));
 			transmit(0, 0x0AB);
 			transmit(0, 0x0AA);
 			transmit(0, 0x0AF);
@@ -335,6 +335,7 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 				stage_lcd = 2;
 				// EPD_BUSY: ~1000 ms
 			}
+			pm_wait_us(200);
 			break;
 		case 4: // Update, stage 4
 			transmit(0, 0x0AE);
@@ -343,7 +344,7 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 		default:
 			if(!g_zcl_thermostatUICfgAttrs.display_off
 			&& memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
-				memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
+				memcpy(display_cmp_buff, display_buff, sizeof(display_cmp_buff));
 				if (lcd_refresh_cnt) {
 					lcd_refresh_cnt--;
 					stage_lcd = 1;

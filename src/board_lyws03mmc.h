@@ -15,7 +15,7 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF		RF_POWER_INDEX_P3p01dBm
+#define RF_TX_POWER_DEF		RF_POWER_INDEX_P1p99dBm // RF_POWER_INDEX_P3p01dBm
 
 
 // BUTTON
