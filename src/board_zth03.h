@@ -16,8 +16,9 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF RF_POWER_INDEX_P3p01dBm
+#define ZIGBEE_TUYA_OTA 	1
 
+// https://pvvx.github.io/TS0201_TZ3000_TH03/
 // TLSR8258
 // GPIO_PA0 - free (Reed Switch, input)
 // GPIO_PA1 - free
@@ -37,6 +38,8 @@ extern "C" {
 // GPIO_PD4 - used KEY
 // GPIO_PD7 - free
 
+// Battery & RF Power
+#define USE_BATTERY 	BATTERY_CR2032
 
 // KEY, BUTTON
 #define BUTTON1				GPIO_PD4

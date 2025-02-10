@@ -12,8 +12,7 @@
 
 #define ZIGBEE_TUYA_OTA 	1
 
-#define RF_TX_POWER_DEF		RF_POWER_INDEX_P3p01dBm
-
+// https://pvvx.github.io/TH03Z/
 // TLSR825x 1M Flash
 // GPIO_PA7 - SWS, free, (debug TX)
 // GPIO_PB1 - TX
@@ -23,6 +22,9 @@
 // GPIO_PC2 - SDA
 // GPIO_PC3 - SCL
 // GPIO_PD7 - Alert
+
+// Battery & RF Power
+#define USE_BATTERY 	BATTERY_CR2450
 
 // BUTTON
 #define BUTTON1             GPIO_PC0

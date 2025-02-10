@@ -16,8 +16,7 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF RF_POWER_INDEX_P3p01dBm
-
+// https://pvvx.github.io/CGDK2
 // TLSR8253F512ET32
 // GPIO_PA0 - free, UART_RX, pcb mark "TP3", (Reed Switch, input)
 // GPIO_PA1 - free
@@ -36,6 +35,9 @@ extern "C" {
 // GPIO_PD3 - free
 // GPIO_PD4 - free
 // GPIO_PD7 - free
+
+// Battery & RF Power
+#define USE_BATTERY 	BATTERY_CR2430
 
 // KEY, BUTTON
 #define BUTTON1				GPIO_PC4

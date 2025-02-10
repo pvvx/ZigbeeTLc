@@ -11,8 +11,7 @@
 
 #if (BOARD == BOARD_MHO_C122)
 
-#define RF_TX_POWER_DEF		RF_POWER_INDEX_P3p01dBm
-
+// https://pvvx.github.io/MHO_C122
 // TLSR8251F512ET24
 // GPIO_PA5 - DM, free, (TRG)
 // GPIO_PA6 - DP, free, (RDS)
@@ -24,6 +23,9 @@
 // GPIO_PC4 - free
 // GPIO_PD2 - CS/PWM, free
 // GPIO_PD7 - free
+
+// Battery & RF Power
+#define USE_BATTERY 	BATTERY_CR2032
 
 // BUTTON
 #define BUTTON1               		GPIO_PA5  // reset test point

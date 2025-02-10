@@ -15,8 +15,8 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF		RF_POWER_INDEX_P1p99dBm // RF_POWER_INDEX_P3p01dBm
-
+// Battery & RF Power
+#define USE_BATTERY 	BATTERY_CR2032
 
 // BUTTON
 #define BUTTON1				GPIO_PA5  // reset test point

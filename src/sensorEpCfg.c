@@ -71,6 +71,11 @@
 #define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
 #define ZCL_BASIC_MODEL_ID	   {10,'Z','Y','-','Z','T','H','0','2','-','z'} // LKTMZL02
 
+#elif BOARD == BOARD_ZG_227Z
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {9,'Z','G','-','2','2','7','Z','-','z'} // ZG-227Z
+
 #else
 #error "Define BOARD!"
 #endif // BOARD

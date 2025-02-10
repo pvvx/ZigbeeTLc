@@ -4,7 +4,9 @@ v0.1.2.4 - beta!
 * 1141-02tt-nnnn3001-xxxxz_vNN.zigbee - ZigbeeTlc firmware
 * 1141-d3a3-01993001-xxxxz_vNN.zigbee - firmware for transferring Tuya to ZigbeeTlc
 * 1286-0202-10993607-TH03Zz_xxxx.zigbee - firmware for transferring TH03 Tuya/Sonoff to ZigbeeTlc
+* 1286-0203-10983001-ZG227Zz_xxxx.zigbee - firmware for transferring ZG227Z Tuya/Sonoff to ZigbeeTlc
 * 1002-0203-66993001-ZYZTH02z_vNN.zigbee - firmware for transferring Tuya to ZigbeeTlc
+
 * xxxxx_vNN.bin - firmware files for the programmer or BLE OTA
 
 * devbis - firmware files for the option https://github.com/devbis
@@ -16,6 +18,7 @@ v0.1.2.4 - beta!
 * 1141-02tt-nnnn3001-xxxxz_vNN.zigbee - прошивки ZigbeeTlc
 * 1141-d3a3-01993001-xxxxz_vNN.zigbee - прошивки для перехода из Tuya в ZigbeeTlc
 * 1286-0202-10993607-TH03Zz_xxxx.zigbee - прошивка для перехода TH03 из Tuya (Sonoff) в ZigbeeTlc
+* 1286-0203-10983001-ZG227Zz_xxxx.zigbee - прошивки для перехода ZG227Z Tuya (Sonoff) в ZigbeeTlc
 * 1002-0203-66993001-ZYZTH02z_vNN.zigbee - прошивки для перехода из Tuya в ZigbeeTlc
 * xxxxx_vNN.bin - файлы прошивки для программатора или BLE OTA
 
@@ -49,4 +52,4 @@ v0.1.2.4 - beta!
 | 31 | 0x021F | [LKTMZL02(TS0201_TZ3210)](https://pvvx.github.io/LKTMZL02) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 33 | 0x0221 | [ZTH05(TS0601_TZE204)](https://pvvx.github.io/TS0601_TZE204) | [BLE](https://github.com/pvvx/ATC_MiThermometer) |
 | 37 | 0x0225 | [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02) TS0201_TZ3000_v1w2k9dd without LCD | [BLE](https://github.com/pvvx/ATC_MiThermometer) |
-	
+| 39 | 0x0227 | [ZG-227Z](https://pvvx.github.io/ZG-227Z) TS0601_TZE200_a8sdabtg | https://github.com/pvvx/ZigbeeTLc/issues/161 |	

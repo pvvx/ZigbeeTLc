@@ -16,8 +16,7 @@
 extern "C" {
 #endif
 
-#define RF_TX_POWER_DEF		RF_POWER_INDEX_P1p99dBm // RF_POWER_INDEX_P3p01dBm
-
+// https://pvvx.github.io/MHO_C401
 // TLSR8251F512ET24
 // GPIO_PA5 - used EPD_BUSY
 // GPIO_PA6 - used EPD_CSB
@@ -29,6 +28,9 @@ extern "C" {
 // GPIO_PC4 - used EPD_SCL
 // GPIO_PD2 - used EPD_SDA
 // GPIO_PD7 - used EPD_RST
+
+// Battery & RF Power
+#define USE_BATTERY 	BATTERY_CR2032
 
 // DISPLAY
 #define SHOW_SMILEY			1

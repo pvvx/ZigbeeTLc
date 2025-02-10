@@ -42,13 +42,13 @@ None: 0.1..0.3, 0.5..0.7, 2.3..2.7, 4.3..4.7, 5.1, 5,3, 5.5, 5.7, 6.1, 6.3, 6.7,
 */
 
 
-#define DEF_EPD_REFRESH_CNT	2048
+//#define DEF_EPD_REFRESH_CNT	2048
 
 u8 display_buff[LCD_BUF_SIZE];
 u8 display_cmp_buff[LCD_BUF_SIZE];
 u8 stage_lcd;
 u8 epd_updated;
-u16 lcd_refresh_cnt;
+//u16 lcd_refresh_cnt;
 
 const u8 T_LUT_ping[5] = {0x07B, 0x081, 0x0E4, 0x0E7, 0x008};
 const u8 T_LUT_init[14] = {0x082, 0x068, 0x050, 0x0E8, 0x0D0, 0x0A8, 0x065, 0x07B, 0x081, 0x0E4, 0x0E7, 0x008, 0x0AC, 0x02B };
@@ -297,7 +297,7 @@ void init_lcd(void) {
 	// pulse RST_N low for 110 microseconds
     gpio_write(EPD_RST, LOW);
     sleep_us(110);
-	lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
+//	lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
     stage_lcd = 1; // Update/Init, stage 1
     epd_updated = 0;
     gpio_write(EPD_RST, HIGH);
@@ -345,18 +345,16 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 			if(!g_zcl_thermostatUICfgAttrs.display_off
 			&& memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
 				memcpy(display_cmp_buff, display_buff, sizeof(display_cmp_buff));
+#if 0
 				if (lcd_refresh_cnt) {
 					lcd_refresh_cnt--;
 					stage_lcd = 1;
 				} else {
-#if 1
 					init_lcd(); // pulse RST_N low for 110 microseconds
-#else
-					lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
-				    stage_lcd = 1; // Update/Init, stage 1
-				    epd_updated = 0;
-#endif
 				}
+#else
+				stage_lcd = 1;
+#endif
 			} else
 				stage_lcd = 0;
 		}

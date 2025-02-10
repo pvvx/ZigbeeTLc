@@ -601,7 +601,8 @@ static int check_sensor(void) {
 		if(!send_i2c_byte(sensor_ht.i2c_addr, AHT2x_CMD_RST)) { // Soft reset command
 			pm_wait_us(AHT2x_SOFT_RESET_us);
 			// 0401017071 -> I2C addres 0x70, write 1 bytes, read: 18
-			if(!read_i2c_addr_bytes(sensor_ht.i2c_addr, AHT2x_RD_STATUS, buf, 1)) { // buf[0] = 0x18
+//			if(!read_i2c_addr_bytes(sensor_ht.i2c_addr, AHT2x_RD_STATUS, buf, 1)) { // buf[0] = 0x18
+			if(!read_i2c_bytes(sensor_ht.i2c_addr, buf, 1)) { // buf[0] = 0x18
 				sensor_ht.id = (0x0020 << 16) | buf[0];
 				ptabinit = (sensor_def_cfg_t *)&def_thcoef_aht2x;
 			}

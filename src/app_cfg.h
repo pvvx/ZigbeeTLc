@@ -55,6 +55,11 @@ extern "C" {
 #define I2C_DRV_HARD	1
 #define I2C_DRV_SOFT	2
 
+#define BATTERY_CR2032		0
+#define BATTERY_CR2430		1
+#define BATTERY_CR2450		2
+#define BATTERY_2AAA		3
+
 /* Board include */
 #if defined(BOARD)
 #include "board_lyws03mmc.h"
@@ -69,8 +74,27 @@ extern "C" {
 #include "board_lktmzl02.h"
 #include "board_cb3s.h"
 #include "board_zyzth02.h"
+#include "board_zg_227z.h"
 #else
 #error "Define BOARD!"
+#endif
+
+// Battery & RF Power
+#ifndef USE_BATTERY
+#define USE_BATTERY 	BATTERY_CR2032
+#endif
+#ifndef RF_TX_POWER_DEF
+#if USE_BATTERY == BATTERY_CR2032
+#define RF_TX_POWER_DEF		RF_POWER_INDEX_P1p99dBm
+#elif USE_BATTERY == BATTERY_CR2430
+#define RF_TX_POWER_DEF		RF_POWER_INDEX_P2p39dBm
+#elif USE_BATTERY == BATTERY_CR2450
+#define RF_TX_POWER_DEF		RF_POWER_INDEX_P2p61dBm
+#elif USE_BATTERY == BATTERY_2AAA
+#define RF_TX_POWER_DEF		RF_POWER_INDEX_P3p01dBm
+#else
+#error "Set BATTERY!"
+#endif
 #endif
 
 #ifndef USE_SENSOR_TH
@@ -91,15 +115,6 @@ extern "C" {
 #define READ_SENSOR_TIMER_MS 		DEFAULT_POLL_RATE // (READ_SENSOR_TIMER_SEC*1000) // msecond
 
 /* Voltage detect module */
-/* If VOLTAGE_DETECT_ENABLE is set,
- * 1) if MCU_CORE_826x is defined, the DRV_ADC_VBAT_MODE mode is used by default,
- * and there is no need to configure the detection IO port;
- * 2) if MCU_CORE_8258 or MCU_CORE_8278 is defined, the DRV_ADC_VBAT_MODE mode is used by default,
- * we need to configure the detection IO port, and the IO must be in a floating state.
- * 3) if MCU_CORE_B91 is defined, the DRV_ADC_BASE_MODE mode is used by default,
- * we need to configure the detection IO port, and the IO must be connected to the target under test,
- * such as VCC.
- */
 #define VOLTAGE_DETECT_ENABLE						0
 
 /* Watch dog module */

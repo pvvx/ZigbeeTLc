@@ -2,8 +2,19 @@
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
-Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/), [CGDK2](https://pvvx.github.io/CGDK2/), [MHO-C122](https://pvvx.github.io/MHO_C122), [MHO-C401(old)](https://pvvx.github.io/MHO_C401), [MHO-C401N](https://pvvx.github.io/MHO_C401N), [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000), [TH03Z](https://pvvx.github.io/TH03Z/), [TH03](https://pvvx.github.io/TS0201_TZ3000_TH03), [LKTMZL02](https://pvvx.github.io/LKTMZL02), [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
-[ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/), [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/) work with modification - [requires unsoldering an extra chip and soldering jumpers](https://github.com/pvvx/BLE_THSensor/issues/13#issuecomment-2148975619).
+Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/),
+ [CGDK2](https://pvvx.github.io/CGDK2/),
+ [MHO-C122](https://pvvx.github.io/MHO_C122),
+ [MHO-C401(old)](https://pvvx.github.io/MHO_C401),
+ [MHO-C401N](https://pvvx.github.io/MHO_C401N),
+ [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000),
+ [TH03Z](https://pvvx.github.io/TH03Z/),
+ [TH03](https://pvvx.github.io/TS0201_TZ3000_TH03),
+ [LKTMZL02](https://pvvx.github.io/LKTMZL02),
+ [ZG-227Z](https://pvvx.github.io/ZG-227Z),
+ [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
+ [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
+ [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/) work with modification - [requires unsoldering an extra chip and soldering jumpers](https://github.com/pvvx/BLE_THSensor/issues/13#issuecomment-2148975619).
 
 Additional alternative firmware options for some devices with TLSR825x can be found at [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
 
@@ -176,7 +187,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 23. Added firmware for [MHO-C401(old)](https://pvvx.github.io/MHO_C401).
 
-24. Ver 0.1.2.4Beta. Added firmware for [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02). Prevent ZHA from incorrectly setting LongPoll to a short interval contrary to Zigbee 3.0 standards. 
+24. Ver 0.1.2.4Beta. Added firmware for [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02), [ZG-227Z](https://pvvx.github.io/ZG-227Z). Prevent ZHA from incorrectly setting LongPoll to a short interval contrary to Zigbee 3.0 standards.
 
 
 ## Make

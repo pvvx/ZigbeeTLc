@@ -67,21 +67,22 @@
 //#define BOARD_THB3				26 // https://github.com/pvvx/THB2
 #define BOARD_ZTH01   				27 // ZigBee ZTH01
 #define BOARD_ZTH02   				28 // ZigBee ZTH02
-//#define BOARD_PLM1 				29  // Tuya BLE Plant monitor ECF-SGS01-A rev1.3 (BT3L Tuya module)  (not yet published at the moment)
+//#define BOARD_PLM1 				29 // Tuya BLE Plant monitor ECF-SGS01-A rev1.3 (BT3L Tuya module)  (not yet published at the moment)
 #define BOARD_ZTH03   				30 // ZigBee TH03
 #define BOARD_LKTMZL02				31 // ZigBee LKTMZL02 LCD
 //#define BOARD_KEY2 				32 // KEY2(iSearching) https://github.com/pvvx/THB2
 //#define BOARD_ZTH05				33 // Tuya ZigBee TS0601_TZE204 and BLE
-//#define BOARD_PHY6252				34 // Tuya BLE (not yet published at the moment)
-#define BOARD_CB3S					35  // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
-#define BOARD_HS09					36  // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
+//#define BOARD_PHY6252				34 // Tuya BLE https://github.com/pvvx/THB2
+//#define BOARD_CB3S				35 // development is not completed! Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
+//#define BOARD_HS09				36 // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
 #define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x
-#define BOARD_ZYZTH01				38  // development is not completed! Tuya ZY-ZTH02Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
+//#define BOARD_ZYZTH01				38 // development is not completed! Tuya ZY-ZTH02Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
+#define BOARD_ZG_227Z				39 // Zigbee ZG-227Z, AHT20, CR2450
 
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_MHO_C401N // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */

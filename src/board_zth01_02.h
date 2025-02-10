@@ -12,9 +12,7 @@
 
 #define ZIGBEE_TUYA_OTA 	1
 
-
-#define RF_TX_POWER_DEF		RF_POWER_INDEX_P3p01dBm
-
+// https://pvvx.github.io/TS0601_TZE200_zth01
 // TLSR825x 1M Flash
 // GPIO_PB1 - TX
 // GPIO_PB4 - KEY
@@ -22,6 +20,9 @@
 // GPIO_PB7 - RX
 // GPIO_PC2 - SDA
 // GPIO_PC3 - SCL
+
+// Battery & RF Power
+#define USE_BATTERY 	BATTERY_2AAA
 
 // VBAT
 #define SHL_ADC_VBAT		B0P // see in adc.h ADC_InputPchTypeDef
