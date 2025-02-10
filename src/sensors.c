@@ -16,19 +16,12 @@ sensor_th_t sensor_ht;
 
 #define _TH_SPEED_CODE_SEC_ _attribute_ram_code_sec_ // for speed
 
-int start_measure_aht2x(void *cfg);
-int read_sensor_aht2x(void *cfg);
-int start_measure_cht8305(void *cfg);
-int read_sensor_cht8305(void *cfg);
-int start_measure_cht8215(void *cfg);
-int read_sensor_cht8215(void *cfg);
-int start_measure_shtc3(void *cfg);
-int start_measure_sht4x(void *cfg);
-int start_measure_sht30(void *cfg);
+
+#if USE_SENSOR_SHT30 || USE_SENSOR_SHT4X || USE_SENSOR_SHT30
 int read_sensor_sht30_shtc3_sht4x(void *cfg);
-
+#endif
 //==================================== SHTC3
-
+#if USE_SENSOR_SHTC3
 //  I2C addres
 //#define SHTC3_I2C_ADDR		0x70
 
@@ -51,6 +44,8 @@ int read_sensor_sht30_shtc3_sht4x(void *cfg);
 #define SHTC3_MAX_CLK_HZ		1000000	// I2C FM+ (1MHz)
 #define SHTC3_MEASURING_TIMEOUT  SHTC3_HI_MEASURE_us // 11 ms
 
+int start_measure_shtc3(void *cfg);
+
 const sensor_def_cfg_t def_thcoef_shtc3 = {
 		.coef.val1_k = 17500, // temp_k
 		.coef.val1_z = -4500, // temp_z
@@ -62,9 +57,10 @@ const sensor_def_cfg_t def_thcoef_shtc3 = {
 		.sensor_type = TH_SENSOR_SHTC3,
 		.mode = MMODE_START_WAIT_READ
 };
-
+#endif
 //==================================== SHT4x
-
+#if  USE_SENSOR_SHT4X
+int start_measure_sht4x(void *cfg);
 //  I2C addres
 //#define SHT4x_I2C_ADDR			0x44
 //#define SHT4xB_I2C_ADDR			0x45
@@ -96,8 +92,12 @@ const sensor_def_cfg_t def_thcoef_sht4x = {
 		.sensor_type = TH_SENSOR_SHT4x,
 		.mode = MMODE_READ_START
 };
+#endif //  USE_SENSOR_SHT4X
 
 //==================================== SHT30/GXHT3x/CHT832x
+
+#if USE_SENSOR_SHT30
+int start_measure_sht30(void *cfg);
 
 //  I2C addres
 //#define SHT30_I2C_ADDR		0x44
@@ -132,8 +132,12 @@ const sensor_def_cfg_t def_thcoef_sht30 = {
 		.sensor_type = TH_SENSOR_SHT30,
 		.mode = MMODE_READ_START
 };
+#endif // #if USE_SENSOR_SHT30
 
 //==================================== AHT20-30
+#if USE_SENSOR_AHT20_30
+int start_measure_aht2x(void *cfg);
+int read_sensor_aht2x(void *cfg);
 
 //  I2C addres
 //#define AHT2x_I2C_ADDR	0x38
@@ -173,8 +177,12 @@ const sensor_def_cfg_t def_thcoef_aht2x = {
 		.sensor_type = TH_SENSOR_AHT2x,
 		.mode = MMODE_READ_START
 };
+#endif // USE_SENSOR_AHT20_30
 
 //==================================== CHT8305
+#if USE_SENSOR_CHT8305
+int start_measure_cht8305(void *cfg);
+int read_sensor_cht8305(void *cfg);
 
 //  I2C addres
 //#define CHT8305_I2C_ADDR		0x40
@@ -228,8 +236,12 @@ const sensor_def_cfg_t def_thcoef_cht8305 = {
 		.sensor_type = TH_SENSOR_CHT8305,
 		.mode = MMODE_READ_START
 };
+#endif // USE_SENSOR_CHT8305
 
 //==================================== CHT8215/CHT8310
+#if USE_SENSOR_CHT8215
+int start_measure_cht8215(void *cfg);
+int read_sensor_cht8215(void *cfg);
 
 #define CHT8215_I2C_ADDR0	0x40
 #define CHT8215_I2C_ADDR1	0x44
@@ -293,6 +305,7 @@ const sensor_def_cfg_t def_thcoef_cht8215 = {
 		.sensor_type = TH_SENSOR_CHT8215,
 		.mode = MMODE_READ_ONLY
 };
+#endif // USE_SENSOR_CHT8215
 
 //===================================
 
@@ -726,7 +739,7 @@ void sensor_go_sleep(void) {
 void init_sensor(void) {
 	int re = 0;
 	send_i2c_byte(0, 0x06); // Reset command using the general call address
-	sleep_us(SHTC3_WAKEUP_us - 50);	// 240 us
+	sleep_us(190);	// 190 us
 	battery_detect();
 	if(check_sensor()) {
 		if(sensor_ht.mode != MMODE_READ_ONLY && sensor_ht.start_measure)
