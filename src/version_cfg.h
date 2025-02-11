@@ -82,7 +82,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_TS0201_TZ3000 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */

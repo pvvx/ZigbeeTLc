@@ -672,35 +672,16 @@ static int check_sensor(void) {
 #endif // USE_SENSOR_CHT8305
 				{
 					// I2C addr 0x44..0x46
-#if USE_SENSOR_SHT30
-					// SHT30/GXHT3x/CHT832x
-					if(!send_i2c_word(sensor_ht.i2c_addr, SHT30_SOFT_RESET)) { // Soft reset command
-						pm_wait_us(SHT30_SOFT_RESET_us);
-						if(//!send_i2c_word(sensor_ht.i2c_addr, SHT30_CLR_STATUS) // clear status reg
-						//&&
-						!send_i2c_word(sensor_ht.i2c_addr, SHT30_RD_STATUS) // read status reg
-						&& !read_i2c_bytes(sensor_ht.i2c_addr, buf, 3)
-						&& !sensor_crc_buf(buf, 3)) {
-							sensor_ht.id = (0x0030 << 16) | (buf[0] << 8) | buf[1];
-							if((!send_i2c_word(sensor_ht.i2c_addr, CHT832x_CMD_MID))
-							 && (!read_i2c_bytes(sensor_ht.i2c_addr, buf, 3))
-							 &&  !sensor_crc_buf(buf, 3)) {
-								sensor_ht.id = (0x8320 << 16) | (buf[0] << 8) | buf[1];
-							}
-							ptabinit = (sensor_def_cfg_t *)&def_thcoef_sht30;
-							break;
-						}
-					}
-#endif // USE_SENSOR_SHT30
 #if USE_SENSOR_SHT4X
 					// SHT4x
 					if(!send_i2c_byte(sensor_ht.i2c_addr, SHT4x_SOFT_RESET)) { // Soft reset command
-						pm_wait_us(SHT4x_SOFT_RESET_us);
+						sleep_us(SHT4x_SOFT_RESET_us);
 						if(!send_i2c_byte(sensor_ht.i2c_addr, SHT4x_GET_ID)) { // Get ID
-							pm_wait_us(SHT4x_SOFT_RESET_us);
+							sleep_us(SHT4x_SOFT_RESET_us);
 							if(read_i2c_bytes(sensor_ht.i2c_addr,  buf, 6) == 0
-							&& !sensor_crc_buf(buf, 3)
-							&& !sensor_crc_buf(&buf[3], 3) == 0) {
+							&& buf[2] == sensor_crc(buf[1] ^ sensor_crc(buf[0] ^ 0xff))
+							&& buf[5] == sensor_crc(buf[4] ^ sensor_crc(buf[3] ^ 0xff))
+							) {
 								sensor_ht.id = (buf[3] << 24) | (buf[4] << 16) | (buf[0] << 8) | buf[1];
 								ptabinit = (sensor_def_cfg_t *)&def_thcoef_sht4x;
 								break;
@@ -708,6 +689,26 @@ static int check_sensor(void) {
 						}
 					}
 #endif // USE_SENSOR_SHT4X
+#if USE_SENSOR_SHT30
+					{
+						// SHT30/GXHT3x/CHT832x
+						if(!send_i2c_word(sensor_ht.i2c_addr, SHT30_SOFT_RESET)) { // Soft reset command
+							sleep_us(SHT30_SOFT_RESET_us);
+							// clear status reg
+							// send_i2c_word(sensor_cfg.i2c_addr, SHT30_CLR_STATUS);
+							// read status reg
+							if(!send_i2c_word(sensor_ht.i2c_addr, SHT30_RD_STATUS)
+							&& !read_i2c_bytes(sensor_ht.i2c_addr, buf, 3)
+							&& buf[2] == sensor_crc(buf[1] ^ sensor_crc(buf[0] ^ 0xff))) {
+								//if(!send_i2c_word(sensor_cfg.i2c_addr, SHT30_HIMEASURE)) { // start measure T/H
+								sensor_ht.id = (0x0030 << 16) | (buf[0] << 8) | buf[1];
+									ptabinit = (sensor_def_cfg_t *)&def_thcoef_sht30;
+								//}
+								break;
+							}
+						}
+					}
+#endif // USE_SENSOR_SHT30
 				}
 			}
 			test_i2c_addr += 2;
