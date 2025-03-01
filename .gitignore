@@ -1,6 +1,6 @@
 build
 .idea
-zigpy_ota
 SDK
 tools/widows
+tools/widows/tc32
 tools/linux

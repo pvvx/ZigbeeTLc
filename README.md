@@ -185,8 +185,9 @@ The flashing "BT" icon is called by the "identify" command.
 
 23. Added firmware for [MHO-C401(old)](https://pvvx.github.io/MHO_C401).
 
-24. Ver 0.1.2.4Beta. Added firmware for [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02), [ZG-227Z](https://pvvx.github.io/ZG-227Z). Prevent ZHA from incorrectly setting LongPoll to a short interval contrary to Zigbee 3.0 standards.
+24. Ver 0.1.2.4. Added firmware for [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02), [ZG-227Z](https://pvvx.github.io/ZG-227Z). Prevent ZHA from incorrectly setting LongPoll to a short interval contrary to Zigbee 3.0 standards.
 
+25. Ver 0.1.2.5 Alpha. Migration to SDK V3.7.1.2. Reduced battery consumption for thermometers with SHTC3 sensor. Changes to storage area for user settings. Additions and corrections to button functions. ...
 
 ## Make
 

@@ -107,7 +107,7 @@ void show_smiley(u8 state){
  	// off
 	display_buff[5] &= ~(BIT(2) | BIT(4) | BIT(6)); // do not reset %
 	display_buff[6] = 0;
-	display_buff[7] &= ~(BIT(4));
+	display_buff[7] &= ~(BIT(0));
 	if (state == 1) {
 		display_buff[7] |= BIT(0); /* (  ) */
 		display_buff[5] |= BIT(4) | BIT(6);
