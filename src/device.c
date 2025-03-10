@@ -20,7 +20,11 @@
 #include "lcd.h"
 #include "reporting.h"
 #include "ext_ota.h"
-
+//#include "zcl_thermostat_ui_cfg.h"
+#if USE_BLE
+#include "ble_cfg.h"
+#include "zigbee_ble_switch.h"
+#endif
 /**********************************************************************
  * LOCAL CONSTANTS
  */
@@ -92,244 +96,14 @@ bdb_commissionSetting_t g_bdbCommissionSetting = {
 /**********************************************************************
  * FUNCTIONS
  */
-
-/*********************************************************************
- * @fn      stack_init
- *
- * @brief   This function initialize the ZigBee stack and related profile. If HA/ZLL profile is
- *          enabled in this application, related cluster should be registered here.
- *
- * @param   None
- *
- * @return  None
- */
-void stack_init(void)
-{
-	zb_init();
-	zb_zdoCbRegister((zdo_appIndCb_t *)&appCbLst);
-}
-
-#if SHOW_SMILEY
-
-u8 is_comfort(s16 t, u16 h) {
-	u8 ret = 0;
-	if (t >= g_zcl_thermostatUICfgAttrs.temp_comfort_min
-		&& t <= g_zcl_thermostatUICfgAttrs.temp_comfort_max
-		&& h >= g_zcl_thermostatUICfgAttrs.humi_comfort_min
-		&& h <= g_zcl_thermostatUICfgAttrs.humi_comfort_max)
-		ret = 1;
-	return ret;
-}
-#endif
-
-
-void read_sensor_and_save(void) {
-	if (!read_sensor()) {
-		g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
-	    g_zcl_relHumidityAttrs.measuredValue = sensor_ht.humi;
-	}
-	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
-    g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;
-#if	USE_DISPLAY
-    if(!g_zcl_thermostatUICfgAttrs.display_off) {
-#ifdef ZCL_THERMOSTAT_UI_CFG
-    	if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode) {
-    		// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
-    		show_big_number_x10(((sensor_ht.temp * 9 + 25) / 50) + 320, 2); // convert C to F
-    	} else {
-    		show_big_number_x10((sensor_ht.temp + 5) / 10, 1);
-    	}
-#else // !ZCL_THERMOSTAT_UI_CFG
-    	g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
-
-    	show_big_number_x10((sensor_ht.temp  + 5) / 10, 1);
-#endif // ZCL_THERMOSTAT_UI_CFG
-
-#if BOARD == BOARD_CGDK2
-    	show_small_number_x10((sensor_ht.humi + 5)/ 10, 1);
-    	show_battery_symbol(true);
-#else // BOARD != BOARD_CGDK2
-    	show_small_number((sensor_ht.humi + 50) / 100, 1);
-#if BOARD == BOARD_LKTMZL02
-    	show_battery_symbol(true);
-#else
-    	show_battery_symbol(g_zcl_powerAttrs.batteryPercentage < 10);
-#endif
-#endif // BOARD == BOARD_CGDK2
-#if SHOW_SMILEY
-#ifdef ZCL_THERMOSTAT_UI_CFG
-    	if(g_zcl_thermostatUICfgAttrs.showSmiley == 0)
-    		show_smiley(is_comfort(sensor_ht.temp, sensor_ht.humi) ? 1 : 2);
-    	else
-    		show_smiley(0);
-#else
-    	show_smiley(is_comfort(sensor_ht.temp, sensor_ht.humi) ? 1 : 2);
-#endif // ZCL_THERMOSTAT_UI_CFG
-#endif // SHOW_SMILEY
-    	update_lcd();
-    }
-#endif // USE_DISPLAY
-    g_sensorAppCtx.readSensorTime = clock_time();
-	while(clock_time() - g_sensorAppCtx.secTimeTik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
-		g_sensorAppCtx.secTimeTik += CLOCK_16M_SYS_TIMER_CLK_1S;
-		g_sensorAppCtx.reportupsec++; // + 1 sec
-	}
-}
-
-
-/*********************************************************************
- * @fn      user_app_init
- *
- * @brief   This function initialize the application(Endpoint) information for this node.
- *
- * @param   None
- *
- * @return  None
- */
-void user_app_init(void)
-{
-#if ZCL_POLL_CTRL_SUPPORT
-	af_powerDescPowerModeUpdate(POWER_MODE_RECEIVER_COMES_PERIODICALLY);
-#else
-	af_powerDescPowerModeUpdate(POWER_MODE_RECEIVER_COMES_WHEN_STIMULATED);
-#endif
-    /* Initialize ZCL layer */
-	/* Register Incoming ZCL Foundation command/response messages */
-	zcl_init(sensorDevice_zclProcessIncomingMsg);
-
-	/* Register endPoint */
-	af_endpointRegister(SENSOR_DEVICE_ENDPOINT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, zcl_rx_handler, NULL);
-#if ZCL_THERMOSTAT_UI_CFG_SUPPORT
-	zcl_thermostatConfig_restore();
-#endif
-	zcl_reportingTabInit();
-
-	/* Register ZCL specific cluster information */
-	zcl_register(SENSOR_DEVICE_ENDPOINT, SENSOR_DEVICE_CB_CLUSTER_NUM, (zcl_specClusterInfo_t *)g_sensorDeviceClusterList);
-
-#if ZCL_OTA_SUPPORT
-    ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, &sensorDevice_otaInfo, &sensorDevice_otaCb);
-#endif
-    // read sensors
-	read_sensor_and_save();
-}
-
-/**********************************************************************
- * FUNCTIONS
- */
-s32 sensors_task(void *arg) {
-	if(clock_time() - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measure_interval) {
-		read_sensor_and_save();
-	}
-#ifdef USE_EPD
-	if(!g_zcl_thermostatUICfgAttrs.display_off)
-		task_lcd();
-#endif
-    return 0;
-}
-
-/**********************************************************************
- * FUNCTIONS
- */
-void app_task(void)
-{
-	static u8 flg_cnt;
-	u16 rep_uptime_sec;
-	task_keys();
-	sensors_task(NULL);
-	if(bdb_isIdle()) {
-		// report handler
-		if(zb_isDeviceJoinedNwk()) {
-#if	USE_DISPLAY
-			if(!g_zcl_thermostatUICfgAttrs.display_off) {
-#if BOARD == BOARD_MHO_C401N
-				show_connected_symbol(true);
-#else
-				if(!g_sensorAppCtx.timerLedEvt)
-					show_ble_symbol(false);
-#endif
-				if(g_sensorAppCtx.timerTaskEvt) {
-					TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
-					g_sensorAppCtx.timerTaskEvt = NULL;
-				}
-			}
-#ifdef USE_BLINK_LED
-			if(!g_sensorAppCtx.timerLedEvt)
-				light_off();
-#endif // USE_BLINK_LED
-
-#else // !USE_DISPLAY
-			if(!g_sensorAppCtx.timerLedEvt)
-				light_off();
-#endif // USE_DISPLAY
-			rep_uptime_sec = g_sensorAppCtx.reportupsec;
-			if(rep_uptime_sec) {
-				g_sensorAppCtx.reportupsec = 0;
-				app_chk_report(rep_uptime_sec);
-			}
-		} else { // Device not Joined
-#if	USE_DISPLAY
-			if(!g_zcl_thermostatUICfgAttrs.display_off) {
-#if BOARD == BOARD_MHO_C401N
-				show_connected_symbol(false);
-#else
-				if(!g_sensorAppCtx.timerLedEvt)
-					show_ble_symbol(true);
-
-#endif
-			}
-#ifdef USE_BLINK_LED
-			if(!g_sensorAppCtx.timerLedEvt)
-				light_blink_start(1, 50, 10000);
-#endif // USE_BLINK_LED
-#else // !USE_DISPLAY
-			if(!g_sensorAppCtx.timerLedEvt)
-				light_blink_start(1, 50, 10000);
-			//gpio_write(GPIO_LED, LED_ON); // - не включать PIN_PULLUP/PULLDOWN !
-#endif // USE_DISPLAY
-		}
-#if PM_ENABLE
-#ifdef USE_EPD
-		if(!g_zcl_thermostatUICfgAttrs.display_off)
-			task_lcd();
-#endif
-		if(flg_cnt)
-			flg_cnt--;
-		else
-			drv_pm_lowPowerEnter();
-#endif
-	} else
-		flg_cnt = 1;
-}
-
-void sensorDeviceSysException(void)
-{
-#if DEBUG_ENABLE
-	extern volatile u16 T_evtExcept[4];
-	show_big_number_x10(T_evtExcept[0], 0);
-#if BOARD == BOARD_CGDK2
-	show_small_number_x10(T_evtExcept[1], false);
-#else
-	show_small_number(T_evtExcept[1], false);
-#endif
-	update_lcd();
-#ifdef USE_EPD
-	while(task_lcd())
-		sleep_us(USE_EPD*1000);
-#endif
-	drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, 0, 20*1000);
-#else
-	zb_resetDevice();
-#endif
-}
-
 char int_to_hex(u8 num) {
 	const char * hex_ascii = {"0123456789ABCDEF"};
 	if (num > 15) return hex_ascii[0];
 	return hex_ascii[num];
 }
 
-void populate_sw_build() {
+/*
+void populate_sw_build(void) {
 	g_zcl_basicAttrs.swBuildId[1] = int_to_hex(STACK_RELEASE>>4);
 	g_zcl_basicAttrs.swBuildId[2] = int_to_hex(STACK_RELEASE & 0xf);
 	g_zcl_basicAttrs.swBuildId[3] = int_to_hex(STACK_BUILD>>4);
@@ -338,9 +112,9 @@ void populate_sw_build() {
 	g_zcl_basicAttrs.swBuildId[7] = int_to_hex(APP_RELEASE & 0xf);
 	g_zcl_basicAttrs.swBuildId[8] = int_to_hex(APP_BUILD>>4);
 	g_zcl_basicAttrs.swBuildId[9] = int_to_hex(APP_BUILD & 0xf);
-}
+}*/
 
-void populate_date_code() {
+void populate_date_code(void) {
 	u8 month;
 	if (__DATE__[0] == 'J' && __DATE__[1] == 'a' && __DATE__[2] == 'n') month = 1;
 	else if (__DATE__[0] == 'F') month = 2;
@@ -366,8 +140,8 @@ void populate_date_code() {
 }
 
 
+void populate_hw_version(void) {
 #if BOARD == BOARD_LYWSD03MMC
-void populate_hw_version() {
 /*
  HW  | LCD I2C addr | SHTxxx I2C addr | Note
 -----|--------------|-----------------|---------
@@ -378,21 +152,400 @@ B1.7 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 B1.9 | 0x3E         | 0x44   (SHT4x)  |
 B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 */
-    if (i2c_address_lcd == B14_I2C_ADDR << 1) {
-        if (sensor_ht.sensor_type == TH_SENSOR_SHTC3)
-            g_zcl_basicAttrs.hwVersion = 14;
-        else
-            g_zcl_basicAttrs.hwVersion = 20; // or 17
-    } else if (i2c_address_lcd == (B16_I2C_ADDR << 1)) {
-        if (sensor_ht.sensor_type == TH_SENSOR_SHTC3)
-            g_zcl_basicAttrs.hwVersion = 15;
-        else
-            g_zcl_basicAttrs.hwVersion = 16;
-    } else if (i2c_address_lcd == (B19_I2C_ADDR << 1)) {
-        g_zcl_basicAttrs.hwVersion = 19;
+#if USE_BLE
+    ble_attr.my_HardStr[0] = 'B';
+    ble_attr.my_HardStr[1] = '1';
+    ble_attr.my_HardStr[2] = '.';
+#endif
+    if (scr.i2c_address == B14_I2C_ADDR << 1) {
+        if (sensor_ht.sensor_type == TH_SENSOR_SHTC3) { // sensor_version == 0)
+            g_zcl_basicAttrs.hwVersion = BOARD_LYWSD03MMC_B14; // B1.4
+#if USE_BLE
+            ble_attr.my_HardStr[3] = '4';
+#endif
+        } else {
+            g_zcl_basicAttrs.hwVersion = BOARD_LYWSD03MMC_B20; // B2.0 or B1.7
+#if USE_BLE
+            ble_attr.my_HardStr[1] = '2';
+            ble_attr.my_HardStr[3] = '0';
+#endif
+        }
+    } else if (scr.i2c_address == (B16_I2C_ADDR << 1)) {
+        if (sensor_ht.sensor_type == TH_SENSOR_SHTC3) { // (sensor_version == 0)
+            g_zcl_basicAttrs.hwVersion = BOARD_LYWSD03MMC_B15; // B1.5
+#if USE_BLE
+            ble_attr.my_HardStr[3] = '5';
+#endif
+        } else {
+            g_zcl_basicAttrs.hwVersion = BOARD_LYWSD03MMC_B16; // B1.6
+#if USE_BLE
+            ble_attr.my_HardStr[3] = '6';
+#endif
+        }
+    } else if (scr.i2c_address == (B19_I2C_ADDR << 1)) {
+        g_zcl_basicAttrs.hwVersion = BOARD_LYWSD03MMC_B19; // B1.9
+#if USE_BLE
+        ble_attr.my_HardStr[3] = '9';
+#endif
     }
+#else // BOARD != BOARD_LYWSD03MMC
+    g_zcl_basicAttrs.hwVersion = BOARD;
+#if USE_BLE
+    ble_attr.my_HardStr[0] = 'V';
+    ble_attr.my_HardStr[1] = '0';
+    ble_attr.my_HardStr[2] = '0' + BOARD / 10;
+    ble_attr.my_HardStr[3] = '0' + BOARD % 10;
+#endif
+#endif
+}
+
+
+#if SHOW_SMILEY
+
+u8 is_comfort(s16 t, u16 h) {
+	u8 ret = 0;
+	if (t >= g_zcl_thermostatUICfgAttrs.temp_comfort_min
+		&& t <= g_zcl_thermostatUICfgAttrs.temp_comfort_max
+		&& h >= g_zcl_thermostatUICfgAttrs.humi_comfort_min
+		&& h <= g_zcl_thermostatUICfgAttrs.humi_comfort_max)
+		ret = 1;
+	return ret;
 }
 #endif
+
+
+void read_sensor_and_save(void) {
+	if(!read_sensor()) {
+		if(sensor_ht.flag & FLG_MEASURE_HT_RP) {
+			sensor_ht.flag &= ~FLG_MEASURE_HT_RP;
+			g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
+			g_zcl_relHumidityAttrs.measuredValue = sensor_ht.humi;
+		}
+	}
+	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
+    g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;
+#if	USE_DISPLAY
+    if(!g_zcl_thermostatUICfgAttrs.display_off) {
+    	if(sensor_ht.flag & FLG_MEASURE_HT_LCD) {
+    		sensor_ht.flag &= ~FLG_MEASURE_HT_LCD;
+#ifdef ZCL_THERMOSTAT_UI_CFG
+    		if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode) {
+    			// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
+    			show_big_number_x10(((sensor_ht.temp * 9 + 25) / 50) + 320, TEMP_SYMBOL_F); // convert C to F
+    		} else {
+    			show_big_number_x10((sensor_ht.temp + 5) / 10, TEMP_SYMBOL_C);
+    		}
+#else // !ZCL_THERMOSTAT_UI_CFG
+    		show_big_number_x10((sensor_ht.temp  + 5) / 10, TEMP_SYMBOL_C);
+#endif // ZCL_THERMOSTAT_UI_CFG
+
+#ifdef USE_DISPLAY_SMALL_NUMBER_X10
+    		show_small_number_x10((sensor_ht.humi + 5)/ 10, 1);
+#else
+    		show_small_number((sensor_ht.humi + 50) / 100, 1);
+#endif
+#ifdef USE_DISPLAY_BATTERY_LEVEL
+    		show_battery_symbol(true, g_zcl_powerAttrs.batteryPercentage);
+#else
+    		show_battery_symbol(g_zcl_powerAttrs.batteryPercentage < 25);
+#endif
+#if SHOW_SMILEY
+#ifdef ZCL_THERMOSTAT_UI_CFG
+    		if(g_zcl_thermostatUICfgAttrs.showSmiley == 0)
+    			show_smiley(is_comfort(sensor_ht.temp, sensor_ht.humi) ? SMILE_HAPPY : SMILE_SAD);
+    		else
+    			show_smiley(SMILE_NONE);
+#else
+    		show_smiley(is_comfort(sensor_ht.temp, sensor_ht.humi) ? SMILE_HAPPY : SMILE_SAD);
+#endif // ZCL_THERMOSTAT_UI_CFG
+#endif // SHOW_SMILEY
+    	} else {
+    		show_err_sensors();
+    	}
+#if USE_BLE
+    	extern u8 blt_state;
+   		show_ble_symbol(blt_state);
+#endif
+    	update_lcd();
+    }
+
+#endif // USE_DISPLAY
+    g_sensorAppCtx.readSensorTime = clock_time();
+	while(clock_time() - g_sensorAppCtx.secTimeTik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
+		g_sensorAppCtx.secTimeTik += CLOCK_16M_SYS_TIMER_CLK_1S;
+		g_sensorAppCtx.reportupsec++; // + 1 sec
+	}
+}
+
+
+/**********************************************************************
+ * FUNCTIONS
+ */
+s32 sensors_task(void *arg) {
+	(void) arg;
+	if(clock_time() - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measure_interval) {
+		read_sensor_and_save();
+	}
+#ifdef USE_EPD
+	task_lcd();
+#endif
+    return 0;
+}
+
+/**********************************************************************
+ * FUNCTIONS
+ */
+void app_task(void)
+{
+	u16 rep_uptime_sec;
+#if !USE_BLE
+	static u8 flg_cnt;
+	sensors_task(NULL);
+	task_keys();
+#endif
+	if(bdb_isIdle()) {
+		// report handler
+		if(zb_isDeviceJoinedNwk()) {
+#if	USE_DISPLAY
+			if(!g_zcl_thermostatUICfgAttrs.display_off) {
+				if(!g_sensorAppCtx.timerLedEvt)
+					show_connected_symbol(true);
+			}
+#if !USE_BLE
+			if(g_sensorAppCtx.timerTaskEvt) {
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
+			}
+#endif
+#ifdef USE_BLINK_LED
+			if(!g_sensorAppCtx.timerLedEvt)
+				light_off();
+#endif // USE_BLINK_LED
+
+#else // !USE_DISPLAY
+			if(!g_sensorAppCtx.timerLedEvt)
+				light_off();
+#endif // USE_DISPLAY
+			rep_uptime_sec = g_sensorAppCtx.reportupsec;
+			if(rep_uptime_sec) {
+				g_sensorAppCtx.reportupsec = 0;
+				app_chk_report(rep_uptime_sec);
+			}
+		} else { // Device not Joined
+#if	USE_DISPLAY
+			if(!g_zcl_thermostatUICfgAttrs.display_off) {
+				if(!g_sensorAppCtx.timerLedEvt)
+					show_connected_symbol(false);
+			}
+#ifdef USE_BLINK_LED
+			if(!g_sensorAppCtx.timerLedEvt)
+				light_blink_start(1, 50, 10000);
+#endif // USE_BLINK_LED
+#else // !USE_DISPLAY
+			if(!g_sensorAppCtx.timerLedEvt)
+				light_blink_start(1, 50, 10000);
+			//gpio_write(GPIO_LED, LED_ON); // - не включать PIN_PULLUP/PULLDOWN !
+#endif // USE_DISPLAY
+		}
+#if PM_ENABLE
+#ifdef USE_EPD
+		task_lcd();
+#endif
+#if !USE_BLE
+		if(flg_cnt)
+			flg_cnt--;
+		else {
+			if(sensor_ht.read_callback) {
+				sensor_ht.read_callback();
+			} else {
+				drv_pm_lowPowerEnter();
+			}
+		}
+#endif // !USE_BLE
+#endif // PM_ENABLE
+	}
+#if !USE_BLE
+	else
+		flg_cnt = 1;
+#endif // !USE_BLE
+}
+
+void sensorDeviceSysException(void)
+{
+#if DEBUG_ENABLE
+	extern volatile u16 T_evtExcept[4];
+	show_big_number_x10(T_evtExcept[0], 0);
+#ifdef USE_DISPLAY_SMALL_NUMBER_X10
+	show_small_number_x10(T_evtExcept[1], TEMP_SYMBOL_E);
+#else
+	show_small_number(T_evtExcept[1], TEMP_SYMBOL_E);
+#endif
+	update_lcd();
+#ifdef USE_EPD
+	while(task_lcd())
+		sleep_us(USE_EPD*1000);
+#endif
+	drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 20*1000);
+#else
+	zb_resetDevice();
+#endif
+}
+
+/**
+ *  @brief Definition for BDB finding and binding cluster
+ */
+u16 bdb_findBindClusterList[] =
+{
+	ZCL_CLUSTER_GEN_POWER_CFG,
+#ifdef ZCL_TEMPERATURE_MEASUREMENT
+	ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
+#endif
+#ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
+    ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
+#endif
+};
+
+/**
+ *  @brief Definition for BDB finding and binding cluster number
+ */
+#define FIND_AND_BIND_CLUSTER_NUM		(sizeof(bdb_findBindClusterList)/sizeof(bdb_findBindClusterList[0]))
+
+/*********************************************************************
+ * @fn      user_app_init
+ *
+ * @brief   This function initialize the application
+ *
+ * @param   None
+ *
+ * @return  None
+ */
+void user_app_init(void)
+{
+	u32 reportableChange;
+
+	/* Populate properties with compiled-in values */
+	// populate_sw_build();
+	populate_date_code();
+
+#if USE_BLE
+	blc_initMacAddress(CFG_MAC_ADDRESS, mac_public, mac_random_static);
+#endif
+
+#if (ZCL_THERMOSTAT_UI_CFG_SUPPORT || USE_CHG_NAME)
+	init_nv_app();
+#endif
+
+	/* Initialize ZB stack */
+	zb_init();
+	/* Register stack CB */
+	zb_zdoCbRegister((zdo_appIndCb_t *)&appCbLst);
+
+#if	USE_DISPLAY
+	LCD_INIT_DELAY();
+	init_lcd();
+#endif
+#if DEBUG_ENABLE
+	/* Register except handler for test */
+	sys_exceptHandlerRegister(sensorDeviceSysException);
+#endif
+
+	init_sensor();
+
+	populate_hw_version();
+
+
+#if ZCL_POLL_CTRL_SUPPORT
+	af_powerDescPowerModeUpdate(POWER_MODE_RECEIVER_COMES_PERIODICALLY);
+#else
+	af_powerDescPowerModeUpdate(POWER_MODE_RECEIVER_COMES_WHEN_STIMULATED);
+#endif
+    /* Initialize ZCL layer */
+	/* Register Incoming ZCL Foundation command/response messages */
+	zcl_init(sensorDevice_zclProcessIncomingMsg);
+
+	/* Register endPoint */
+	af_endpointRegister(SENSOR_DEVICE_ENDPOINT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, zcl_rx_handler, NULL);
+
+	zcl_reportingTabInit();
+
+	/* Register ZCL specific cluster information */
+	zcl_register(SENSOR_DEVICE_ENDPOINT, SENSOR_DEVICE_CB_CLUSTER_NUM, (zcl_specClusterInfo_t *)g_sensorDeviceClusterList);
+
+#if ZCL_OTA_SUPPORT
+    ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, &sensorDevice_otaInfo, &sensorDevice_otaCb);
+#endif
+
+    // read sensors
+	read_sensor_and_save();
+
+	// keys init
+	keys_init();
+
+	/* User's Task */
+#if ZBHCI_EN
+	ev_on_poll(EV_POLL_HCI, zbhciTask);
+#endif
+	ev_on_poll(EV_POLL_IDLE, app_task);
+
+	/* Load the pre-install code from flash */
+	if(bdb_preInstallCodeLoad(&g_sensorAppCtx.tcLinkKey.keyType, g_sensorAppCtx.tcLinkKey.key) == RET_OK){
+		g_bdbCommissionSetting.linkKey.tcLinkKey.keyType = g_sensorAppCtx.tcLinkKey.keyType;
+		g_bdbCommissionSetting.linkKey.tcLinkKey.key = g_sensorAppCtx.tcLinkKey.key;
+	}
+	/* Set default reporting configuration */
+	reportableChange = 0;
+    bdb_defaultReportingCfg(
+		SENSOR_DEVICE_ENDPOINT,
+		HA_PROFILE_ID,
+		ZCL_CLUSTER_GEN_POWER_CFG,
+		ZCL_ATTRID_BATTERY_VOLTAGE,
+		360,
+		3600,
+		(u8 *)&reportableChange
+	);
+    reportableChange = 0;
+    bdb_defaultReportingCfg(
+		SENSOR_DEVICE_ENDPOINT,
+		HA_PROFILE_ID,
+		ZCL_CLUSTER_GEN_POWER_CFG,
+		ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
+		360,
+		3600,
+		(u8 *)&reportableChange
+	);
+    reportableChange = 10;
+	bdb_defaultReportingCfg(
+		SENSOR_DEVICE_ENDPOINT,
+		HA_PROFILE_ID,
+		ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
+		ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,
+		30,
+		180,
+		(u8 *)&reportableChange
+	);
+    reportableChange = 50;
+	bdb_defaultReportingCfg(
+		SENSOR_DEVICE_ENDPOINT,
+		HA_PROFILE_ID,
+		ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
+		ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,
+		30,
+		180,
+		(u8 *)&reportableChange
+	);
+
+	bdb_findBindMatchClusterSet(FIND_AND_BIND_CLUSTER_NUM, bdb_findBindClusterList);
+
+	/* Initialize BDB */
+	u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;
+	bdb_init((af_simple_descriptor_t *)&sensorDevice_simpleDesc, &g_bdbCommissionSetting, &g_zbDemoBdbCb, repower);
+
+#if USE_BLE && defined(STARTUP_IN_BLE) && (!STARTUP_IN_BLE) // Startup in Zigbee ?
+	u32 r = drv_disable_irq();
+	switch_to_zb_context();
+	drv_restore_irq(r);
+#endif
+}
+
 /*********************************************************************
  * @fn      user_init
  *
@@ -404,11 +557,6 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
  */
 void user_init(bool isRetention)
 {
-	u32 reportableChange;
-
-#if PA_ENABLE
-	rf_paInit(PA_TX, PA_RX);
-#endif
 
 #if ZBHCI_EN
 	zbhciInit();
@@ -416,97 +564,11 @@ void user_init(bool isRetention)
 
 	if(!isRetention){
 
-		/* Populate properties with compiled-in values */
-		populate_sw_build();
-		populate_date_code();
-
-#if USE_CHG_NAME
-		read_dev_name();
-#endif
-
-		/* Initialize Stack */
-		stack_init();
-#if	USE_DISPLAY
-		LCD_INIT_DELAY();
-		init_lcd();
-#endif
-		init_sensor();
-
-#if BOARD == BOARD_LYWSD03MMC
-		populate_hw_version();
-#endif
-
-#if DEBUG_ENABLE
-		/* Register except handler for test */
-		sys_exceptHandlerRegister(sensorDeviceSysException);
-#endif
-
 		/* Initialize user application */
 		user_app_init();
 
-		/* User's Task */
-#if ZBHCI_EN
-		ev_on_poll(EV_POLL_HCI, zbhciTask);
-#endif
-		ev_on_poll(EV_POLL_IDLE, app_task);
-
-		/* Load the pre-install code from flash */
-		if(bdb_preInstallCodeLoad(&g_sensorAppCtx.tcLinkKey.keyType, g_sensorAppCtx.tcLinkKey.key) == RET_OK){
-			g_bdbCommissionSetting.linkKey.tcLinkKey.keyType = g_sensorAppCtx.tcLinkKey.keyType;
-			g_bdbCommissionSetting.linkKey.tcLinkKey.key = g_sensorAppCtx.tcLinkKey.key;
-		}
-		/* Set default reporting configuration */
-		reportableChange = 0;
-        bdb_defaultReportingCfg(
-			SENSOR_DEVICE_ENDPOINT,
-			HA_PROFILE_ID,
-			ZCL_CLUSTER_GEN_POWER_CFG,
-			ZCL_ATTRID_BATTERY_VOLTAGE,
-			360,
-			3600,
-			(u8 *)&reportableChange
-		);
-        reportableChange = 0;
-        bdb_defaultReportingCfg(
-			SENSOR_DEVICE_ENDPOINT,
-			HA_PROFILE_ID,
-			ZCL_CLUSTER_GEN_POWER_CFG,
-			ZCL_ATTRID_BATTERY_PERCENTAGE_REMAINING,
-			360,
-			3600,
-			(u8 *)&reportableChange
-		);
-        reportableChange = 10;
-		bdb_defaultReportingCfg(
-			SENSOR_DEVICE_ENDPOINT,
-			HA_PROFILE_ID,
-			ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
-			ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,
-			30,
-			180,
-			(u8 *)&reportableChange
-		);
-        reportableChange = 50;
-		bdb_defaultReportingCfg(
-			SENSOR_DEVICE_ENDPOINT,
-			HA_PROFILE_ID,
-			ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
-			ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,
-			30,
-			180,
-			(u8 *)&reportableChange
-		);
-		/* Initialize BDB */
-		u8 repower = drv_pm_deepSleep_flag_get() ? 0 : 1;
-		bdb_init((af_simple_descriptor_t *)&sensorDevice_simpleDesc, &g_bdbCommissionSetting, &g_zbDemoBdbCb, repower);
-#if	USE_DISPLAY
-///		g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
-#endif
 	} else {
 		/* Re-config phy when system recovery from deep sleep with retention */
 		mac_phyReconfig();
 	}
-#ifdef USE_EPD
-//	task_lcd();
-#endif
 }

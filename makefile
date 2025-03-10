@@ -4,8 +4,6 @@ VERSION_BIN ?=
 
 TEL_CHIP := $(POJECT_DEF) -DMCU_CORE_8258=1 -DEND_DEVICE=1 -DMCU_STARTUP_8258=1
 
-LIBS := -ldrivers_8258 -lzb_ed
-
 #All libs: -ldrivers_826x -ldrivers_8258 -ldrivers_8278 -lsoft-fp -lfirmware_encrypt -lzb_coordinator -lzb_ed -lzb_router
 
 PGM_PORT?=COM9
@@ -16,17 +14,16 @@ SRC_PATH ?= $(PROJECT_PATH)$(SRC_DIR)
 # TEL_PATH:  Telink SDK - tc32/bin/
 TEL_PATH ?= .
 # SDK_PATH: X:/Telink/tl_zigbee_sdk
-SDK_PATH ?= ./SDK
-SDK_FLAGS := $(SDK_PATH)/zigbee
-# MAKE_PATH: project all make
-MAKE_PATH ?= ./make
 
-LS_FLAGS := $(SRC_PATH)/boot.link
+SDK_z_PATH ?= ./SDK_z
+SDK_bz_PATH ?= ./SDK_bz
+
+USE_BZ ?=0
 
 OUT_PATH ?=./build
 BIN_PATH ?=./bin
 
-PYTHON ?= python3
+PYTHON ?= python
 
 OBJ_SRCS :=
 S_SRCS :=
@@ -52,9 +49,6 @@ else
 	TOOLS_PATH := $(TEL_PATH)/tools/windows
 endif
 TC32_PATH := $(TOOLS_PATH)/tc32/bin/
-
-#LNK_FLAG := -Wl,-nostartfiles -Wl,-nostdlib -Wl,--gc-sections -Wl,-uss_apsmeSwitchKeyReq -fshort-enums -nostartfiles -fno-rtti -fno-exceptions -fno-use-cxa-atexit -fno-threadsafe-statics
-# -uss_apsmeSwitchKeyReq
 
 LNK_FLAGS := --gc-sections -nostartfiles
 
@@ -85,6 +79,67 @@ ASM_FLAGS := \
 -fno-rtti \
 -fno-threadsafe-statics
 
+ifeq ($(USE_BZ),1)
+
+# MAKE_PATH: project all make
+
+TEL_CHIP +=-DUSE_BLE=1
+
+MAKE_PATH ?= ./make_bz
+
+SDK_PATH ?= $(SDK_bz_PATH)
+
+SDK_FLAGS := $(SDK_PATH)/stack/zigbee
+
+LS_FLAGS := $(SRC_PATH)/boot_bz.link
+
+LIBS := -lble_8258 -ldrivers_8258 -lzb_ed 
+
+INCLUDE_PATHS := -I$(SRC_PATH) -I$(SRC_PATH)/includes -I$(SRC_PATH)/common  -I$(SRC_PATH)/custom_zcl\
+-I$(SDK_PATH) \
+-I$(SDK_PATH)/proj \
+-I$(SDK_PATH)/proj/common \
+-I$(SDK_PATH)/platform \
+-I$(SDK_PATH)/platform/chip_8258 \
+-I$(SDK_PATH)/stack/ble \
+-I$(SDK_PATH)/stack/zigbee/af \
+-I$(SDK_PATH)/stack/zigbee/include \
+-I$(SDK_PATH)/stack/zigbee/bdb/includes \
+-I$(SDK_PATH)/stack/zigbee/common/includes \
+-I$(SDK_PATH)/stack/zigbee/ota \
+-I$(SDK_PATH)/stack/zigbee/zbapi \
+-I$(SDK_PATH)/stack/zigbee/zcl \
+-I$(SDK_PATH)/stack/zigbee/zdo \
+-I$(SDK_PATH)/zbhci \
+-I$(SDK_PATH)/stack/ble \
+-I$(SDK_PATH)/stack/ble/ble_8258
+
+GCC_FLAGS += $(TEL_CHIP)
+
+LS_INCLUDE := -L$(SDK_PATH)/platform/lib -L$(SDK_PATH)/stack/zigbee/lib/tc32 -L$(SDK_PATH)/stack/ble/lib -L$(OUT_PATH)
+
+#include Project makefile
+-include $(MAKE_PATH)/src.mk
+#include SDK makefile
+-include $(MAKE_PATH)/platform.mk
+-include $(MAKE_PATH)/proj.mk
+-include $(MAKE_PATH)/zigbee.mk
+#-include $(MAKE_PATH)/zbhci.mk
+
+else
+
+# MAKE_PATH: project all make
+
+MAKE_PATH ?= ./make_z
+
+SDK_PATH ?= $(SDK_z_PATH)
+
+SDK_FLAGS := $(SDK_PATH)/zigbee
+
+LS_FLAGS := $(SRC_PATH)/boot_z.link
+
+LIBS := -ldrivers_8258 -lzb_ed
+
 INCLUDE_PATHS := -I$(SRC_PATH) -I$(SRC_PATH)/includes -I$(SRC_PATH)/common  -I$(SRC_PATH)/custom_zcl\
 -I$(SDK_PATH)/platform \
 -I$(SDK_PATH)/platform/chip_8258 \
@@ -112,6 +167,9 @@ LS_INCLUDE := -L$(SDK_PATH)/platform/lib -L$(SDK_PATH)/zigbee/lib/tc32 -L$(SDK_P
 -include $(MAKE_PATH)/proj.mk
 -include $(MAKE_PATH)/zigbee.mk
 #-include $(MAKE_PATH)/zbhci.mk
+
+endif
+
 
 # Add inputs and outputs from these tool invocations to the build variables
 LST_FILE := $(OUT_PATH)/$(PROJECT_NAME).lst
@@ -215,7 +273,8 @@ install: $(SDK_FLAGS) $(TC32_PATH)
 $(SDK_FLAGS): $(SDK_PATH)
 ifneq ($(SDK_FLAGS),$(wildcard $(SDK_FLAGS)))
 	#@wget -P $(SDK_PATH) http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
-	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_PATH)
+	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_z_PATH)
+	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_BLE_v2.4.0.1.zip -d $(SDK_bz_PATH)
 endif
 
 $(SDK_PATH):

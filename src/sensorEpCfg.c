@@ -7,87 +7,37 @@
 #include "zcl_thermostat_ui_cfg.h"
 #include "device.h"
 #include "lcd.h"
+#if USE_BLE
+#include "zigbee_ble_switch.h"
+#endif
 
 /**********************************************************************
  * LOCAL CONSTANTS
  */
-#if BOARD == BOARD_LYWSD03MMC
 
-#define ZCL_BASIC_MFG_NAME     {6,'X','i','a','o','m','i'}
-#define ZCL_BASIC_MODEL_ID	   {12,'L','Y','W','S','D','0','3','M','M','C','-','z'}
-
-#elif BOARD == BOARD_CGDK2
-
-#define ZCL_BASIC_MFG_NAME     {8,'Q','i','n','g','p','i','n','g'} // Qingping
-#define ZCL_BASIC_MODEL_ID	   {7,'C','G','D','K','2','-','z'} // CGDK2
-
-#elif BOARD == BOARD_MHO_C122
-
-#define ZCL_BASIC_MFG_NAME     {10,'M','i','a','o','M','i','a','o','C','e'} // MiaoMiaoCe
-#define ZCL_BASIC_MODEL_ID	   {10,'M','H','O','-','C','1','2','2','-','z'} // MHO-C122
-
-#elif BOARD == BOARD_MHO_C401
-
-#define ZCL_BASIC_MFG_NAME     {10,'M','i','a','o','M','i','a','o','C','e'} // MiaoMiaoCe
-#define ZCL_BASIC_MODEL_ID	   {10,'M','H','O','-','C','4','0','1','-','z'} // MHO-C401
-
-#elif BOARD == BOARD_MHO_C401N
-
-#define ZCL_BASIC_MFG_NAME     {10,'M','i','a','o','M','i','a','o','C','e'} // MiaoMiaoCe
-#define ZCL_BASIC_MODEL_ID	   {11,'M','H','O','-','C','4','0','1','N','-','z'} // MHO-C401N
-
-#elif BOARD == BOARD_TS0201_TZ3000
-
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {8,'T','S','0','2','0','1','-','z'} // TS0201
-
-#elif BOARD == BOARD_TH03Z
-
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {7,'T','H','0','3','Z','-','z'} // TH03Z
-
-#elif BOARD == BOARD_ZTH01
-
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {7,'Z','T','H','0','1','-','z'} // ZTH01
-
-#elif BOARD == BOARD_ZTH02
-
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {7,'Z','T','H','0','2','-','z'} // ZTH02
-
-#elif BOARD == BOARD_ZTH03
-
-#define ZCL_BASIC_MFG_NAME     {6,'S','o','n','o','f','f'} // Sonoff
-#define ZCL_BASIC_MODEL_ID	   {6,'T','H','0','3','-','z'} // TH03
-
-#elif BOARD == BOARD_LKTMZL02
-
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {10,'L','K','T','M','Z','L','0','2','-','z'} // LKTMZL02
-
-#elif BOARD == BOARD_ZYZTH02
-
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {10,'Z','Y','-','Z','T','H','0','2','-','z'} // LKTMZL02
-
-#elif BOARD == BOARD_ZG_227Z
-
-#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	   {9,'Z','G','-','2','2','7','Z','-','z'} // ZG-227Z
-
-#else
-#error "Define BOARD!"
-#endif // BOARD
+#if !defined(ZCL_BASIC_MFG_NAME) || !defined(ZCL_BASIC_MODEL_ID)
+#error "defined ZCL_BASIC_MODEL_ID & ZCL_BASIC_MFG_NAME !"
+#endif
 
 #ifndef ZCL_BASIC_SW_BUILD_ID
-#define ZCL_BASIC_SW_BUILD_ID     	{9,'0','0','0','0','-','0','0','0','0'}
+
+#define ZCL_BASIC_SW_BUILD_ID	{9 \
+								,'0'+(STACK_RELEASE>>4) \
+								,'0'+(STACK_RELEASE & 0xf) \
+								,'0'+(STACK_BUILD>>4) \
+								,'0'+(STACK_BUILD & 0xf) \
+								,'-' \
+								,'0'+(APP_RELEASE>>4) \
+								,'0'+(APP_RELEASE & 0xf) \
+								,'0'+(APP_BUILD>>4) \
+								,'0'+(APP_BUILD & 0xf) \
+								}
+
 #endif
 
 #ifndef ZCL_BASIC_DATE_CODE
-#define ZCL_BASIC_DATE_CODE     	{8,'0','0','0','0','0','0','0','0'}
+#define ZCL_BASIC_DATE_CODE     {8,'0','0','0','0','0','0','0','0'}
 #endif
-
 
 /**********************************************************************
  * TYPEDEFS
@@ -418,63 +368,60 @@ const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 
 u8 SENSOR_DEVICE_CB_CLUSTER_NUM = (sizeof(g_sensorDeviceClusterList)/sizeof(g_sensorDeviceClusterList[0]));
 
-/**********************************************************************
- * FUNCTIONS
- */
+
 #if NV_ENABLE
-	zcl_thermostatUICfgAttr_t zcl_nv_thermostatUiCfg;
-#endif
-
-
+/**********************************************************************
+ * FUNCTIONS NV
+ */
 
 #if USE_CHG_NAME
 
-#define FLASH_DEV_NAME_ADDR  0x075000
 static const u8 modelId[] = ZCL_BASIC_MODEL_ID;
 static const u8 manuName[] = ZCL_BASIC_MFG_NAME;
-#define KEY_SAVED_NAMES 0x454D414E
 
 void read_dev_name(void) {
-	u32 tflg;
-	flash_read_page(FLASH_DEV_NAME_ADDR, sizeof(tflg), (unsigned char *) &tflg);
-	flash_read_page(FLASH_DEV_NAME_ADDR + sizeof(tflg), ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.modelId);
-	flash_read_page(FLASH_DEV_NAME_ADDR + sizeof(tflg) + ZCL_BASIC_MAX_LENGTH, ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.manuName);
-	if(tflg != KEY_SAVED_NAMES
-	    || g_zcl_basicAttrs.modelId[0] == 0
-		|| g_zcl_basicAttrs.modelId[0] >= ZCL_BASIC_MAX_LENGTH
-	    || g_zcl_basicAttrs.manuName[0] == 0
-		|| g_zcl_basicAttrs.manuName[0] >= ZCL_BASIC_MAX_LENGTH) {
+	if(NV_SUCC != nv_flashReadNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_NAME, ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.modelId)
+			|| g_zcl_basicAttrs.modelId[0] == 0
+			|| g_zcl_basicAttrs.modelId[0] >= ZCL_BASIC_MAX_LENGTH) {
 		memcpy(g_zcl_basicAttrs.modelId, modelId, sizeof(modelId));
+	}
+	if(NV_SUCC != nv_flashReadNew(1, NV_MODULE_APP, NV_ITEM_APP_MAN_NAME, ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.manuName)
+			|| g_zcl_basicAttrs.manuName[0] == 0
+			|| g_zcl_basicAttrs.manuName[0] >= ZCL_BASIC_MAX_LENGTH) {
 		memcpy(g_zcl_basicAttrs.manuName, manuName, sizeof(manuName));
 	}
 }
 
 
-void save_dev_name(void) {
-	u32 tflg;
-	int i;
-	u8 buf[2*ZCL_BASIC_MAX_LENGTH];
-	if(g_zcl_basicAttrs.modelId[0] == 0 || g_zcl_basicAttrs.modelId[0] >= ZCL_BASIC_MAX_LENGTH)
-		memcpy(g_zcl_basicAttrs.modelId, modelId, sizeof(modelId));
-	if(g_zcl_basicAttrs.manuName[0] == 0 || g_zcl_basicAttrs.manuName[0] >= ZCL_BASIC_MAX_LENGTH)
-		memcpy(g_zcl_basicAttrs.manuName, manuName, sizeof(manuName));
-	flash_read_page(FLASH_DEV_NAME_ADDR, sizeof(tflg), (unsigned char *) &tflg);
-	flash_read_page(FLASH_DEV_NAME_ADDR + sizeof(tflg), sizeof(buf), buf);
-	i = memcmp(g_zcl_basicAttrs.modelId, buf, g_zcl_basicAttrs.modelId[0] + 1);
-	i |= memcmp(g_zcl_basicAttrs.manuName, &buf[ZCL_BASIC_MAX_LENGTH], g_zcl_basicAttrs.manuName[0] + 1);
-	if(i || tflg != KEY_SAVED_NAMES ) {
-		flash_write_status(0, 0);
-		flash_erase_sector(FLASH_DEV_NAME_ADDR);
-		flash_write_page(FLASH_DEV_NAME_ADDR + sizeof(tflg), g_zcl_basicAttrs.modelId[0] + 1, g_zcl_basicAttrs.modelId);
-		flash_write_page(FLASH_DEV_NAME_ADDR  + sizeof(tflg) + ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.manuName[0] + 1, g_zcl_basicAttrs.manuName);
-		tflg = KEY_SAVED_NAMES;
-		flash_write_page(FLASH_DEV_NAME_ADDR, sizeof(tflg), (unsigned char *) &tflg);
+void save_dev_name(u16 attrID) {
+	u8 buf[ZCL_BASIC_MAX_LENGTH];
+	if(attrID == ZCL_ATTRID_BASIC_MODEL_ID) {
+		if(g_zcl_basicAttrs.modelId[0] == 0 || g_zcl_basicAttrs.modelId[0] >= ZCL_BASIC_MAX_LENGTH)
+			memcpy(g_zcl_basicAttrs.modelId, modelId, sizeof(modelId));
+		else {
+			if(NV_SUCC != nv_flashReadNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_NAME, ZCL_BASIC_MAX_LENGTH, buf)
+				|| memcmp(g_zcl_basicAttrs.modelId, buf, g_zcl_basicAttrs.modelId[0] + 1)) {
+				nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_NAME, ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.modelId);
+			}
+		}
+	} else if (attrID == ZCL_ATTRID_BASIC_MFR_NAME) {
+		if(g_zcl_basicAttrs.manuName[0] == 0 || g_zcl_basicAttrs.manuName[0] >= ZCL_BASIC_MAX_LENGTH)
+			memcpy(g_zcl_basicAttrs.manuName, manuName, sizeof(manuName));
+		else {
+			if(NV_SUCC != nv_flashReadNew(1, NV_MODULE_APP, NV_ITEM_APP_MAN_NAME, ZCL_BASIC_MAX_LENGTH, buf)
+				|| memcmp(g_zcl_basicAttrs.manuName, buf, g_zcl_basicAttrs.manuName[0] + 1)) {
+				nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_NAME, ZCL_BASIC_MAX_LENGTH, g_zcl_basicAttrs.manuName);
+			}
+		}
 	}
 }
 
 #endif // USE_CHG_NAME
 
+#ifdef ZCL_THERMOSTAT_UI_CFG
 
+// cmp buf
+zcl_thermostatUICfgAttr_t zcl_nv_thermostatUiCfg;
 /*********************************************************************
  * @fn      zcl_thermostatConfig_save
  *
@@ -488,30 +435,29 @@ nv_sts_t zcl_thermostatConfig_save(void)
 {
 	nv_sts_t st = NV_SUCC;
 
-#ifdef ZCL_THERMOSTAT_UI_CFG
-#if NV_ENABLE
 	if(memcmp(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs))) {
 #if USE_DISPLAY
-		if(zcl_nv_thermostatUiCfg.display_off != g_zcl_thermostatUICfgAttrs.display_off) {
-			init_lcd(); // show_blink_screen();
+		if(zcl_nv_thermostatUiCfg.display_off ^ g_zcl_thermostatUICfgAttrs.display_off) {
+			init_lcd();
 		}
 #endif
 		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
 		if(g_zcl_thermostatUICfgAttrs.measure_interval < READ_SENSOR_TIMER_MIN_SEC)
 			g_zcl_thermostatUICfgAttrs.measure_interval = READ_SENSOR_TIMER_SEC;
 		g_sensorAppCtx.measure_interval = (g_zcl_thermostatUICfgAttrs.measure_interval * CLOCK_16M_SYS_TIMER_CLK_1S) - 25*CLOCK_16M_SYS_TIMER_CLK_1MS;
-		zb_setPollRate(DEFAULT_POLL_RATE);
-		st = nv_flashWriteNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
+		g_zcl_pollCtrlAttrs.longPollIntervalMin = g_zcl_thermostatUICfgAttrs.measure_interval * 4;
+		if(g_zcl_pollCtrlAttrs.longPollIntervalMin > g_zcl_pollCtrlAttrs.longPollInterval)
+			g_zcl_pollCtrlAttrs.longPollInterval = g_zcl_pollCtrlAttrs.longPollIntervalMin;
+		zb_setPollRate(g_zcl_pollCtrlAttrs.longPollIntervalMin * POLL_RATE_QUARTERSECONDS); // TODO ZHA ?
+		st = nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
 	}
-#else
-	st = NV_ENABLE_PROTECT_ERROR;
-#endif
-#endif
 	return st;
 }
 
+#endif // ZCL_THERMOSTAT_UI_CFG
+
 /*********************************************************************
- * @fn      zcl_thermostatConfig_restore
+ * @fn      init_nv_app
  *
  * @brief
  *
@@ -519,35 +465,41 @@ nv_sts_t zcl_thermostatConfig_save(void)
  *
  * @return
  */
-nv_sts_t zcl_thermostatConfig_restore(void)
-{
-	nv_sts_t st = NV_SUCC;
-
+void init_nv_app(void) {
+	u32 ver = 0;
+	if(nv_flashReadNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_VER, sizeof(ver), (u8 *)&ver) == NV_SUCC
+		&& ver == USE_NV_APP) {
 #ifdef ZCL_THERMOSTAT_UI_CFG
-#if NV_ENABLE
-	st = nv_flashReadNew(1, NV_MODULE_ZCL,  NV_ITEM_ZCL_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
-
-	if(st == NV_SUCC){
-		memcpy(&g_zcl_thermostatUICfgAttrs, &zcl_nv_thermostatUiCfg, sizeof(g_zcl_thermostatUICfgAttrs));
+		if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg) == NV_SUCC){
+			memcpy(&g_zcl_thermostatUICfgAttrs, &zcl_nv_thermostatUiCfg, sizeof(g_zcl_thermostatUICfgAttrs));
+		} else {
+			memcpy(&g_zcl_thermostatUICfgAttrs, &g_zcl_thermostatUICfgDefault, sizeof(g_zcl_thermostatUICfgAttrs));
+		}
+#endif
 	} else {
+#ifdef ZCL_THERMOSTAT_UI_CFG
 		memcpy(&g_zcl_thermostatUICfgAttrs, &g_zcl_thermostatUICfgDefault, sizeof(g_zcl_thermostatUICfgAttrs));
+		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgDefault, sizeof(zcl_nv_thermostatUiCfg));
+#endif
+		nv_resetAll();
+		nv_resetModule(NV_MODULE_APP);
+		nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
+		ver = USE_NV_APP;
+		nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_VER, sizeof(ver), (u8 *)&ver);
 	}
+#ifdef ZCL_THERMOSTAT_UI_CFG
 	if(g_zcl_thermostatUICfgAttrs.measure_interval < READ_SENSOR_TIMER_MIN_SEC)
 		g_zcl_thermostatUICfgAttrs.measure_interval = READ_SENSOR_TIMER_SEC;
 	g_sensorAppCtx.measure_interval = (g_zcl_thermostatUICfgAttrs.measure_interval * CLOCK_16M_SYS_TIMER_CLK_1S) - 25*CLOCK_16M_SYS_TIMER_CLK_1MS;
-#if USE_DISPLAY
-	if(g_zcl_thermostatUICfgAttrs.display_off) {
-		init_lcd(); // show_blink_screen();
-	}
+	g_zcl_pollCtrlAttrs.longPollIntervalMin = g_zcl_thermostatUICfgAttrs.measure_interval * 4;
+	if(g_zcl_pollCtrlAttrs.longPollIntervalMin > g_zcl_pollCtrlAttrs.longPollInterval)
+		g_zcl_pollCtrlAttrs.longPollInterval = g_zcl_pollCtrlAttrs.longPollIntervalMin;
 #endif
-
-#else
-	st = NV_ENABLE_PROTECT_ERROR;
+#if USE_CHG_NAME
+	read_dev_name();
 #endif
-#endif
-	return st;
 }
 
-
+#endif // #if NV_ENABLE
 
 

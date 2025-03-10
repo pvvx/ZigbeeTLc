@@ -5,7 +5,6 @@
 /*********************************************************************
  * CONSTANTS
  */
-
 /**
  *  @brief	thermostatu UI configuration cluster Attribute IDs
  */
@@ -23,6 +22,16 @@
 
 #define ZCL_THERMOSTAT_UI_CFG_ATTRID_MEASURE_INTERVAL	0x0107
 
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_TEMP	0x0100
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_OFFSET_HUMI	0x0101
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_T	0x0102
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_T	0x0103
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MIN_H	0x0104
+#define ZCL_THERMOSTAT_UI_CFG_ATTRID_COMFORT_MAX_H	0x0105
+
 status_t zcl_thermostat_ui_cfg_register(u8 endpoint, u16 manuCode, u8 attrNum, const zclAttrInfo_t attrTbl[], cluster_forAppCb_t cb);
+nv_sts_t zcl_thermostatConfig_save(void);
+//nv_sts_t zcl_thermostatConfig_restore(void);
 
 #endif	/* ZCL_THERMOSTAT_UI_CFG_H */
+

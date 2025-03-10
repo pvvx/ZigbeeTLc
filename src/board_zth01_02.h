@@ -1,7 +1,6 @@
 /*
  * board_mho_zth01_02.h
- *
- *      Author: pvvx
+ * Author: pvvx
  */
 #ifndef _BOARD_ZTH01_02_H_
 #define _BOARD_ZTH01_02_H_
@@ -12,17 +11,43 @@
 
 #define ZIGBEE_TUYA_OTA 	1
 
-// https://pvvx.github.io/TS0601_TZE200_zth01
-// TLSR825x 1M Flash
-// GPIO_PB1 - TX
-// GPIO_PB4 - KEY
-// GPIO_PB5 - LED
-// GPIO_PB7 - RX
-// GPIO_PC2 - SDA
-// GPIO_PC3 - SCL
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
+
+/* https://pvvx.github.io/TS0601_TZE200_zth01
+
+TLSR825x 1M Flash
+
+GPIO_PB1 - TX
+GPIO_PB4 - KEY
+GPIO_PB5 - LED
+GPIO_PB7 - RX
+GPIO_PC2 - SDA
+GPIO_PC3 - SCL
+*/
+
+#define BLE_MAN_STR			"Tuya"
+
+#if (BOARD == BOARD_ZTH01)
+ 
+#define BLE_MODEL_STR		"ZTH01"
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {7,'Z','T','H','0','1','-','z'} // ZTH01
+
+#elif (BOARD == BOARD_ZTH02)
+
+#define BLE_MODEL_STR		"ZTH02"
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {7,'Z','T','H','0','2','-','z'} // ZTH02
+
+#else
+#error "BOARD ?"
+#endif
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_2AAA
+
+// DISPLAY
+#define	USE_DISPLAY			0
 
 // VBAT
 #define SHL_ADC_VBAT		B0P // see in adc.h ADC_InputPchTypeDef
@@ -34,6 +59,8 @@
 
 // BUTTON
 #define BUTTON1             GPIO_PB4
+#define BUTTON1_ON			0
+#define BUTTON1_OFF			1
 #define PB4_FUNC			AS_GPIO
 #define PB4_OUTPUT_ENABLE	0
 #define PB4_INPUT_ENABLE	1
@@ -48,7 +75,7 @@
 #define PB5_INPUT_ENABLE	1
 #define PB5_DATA_OUT		LED_OFF
 
-// I2C
+// I2C Sensor
 #define	USE_I2C_DRV			I2C_DRV_HARD
 #define I2C_CLOCK			400000 // Hz
 #define I2C_SCL 			GPIO_PC2
@@ -64,9 +91,6 @@
 #define USE_SENSOR_SHT4X		0
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		0
-
-// DISPLAY
-#define	USE_DISPLAY			0
 
 // UART
 #if ZBHCI_UART

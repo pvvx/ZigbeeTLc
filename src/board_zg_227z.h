@@ -1,13 +1,6 @@
 /*
  * board_zg_227z.h
- *
- *  Created on: 10 февр. 2025 г.
- *      Author: pvvx
- */
-/*
- * board_zg_227z.h
- *
- *      Author: pvvx
+ * Author: pvvx
  */
 #ifndef _BOARD_ZG_227Z_H_
 #define _BOARD_ZG_227Z_H_
@@ -18,20 +11,37 @@
 
 #define ZIGBEE_TUYA_OTA 	1
 
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
+
+/* https://pvvx.github.io/ZG-227Z/ | https://pvvx.github.io/ZG-103Z/
+
+TLSR8253 512K Flash
+
+GPIO_PA7 - SWS, free, (debug TX)
+GPIO_PB1 - TX
+GPIO_PC2 - LED
+GPIO_PB7 - RX
+GPIO_PD4 - KEY
+GPIO_PC3 - SDA
+GPIO_PC4 - SCL
+*/
+
+#define BLE_MODEL_STR		"ZG-227Z"
+#define BLE_MAN_STR			"Tuya"
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {9,'Z','G','-','2','2','7','Z','-','z'} // ZG-227Z
+
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_CR2450
 
-// TLSR8253 512K Flash
-// GPIO_PA7 - SWS, free, (debug TX)
-// GPIO_PB1 - TX
-// GPIO_PC2 - LED
-// GPIO_PB7 - RX
-// GPIO_PD4 - KEY
-// GPIO_PC3 - SDA
-// GPIO_PC4 - SCL
+// DISPLAY
+#define	USE_DISPLAY			0
 
 // BUTTON
 #define BUTTON1             GPIO_PD4
+#define BUTTON1_ON			0
+#define BUTTON1_OFF			1
 #define PD4_FUNC			AS_GPIO
 #define PD4_OUTPUT_ENABLE	0
 #define PD4_INPUT_ENABLE	1
@@ -65,8 +75,6 @@
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		0
 
-// DISPLAY
-#define	USE_DISPLAY			0
 
 // LED
 #define LED_ON				0

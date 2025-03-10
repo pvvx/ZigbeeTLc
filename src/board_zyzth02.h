@@ -1,7 +1,6 @@
 /*
  * board_ts0201_tz3000.h
- *
- *      Author: pvvx
+ * Author: pvvx
  */
 #ifndef _BOARD_ZYZTH02_H_
 #define _BOARD_ZYZTH02_H_
@@ -12,28 +11,53 @@
 
 #define ZIGBEE_TUYA_OTA 	1
 
-// https://pvvx.github.io/ZY-ZTH02
-// TLSR825x 1M Flash
-// GPIO_PA7 - SWS, free, (debug TX)
-// GPIO_PB1 - TX
-// GPIO_PB4 - LED (to GND)
-// GPIO_PB7 - RX
-// GPIO_PC0 - KEY (to GND)
-// GPIO_PC2 - SDA, used I2C
-// GPIO_PC3 - SCL, used I2C
-// GPIO_PD7 - ALERT (CHT8305)
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
+
+/* https://pvvx.github.io/ZY-ZTH02 | https://pvvx.github.io/ZY-ZTH02Pro
+
+*TLSR8258
+
+ GPIO_PA0 - free "RXD2" (Reed Switch, input)
+ GPIO_PA1 - free "TXD2"
+ GPIO_PA7 - SWS, (debug TX)
+ GPIO_PB1 - free "TXD1"
+ GPIO_PB4 - KEY
+ GPIO_PB5 - free "P34" (R1 to VCC)
+ GPIO_PB6 - free
+ GPIO_PB7 - free "RXD1"
+ GPIO_PC0 - free "PC0"
+ GPIO_PC1 - free
+ GPIO_PC2 - free "LED"
+ GPIO_PC3 - SCL  "SCL"
+ GPIO_PC4 - +BAT R11/R13
+ GPIO_PD2 - SDA  "SDA"
+ GPIO_PD3 - free
+ GPIO_PD4 - free
+ GPIO_PD7 - free
+*/
+
+#define BLE_MODEL_STR		"ZY-ZTH02"
+#define BLE_MAN_STR			"Tuya"
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {10,'Z','Y','-','Z','T','H','0','2','-','z'} // ZY-ZTH02
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_2AAA
 
+// DISPLAY
+#define	USE_DISPLAY			0
+
 // BUTTON
 #define BUTTON1             GPIO_PB4
+#define BUTTON1_ON			0
+#define BUTTON1_OFF			1
 #define PB4_FUNC			AS_GPIO
 #define PB4_OUTPUT_ENABLE	0
 #define PB4_INPUT_ENABLE	1
 #define	PULL_WAKEUP_SRC_PB4	PM_PIN_PULLUP_1M // Board has hardware pull-ups
 
-// I2C
+// I2C Sensor
 // Warning: SCL and SDA markings are swapped on the PCB
 //#define I2C_GROUP 	I2C_GPIO_GROUP_C2C3
 #define	USE_I2C_DRV			I2C_DRV_SOFT // Soft I2C
@@ -62,9 +86,6 @@
 #define USE_SENSOR_SHT4X		0
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		1
-
-// DISPLAY
-#define	USE_DISPLAY			0
 
 // LED
 //#define USE_BLINK_LED		1 // Debug

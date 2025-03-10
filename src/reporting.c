@@ -5,8 +5,46 @@
 #include "reporting.h"
 #include "utility.h"
 
-extern void reportAttr(reportCfgInfo_t *pEntry);
+//old sdk:  extern void reportAttr(reportCfgInfo_t *pEntry);
 
+/*********************************************************************
+ * @fn      reportAttr
+ *
+ * @brief
+ *
+ * @param   pEntry
+ *
+ * @return	NULL
+ */
+void reportAttr(reportCfgInfo_t *pEntry)
+{
+	if(!zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)){
+		return;
+	}
+
+	epInfo_t dstEpInfo;
+	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+	dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+	dstEpInfo.profileId = pEntry->profileID;
+
+	zclAttrInfo_t *pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
+	if(!pAttrEntry){
+		//should not happen.
+		ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
+		return;
+	}
+
+	u16 len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
+
+	len = (len>8) ? (8):(len);
+
+	//store for next compare
+	memcpy(pEntry->prevData, pAttrEntry->data, len);
+
+	zcl_sendReportCmd(pEntry->endPoint, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+					  pEntry->clusterID, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
+}
 /*********************************************************************
  * @fn      app_chk_report
  *

@@ -1,51 +1,39 @@
 /********************************************************************************************************
  * @file    main.c
  *
- * @brief   This is the source file for main
- *
- * @author  Zigbee Group
- * @date    2021
- *
- * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
- *			All rights reserved.
- *
- *          Licensed under the Apache License, Version 2.0 (the "License");
- *          you may not use this file except in compliance with the License.
- *          You may obtain a copy of the License at
- *
- *              http://www.apache.org/licenses/LICENSE-2.0
- *
- *          Unless required by applicable law or agreed to in writing, software
- *          distributed under the License is distributed on an "AS IS" BASIS,
- *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *          See the License for the specific language governing permissions and
- *          limitations under the License.
  *
  *******************************************************************************************************/
-
+#include "tl_common.h"
 #include "zb_common.h"
+#include "device.h"
 #include "ext_ota.h"
-#include "chip_8258/register.h"
-
-extern void user_init(bool isRetention);
+#if USE_BLE
+#include "stack/ble/ble_config.h"
+#include "stack/ble/ble_common.h"
+#include "stack/ble/ble.h"
+#include "zigbee_ble_switch.h"
+#include "zcl_include.h"
+#include "app_ui.h"
+#include "ble_cfg.h"
+#endif
 
 /*
  * main:
  * */
 #if ZIGBEE_TUYA_OTA
-_attribute_ram_code_sec_
+int flash_main(void)
+#else
+int main(void)
 #endif
-int main(void){
+{
 #if ZIGBEE_TUYA_OTA
 	if(*(u32 *)(0x08008) == 0x544c4e4b) {
 		//clock_init(SYS_CLK_24M_Crystal);
 		tuya_zigbee_ota();
 	}
 #endif
-    // g_zb_txPowerSet = RF_TX_POWER_DEF; // RF_POWER_INDEX_P1p99dBm; mac_phy.c
-	startup_state_e state = drv_platform_init();
 
-	u8 isRetention = (state == SYSTEM_DEEP_RETENTION) ? 1 : 0;
+	u8 isRetention = (drv_platform_init() == SYSTEM_DEEP_RETENTION) ? 1 : 0;
 
 	os_init(isRetention);
 
@@ -56,6 +44,44 @@ int main(void){
 			| FLD_CLK0_UART_EN
 #endif
 			| FLD_CLK0_SWIRE_EN;
+#if PA_ENABLE
+	rf_paInit(PA_TX, PA_RX);
+#endif
+
+#if USE_BLE
+
+	user_init(isRetention);
+	ble_radio_init();
+	user_ble_init(isRetention);
+
+	if(CURRENT_SLOT_GET() == DUALMODE_SLOT_ZIGBEE){
+		switch_to_zb_context();
+	}
+
+	irq_enable(); // drv_enable_irq();
+
+#if (MODULE_WATCHDOG_ENABLE)
+	drv_wd_setInterval(600);
+    drv_wd_start();
+#endif
+
+    while(1) {
+#if (MODULE_WATCHDOG_ENABLE)
+		drv_wd_clear();
+#endif
+
+#if USE_BLE_OTA
+		if(!ble_attr.ota_is_working)
+#endif
+			sensors_task(NULL);
+		concurrent_mode_main_loop();
+		task_keys();
+#if PM_ENABLE
+		app_pm_task();
+#endif
+	}
+
+#else // USE_BLE
 
 	user_init(isRetention);
 
@@ -66,18 +92,7 @@ int main(void){
     drv_wd_start();
 #endif
 
-#if VOLTAGE_DETECT_ENABLE
-    u32 tick = clock_time();
-#endif
-
-	while(1){
-#if VOLTAGE_DETECT_ENABLE
-		if(clock_time_exceed(tick, 200 * 1000)) { // 200 ms
-			batery_detect();
-			tick = clock_time();
-		}
-#endif
-
+	while(1) {
     	ev_main();
 
 #if (MODULE_WATCHDOG_ENABLE)
@@ -90,6 +105,7 @@ int main(void){
 		drv_wd_clear();
 #endif
 	}
+#endif // USE_BLE
 
 	return 0;
 }

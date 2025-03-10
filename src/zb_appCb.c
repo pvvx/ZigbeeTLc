@@ -3,23 +3,6 @@
  *
  * @brief   This is the source file for zb_appCb
  *
- * @author  Zigbee Group
- * @date    2021
- *
- * @par     Copyright (c) 2021, Telink Semiconductor (Shanghai) Co., Ltd. ("TELINK")
- *			All rights reserved.
- *
- *          Licensed under the Apache License, Version 2.0 (the "License");
- *          you may not use this file except in compliance with the License.
- *          You may obtain a copy of the License at
- *
- *              http://www.apache.org/licenses/LICENSE-2.0
- *
- *          Unless required by applicable law or agreed to in writing, software
- *          distributed under the License is distributed on an "AS IS" BASIS,
- *          WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- *          See the License for the specific language governing permissions and
- *          limitations under the License.
  *
  *******************************************************************************************************/
 
@@ -35,7 +18,11 @@
 #include "device.h"
 #include "app_ui.h"
 #include "lcd.h"
-
+#if USE_BLE
+#include "zigbee_ble_switch.h"
+#include "stack/ble/ble.h"
+#include "ble_cfg.h"
+#endif
 /**********************************************************************
  * LOCAL CONSTANTS
  */
@@ -72,10 +59,6 @@ ota_callBack_t sensorDevice_otaCb =
 };
 #endif
 
-ev_timer_event_t *steerTimerEvt = NULL;
-#if REJOIN_FAILURE_TIMER
-ev_timer_event_t *deviceRejoinBackoffTimerEvt = NULL;
-#endif
 /**********************************************************************
  * FUNCTIONS
  */
@@ -83,16 +66,34 @@ s32 sensorDevice_bdbNetworkSteerStart(void *arg){
 
 	bdb_networkSteerStart();
 
-	steerTimerEvt = NULL;
+	g_sensorAppCtx.timerSteerEvt = NULL;
 	return -1;
 }
 
 #if REJOIN_FAILURE_TIMER
 
+#define REJOIN_FAILURE_COUNT	55 // 55 sec
+
+inline void sensorDevice_rejoin_faillure_timer_set(void) {
+	u32 period;
+	if(g_sensorAppCtx.timerSteerEvt) {
+		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
+	}
+	if(++g_sensorAppCtx.rejoin_cnt > 200) // max 240 sec
+		g_sensorAppCtx.rejoin_cnt = 200;
+	if(g_sensorAppCtx.rejoin_cnt < 7)
+		period = 9 << 10; // ~9 sec
+	else if(g_sensorAppCtx.rejoin_cnt < REJOIN_FAILURE_COUNT)
+		period = REJOIN_FAILURE_COUNT << 10; // ~50 sec
+	else
+		period = g_sensorAppCtx.rejoin_cnt << 10; // * 1024, 50..180 sec
+	g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, period);
+}
+
 s32 sensorDevice_rejoinBackoff(void *arg){
 
 	if(zb_isDeviceFactoryNew()){
-		deviceRejoinBackoffTimerEvt = NULL;
+		g_sensorAppCtx.timerRejoinBackoffEvt = NULL;
 		return -1;
 	}
 
@@ -124,36 +125,47 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 		 *
 		 */
 		if(joinedNetwork){
+#if	!USE_BLE && USE_DISPLAY
+			if(g_sensorAppCtx.timerTaskEvt) {
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
+			}
+#endif
 			zb_setPollRate(DEFAULT_POLL_RATE);
 
 #ifdef ZCL_OTA
-			ota_queryStart(15 * 60);	// 15 m
+			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL); // 15 * 60);	// 15 m
 #endif
 
 #ifdef ZCL_POLL_CTRL
 			sensorDevice_zclCheckInStart();
 #endif
-		}else{
+		} else {
 			u16 jitter = 0;
-			do{
+			do {
 				jitter = zb_random() % 0x0fff;
 			}while(jitter == 0);
 
-			if(steerTimerEvt){
-				TL_ZB_TIMER_CANCEL(&steerTimerEvt);
+			if(g_sensorAppCtx.timerSteerEvt){
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
 			}
 			///time_soff = 0;
-			steerTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
+			g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
+#if USE_BLE
+			g_dualModeInfo.bleStart = 1;
+#endif
 		}
 	}
 #if REJOIN_FAILURE_TIMER
 	else
 	{
-		if(joinedNetwork){
+		if(joinedNetwork) {
 			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 		}
-	}
+#if USE_BLE
+			g_dualModeInfo.bleStart = 1;
 #endif
+	}
+#endif // REJOIN_FAILURE_TIMER
 }
 
 /*********************************************************************
@@ -170,21 +182,27 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
-			light_blink_start(7, 500, 500);
-			zb_setPollRate(DEFAULT_POLL_RATE);
-
-			if(steerTimerEvt){
-				TL_ZB_TIMER_CANCEL(&steerTimerEvt);
-			}
-			if(deviceRejoinBackoffTimerEvt){
-				TL_ZB_TIMER_CANCEL(&deviceRejoinBackoffTimerEvt);
-			}
+#if	USE_BLE
+			ble_task_stop();	// отключение BLE
+#else
 #if	USE_DISPLAY
 			if(g_sensorAppCtx.timerTaskEvt) {
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
-				g_sensorAppCtx.timerTaskEvt = NULL;
 			}
 #endif
+#endif
+			if(g_sensorAppCtx.timerSteerEvt){
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
+			}
+			if(g_sensorAppCtx.timerRejoinBackoffEvt){
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerRejoinBackoffEvt);
+			}
+
+			g_sensorAppCtx.rejoin_cnt = REJOIN_FAILURE_COUNT;
+
+			light_blink_start(7, 500, 500);
+			zb_setPollRate(DEFAULT_POLL_RATE);
+
 #ifdef ZCL_POLL_CTRL
 		    sensorDevice_zclCheckInStart();
 #endif
@@ -192,11 +210,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
 #endif
 #if	USE_DISPLAY
-#if BOARD == BOARD_MHO_C401N
 			show_connected_symbol(true);
-#else
-			show_ble_symbol(false);
-#endif
 #endif
 			break;
 		case BDB_COMMISSION_STA_IN_PROGRESS:
@@ -207,27 +221,29 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 		case BDB_COMMISSION_STA_TCLK_EX_FAILURE:
 		case BDB_COMMISSION_STA_TARGET_FAILURE:
 			{
+#if REJOIN_FAILURE_TIMER
+				sensorDevice_rejoin_faillure_timer_set();
+#else
 				u16 jitter = 0;
 				do{
 					jitter = zb_random() % 0x0fff;
 				}while(jitter == 0);
 
-				if(steerTimerEvt){
-					TL_ZB_TIMER_CANCEL(&steerTimerEvt);
+				if(g_sensorAppCtx.timerSteerEvt){
+					TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
 				}
-#if REJOIN_FAILURE_TIMER
-				steerTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter + 60000);
-#else
-				steerTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
+				g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
 #endif
 #if	USE_DISPLAY
-#if BOARD == BOARD_MHO_C401N
 				show_connected_symbol(false);
-#else
-				show_ble_symbol(true);
 #endif
+#if	USE_BLE
+				g_dualModeInfo.bleStart = 1;
+#else
+#if	USE_DISPLAY
 				if(!g_sensorAppCtx.timerTaskEvt)
 					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+#endif
 #endif
 			}
 			break;
@@ -247,32 +263,39 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 #endif
 #if	USE_DISPLAY
-#if BOARD == BOARD_MHO_C401N
-			show_connected_symbol(false);
-#else
-			show_ble_symbol(true);
+				show_connected_symbol(false);
 #endif
-			if(!g_sensorAppCtx.timerTaskEvt)
-				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+#if	USE_BLE
+				g_dualModeInfo.bleStart = 1;
+#else
+#if	USE_DISPLAY
+				if(!g_sensorAppCtx.timerTaskEvt)
+					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+#endif
 #endif
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
 			if(!zb_isDeviceFactoryNew()){
 #if REJOIN_FAILURE_TIMER
-                // sleep for 3 minutes before reconnect if rejoin failed
-                deviceRejoinBackoffTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 360 * 1000);
+                // sleep for 6 minutes before reconnect if rejoin failed
+				if(g_sensorAppCtx.timerRejoinBackoffEvt) {
+					TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerRejoinBackoffEvt);
+				}
+                g_sensorAppCtx.timerRejoinBackoffEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 360 * 1000);
 #else
 				zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 #endif
 			}
 #if	USE_DISPLAY
-#if BOARD == BOARD_MHO_C401N
-			show_connected_symbol(false);
-#else
-			show_ble_symbol(true);
+				show_connected_symbol(false);
 #endif
-			if(!g_sensorAppCtx.timerTaskEvt)
-				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+#if	USE_BLE
+				g_dualModeInfo.bleStart = 1;
+#else
+#if	USE_DISPLAY
+				if(!g_sensorAppCtx.timerTaskEvt)
+					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+#endif
 #endif
 			break;
 		default:
@@ -321,8 +344,8 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
 {
     if(pLeaveCnf->status == SUCCESS){
-		if(deviceRejoinBackoffTimerEvt){
-			TL_ZB_TIMER_CANCEL(&deviceRejoinBackoffTimerEvt);
+		if(g_sensorAppCtx.timerRejoinBackoffEvt){
+			TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerRejoinBackoffEvt);
 		}
     }
 }

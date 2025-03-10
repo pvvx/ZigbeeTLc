@@ -9,52 +9,49 @@
 #include "device.h"
 #include "sensors.h"
 #include "battery.h"
+#include "lcd.h"
 
 measured_battery_t measured_battery;
 
-#define _BAT_SPEED_CODE_SEC_ _attribute_ram_code_sec_ // for speed
+#define _BAT_SPEED_CODE_SEC_ //_attribute_ram_code_sec_ // for speed
 
-
-#define BAT_AVERAGE_COUNT	32
-
-struct {
-	u32 summ;
-	u16 count;
-	u16 battery_mv;
-} bat_average;
+#define BAT_AVERAGE_COUNT_SHL	9 // 4,5,6,7,8,9,10,11,12 -> 16,32,64,128,256,512,1024,2048,4096
 
 _BAT_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
-static u16 battery_average(u16 battery_mv) {
-	u16 bat_battery_mv;
-
-	bat_average.summ += battery_mv;
-	bat_average.count++;
-
-	bat_battery_mv = bat_average.summ / bat_average.count;
-
-	if(bat_average.count >= BAT_AVERAGE_COUNT) {
-		bat_average.summ >>= 1;
-		bat_average.count >>= 1;
-	}
-	return bat_battery_mv;
-}
-
-_BAT_SPEED_CODE_SEC_
 void battery_detect(void)
 {
+	u16 battery_level = 0;
 	adc_channel_init(SHL_ADC_VBAT);
 	measured_battery.mv = get_adc_mv();
 	if(measured_battery.mv < BATTERY_SAFETY_THRESHOLD){
 #if PM_ENABLE
+#if USE_DISPLAY
+		display_off();
+#endif
 		sensor_go_sleep();
-		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 60*1000);
+		drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, LOW_POWER_SLEEP_TIME_ms);
 #else
 		SYSTEM_RESET();
 #endif
 	}
-	measured_battery.average_mv = battery_average(measured_battery.mv);
-	measured_battery.level = (measured_battery.average_mv - BATTERY_SAFETY_THRESHOLD)/4;
-    if(measured_battery.level > 200)
-    	measured_battery.level = 200;
+	measured_battery.summ += measured_battery.mv;
+	measured_battery.cnt++;
+	if(measured_battery.cnt >= (1<<BAT_AVERAGE_COUNT_SHL)) {
+		measured_battery.average_mv = measured_battery.summ >> BAT_AVERAGE_COUNT_SHL;
+		measured_battery.summ -= measured_battery.average_mv;
+		measured_battery.cnt--;
+	} else {
+		measured_battery.average_mv = measured_battery.summ / measured_battery.cnt;
+	}
+	if(measured_battery.average_mv > BATTERY_SAFETY_THRESHOLD) {
+		battery_level = (measured_battery.average_mv - BATTERY_SAFETY_THRESHOLD) / 4;
+		if(battery_level > 200)
+			battery_level = 200;
+	}
+    measured_battery.level = (u8)battery_level;
+#if USE_BLE
+    measured_battery.batVal = (u8)(battery_level >> 1);
+#endif
+    measured_battery.flag = 0xff;
 }

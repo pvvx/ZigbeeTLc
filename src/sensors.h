@@ -25,6 +25,8 @@ enum {
 	TH_SENSOR_TYPE_MAX // 13
 } SENSOR_TYPES_e;
 
+#if USE_SENSOR_TH
+
 #define AHT2x_I2C_ADDR			0x38
 #define CHT8305_I2C_ADDR		0x40
 #define CHT8305_I2C_ADDR_MAX	0x43
@@ -53,11 +55,11 @@ enum {
 #define USE_SENSOR_SHT30 	0
 #endif
 
-#if USE_SENSOR_TH
 
-typedef int (*sensors_callback_t)(void *);
+typedef int (*sensors_stage_t)(void *);
+typedef void (*sensors_callback_t)(void);
 
-typedef struct _thsensor_coef_t {
+typedef struct {
 	u32 val1_k;	// temp_k / current_k
 	u32 val2_k;	// humi_k / voltage_k
 	s16 val1_z;	// temp_z / current_z
@@ -65,32 +67,44 @@ typedef struct _thsensor_coef_t {
 } sensor_coef_t; // [12]
 
 enum {
-	MMODE_START_WAIT_READ	=0,
-	MMODE_READ_START,
-	MMODE_READ_ONLY
+	MMODE_START_WAIT_READ	=0,	// wakeup, start, wait + (read [+sleep])
+	MMODE_READ_START,			// read, next start, none
+	MMODE_READ_ONLY				// read, none, none
 } MEASUREMENT_MODE_e;
 
-typedef struct _sensor_def_cfg_t {
+typedef struct {
 	sensor_coef_t coef;
-	sensors_callback_t start_measure;
-	sensors_callback_t read_measure;
-	u32 measure_timeout;
+//	MEASUREMENT_MODE: 0,1,2
+	sensors_stage_t stage1_measure; // wakeup, read, read
+	sensors_stage_t stage2_measure; // start, next start, none
+	sensors_callback_t measure_callback; // wait + (read [+sleep]), none, none
+	u32 measure_timeout_us;
 	u8 sensor_type; // SENSOR_TYPES
 	u8	mode; // =0 - start-wait-read, =1 - read-start, =2 read only
 } sensor_def_cfg_t;
 
-typedef struct _sensor_th_t {
+typedef struct {
 	s16	temp; // in 0.01 C
 	s16	humi; // in 0.01 %
 	sensor_coef_t coef;
-	sensors_callback_t start_measure;
-	sensors_callback_t read_measure;
+	sensors_stage_t stage1_measure;
+	sensors_stage_t stage2_measure;
+	sensors_callback_t measure_callback;
+	sensors_callback_t read_callback;
 	u32	id;
-	u32	measure_timeout;
+	u32	measure_timeout_us;
+	u32	start_measure_tik;
 	u8	i2c_addr;
 	u8	sensor_type; // SENSOR_TYPES
 	u8	mode; // =0 - start-wait-read, =1 - read-start, =2 read only (auto step measure)
+	u8  flag; // =0xff if read data ok, = 0 if not check_sensor
 } sensor_th_t;
+
+#define FLG_MEASURE_HT_ADV		0x01
+#define FLG_MEASURE_HT_LCD		0x02
+#define FLG_MEASURE_HT_RP		0x04
+#define FLG_MEASURE_HT_CC		0x08
+
 
 extern sensor_th_t sensor_ht;
 
@@ -105,6 +119,6 @@ void sensor_go_sleep(void);
 
 int read_sensor(void);
 
-#endif
+#endif // USE_SENSOR_TH
 
 #endif /* _SENSORS_H_ */

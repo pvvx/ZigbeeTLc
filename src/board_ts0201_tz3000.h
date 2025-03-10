@@ -12,28 +12,45 @@
 
 #define ZIGBEE_TUYA_OTA 	1
 
-// https://pvvx.github.io/TS0201_TZ3000
-// TLSR825x 1M Flash
-// GPIO_PA7 - SWS, free, (debug TX)
-// GPIO_PB1 - TX
-// GPIO_PB4 - LED (to GND)
-// GPIO_PB7 - RX
-// GPIO_PC0 - KEY (to GND)
-// GPIO_PC2 - SDA, used I2C
-// GPIO_PC3 - SCL, used I2C
-// GPIO_PD7 - ALERT (CHT8305)
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
+
+/* https://pvvx.github.io/TS0201_TZ3000
+
+TLSR825x 1M Flash
+
+GPIO_PA7 - SWS, free, (debug TX)
+GPIO_PB1 - TX
+GPIO_PB4 - LED (to GND)
+GPIO_PB7 - RX
+GPIO_PC0 - KEY (to GND)
+GPIO_PC2 - SDA, used I2C
+GPIO_PC3 - SCL, used I2C
+GPIO_PD7 - ALERT (CHT8305)
+
+*/
+
+#define BLE_MODEL_STR		"TS0201"
+#define BLE_MAN_STR			"Tuya"
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {8,'T','S','0','2','0','1','-','z'} // TS0201
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_2AAA
 
+// DISPLAY
+#define	USE_DISPLAY			0
+
 // BUTTON
 #define BUTTON1             GPIO_PC0
+#define BUTTON1_ON			0
+#define BUTTON1_OFF			1
 #define PC0_FUNC			AS_GPIO
 #define PC0_OUTPUT_ENABLE	0
 #define PC0_INPUT_ENABLE	1
 #define	PULL_WAKEUP_SRC_PC0	PM_PIN_PULLUP_10K
 
-// I2C
+// I2C Sensor
 #define	USE_I2C_DRV			I2C_DRV_HARD
 #define I2C_CLOCK			100000 // Hz
 #define I2C_SCL 			GPIO_PC2
@@ -49,9 +66,6 @@
 #define USE_SENSOR_SHT4X		0
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		0
-
-// DISPLAY
-#define	USE_DISPLAY			0
 
 // LED
 #define LED_ON				1

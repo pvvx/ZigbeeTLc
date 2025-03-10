@@ -1,8 +1,7 @@
 /*
  * lcd_mho_c122.c
- *
- *      Created: pvvx, 28.05.2023 
- *      Edited by: FaBjE
+ * Created: pvvx, 28.05.2023 
+ * Edited by: FaBjE
  *
  *  https://github.com/pvvx/ATC_MiThermometer/issues/339
  */
@@ -14,48 +13,28 @@
 #include "lcd.h"
 #include "device.h"
 
-#define _LCD_SPEED_CODE_SEC_ _attribute_ram_code_sec_
+#define _SCR_CODE_SEC_
 
-/*
- *  MHO-C122 LCD buffer:  byte.bit
+RAM scr_data_t scr;
 
-         --0.4--         --1.4--            --2.4--
-  |    |         |     |         |        |         |
-  |   0.0       0.5   1.0       1.5      2.0       2.5
-  |    |         |     |         |        |         |      o 3.0
- 0.3     --0.1--         --1.1--            --2.1--          +--- 3.0
-  |    |         |     |         |        |         |     3.0|
-  |   0.2       0.6   1.2       1.6      2.2       2.6       ---- 3.1
-  |    |         |     |         |        |         |     3.0|
-         --0.7--         --1.7--     *      --2.7--          ---- 3.2
-                                    2.3
-           --5.3--         --4.3--              1.3       1.3            
- (|)     |         |     |         |            / \       / \      
- 3.6    5.6       5.2   4.6       4.2     1.3(  ___  3.1  ___  )1.3
-         |         |     |         |            1.3 /3.6\ 1.3      
- BLE       --5.5--         --4.5--                  _____
- 4.7     |         |     |         |                \3.5/
-        5.4       5.1   4.4       4.1     	          
- BAT     |         |     |         |                  %
- 5.7       --5.0--         --4.0--                   3.4
+#define lcd_send_i2c_byte(a)  send_i2c_byte(scr.i2c_address, a)
+#define lcd_send_i2c_buf(b, a)  send_i2c_bytes(scr.i2c_address, (u8 *) b, a)
 
-None: 3.3 ?
-*/
+#define LCD_SYM_Top_E	0b10010111	// "E"
+#define LCD_SYM_Top_H	0b01100111	// "H"
+#define LCD_SYM_Top_i	0b00000100	// "i"
+#define LCD_SYM_Top_L	0b10000101	// "L"
+#define LCD_SYM_Top_o	0b11000110	// "o"
 
-u8 display_buff[LCD_BUF_SIZE];
-u8 display_cmp_buff[LCD_BUF_SIZE];
-u8 i2c_address_lcd; // = 0x78; // B1.4 uses Address 0x78 and B1.9 uses 0x7c
+#define LCD_SYM_Top_t	0b10000111	// "t"
+#define LCD_SYM_Top_a	0b11110110	// "a"
 
-#define lcd_send_i2c_byte(a)  send_i2c_byte(i2c_address_lcd, a)
-#define lcd_send_i2c_buf(b, a)  send_i2c_bytes(i2c_address_lcd, (u8 *) b, a)
+#define LCD_SYM_Bot_E	0b01111001	// "E"
+#define LCD_SYM_Bot_H   0b01110110	// "H"
+#define LCD_SYM_Bot_i	0b00010000	// "i"
+#define LCD_SYM_Bot_L	0b01010001	// "L"
+#define LCD_SYM_Bot_o	0b00110011	// "o"
 
-#define LCD_SYM_H	0b01100111	// "H"
-#define LCD_SYM_i	0b00000100	// "i"
-#define LCD_SYM_L	0b10000101	// "L"
-#define LCD_SYM_o	0b11000110	// "o"
-
-#define LCD_SYM_BLE	BIT(7)	// BLE connect
-#define LCD_SYM_BAT	BIT(7)	// battery
 
 const u8 lcd_init_cmd_b14[] =	{0x80,0x3B,0x80,0x02,0x80,0x0F,0x80,0x95,0x80,0x88,0x80,0x88,0x80,0x88,0x80,0x88,0x80,0x19,0x80,0x28,0x80,0xE3,0x80,0x11};
 								//	{0x80,0x40,0xC0,byte1,0xC0,byte2,0xC0,byte3,0xC0,byte4,0xC0,byte5,0xC0,byte6};
@@ -97,11 +76,11 @@ const u8 display_small_numbers[] = {
 		0b01111001, // E
 		0b01111000};  // F
 
-_LCD_SPEED_CODE_SEC_
+_SCR_CODE_SEC_
 static void send_to_lcd(void){
 	unsigned int buff_index;
-	u8 * p = display_buff;
-	if (i2c_address_lcd) {
+	u8 * p = scr.display_cmp_buff;
+	if (scr.i2c_address) {
 		unsigned char r = irq_disable();
 		if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 			init_i2c();
@@ -109,12 +88,12 @@ static void send_to_lcd(void){
 			gpio_setup_up_down_resistor(I2C_SCL, PM_PIN_PULLUP_10K);
 			gpio_setup_up_down_resistor(I2C_SDA, PM_PIN_PULLUP_10K);
 		}
-		reg_i2c_id = i2c_address_lcd;
+		reg_i2c_id = scr.i2c_address;
 		reg_i2c_adr_dat = 0x4080;
 		reg_i2c_ctrl = FLD_I2C_CMD_START | FLD_I2C_CMD_ID | FLD_I2C_CMD_ADDR | FLD_I2C_CMD_DO;
 		while (reg_i2c_status & FLD_I2C_CMD_BUSY);
 		reg_i2c_adr = 0xC0;
-		for(buff_index = 0; buff_index < sizeof(display_buff); buff_index++) {
+		for(buff_index = 0; buff_index < sizeof(scr.display_buff); buff_index++) {
 			reg_i2c_do = *p++;
 			reg_i2c_ctrl = FLD_I2C_CMD_ADDR | FLD_I2C_CMD_DO;
 			while (reg_i2c_status & FLD_I2C_CMD_BUSY);
@@ -125,30 +104,28 @@ static void send_to_lcd(void){
 	}
 }
 
-// #define SHOW_REBOOT_SCREEN()
-void show_reboot_screen(void) {
-	memset(&display_buff, 0xff, sizeof(display_buff));
-	update_lcd();
-}
-
 void init_lcd(void){
-	i2c_address_lcd = scan_i2c_addr(B14_I2C_ADDR << 1);
-	if (i2c_address_lcd) {
+	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
+	scr.i2c_address = scan_i2c_addr(B14_I2C_ADDR << 1);
+	if (scr.i2c_address) {
 // 		GPIO_PB6 set in app_config.h!
 //		gpio_setup_up_down_resistor(GPIO_PB6, PM_PIN_PULLUP_10K); // LCD on low temp needs this, its an unknown pin going to the LCD controller chip
 //		pm_wait_ms(50); // LCD_INIT_DELAY()
 		lcd_send_i2c_buf((u8 *) lcd_init_cmd_b14, sizeof(lcd_init_cmd_b14));
 		lcd_send_i2c_buf((u8 *) lcd_init_clr_b14, sizeof(lcd_init_clr_b14));
-		show_reboot_screen();
-	}
+		memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
+		send_to_lcd();
+	} else
+		scr.display_off = 1;
 }
 
+_SCR_CODE_SEC_
 void update_lcd(void){
-	if(g_zcl_thermostatUICfgAttrs.display_off)
+	if(scr.display_off)
 		return;
-	if (memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
+	if (memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
+		memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff));
 		send_to_lcd();
-		memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
 	}
 }
 
@@ -159,133 +136,180 @@ void update_lcd(void){
  * 0x80 = " _"
  * 0xA0 = "°C"
  * 0xC0 = " ="
- * 0xE0 = "°E"
+ * 0xE0 = "°E" */
+_SCR_CODE_SEC_
 void show_temp_symbol(u8 symbol) {
-	display_buff[3] &= ~(BIT(0) | BIT(1) | BIT(2));
+	scr.display_buff[3] &= ~(BIT(0) | BIT(1) | BIT(2));
 	if (symbol & 0x20)
-		display_buff[3] |= BIT(0);
+		scr.display_buff[3] |= BIT(0);
 	if (symbol & 0x40)
-		display_buff[3] |= BIT(1); //"-"
+		scr.display_buff[3] |= BIT(1); //"-"
 	if (symbol & 0x80)
-		display_buff[3] |= BIT(2); // "_"
+		scr.display_buff[3] |= BIT(2); // "_"
 }
-*/
-/*0=off, 1=happy, 2=sad*/
+
+/* 0 = "     " off,
+ * 1 = " ^-^ "
+ * 2 = " -^- "
+ * 3 = " ooo "
+ * 4 = "(   )"
+ * 5 = "(^-^)" happy
+ * 6 = "(-^-)" sad
+ * 7 = "(ooo)" */
+_SCR_CODE_SEC_
 void show_smiley(u8 state){
-	display_buff[1] &= ~BIT(3);
-	display_buff[3] &= ~(BIT(5) | BIT(6));
+	scr.display_buff[1] &= ~BIT(3);
+	scr.display_buff[3] &= ~(BIT(5) | BIT(6));
 
-	if(state == 1) {
-		display_buff[3] |= BIT(5); //Happy mouth
-		display_buff[1] |= BIT(3);
-	} else if(state == 2) {
-		display_buff[3] |= BIT(6); //Sad mouth
-		display_buff[1] |= BIT(3);
-	}
+	if(state & 1)
+		scr.display_buff[3] |= BIT(5); // Happy mouth
+	if(state & 2)
+		scr.display_buff[3] |= BIT(6); // Sad mouth
+	if(state & 4)
+		scr.display_buff[1] |= BIT(3); // Smiley contour
 }
 
+_SCR_CODE_SEC_
 void show_ble_symbol(bool state){
 	if (state)
-		display_buff[4] |= LCD_SYM_BLE;
+		scr.display_buff[4] |= BIT(7);
 	else 
-		display_buff[4] &= ~LCD_SYM_BLE;
+		scr.display_buff[4] &= ~BIT(7);
 }
 
+_SCR_CODE_SEC_
+void show_connected_symbol(bool state){
+ 	if (state)
+		scr.display_buff[3] |= BIT(7); // "*"
+	else
+		scr.display_buff[3] &= ~BIT(7);
+}
+
+_SCR_CODE_SEC_
 void show_battery_symbol(bool state){
 	if (state)
-		display_buff[5] |= LCD_SYM_BAT;
+		scr.display_buff[5] |= BIT(7);
 	else 
-		display_buff[5] &= ~LCD_SYM_BAT;
+		scr.display_buff[5] &= ~BIT(7);
 }
 
-/* number in 0.1 (-995..19995), Show: -99 .. -9.9 .. 199.9 .. 1999 */
-_LCD_SPEED_CODE_SEC_
-__attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol){
-	display_buff[0] = 0;
-	display_buff[1] &= BIT(3); // Clear digit (except smiley contour)
-	display_buff[2] = 0;
+/* number:
+ * in 0.1 (-995..19995), Show: -99..-9.9 .. 199.9 .. 1999
+ * symbol:
+ * 0x00 = "  "
+ * 0x20 = "°Г"
+ * 0x40 = " -"
+ * 0x60 = "°F"
+ * 0x80 = " _"
+ * 0xA0 = "°C"
+ * 0xC0 = " ="
+ * 0xE0 = "°E" */
+_SCR_CODE_SEC_
+__attribute__((optimize("-Os")))
+void show_big_number_x10(s16 number, u8 symbol){
 
-	display_buff[3] &= ~(BIT(0) | BIT(1) | BIT(2));
-	if (symbol == 1)
-		display_buff[3] |= BIT(0) | BIT(2); //"C"
-	if (symbol == 2)
-		display_buff[3] |= BIT(0) | BIT(1); //"F"
+	scr.display_buff[3] &= ~(BIT(0) | BIT(1) | BIT(2));
+	if (symbol & 0x20)
+		scr.display_buff[3] |= BIT(0);
+	if (symbol & 0x40)
+		scr.display_buff[3] |= BIT(1); //"-"
+	if (symbol & 0x80)
+		scr.display_buff[3] |= BIT(2); // "_"
+
+	scr.display_buff[0] = 0;
+	scr.display_buff[1] &= BIT(3); // Clear digit (except smiley contour)
+	scr.display_buff[2] = 0;
 
 	if (number > 19995) {
-   		display_buff[0] |= LCD_SYM_H; // "H"
-   		display_buff[1] |= LCD_SYM_i; // "i"
+   		scr.display_buff[0] |= LCD_SYM_Top_H; // "H"
+   		scr.display_buff[1] |= LCD_SYM_Top_i; // "i"
 	} else if (number < -995) {
-   		display_buff[0] |= LCD_SYM_L; // "L"
-   		display_buff[1] |= LCD_SYM_o; // "o"
+   		scr.display_buff[0] |= LCD_SYM_Top_L; // "L"
+   		scr.display_buff[1] |= LCD_SYM_Top_o; // "o"
 	} else {
 		/* number: -995..19995 */
-		if (number > 1995 || number < -95) {
-			if (number < 0){
-				number = -number;
-				display_buff[0] |= BIT(1); // "-"
-			}
-			number = (number + 5) / 10; // round(div 10)
-		} else { // show: -9.9..199.9
-			display_buff[2] = BIT(3); // point
-			if (number < 0){
-				number = -number;
-				display_buff[0] |= BIT(1); // "-"
-			}
+		if (number > 1999 || number < -99) {
+			/* number: -995..-100, 2000..19995 */
+			// round(div 10)
+			number += 5;
+			number /= 10;
+			// show no point: -99..-10, 200..1999
+		} else {
+			// show point: -9.9..199.9
+			scr.display_buff[2] = BIT(3); // point top
+		}
+		/* show: -99..1999 */
+		if (number < 0) {
+			number = -number;
+			scr.display_buff[0] |= BIT(1); // "-"
 		}
 		/* number: -99..1999 */
-		if (number > 999) display_buff[0] |= BIT(3); // "1" 1000..1999
-		if (number > 99) display_buff[0] |= display_numbers[number / 100 % 10];
-		if (number > 9) display_buff[1] |= display_numbers[number / 10 % 10];
-		else display_buff[1] |= display_numbers[0]; // "0"
-	    display_buff[2] |= display_numbers[number %10];
+		if (number > 999) scr.display_buff[0] |= BIT(3); // "1" 1000..1999
+		if (number > 99) scr.display_buff[0] |= display_numbers[number / 100 % 10];
+		if (number > 9) scr.display_buff[1] |= display_numbers[number / 10 % 10];
+		else scr.display_buff[1] |= display_numbers[0]; // "0"
+	    scr.display_buff[2] |= display_numbers[number %10];
 	}
 }
 
 /* -9 .. 99 */
-_LCD_SPEED_CODE_SEC_
-__attribute__((optimize("-Os"))) void show_small_number(s16 number, bool percent){
-	display_buff[4] &= LCD_SYM_BLE; //Clear digit (except BLE symbol)
-	display_buff[5] &= LCD_SYM_BAT; //Clear digit (except BAT symbol)
+_SCR_CODE_SEC_
+__attribute__((optimize("-Os")))
+void show_small_number(s16 number, bool percent){
+	scr.display_buff[4] &= BIT(7); //Clear digit (except BLE symbol)
+	scr.display_buff[5] &= BIT(7); //Clear digit (except BAT symbol)
 
 	if (percent)
-		display_buff[3] |= BIT(4); // %
+		scr.display_buff[3] |= BIT(4); // %
 	else
-		display_buff[3] &= ~BIT(4); // %
+		scr.display_buff[3] &= ~BIT(4); // %
 
 	if (number > 99) {
-		display_buff[5] |= BIT(1) | BIT(2) | BIT(4) | BIT(5) | BIT(6) ; // "H"
-		display_buff[4] |= BIT(4); // "i"
+		scr.display_buff[5] |= LCD_SYM_Bot_H;  // "H"
+		scr.display_buff[4] |= LCD_SYM_Bot_i;  // "i"
 	} else if (number < -9) {
-		display_buff[5] |= BIT(0) | BIT(4) | BIT(6); // "L"
-		display_buff[4] |= BIT(0) | BIT(1) | BIT(4) | BIT(5); // "o"
+		scr.display_buff[5] |= LCD_SYM_Bot_L; // "L"
+		scr.display_buff[4] |= LCD_SYM_Bot_o; // "o"
 	} else {
 		if (number < 0) {
 			number = -number;
-			display_buff[5] |= BIT(5); // "-"
+			scr.display_buff[5] |= BIT(5); // "-"
 		}
 		if (number > 9) 
-			display_buff[5] |= display_small_numbers[number / 10 % 10];
+			scr.display_buff[5] |= display_small_numbers[number / 10 % 10];
 
-		display_buff[4] |= display_small_numbers[number %10];
+		scr.display_buff[4] |= display_small_numbers[number %10];
 	}
 }
 
-void show_ota_screen(void) {
-	memset(&display_buff, 0, sizeof(display_buff));
-	display_buff[4] = BIT(7); // "ble"
-	display_buff[0] = BIT(1); // "_"
-	display_buff[1] = BIT(1); // "_"
-	display_buff[2] = BIT(1); // "_"
+void show_ble_ota(void) {
+	scr.display_buff[0] = LCD_SYM_Top_o; // "o"
+	scr.display_buff[1] = LCD_SYM_Top_t; // "t"
+	scr.display_buff[2] = LCD_SYM_Top_a; // "a"
+	scr.display_buff[3] &= BIT(7); // "(|)"
+	scr.display_buff[4] = BIT(7); // "ble"
+	scr.display_buff[5] &= BIT(7); // "bat"
 	update_lcd();
 }
 
+void show_err_sensors(void) {
+	scr.display_buff[0] = LCD_SYM_Bot_E; // E
+	scr.display_buff[1] = LCD_SYM_Bot_E; // E
+	scr.display_buff[2] = 0;
+	scr.display_buff[3] &= BIT(7); // "(|)"
+	scr.display_buff[4] &= BIT(7); // "ble"
+	scr.display_buff[5] &= BIT(7); // "bat"
+	scr.display_buff[4] |= LCD_SYM_Top_E; // E
+	scr.display_buff[5] |= LCD_SYM_Top_E; // E
+}
 
-void show_blink_screen(void) {
-	memset(&display_buff, 0, sizeof(display_buff));
-	display_buff[2] = BIT(4); // "ble"
-	display_buff[3] = BIT(7); // "_"
-	display_buff[4] = BIT(7); // "_"
-	display_buff[5] = BIT(7); // "_"
+void show_reset_screen(void) {
+	scr.display_buff[0] = LCD_SYM_Top_o; // "o"
+	scr.display_buff[1] = LCD_SYM_Top_o; // "o"
+	scr.display_buff[2] = 0;
+	scr.display_buff[3] = 0;
+	scr.display_buff[4] = LCD_SYM_Bot_o; // "o"
+	scr.display_buff[5] = LCD_SYM_Bot_o; // "o"
 	update_lcd();
 }
 
@@ -295,19 +319,19 @@ void show_clock(void) {
 	uint32_t min = tmp % 60;
 	uint32_t hrs = tmp / 60 % 24;
 
-	display_buff[0] = 0;
-	display_buff[1] &= BIT(3); //Clear digit (except smiley contour)
+	scr.display_buff[0] = 0;
+	scr.display_buff[1] &= BIT(3); //Clear digit (except smiley contour)
 
-	display_buff[0] = display_numbers[hrs / 10 % 10];
-	display_buff[1] = display_numbers[hrs % 10];
-	display_buff[2] = 0;
-	display_buff[3] = 0;
+	scr.display_buff[0] = display_numbers[hrs / 10 % 10];
+	scr.display_buff[1] = display_numbers[hrs % 10];
+	scr.display_buff[2] = 0;
+	scr.display_buff[3] &= BIT(7);
 
-	display_buff[4] &= LCD_SYM_BLE; //Clear digit (except BLE symbol)
-	display_buff[5] &= LCD_SYM_BAT; //Clear digit (except BAT symbol)
+	scr.display_buff[4] &= BIT(7); //Clear digit (except BLE symbol)
+	scr.display_buff[5] &= BIT(7); //Clear digit (except BAT symbol)
 
-	display_buff[4] |= display_small_numbers[min % 10];
-	display_buff[5] |= display_small_numbers[min / 10 % 10];
+	scr.display_buff[4] |= display_small_numbers[min % 10];
+	scr.display_buff[5] |= display_small_numbers[min / 10 % 10];
 }
 #endif // USE_CLOCK
 

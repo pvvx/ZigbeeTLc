@@ -1,23 +1,28 @@
 
 OUT_DIR += $(SRC_DIR) \
-$(SRC_DIR)/patch_sdk \
+$(SRC_DIR)/patch_z_sdk \
 $(SRC_DIR)/custom_zcl
 
 OBJS += \
-$(OUT_PATH)$(SRC_DIR)/patch_sdk/flash.o \
-$(OUT_PATH)$(SRC_DIR)/patch_sdk/flash_drv.o \
-$(OUT_PATH)$(SRC_DIR)/patch_sdk/adc_drv.o \
-$(OUT_PATH)$(SRC_DIR)/patch_sdk/random.o \
-$(OUT_PATH)$(SRC_DIR)/patch_sdk/i2c_drv.o \
-$(OUT_PATH)$(SRC_DIR)/patch_sdk/hw_drv.o \
-$(OUT_PATH)$(SRC_DIR)/patch_sdk/cstartup_8258.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/cstartup_8258.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/flash.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/flash_drv.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/adc_drv.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/random.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/i2c_drv.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/hw_drv.o \
+$(OUT_PATH)$(SRC_DIR)/patch_z_sdk/drv_nv.o \
 $(OUT_PATH)$(SRC_DIR)/app_ui.o \
 $(OUT_PATH)$(SRC_DIR)/device.o \
-$(OUT_PATH)$(SRC_DIR)/lcd_03mmc.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_cgdk2.o \
+$(OUT_PATH)$(SRC_DIR)/lcd_lktmzl02.o \
+$(OUT_PATH)$(SRC_DIR)/lcd_lywsd03mmc.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_mho_c122.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zth03.o \
-$(OUT_PATH)$(SRC_DIR)/lcd_lktmzl02.o \
+$(OUT_PATH)$(SRC_DIR)/lcd_zth05.o \
+$(OUT_PATH)$(SRC_DIR)/lcd_zy_zth02pro.o \
+$(OUT_PATH)$(SRC_DIR)/epd_cgg1.o \
+$(OUT_PATH)$(SRC_DIR)/epd_cgg1n.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/battery.o \

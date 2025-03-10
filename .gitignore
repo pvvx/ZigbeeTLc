@@ -1,6 +1,7 @@
-build
+/build/
 .idea
-SDK
-tools/widows
-tools/widows/tc32
-tools/linux
+.vscode
+/SDK_z/
+/SDK_bz/
+/tools/widows/
+/tools/linux/

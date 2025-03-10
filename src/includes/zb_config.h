@@ -56,7 +56,7 @@
 //If defined, use distributed address assign for tree and for mesh routing (ZigBee 2007).
 #ifndef ZB_NWK_DISTRIBUTED_ADDRESS_ASSIGN
 //If defined, use stochastic address assign (ZigBee PRO).
-  #define ZB_NWK_STOCHASTIC_ADDRESS_ASSIGN
+  #define ZB_NWK_STOCHASTIC_ADDRESS_ASSING
 #endif
 
 /* Some defaults for ZDO startup */
@@ -65,6 +65,7 @@
  */
 
 /*******************************ZOO Default Configuration Attribute Definitions***********************************************/
+//Permit join duration, 0x00 - disable join, 0xff - join is allowed forever
 #define ZDO_PERMIT_JOIN_DURATION					0
 
 #define POLL_RATE_QUARTERSECONDS					250 // 1 qs = 250 ms
@@ -81,18 +82,25 @@
 #define ZDO_NWK_TIME_BTWN_SCANS 					100
 
 //The value in milliseconds, for the device to request indirect transmission messages from the parent.
-#define ZDO_NWK_INDIRECT_POLL_RATE					4 * POLL_RATE_QUARTERSECONDS//1000 ms
+#define ZDO_NWK_INDIRECT_POLL_RATE					4 * POLL_RATE_QUARTERSECONDS //1000 ms
 
 //Contents of the link retry threshold for parent link.
 #define	ZDO_MAX_PARENT_THRESHOLD_RETRY				5
 
 //Contents of the rejoin interval in seconds
-#define ZDO_REJOIN_TIMES							5 // =5
-#define	ZDO_REJOIN_DURATION							0  // =6
-#define ZDO_REJOIN_BACKOFF_TIME						45 // =30
-#define ZDO_MAX_REJOIN_BACKOFF_TIME					180 // =90
-#define ZDO_REJOIN_BACKOFF_ITERATION				0  // =8
-
+//The number of rejoin attempts during the fast rejoin.
+#define ZDO_REJOIN_TIMES							5
+//The amount of time between each rejoin attempt while the device is in Fast Rejoin mode, in seconds.
+//If 0, config_rejoin_times will be ignored and only one Fast Rejoin will be performed.
+#define	ZDO_REJOIN_DURATION							6
+//The amount of time to sleep after the Fast Rejoin attempts before performing the next attempt, in seconds.
+//If 0 means no Rejoin backoff/retry.
+#define ZDO_REJOIN_BACKOFF_TIME						30
+//Upper limit of the config_rejoin_backoff_time.
+#define ZDO_MAX_REJOIN_BACKOFF_TIME					90
+//The number of iterations of the Fast Rejoin backoff, in times.
+//If 0 means do not reset the backoff duration.
+#define ZDO_REJOIN_BACKOFF_ITERATION				8
 /******************************************************************************************************************************/
 
 #if defined(MCU_CORE_8258) || defined(MCU_CORE_8278) || defined(MCU_CORE_B91)
@@ -140,19 +148,6 @@
 
 #if ZB_ROUTER_ROLE
 	#define GP_SUPPORT_ENABLE					  	1
-#endif
-
-//default TX power idx.
-#if defined (MCU_CORE_826x)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_POWER_7dBm
-#elif defined(MCU_CORE_8258)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_TX_POWER_DEF //  2xAAA -> RF_POWER_INDEX_P3p01dBm, if CR2032 -> RF_POWER_INDEX_P1p99dBm ?
-#elif defined(MCU_CORE_8278)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_POWER_INDEX_P11p26dBm
-#elif defined(MCU_CORE_B91)
-	#define ZB_DEFAULT_TX_POWER_IDX					RF_POWER_INDEX_P9p11dBm
-#else
-	#define ZB_DEFAULT_TX_POWER_IDX					0/* idx = 0, means MAX TX power. */
 #endif
 
 #endif	/* ZB_CONFIG_H */

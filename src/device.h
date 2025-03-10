@@ -18,30 +18,46 @@ typedef struct{
 }app_linkKey_info_t;
 
 typedef struct{
-#if	USE_DISPLAY
+	u16 reportupsec; // report add (sec)
+
+	u8  keyPressed;	// gpio keyPressed
+	u8  key_on_flag; // new keyPressed and flags (task_keys() used)
+
+	u32 secTimeTik;	// used for calculate measure seconds
+	u32 readSensorTime; // read sensor timer (tik)
+	u32 keyPressedTime; // key pressed time (tik)
+	u32 measure_interval; // measure step
+
+	u16 ledOnTime;	// used blink
+	u16 ledOffTime; // used blink
+
+	u8 	oriSta;		// original state before blink
+	u8 	sta;		// current state in blink
+
+	u8 	times;		// blink times
+
+#if	!USE_BLE && USE_DISPLAY
 	ev_timer_event_t *timerTaskEvt;
 #endif
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerKeyEvt;
+#if REJOIN_FAILURE_TIMER
+	ev_timer_event_t *timerRejoinBackoffEvt;
+#endif
+	ev_timer_event_t *timerSteerEvt;
+#if REJOIN_FAILURE_TIMER
+	ev_timer_event_t *timerRejoinBackOffEvt;
+#endif
+#ifdef ZCL_IDENTIFY
+	ev_timer_event_t *timerIdentifyEvt;
+#endif
 
-	u32 secTimeTik;
-	u32 keyPressedTime;
-	u32 readSensorTime; // read sensor timer (tik)
-	u32 measure_interval;
-	u16 reportupsec; // report add (sec)
-
-	u16 ledOnTime;
-	u16 ledOffTime;
-	u8 	oriSta;		// original state before blink
-	u8 	sta;		// current state in blink
-	u8 	times;		// blink times
-	u8  state;
-
-	u8  keyPressed;
-	u8  key1flag;
+#if REJOIN_FAILURE_TIMER
+	u16	rejoin_cnt; // startup counter
+#endif
 
 	app_linkKey_info_t tcLinkKey;
-}app_ctx_t;
+} app_ctx_t;
 
 /**
  *  @brief Defined for basic cluster attributes
@@ -155,6 +171,7 @@ extern zcl_identifyAttr_t g_zcl_identifyAttrs;
 extern zcl_powerAttr_t g_zcl_powerAttrs;
 #ifdef ZCL_THERMOSTAT_UI_CFG
 extern zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs;
+extern const zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgDefault;
 #endif
 #ifdef ZCL_TEMPERATURE_MEASUREMENT
 extern zcl_temperatureAttr_t g_zcl_temperatureAttrs;
@@ -173,13 +190,15 @@ extern scomfort_t cmf;
 /**********************************************************************
  * FUNCTIONS
  */
-#if 1
+#if !USE_BLE
 #define pm_wait_ms(t) cpu_stall_wakeup_by_timer0(t*(CLOCK_SYS_CLOCK_HZ/1000));
 #define pm_wait_us(t) cpu_stall_wakeup_by_timer0(t*(CLOCK_SYS_CLOCK_HZ/1000000));
 #else
 #define pm_wait_ms(t) sleep_us((t)*1000);
 #define pm_wait_us(t) sleep_us(t);
 #endif
+
+void init_nv_app(void);
 
 void sensorDevice_zclProcessIncomingMsg(zclIncoming_t *pInHdlrMsg);
 
@@ -195,11 +214,35 @@ void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);
 void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status);
 
-nv_sts_t zcl_thermostatConfig_save(void);
-nv_sts_t zcl_thermostatConfig_restore(void);
+#if USE_BLE
+void user_ble_init(bool isRetention);
+extern u8  mac_public[6];
+extern u8  mac_random_static[6];
 
+void blc_initMacAddress(u32 flash_addr, u8 *mac_public, u8 *mac_random_static);
+void blc_newMacAddress(u32 flash_addr, u8 *mac_pub, u8 *mac_rand);
+
+void app_pm_task(void);
+
+#if USE_CHG_NAME
 void read_dev_name(void);
-void save_dev_name(void);
+void save_dev_name(u16 attrID);
+#endif
+
+#endif // USE_BLE
+
+void user_init(bool isRetention);
+
+char int_to_hex(u8 num);
+
+#ifdef ZCL_POLL_CTRL
+typedef struct {
+	ev_timer_event_t *zclFastPollTimeoutTimerEvt;
+	ev_timer_event_t *zclCheckInTimerEvt;
+	bool isFastPollMode;
+} poll_ctrl_wrk_t;
+extern poll_ctrl_wrk_t poll_ctrl_wrk;
+#endif
 
 void scan_task(void);
 s32 sensors_task(void *arg);

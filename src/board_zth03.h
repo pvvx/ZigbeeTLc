@@ -11,38 +11,80 @@
 
 #if (BOARD == BOARD_ZTH03)
 
-/* Enable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-extern "C" {
-#endif
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_SCREEN | SERVICE_THS)
 
 #define ZIGBEE_TUYA_OTA 	1
 
-// https://pvvx.github.io/TS0201_TZ3000_TH03/
-// TLSR8258
-// GPIO_PA0 - free (Reed Switch, input)
-// GPIO_PA1 - free
-// GPIO_PA7 - SWS, (debug TX)
-// GPIO_PB1 - SCL, used I2C LCD
-// GPIO_PB4 - free, (TRG)
-// GPIO_PB5 - free
-// GPIO_PB6 - free
-// GPIO_PB7 - SDA, used I2C LCD
-// GPIO_PC0 - LED
-// GPIO_PC1 - free
-// GPIO_PC2 - SDA, used I2C Sensor
-// GPIO_PC3 - SCL, used I2C Sensor
-// GPIO_PC4 - free
-// GPIO_PD2 - free
-// GPIO_PD3 - free
-// GPIO_PD4 - used KEY
-// GPIO_PD7 - free
+/* https://pvvx.github.io/TS0201_TZ3000_TH03/
+
+TLSR8258
+
+GPIO_PA0 - free (Reed Switch, input)
+GPIO_PA1 - free
+GPIO_PA7 - SWS, (debug TX)
+GPIO_PB1 - SCL, used I2C LCD
+GPIO_PB4 - free, (TRG)
+GPIO_PB5 - free
+GPIO_PB6 - free
+GPIO_PB7 - SDA, used I2C LCD
+GPIO_PC0 - LED
+GPIO_PC1 - free
+GPIO_PC2 - SDA, used I2C Sensor
+GPIO_PC3 - SCL, used I2C Sensor
+GPIO_PC4 - free
+GPIO_PD2 - free
+GPIO_PD3 - free
+GPIO_PD4 - used KEY
+GPIO_PD7 - free
+
+ *  TH03 LCD buffer:  byte.bit
+
+              --0.4--         --1.4--            --2.4--          BAT
+       |    |         |     |         |        |         |        3.6
+       |   0.6       0.0   1.6       1.0      2.6       2.0
+       |    |         |     |         |        |         |      o 3.5
+-3.3- 0.3     --0.2--         --1.2--            --2.2--          +--- 3.5
+       |    |         |     |         |        |         |     3.5|
+       |   0.5       0.1   1.5       1.1      2.5       2.1       ---- 3.7
+       |    |         |     |         |        |         |     3.5|
+              --0.7--         --1.7--     *      --2.7--          ---- 2.3
+                                         1.3
+
+                                        --4.4--         --5.4--
+                                      |         |     |         |
+          3.0      3.0               4.6       4.0   5.6       5.0
+          / \      / \                |         |     |         |
+    3.4(  ___  3.2 ___  )3.4            --4.2--         --5.2--
+          3.2  / \ 3.2                |         |     |         |
+               ___                   4.5       4.1   5.5       5.1     %
+               3.0                    |         |     |         |     5.3
+                                        --4.7--         --5.7--
+                        OO 4.3
+
+  None: 3.1
+*/
+
+#define BLE_MODEL_STR		"TH03"
+#define BLE_MAN_STR			"Sonoff"
+
+#define ZCL_BASIC_MFG_NAME     {6,'S','o','n','o','f','f'} // Sonoff
+#define ZCL_BASIC_MODEL_ID	   {6,'T','H','0','3','-','z'} // TH03
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_CR2032
 
+// DISPLAY
+#define SHOW_SMILEY			1
+#define	USE_DISPLAY			1
+#define LCD_BUF_SIZE		6
+#define LCD_CMP_BUF_SIZE	7
+#define LCD_INIT_DELAY()
+#define USE_DISPLAY_OFF		1
+
 // KEY, BUTTON
 #define BUTTON1				GPIO_PD4
+#define BUTTON1_ON			0
+#define BUTTON1_OFF			1
 #define PD4_INPUT_ENABLE	1
 #define PD4_DATA_OUT		0
 #define PD4_OUTPUT_ENABLE	0
@@ -76,12 +118,6 @@ extern "C" {
 #define USE_SENSOR_SHTC3		1
 #define USE_SENSOR_SHT30		1
 
-// DISPLAY
-#define SHOW_SMILEY			1
-#define	USE_DISPLAY			5
-#define LCD_BUF_SIZE		6
-#define LCD_INIT_DELAY()
-
 // I2C LCD
 #define I2C_SCL_LCD			GPIO_PB1
 #define I2C_SDA_LCD			GPIO_PB7
@@ -114,9 +150,5 @@ extern "C" {
 	#define	DEBUG_INFO_TX_PIN	    GPIO_SWS //print
 #endif
 
-/* Disable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-}
-#endif
 #endif // (BOARD == BOARD_ZTH03)
 #endif // _BOARD_ZTH03_H_

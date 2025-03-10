@@ -11,23 +11,55 @@
 
 #if (BOARD == BOARD_MHO_C401N)
 
-/* Enable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-extern "C" {
-#endif
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_SCREEN | SERVICE_THS)
 
-// https://pvvx.github.io/MHO_C401N
-// TLSR8251F512ET24
-// GPIO_PA5 - used EPD_BUSY
-// GPIO_PA6 - used EPD_CSB
-// GPIO_PA7 - SWS, free, (debug TX)
-// GPIO_PB6 - used KEY, pcb mark "P5" (TRG)
-// GPIO_PB7 - used EPD_RST2
-// GPIO_PC2 - SDA, used I2C
-// GPIO_PC3 - SCL, used I2C
-// GPIO_PC4 - used EPD_SCL
-// GPIO_PD2 - used EPD_SDA
-// GPIO_PD7 - used EPD_RST
+/* https://pvvx.github.io/MHO_C401N
+
+TLSR8251F512ET24
+
+GPIO_PA5 - used EPD_BUSY
+GPIO_PA6 - used EPD_CSB
+GPIO_PA7 - SWS, free, (debug TX)
+GPIO_PB6 - used KEY, pcb mark "P5" (TRG)
+GPIO_PB7 - used EPD_RST2
+GPIO_PC2 - SDA, used I2C
+GPIO_PC3 - SCL, used I2C
+GPIO_PC4 - used EPD_SCL
+GPIO_PD2 - used EPD_SDA
+GPIO_PD7 - used EPD_RST
+
+* MHO-C401-2022 LCD buffer:  byte.bit
+
+  7.4  8.4--8.7-- .  10.4--10.7--- .       12.4--12.7--- .     BAT 14.6
+   |    |         |    |           |         |           |
+  7.4  8.3       9.2 10.3        11.2      12.3        13.2   o|--- 14.4
+   |    |         |    |           |         |           |     |  --14.2
+  7.4  8.2--8.6--9.1 10.2--10.6--11.1      12.2--12.6--13.1    |  --14.0
+   |    |         |    |           |         |           |
+  7.4  8.1       9.0 10.1        11.0      12.1        13.0
+   |    |         |    |           |  11.4   |           |
+  7.4  8.0--8.5-- '  10.0--10.5--- '    *  12.0--12.5--- '
+
+
+       1.4--1.7-- .   3.4--3.7-- .
+        |         |    |         |     *7.2 ^6.6      ^6.6
+ BLE   1.3       2.2  3.3       4.2         U6.5      U6.5
+ 0.4    |         |    |         |               ^6.0
+       1.2--1.6--2.1  3.2--3.6--4.1    (7.0 `5.2 -5.6  )7.0 ;6.2
+  @     |         |    |         |               U5.4
+ 0.0   1.1       2.0  3.1       4.0
+        |         |    |         |               %5.0
+       1.0--1.5-- '   3.0--3.5-- '
+
+Background: 15=0xff ?
+None: 0.1..0.3, 0.5..0.7, 2.3..2.7, 4.3..4.7, 5.1, 5,3, 5.5, 5.7, 6.1, 6.3, 6.7, 7.1, 7.3, 7.5..7.7, 9.3..9.7, 11.3, 11.5..11.7, 13.3..13.7, 14.1, 14.3, 14.5
+*/
+
+#define BLE_MODEL_STR		"MHO-C401N"
+#define BLE_MAN_STR			"miaomiaoce.com"
+
+#define ZCL_BASIC_MFG_NAME     {10,'M','i','a','o','M','i','a','o','C','e'} // MiaoMiaoCe
+#define ZCL_BASIC_MODEL_ID	   {11,'M','H','O','-','C','4','0','1','N','-','z'} // MHO-C401N
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_CR2032
@@ -38,7 +70,9 @@ extern "C" {
 #define USE_EPD				50 // while(task_lcd()) pm_wait_ms(50 ms);
 #define LCD_BUF_SIZE		16
 #define LCD_INIT_DELAY()
+#define USE_DISPLAY_CONNECT_SYMBOL		1
 
+// DISPLAY GPIO
 #define EPD_RST2			GPIO_PB7 // should be high
 #define PULL_WAKEUP_SRC_PB7 PM_PIN_PULLUP_1M
 
@@ -77,13 +111,15 @@ extern "C" {
 
 // BUTTON
 #define BUTTON1 			GPIO_PB6	// Reed Switch, input, pcb mark "P5"
+#define BUTTON1_ON			0
+#define BUTTON1_OFF			1
 #define PB6_INPUT_ENABLE	1
 #define PB6_DATA_OUT		0
 #define PB6_OUTPUT_ENABLE	0
 #define PB6_FUNC			AS_GPIO
 #define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_1M
 
-// I2C
+// I2C Sensor
 #define	USE_I2C_DRV			I2C_DRV_HARD
 #define I2C_CLOCK			100000 // Hz
 #define I2C_SCL 			GPIO_PC2
@@ -118,10 +154,5 @@ extern "C" {
 	#define	DEBUG_INFO_TX_PIN	    GPIO_SWS //print
 #endif
 
-
-/* Disable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-}
-#endif
 #endif // BOARD == BOARD_MHO_C401N
 #endif // _BOARD_MHO_C401N_H_

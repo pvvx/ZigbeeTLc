@@ -1,7 +1,6 @@
 /*
  * board_mho_th03z.h
- *
- *      Author: pvvx
+ * Author: pvvx
  */
 #ifndef _BOARD_TH03Z_H_
 #define _BOARD_TH03Z_H_
@@ -12,22 +11,39 @@
 
 #define ZIGBEE_TUYA_OTA 	1
 
-// https://pvvx.github.io/TH03Z/
-// TLSR825x 1M Flash
-// GPIO_PA7 - SWS, free, (debug TX)
-// GPIO_PB1 - TX
-// GPIO_PB4 - LED
-// GPIO_PB7 - RX
-// GPIO_PC0 - KEY
-// GPIO_PC2 - SDA
-// GPIO_PC3 - SCL
-// GPIO_PD7 - Alert
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
+
+/* https://pvvx.github.io/TH03Z/
+
+TLSR825x 1M Flash
+
+GPIO_PA7 - SWS, free, (debug TX)
+GPIO_PB1 - TX
+GPIO_PB4 - LED
+GPIO_PB7 - RX
+GPIO_PC0 - KEY
+GPIO_PC2 - SDA
+GPIO_PC3 - SCL
+GPIO_PD7 - Alert
+*/
+
+#define BLE_MODEL_STR		"TH03Z"
+#define BLE_MAN_STR			"Tuya"
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {7,'T','H','0','3','Z','-','z'} // TH03Z
+
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_CR2450
 
+// DISPLAY
+#define	USE_DISPLAY			0
+
 // BUTTON
 #define BUTTON1             GPIO_PC0
+#define BUTTON1_ON			0
+#define BUTTON1_OFF			1
 #define PC0_FUNC			AS_GPIO
 #define PC0_OUTPUT_ENABLE	0
 #define PC0_INPUT_ENABLE	1
@@ -49,9 +65,6 @@
 #define USE_SENSOR_SHT4X		0
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		1
-
-// DISPLAY
-#define	USE_DISPLAY			0
 
 // LED
 #define LED_ON				1

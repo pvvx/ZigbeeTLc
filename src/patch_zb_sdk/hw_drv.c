@@ -28,7 +28,6 @@
 #include "battery.h"
 #include "ext_ota.h"
 
-extern void drv_calib_adc_verf(void);
 /*
  * system clock configuration
  */
@@ -42,9 +41,9 @@ extern void drv_calib_adc_verf(void);
 	#error please config system clock
 #endif
 
-//system ticks per US
-u32 sysTimerPerUs;
-
+//system ticks per US (used libzb_ed.a: mac_trx.c)
+u32 sysTimerPerUs; // = sys_tick_per_us = 16 = CLOCK_16M_SYS_TIMER_CLK_1US
+#if 0
 /*********************************************************************
  * @fn      internalFlashSizeCheck
  *
@@ -85,12 +84,7 @@ static void internalFlashSizeCheck(void){
 			break;
 	}
 }
-
-static startup_state_e platform_wakeup_init(void)
-{
-	cpu_wakeup_init();
-	return (startup_state_e)pm_get_mcu_status();
-}
+#endif
 
 /****************************************************************************************************
 * @brief 		platform initialization function
@@ -101,50 +95,40 @@ static startup_state_e platform_wakeup_init(void)
 */
 startup_state_e drv_platform_init(void)
 {
-	startup_state_e state = platform_wakeup_init();
+	cpu_wakeup_init();
+
+	startup_state_e state = (startup_state_e)pm_get_mcu_status();
 
 	clock_init(SYS_CLOCK_VALUE);
+
 	/* Get system ticks per US, must be after the clock is initialized. */
 	sysTimerPerUs = sys_tick_per_us;
-	if(state == SYSTEM_BOOT)
-		tuya_zigbee_ota();
+
 	gpio_init(TRUE);
 
+	if(state != SYSTEM_DEEP_RETENTION) {
+		tuya_zigbee_ota();
 #if UART_PRINTF_MODE
-	DEBUG_TX_PIN_INIT();
+		DEBUG_TX_PIN_INIT();
 #endif
-
-	/* Get calibration info to improve performance */
-	if(state != SYSTEM_DEEP_RETENTION){
+		battery_detect();
+		random_generator_init();
+//		internalFlashSizeCheck();
 #if PM_ENABLE
+		/// PM_CLOCK_INIT(); ///
 		/* Initialize 32K for timer wakeup. */
 		clock_32k_init(CLK_32K_RC);
 		rc_32k_cal();
 		pm_select_internal_32k_rc();
-#endif
-		drv_calib_adc_verf();
-		battery_detect();
-		random_generator_init();
-		internalFlashSizeCheck();
 	} else {
-#if PM_ENABLE
 		drv_pm_wakeupTimeUpdate();
 #endif
 	}
 
-	/* ADC */
-#if VOLTAGE_DETECT_ENABLE
-	voltage_detect_init(VOLTAGE_DETECT_ADC_PIN);
-    static u32 tick = clock_time();
-	if(clock_time_exceed(tick, 500 * 1000)) { // 500 ms
-		voltage_detect(0);
-		tick = clock_time();
-	}
-#endif
-
 	/* RF */
 	ZB_RADIO_INIT();
-	ZB_TIMER_INIT();
+
+	//ZB_TIMER_INIT();
 
 	return state;
 }

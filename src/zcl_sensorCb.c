@@ -2,13 +2,18 @@
  * INCLUDES
  */
 #include "tl_common.h"
-//#include "zb_api.h"
 #include "zcl_include.h"
-//#include "zcl_config.h"
 #include "zcl_thermostat_ui_cfg.h"
 #include "device.h"
 #include "app_ui.h"
 #include "reporting.h"
+#if USE_BLE
+#include "ble_cfg.h"
+#include "zigbee_ble_switch.h"
+#include "stack/ble/ble.h"
+#include "ble_cfg.h"
+#endif
+
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -44,9 +49,6 @@ void sensorDevice_zclDfltRspCmd(u16 clusterId, zclDefaultRspCmd_t *pDftRspCmd);
 /**********************************************************************
  * LOCAL VARIABLES
  */
-#ifdef ZCL_IDENTIFY
-static ev_timer_event_t *identifyTimerEvt = NULL;
-#endif
 
 /**********************************************************************
  * FUNCTIONS
@@ -142,17 +144,13 @@ void sensorDevice_zclWriteRspCmd(u16 clusterId, zclWriteRspCmd_t *pWriteRspCmd)
  */
 void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 {
-#if defined(ZCL_THERMOSTAT_UI_CFG) || defined(ZCL_POLL_CTRL)
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	if(clusterId == ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG) {
 		zcl_thermostatConfig_save();
-	}
+	} else
+#endif // ZCL_THERMOSTAT_UI_CFG
 #ifdef ZCL_POLL_CTRL
-	else
-#endif
-#endif
-#ifdef ZCL_POLL_CTRL
-	if(clusterId == ZCL_CLUSTER_GEN_POLL_CONTROL){
+	 if(clusterId == ZCL_CLUSTER_GEN_POLL_CONTROL){
 		u8 numAttr = pWriteReqCmd->numAttr;
 		zclWriteRec_t *attr = pWriteReqCmd->attrList;
 		for(int i = 0; i < numAttr; i++){
@@ -161,15 +159,30 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 				return;
 			}
 		}
-	}
-#endif
+	} else
+#endif // ZCL_POLL_CTRL
+#if USE_BLE
+	 if(clusterId == ZCL_CLUSTER_GEN_BASIC) {
+		u8 numAttr = pWriteReqCmd->numAttr;
+		zclWriteRec_t *attr = pWriteReqCmd->attrList;
+		for(int i = 0; i < numAttr; i++) {
+			if(attr[i].attrID == ZCL_ATTRID_BASIC_DEV_ENABLED && attr[i].dataType == ZCL_DATA_TYPE_BOOLEAN) {
+				if(attr[i].attrData[0]) // or if(g_zcl_basicAttrs.deviceEnable) ?
+					ble_task_stop();	// отключение BLE
+				else {
+					g_dualModeInfo.bleStart = CONNECT_ADV_COUNT;
+				}
+			} else
 #if USE_CHG_NAME
-	else if(clusterId == ZCL_CLUSTER_GEN_BASIC) {
-		save_dev_name();
-	}
-
+			 	if(attr[i].dataType == ZCL_DATA_TYPE_CHAR_STR
+				&& (attr[i].attrID == ZCL_ATTRID_BASIC_MFR_NAME || attr[i].attrID == ZCL_ATTRID_BASIC_MODEL_ID)) {
+				save_dev_name(attr[i].attrID);
+#endif // USE_CHG_NAME
+			}
+		}
+	} else
 #endif
-#endif
+	{}
 }
 #endif	/* ZCL_WRITE */
 
@@ -267,7 +280,7 @@ status_t sensorDevice_basicCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *
 s32 sensorDevice_zclIdentifyTimerCb(void *arg)
 {
 	if(g_zcl_identifyAttrs.identifyTime <= 0){
-		identifyTimerEvt = NULL;
+		g_sensorAppCtx.timerIdentifyEvt = NULL;
 		return -1;
 	}
 	g_zcl_identifyAttrs.identifyTime--;
@@ -276,8 +289,8 @@ s32 sensorDevice_zclIdentifyTimerCb(void *arg)
 
 void sensorDevice_zclIdentifyTimerStop(void)
 {
-	if(identifyTimerEvt){
-		TL_ZB_TIMER_CANCEL(&identifyTimerEvt);
+	if(g_sensorAppCtx.timerIdentifyEvt){
+		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerIdentifyEvt);
 	}
 }
 
@@ -300,9 +313,9 @@ void sensorDevice_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTi
 		sensorDevice_zclIdentifyTimerStop();
 		light_blink_stop();
 	}else{
-		if(!identifyTimerEvt){
+		if(!g_sensorAppCtx.timerIdentifyEvt){
 			light_blink_start(identifyTime, 500, 500);
-			identifyTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_zclIdentifyTimerCb, NULL, 1000);
+			g_sensorAppCtx.timerIdentifyEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_zclIdentifyTimerCb, NULL, 1000);
 		}
 	}
 }
@@ -513,9 +526,17 @@ status_t sensorDevice_iasZoneCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void
 #endif  /* ZCL_IAS_ZONE */
 
 #ifdef ZCL_POLL_CTRL
-static ev_timer_event_t *zclFastPollTimeoutTimerEvt = NULL;
-static ev_timer_event_t *zclCheckInTimerEvt = NULL;
-static bool isFastPollMode = FALSE;
+/*
+typedef struct {
+	ev_timer_event_t *zclFastPollTimeoutTimerEvt = NULL;
+	ev_timer_event_t *zclCheckInTimerEvt = NULL;
+	bool isFastPollMode;
+} poll_ctrl_wrk_t;
+*/
+
+poll_ctrl_wrk_t poll_ctrl_wrk = {
+		.isFastPollMode  = FALSE
+};
 
 void sensorDevice_zclCheckInCmdSend(void)
 {
@@ -534,7 +555,7 @@ s32 sensorDevice_zclCheckInTimerCb(void *arg)
 	zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
 	if(!pPollCtrlAttr->chkInInterval){
-		zclCheckInTimerEvt = NULL;
+		poll_ctrl_wrk.zclCheckInTimerEvt = NULL;
 		return -1;
 	}
 
@@ -548,8 +569,8 @@ void sensorDevice_zclCheckInStart(void)
 	if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, SENSOR_DEVICE_ENDPOINT)){
 		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
-		if(!zclCheckInTimerEvt){
-			zclCheckInTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_zclCheckInTimerCb, NULL, pPollCtrlAttr->chkInInterval * POLL_RATE_QUARTERSECONDS);
+		if(!poll_ctrl_wrk.zclCheckInTimerEvt){
+			poll_ctrl_wrk.zclCheckInTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_zclCheckInTimerCb, NULL, pPollCtrlAttr->chkInInterval * POLL_RATE_QUARTERSECONDS);
 
 			if(pPollCtrlAttr->chkInInterval){
 				sensorDevice_zclCheckInCmdSend();
@@ -562,7 +583,7 @@ void sensorDevice_zclSetFastPollMode(bool fastPollMode)
 {
 	zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
-	isFastPollMode = fastPollMode;
+	poll_ctrl_wrk.isFastPollMode = fastPollMode;
 	u32 pollRate = fastPollMode ? pPollCtrlAttr->shortPollInterval : pPollCtrlAttr->longPollInterval;
 
 	zb_setPollRate(pollRate * POLL_RATE_QUARTERSECONDS);
@@ -572,7 +593,7 @@ s32 sensorDevice_zclFastPollTimeoutCb(void *arg)
 {
 	sensorDevice_zclSetFastPollMode(FALSE);
 
-	zclFastPollTimeoutTimerEvt = NULL;
+	poll_ctrl_wrk.zclFastPollTimeoutTimerEvt = NULL;
 	return -1;
 }
 
@@ -590,21 +611,21 @@ static status_t sensorDevice_zclPollCtrlChkInRspCmdHandler(zcl_chkInRsp_t *pCmd)
 
 			fastPollTimeoutCnt = pCmd->fastPollTimeout;
 
-			if(zclFastPollTimeoutTimerEvt){
-				TL_ZB_TIMER_CANCEL(&zclFastPollTimeoutTimerEvt);
+			if(poll_ctrl_wrk.zclFastPollTimeoutTimerEvt){
+				TL_ZB_TIMER_CANCEL(&poll_ctrl_wrk.zclFastPollTimeoutTimerEvt);
 			}
 		}else{
-			if(!zclFastPollTimeoutTimerEvt){
+			if(!poll_ctrl_wrk.zclFastPollTimeoutTimerEvt){
 				fastPollTimeoutCnt = pPollCtrlAttr->fastPollTimeout;
 			}
 		}
 
-		if(!zclFastPollTimeoutTimerEvt && fastPollTimeoutCnt){
+		if(!poll_ctrl_wrk.zclFastPollTimeoutTimerEvt && fastPollTimeoutCnt){
 			sensorDevice_zclSetFastPollMode(TRUE);
 
-			zclFastPollTimeoutTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_zclFastPollTimeoutCb, NULL, fastPollTimeoutCnt * POLL_RATE_QUARTERSECONDS);
+			poll_ctrl_wrk.zclFastPollTimeoutTimerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_zclFastPollTimeoutCb, NULL, fastPollTimeoutCnt * POLL_RATE_QUARTERSECONDS);
 		}
-	}else{
+	} else {
 		//continue in normal operation and not required to go into fast poll mode.
 	}
 
@@ -613,11 +634,11 @@ static status_t sensorDevice_zclPollCtrlChkInRspCmdHandler(zcl_chkInRsp_t *pCmd)
 
 static status_t sensorDevice_zclPollCtrlFastPollStopCmdHandler(void)
 {
-	if(!isFastPollMode){
+	if(!poll_ctrl_wrk.isFastPollMode){
 		return ZCL_STA_ACTION_DENIED;
 	}else{
-		if(zclFastPollTimeoutTimerEvt){
-			TL_ZB_TIMER_CANCEL(&zclFastPollTimeoutTimerEvt);
+		if(poll_ctrl_wrk.zclFastPollTimeoutTimerEvt){
+			TL_ZB_TIMER_CANCEL(&poll_ctrl_wrk.zclFastPollTimeoutTimerEvt);
 		}
 		sensorDevice_zclSetFastPollMode(FALSE);
 	}
@@ -630,14 +651,17 @@ static status_t sensorDevice_zclPollCtrlSetLongPollIntervalCmdHandler(zcl_setLon
 	zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
 	if((pCmd->newLongPollInterval >= 0x04) && (pCmd->newLongPollInterval <= 0x6E0000)
-		&& (pCmd->newLongPollInterval <= pPollCtrlAttr->chkInInterval) && (pCmd->newLongPollInterval >= pPollCtrlAttr->shortPollInterval)){
-#if 1	// @TODO ZHA !!!
-		if(pCmd->newLongPollInterval < (g_zcl_thermostatUICfgAttrs.measure_interval << 2))
-			pPollCtrlAttr->longPollInterval = g_zcl_thermostatUICfgAttrs.measure_interval << 2;
+		&& (pCmd->newLongPollInterval <= pPollCtrlAttr->chkInInterval) // <= 1 hr
+//		 TODO: ZHA
+//	    && (pCmd->newLongPollInterval >= pPollCtrlAttr->shortPollInterval)
+//		&& (pCmd->newLongPollInterval >= pPollCtrlAttr->longPollIntervalMin)
+		){
+		u32 t = g_zcl_thermostatUICfgAttrs.measure_interval * 4;
+		if(pCmd->newLongPollInterval < t)
+			pPollCtrlAttr->longPollInterval = t;
 		else
-#endif
-		pPollCtrlAttr->longPollInterval = pCmd->newLongPollInterval;
-		zb_setPollRate(pCmd->newLongPollInterval * POLL_RATE_QUARTERSECONDS);
+			pPollCtrlAttr->longPollInterval = pCmd->newLongPollInterval;
+		zb_setPollRate(pPollCtrlAttr->longPollInterval * POLL_RATE_QUARTERSECONDS);
 	}else{
 		return ZCL_STA_INVALID_VALUE;
 	}
@@ -650,9 +674,12 @@ static status_t sensorDevice_zclPollCtrlSetShortPollIntervalCmdHandler(zcl_setSh
 	zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
 	if((pCmd->newShortPollInterval >= 0x01) && (pCmd->newShortPollInterval <= 0xff)
-		&& (pCmd->newShortPollInterval <= pPollCtrlAttr->longPollInterval)){
+	&& (pCmd->newShortPollInterval <= pPollCtrlAttr->longPollInterval)
+//		 TODO: ZHA
+//		&& (pCmd->newShortPollInterval < pPollCtrlAttr->longPollIntervalMin)
+		){
 		pPollCtrlAttr->shortPollInterval = pCmd->newShortPollInterval;
-		zb_setPollRate(pCmd->newShortPollInterval * POLL_RATE_QUARTERSECONDS);
+		zb_setPollRate(pPollCtrlAttr->shortPollInterval * POLL_RATE_QUARTERSECONDS);
 	}else{
 		return ZCL_STA_INVALID_VALUE;
 	}

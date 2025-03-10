@@ -1,4 +1,3 @@
-#include <stdint.h>
 #include "tl_common.h"
 #if BOARD == BOARD_LKTMZL02
 #include "chip_8258/timer.h"
@@ -9,83 +8,14 @@
 
 #define VKL060_I2C_ADDR		0x3E // VKL060
 
-#define _LCD_SPEED_CODE_SEC_ _attribute_ram_code_sec_
-
-u8 display_buff[LCD_BUF_SIZE];
-u8 display_cmp_buff[LCD_BUF_SIZE];
-u8 i2c_address_lcd; // = 0x78; // B1.4 uses Address 0x78 and B1.9 uses 0x7c
-u8 lcd_blink;
+#define _SCR_CODE_SEC_
 
 #define I2C_TCLK_US	2 // 2 us
 
-
-/*
- *   LCD LKTMZL02 real buffer:  byte.bit
-
-                                ------------|
- 0.2 0.1 0.0					0.5 0.6	0.4 |
-  |   |   |                      |   |   |  |0.7
-                                ------------|
-
-              --1.4--         --2.4--            --3.0--
-       |    |         |     |         |        |         |
-       |   1.5       1.1   2.5       2.1      3.1       4.5
-       |    |         |     |         |        |         |      o 3.5
--1.0- 0.3     --1.2--         --2.2--            --4.6--          +--- 3.5
-       |    |         |     |         |        |         |     3.5|
-       |   1.6       1.3   2.6       2.3      3.2       4.7       ---- 3.4
-       |    |         |     |         |        |         |     3.5|
-              --1.7--         --2.7--     *      --3.3--          ---- 3.6
-                                         3.7
-
-          --4.0--         --5.0--
-        |         |     |         |
-       4.1       5.5   5.1       6.5
-        |         |     |         |
-          --5.6--         --6.6--
-        |         |     |         |
-       4.2       5.7   5.2       6.7     %
-        |         |     |         |     6.4
-          --4.3--         --5.3--
-
-
-  None: 2.0, 4.4, 5.4, 6.0..6.3
-
- Work buffer:  byte.bit
-
-                                ------------|
- 0.2 0.1 0.0					0.5 0.6	0.4 |
-  |   |   |                      |   |   |  |0.7
-                                ------------|
-
-              --1.4--         --2.4--            --4.4--
-       |    |         |     |         |        |         |
-       |   1.5       1.1   2.5       2.1      4.5       4.1
-       |    |         |     |         |        |         |      o 3.1
--1.0- 0.3     --1.2--         --2.2--            --4.2--          +--- 3.1
-       |    |         |     |         |        |         |     3.1|
-       |   1.6       1.3   2.6       2.3      4.6       4.3       ---- 3.0
-       |    |         |     |         |        |         |     3.1|
-              --1.7--         --2.7--     *      --4.7--          ---- 3.2
-                                         3.3
-
-          --5.4--         --6.4--
-        |         |     |         |
-       5.5       5.1   6.5       6.1
-        |         |     |         |
-          --5.2--         --6.2--
-        |         |     |         |
-       5.6       5.3   6.6       6.3     %
-        |         |     |         |     6.0
-          --5.7--         --6.7--
-
-
-  None: 2.0, 3.4..3.7, 4.0, 5.0
-
- */
+RAM scr_data_t scr;
 
 /* 0,1,2,3,4,5,6,7,8,9,A,b,C,d,E,F*/
-const uint8_t display_numbers[] = {
+const u8 display_numbers[] = {
 		// 76543210
 		0b011111010, // 0
 		0b000001010, // 1
@@ -114,11 +44,12 @@ const uint8_t display_numbers[] = {
 #define LCD_SYM_t  0b011100100 // "t"
 #define LCD_SYM_0  0b011111010 // "0"
 #define LCD_SYM_A  0b001111110 // "A"
-#define LCD_SYM_a  0b011111100 // "a"
+#define LCD_SYM_a  0b011011110 // "a"
 #define LCD_SYM_P  0b001110110 // "P"
+#define LCD_SYM_E  0b011110100 // "E"
 
 #define LCD_SYM_BLE	0x07	// connect
-#define LCD_SYM_BAT	0x80	// battery
+#define LCD_SYM_BAT	0xf0	// battery
 
 
 void soft_i2c_start(void) {
@@ -139,7 +70,7 @@ void soft_i2c_stop(void) {
 	gpio_set_output_en(I2C_SDA_LCD, 0); // SDA set "1"
 }
 
-int soft_i2c_wr_byte(uint8_t b) {
+int soft_i2c_wr_byte(u8 b) {
 	int ret, i = 8;
 	while(i--) {
 		sleep_us(I2C_TCLK_US/2);
@@ -163,7 +94,7 @@ int soft_i2c_wr_byte(uint8_t b) {
 	return ret;
 }
 
-int soft_i2c_send_buf(uint8_t addr, uint8_t * pbuf, int size) {
+int soft_i2c_send_buf(u8 addr, u8 * pbuf, int size) {
 	int ret = 0;
 	soft_i2c_start();
 	ret = soft_i2c_wr_byte(addr);
@@ -178,7 +109,8 @@ int soft_i2c_send_buf(uint8_t addr, uint8_t * pbuf, int size) {
 	soft_i2c_stop();
 	return ret;
 }
-int soft_i2c_send_byte(uint8_t addr, uint8_t b) {
+
+int soft_i2c_send_byte(u8 addr, u8 b) {
 	int ret;
 	soft_i2c_start();
 	ret = soft_i2c_wr_byte(addr);
@@ -188,10 +120,10 @@ int soft_i2c_send_byte(uint8_t addr, uint8_t b) {
 	return ret;
 }
 
-#define lcd_send_i2c_byte(a)  soft_i2c_send_byte(i2c_address_lcd, a)
-#define lcd_send_i2c_buf(b, a)  soft_i2c_send_buf(i2c_address_lcd, (uint8_t *) b, a)
+#define lcd_send_i2c_byte(a)  soft_i2c_send_byte(scr.i2c_address, a)
+#define lcd_send_i2c_buf(b, a)  soft_i2c_send_buf(scr.i2c_address, (u8 *) b, a)
 
-const uint8_t lcd_init_cmd[]	=	{
+const u8 lcd_init_cmd[]	=	{
 		// LCD controller initialize:
 		0xea, // System Set: Software Reset, Internal oscillator circuit
 //		0xe8, // System Set: Internal oscillator circuit
@@ -203,41 +135,31 @@ const uint8_t lcd_init_cmd[]	=	{
 		0x0c, 0,0,0,0,0,0,0
 };
 
-_LCD_SPEED_CODE_SEC_
-void send_to_lcd(void){
-	if(g_zcl_thermostatUICfgAttrs.display_off)
-		return;
-	if (i2c_address_lcd) {
-		uint8_t buf[8];
-		buf[0] = 0x0b;
-		buf[1] = display_buff[0];
-		buf[2] = display_buff[1];
-		buf[3] = display_buff[2];
-		buf[4] = (display_buff[4] >> 4) | (display_buff[3] << 4);
-		buf[5] = (display_buff[5] >> 4) | (display_buff[4] << 4);
-		buf[6] = (display_buff[6] >> 4) | (display_buff[5] << 4);
-		buf[7] = (display_buff[6] << 4);
-		lcd_send_i2c_buf(buf, sizeof(buf));
-	}
-}
 
-void init_lcd(void){
-	i2c_address_lcd = VKL060_I2C_ADDR << 1;
-	if(g_zcl_thermostatUICfgAttrs.display_off) {
-		if(lcd_send_i2c_byte(0xD0) || lcd_send_i2c_byte(0xEA)) // LCD reset
-			i2c_address_lcd = 0;
-	} else {
-		if(lcd_send_i2c_buf((uint8_t *) lcd_init_cmd, sizeof(lcd_init_cmd)))
-			i2c_address_lcd = 0;
-		else {
-			// pm_wait_us(200);
-			send_to_lcd();
+_SCR_CODE_SEC_
+void send_to_lcd(void){
+	if (scr.i2c_address) {
+		u8 buf[8];
+		buf[0] = 0x0b;
+		buf[1] = scr.display_cmp_buff[0];
+		buf[2] = scr.display_cmp_buff[1];
+		buf[3] = scr.display_cmp_buff[2];
+		buf[4] = (scr.display_cmp_buff[4] >> 4) | (scr.display_cmp_buff[3] << 4);
+		buf[5] = (scr.display_cmp_buff[5] >> 4) | (scr.display_cmp_buff[4] << 4);
+		buf[6] = (scr.display_cmp_buff[6] >> 4) | (scr.display_cmp_buff[5] << 4);
+		buf[7] = (scr.display_cmp_buff[6] << 4);
+		lcd_send_i2c_buf(buf, sizeof(buf));
+		if(scr.blink_flg) {
+			lcd_send_i2c_byte(scr.blink_flg);
+			if(scr.blink_flg > 0xf0)
+				scr.blink_flg = 0xf0;
+			else
+				scr.blink_flg = 0;
 		}
 	}
 }
 
 
-#if 0
 /* 0x00 = "  "
  * 0x20 = "°Г"
  * 0x40 = " -"
@@ -246,164 +168,226 @@ void init_lcd(void){
  * 0xA0 = "°C"
  * 0xC0 = " ="
  * 0xE0 = "°E" */
-_LCD_SPEED_CODE_SEC_
-void show_temp_symbol(uint8_t symbol) {
+_SCR_CODE_SEC_
+void show_temp_symbol(u8 symbol) {
 	if (symbol & 0x20)
-		display_buff[3] |= BIT(1);
+		scr.display_buff[3] |= BIT(1);
 	else
-		display_buff[3] &= ~(BIT(1));
+		scr.display_buff[3] &= ~(BIT(1));
 	if (symbol & 0x40)
-		display_buff[3] |= BIT(0); //"-"
+		scr.display_buff[3] |= BIT(0); //"-"
 	else
-		display_buff[3] &= ~BIT(0); //"-"
+		scr.display_buff[3] &= ~BIT(0); //"-"
 	if (symbol & 0x80)
-		display_buff[3] |= BIT(2); // "_"
+		scr.display_buff[3] |= BIT(2); // "_"
 	else
-		display_buff[3] &= ~BIT(2); // "_"
+		scr.display_buff[3] &= ~BIT(2); // "_"
 }
-#endif
 
-_LCD_SPEED_CODE_SEC_
+_SCR_CODE_SEC_
 void show_ble_symbol(bool state){
 	if (state)
-		display_buff[0] |= LCD_SYM_BLE;
+		scr.display_buff[0] |= LCD_SYM_BLE;
 	else 
-		display_buff[0] &= ~LCD_SYM_BLE;
+		scr.display_buff[0] &= ~LCD_SYM_BLE;
 }
 
-_LCD_SPEED_CODE_SEC_
-void show_battery_symbol(bool state){
-	display_buff[0] &= 0x0f;
+_SCR_CODE_SEC_
+void show_battery_symbol(bool state, u8 battery_level){
+	scr.display_buff[0] &= 0x0f;
 	if (state) {
-		display_buff[0] |= BIT(7);
-		if (measured_battery.level >= 50) {
-			display_buff[0] |= BIT(5);
-			if (measured_battery.level >= 100) {
-				display_buff[0] |= BIT(6);
-				if (measured_battery.level >= 160) {
-					display_buff[0] |= BIT(4);
+		scr.display_buff[0] |= BIT(7);
+#if ZIGBEE_BATT_LEVEL
+		if (battery_level >= 50) {
+			scr.display_buff[0] |= BIT(5);
+			if (battery_level >= 100) {
+				scr.display_buff[0] |= BIT(6);
+				if (battery_level >= 160) {
+					scr.display_buff[0] |= BIT(4);
 				}
 			}
 		}
+#else
+		if (battery_level >= 25) {
+			scr.display_buff[0] |= BIT(5);
+			if (battery_level >= 50) {
+				scr.display_buff[0] |= BIT(6);
+				if (battery_level >= 80) {
+					scr.display_buff[0] |= BIT(4);
+				}
+			}
+		}
+#endif
 	}
 }
 
-/* number in 0.1 (-9995..19995), Show: -999 .. 1999
-   symbol 0 - none, 1 - C, 2 - F  */
-_LCD_SPEED_CODE_SEC_
-__attribute__((optimize("-Os"))) void show_big_number_x10(s16 number, u8 symbol){
+/* number:
+ * in 0.1 (-19995..19995), Show: -1999 .. -199.9 .. 199.9 .. 1999
+ * symbol:
+ * 0x00 = "  "
+ * 0x20 = "°Г"
+ * 0x40 = " -"
+ * 0x60 = "°F"
+ * 0x80 = " _"
+ * 0xA0 = "°C"
+ * 0xC0 = " ="
+ * 0xE0 = "°E" */
+_SCR_CODE_SEC_
+__attribute__((optimize("-Os")))
+void show_big_number_x10(s16 number, u8 symbol){
 
-	display_buff[3] = 0;
+	scr.display_buff[3] = 0;
+	if (symbol & 0x20)
+		scr.display_buff[3] |= BIT(1); // "°Г"
+	if (symbol & 0x40)
+		scr.display_buff[3] |= BIT(0); //"-"
+	if (symbol & 0x80)
+		scr.display_buff[3] |= BIT(2); // "_"
 
-	if(symbol == 1)
-		display_buff[3] = BIT(1) | BIT(2);
-	else if(symbol == 2)
-		display_buff[3] = BIT(0) | BIT(1);
-
-	display_buff[4] = 0;
+	scr.display_buff[4] = 0;
 
 	if (number > 19995) {
-   		display_buff[1] = LCD_SYM_H; // "H"
-   		display_buff[2] = LCD_SYM_i; // "i"
+   		scr.display_buff[1] = LCD_SYM_H; // "H"
+   		scr.display_buff[2] = LCD_SYM_i; // "i"
 	} else if (number < -9995) {
-   		display_buff[1] = LCD_SYM_L; // "L"
-   		display_buff[2] = LCD_SYM_o; // "o"
+   		scr.display_buff[1] = LCD_SYM_L; // "L"
+   		scr.display_buff[2] = LCD_SYM_o; // "o"
 	} else {
-		display_buff[1] = 0;
-		display_buff[2] = 0;
-		/* number: -9995..19995 */
-		if (number > 1995 || number < -995) {
-			// show: -999..1999
-			//display_buff[3] &= ~(BIT(3)); // no point
-			if (number < 0){
-				number = -number;
-				display_buff[1] = BIT(0); // "-"
-			}
-			number = (number + 5) / 10; // round(div 10)
+		/* number: -19995..19995 */
+		scr.display_buff[1] = 0;
+		scr.display_buff[2] = 0;
+		if (number > 1999 || number < -1999) {
+			/* number: -19995..-2000, 2000..19995 */
+			// round(div 10)
+			number += 5;
+			number /= 10;
+			// show no point: -1999..-200, 200..1999
 		} else {
-			// show: -99.9..199.9
-			display_buff[3] |= BIT(3); // point
-			if (number < 0){
-				number = -number;
-				display_buff[1] = BIT(0); // "-"
-			}
+			// show point: -199.9..199.9
+			scr.display_buff[3] |= BIT(3); // point top
+		}
+		/* show: -1999..1999 */
+		if (number < 0) {
+			number = -number;
+			if(number > 99)
+				scr.display_buff[1] = BIT(0); // "-"
+			else
+				scr.display_buff[1] = BIT(2); // "-"
 		}
 		/* number: -99..1999 */
-		if (number > 999) display_buff[0] |= BIT(3); // "1" 1000..1999
-		else display_buff[0] &= ~(BIT(3)); // "0" -999..999
-		if (number > 99) display_buff[1] |= display_numbers[number / 100 % 10];
-		if (number > 9) display_buff[2] |= display_numbers[number / 10 % 10];
-		else display_buff[2] |= LCD_SYM_0; // "0"
-	    display_buff[4] = display_numbers[number %10];
+		if (number > 999) scr.display_buff[0] |= BIT(3); // "1" 1000..1999
+		else scr.display_buff[0] &= ~(BIT(3)); // "0" -999..999
+		if (number > 99) scr.display_buff[1] |= display_numbers[number / 100 % 10];
+		if (number > 9) scr.display_buff[2] |= display_numbers[number / 10 % 10];
+		else scr.display_buff[2] |= LCD_SYM_0; // "0"
+	    scr.display_buff[4] = display_numbers[number %10];
 	}
 }
 
 /* -9 .. 99 */
-_LCD_SPEED_CODE_SEC_
-__attribute__((optimize("-Os"))) void show_small_number(int16_t number, bool percent){
-//	display_buff[5] = 0;
-	display_buff[6] = percent? BIT(0) : 0;
+_SCR_CODE_SEC_
+__attribute__((optimize("-Os")))
+void show_small_number(s16 number, bool percent){
+//	scr.display_buff[5] = 0;
+	scr.display_buff[6] = percent? BIT(0) : 0;
 	if (number > 99) {
-		display_buff[5] |= LCD_SYM_H; // "H"
-		display_buff[6] |= LCD_SYM_i; // "i"
+		scr.display_buff[5] |= LCD_SYM_H; // "H"
+		scr.display_buff[6] |= LCD_SYM_i; // "i"
 	} else if (number < -9) {
-		display_buff[5] |= LCD_SYM_L; // "L"
-		display_buff[6] |= LCD_SYM_o; // "o"
+		scr.display_buff[5] |= LCD_SYM_L; // "L"
+		scr.display_buff[6] |= LCD_SYM_o; // "o"
 	} else {
 		if (number < 0) {
 			number = -number;
-			display_buff[5] = BIT(2); // "-"
+			scr.display_buff[5] = BIT(2); // "-"
 		}
-		if (number > 9) display_buff[5] = display_numbers[number / 10 % 10];
-		display_buff[6] |= display_numbers[number %10];
+		if (number > 9) scr.display_buff[5] = display_numbers[number / 10 % 10];
+		scr.display_buff[6] |= display_numbers[number %10];
 	}
 }
 
-void show_blink_screen(void) {
-	memset(&display_buff, 0, sizeof(display_buff));
-	display_buff[0] = LCD_SYM_BLE;
-	display_buff[1] = BIT(2); // "_"
-	display_buff[2] = BIT(2); // "_"
-	display_buff[4] = BIT(2); // "_"
-	send_to_lcd();
-	lcd_blink = 0xf2;
-	lcd_send_i2c_byte(lcd_blink);
+_SCR_CODE_SEC_
+void update_lcd(void){
+	if(!scr.display_off
+	 && memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
+		memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff));
+		send_to_lcd();
+	}
+}
+void display_off(void) {
+	scr.display_off = 1;
+	soft_i2c_send_byte(VKL060_I2C_ADDR << 1, 0xea);
+//	soft_i2c_send_byte(VKL060_I2C_ADDR << 1, 0xd0);
 }
 
-// #define SHOW_REBOOT_SCREEN()
-void show_reboot_screen(void) {
-	memset(&display_buff, 0xff, sizeof(display_buff));
-	send_to_lcd();
+void init_lcd(void){
+	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
+	scr.i2c_address = VKL060_I2C_ADDR << 1;
+	if(scr.display_off) {
+		display_off(); // 2.0 uA
+	} else {
+		if(lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd)))
+			display_off();
+		else {
+			pm_wait_us(200);
+			scr.blink_flg = 0;
+			memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
+			update_lcd();
+		} // 8.6 uA
+	}
 }
 
 #if	USE_DISPLAY_CLOCK
-_LCD_SPEED_CODE_SEC_
+_SCR_CODE_SEC_
 void show_clock(void) {
 	uint32_t tmp = utc_time_sec / 60;
 	uint32_t min = tmp % 60;
 	uint32_t hrs = (tmp / 60) % 24;
-	display_buff[0] &= ~BIT(3);
-	display_buff[1] = display_numbers[(hrs / 10) % 10];
-	display_buff[2] = display_numbers[hrs % 10];
-	display_buff[3] = 0;
-	display_buff[4] = 0;
-	display_buff[5] = display_numbers[(min / 10) % 10];
-	display_buff[6] = display_numbers[min % 10];
+	scr.display_buff[0] &= ~BIT(3);
+	scr.display_buff[1] = display_numbers[(hrs / 10) % 10];
+	scr.display_buff[2] = display_numbers[hrs % 10];
+	scr.display_buff[3] = 0;
+	scr.display_buff[4] = 0;
+	scr.display_buff[5] = display_numbers[(min / 10) % 10];
+	scr.display_buff[6] = display_numbers[min % 10];
 }
 #endif // USE_DISPLAY_CLOCK
 
-_LCD_SPEED_CODE_SEC_
-void update_lcd(void){
-	if(g_zcl_thermostatUICfgAttrs.display_off)
-		return;
-	if(memcmp(display_cmp_buff, display_buff, sizeof(display_buff))) {
-		send_to_lcd();
-		memcpy(display_cmp_buff, display_buff, sizeof(display_buff));
-	}
-	if(lcd_blink == 0xf2) {
-		lcd_blink = 0xf0;
-		lcd_send_i2c_byte(lcd_blink);
-	}
+void show_err_sensors(void) {
+	scr.display_buff[0] &= LCD_SYM_BAT | LCD_SYM_BLE;
+	scr.display_buff[1] = LCD_SYM_E; // "E"
+	scr.display_buff[2] = LCD_SYM_E; // "E"
+	scr.display_buff[3] = 0;
+	scr.display_buff[4] = 0;
+	scr.display_buff[5] = LCD_SYM_E; // "E"
+	scr.display_buff[6] = LCD_SYM_E; // "E"
+
 }
+
+void show_reset_screen(void) {
+	scr.display_buff[0] = 0;
+	scr.display_buff[1] = LCD_SYM_o; // "o"
+	scr.display_buff[2] = LCD_SYM_o; // "o"
+	scr.display_buff[3] = 0;
+	scr.display_buff[4] = 0;
+	scr.display_buff[5] = LCD_SYM_o; // "o"
+	scr.display_buff[6] = LCD_SYM_o; // "o"
+	scr.blink_flg = 0xf2;
+	update_lcd();
+}
+
+void show_ble_ota(void) {
+	scr.display_buff[0] &= LCD_SYM_BAT;
+	scr.display_buff[0] |= LCD_SYM_BLE;
+	scr.display_buff[1] = LCD_SYM_o; // "o"
+	scr.display_buff[2] = LCD_SYM_t; // "t"
+	scr.display_buff[3] = 0;
+	scr.display_buff[4] = LCD_SYM_a; // "a"
+	scr.display_buff[5] = 0;
+	scr.display_buff[6] = 0;
+	scr.blink_flg = 0xf2;
+	update_lcd();
+}
+
 
 #endif // BOARD_LKTMZL02

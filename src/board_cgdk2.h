@@ -11,33 +11,85 @@
 
 #if (BOARD == BOARD_CGDK2)
 
-/* Enable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-extern "C" {
-#endif
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_SCREEN | SERVICE_THS)
 
-// https://pvvx.github.io/CGDK2
-// TLSR8253F512ET32
-// GPIO_PA0 - free, UART_RX, pcb mark "TP3", (Reed Switch, input)
-// GPIO_PA1 - free
-// GPIO_PA7 - SWS, free, (debug TX), pcb mark "TP17"
-// GPIO_PB1 - free, UART_TX, pcb mark "TP1", (TRG)
-// GPIO_PB4 - free
-// GPIO_PB5 - free
-// GPIO_PB6 - free, (ADC2)
-// GPIO_PB7 - free, (ADC1)
-// GPIO_PC0 - SDA, used I2C
-// GPIO_PC1 - SCL, used I2C
-// GPIO_PC2 - free
-// GPIO_PC3 - free
-// GPIO_PC4 - used KEY (RDS)
-// GPIO_PD2 - free
-// GPIO_PD3 - free
-// GPIO_PD4 - free
-// GPIO_PD7 - free
+/* https://pvvx.github.io/CGDK2
+
+TLSR8253F512ET32
+
+GPIO_PA0 - free, UART_RX, pcb mark "TP3", (Reed Switch, input)
+GPIO_PA1 - free
+GPIO_PA7 - SWS, free, (debug TX), pcb mark "TP17"
+GPIO_PB1 - free, UART_TX, pcb mark "TP1", (TRG)
+GPIO_PB4 - free
+GPIO_PB5 - free
+GPIO_PB6 - free, (ADC2)
+GPIO_PB7 - free, (ADC1)
+GPIO_PC0 - SDA, used I2C
+GPIO_PC1 - SCL, used I2C
+GPIO_PC2 - free
+GPIO_PC3 - free
+GPIO_PC4 - used KEY (RDS)
+GPIO_PD2 - free
+GPIO_PD3 - free
+GPIO_PD4 - free
+GPIO_PD7 - free
+
+CGDK2 LCD buffer:  byte.bit
+
+       ---------1.5-------------      O 17.6  :--17.6---
+       |                       |              |
+ BLE  ||    |   |   |   |   |  |             17.6
+ 1.4  ||   1.6 1.7 1.3 1.2 1.1 |              |
+      ||    |   |   |   |   |  |              :--17.5---
+       |                       |              |
+       -------------------------             17.6
+                                              |
+                                              :--17.4---
+
+   |   2.7---2.3---5.7  3.3---4.7---5.6       0.7---0.6--17.3
+   |    |           |    |           |         |           |
+   |   2.6         3.7  3.2         4.3       0.3        17.2
+   |    |           |    |           |         |           |
+  1.0  2.5---2.2---3.6  3.1---4.6---4.2       0.2---0.5--17.1
+   |    |           |    |           |         |           |
+   |   2.4         3.5  3.0         4.1       0.1        17.0
+   |    |           |    |           |   5.4   |           |
+   |   2.0---2.1---3.4  4.4---4.5---4.0   *   0.0---0.4---5.5
+
+  ------------------------------5.4--------------------------
+
+   5.3---6.7---8.3  7.7---7.3---8.2   %   9.7---9.3--17.7
+    |           |    |           |   8.1   |           |
+   5.2         6.3  7.6         8.7       9.6        10.7
+    |           |    |           |         |           |
+   5.1---6.6---6.2  7.5---7.2---8.6       9.5---9.2--10.6
+    |           |    |           |         |           |
+   5.0         6.1  7.4         8.5       9.4        10.5
+    |           |    |           |   8.0   |           |
+   6.4---6.5---6.0  7.0---7.1---8.4   *   9.0---9.1--10.4
+
+
+none: 10.0-10.3, 11.0-16.7
+*/
+
+#define BLE_MODEL_STR		"CGDK2"
+#define BLE_MAN_STR			"Qingping"
+
+#define ZCL_BASIC_MFG_NAME     {8,'Q','i','n','g','p','i','n','g'} // Qingping
+#define ZCL_BASIC_MODEL_ID	   {7,'C','G','D','K','2','-','z'} // CGDK2
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_CR2430
+
+// DISPLAY
+#define SHOW_SMILEY			0
+#define	USE_DISPLAY			1
+#define LCD_BUF_SIZE		18
+#define LCD_INIT_DELAY()
+#define USE_DISPLAY_BATTERY_LEVEL		1
+#define USE_DISPLAY_SMALL_NUMBER_X10	1
+#define USE_DISPLAY_OFF					1
 
 // KEY, BUTTON
 #define BUTTON1				GPIO_PC4
@@ -47,13 +99,7 @@ extern "C" {
 #define PC4_FUNC			AS_GPIO
 #define PULL_WAKEUP_SRC_PC4 PM_PIN_PULLUP_1M
 
-// DISPLAY
-#define SHOW_SMILEY			0
-#define	USE_DISPLAY			2
-#define LCD_BUF_SIZE		18
-#define LCD_INIT_DELAY()
-
-// I2C
+// I2C Sensors & Display
 #define	USE_I2C_DRV			I2C_DRV_HARD
 #define I2C_CLOCK			100000 // Hz
 #define I2C_SCL 			GPIO_PC0
@@ -88,9 +134,5 @@ extern "C" {
 	#define	DEBUG_INFO_TX_PIN	    GPIO_SWS //print
 #endif
 
-/* Disable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-}
-#endif
 #endif // (BOARD == BOARD_CGDK2)
 #endif // _BOARD_CGDK2_H_

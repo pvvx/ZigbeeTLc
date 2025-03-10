@@ -5,13 +5,10 @@
 
 #if USE_I2C_DRV == I2C_DRV_HARD // Hardware I2C
 
-#define _I2C_SEG_
-
 #ifndef I2C_GROUP
 #error "Set I2C_GROUP!"
 #endif
 
-_I2C_SEG_
 void init_i2c(void) {
 	i2c_gpio_set(I2C_GROUP); // I2C_GPIO_GROUP_C0C1, I2C_GPIO_GROUP_C2C3, I2C_GPIO_GROUP_B6D7, I2C_GPIO_GROUP_A3A4
 	reg_i2c_speed = (unsigned char)(CLOCK_SYS_CLOCK_HZ/(4*I2C_CLOCK)); // 100, 400, 700 kHz
@@ -65,7 +62,6 @@ int send_i2c_word(unsigned char i2c_addr, unsigned short w) {
 }
 
 /* send_i2c_bytes() return: NAK (=0 - send ok) */
-_I2C_SEG_
 int send_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataLen) {
 	int err = 0;
 	int size = dataLen;
@@ -94,7 +90,6 @@ int send_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, size_t dataL
 }
 
 /* read_i2c_byte() return: =-1 - error) */
-_I2C_SEG_
 int read_i2c_byte(unsigned char i2c_addr) {
 	int ret = -1;
 	unsigned char r = irq_disable();
@@ -117,7 +112,6 @@ int read_i2c_byte(unsigned char i2c_addr) {
 }
 
 /* read_i2c_bytes() return: NAK (=0 - send ok) */
-_I2C_SEG_
 int read_i2c_bytes(unsigned char i2c_addr, unsigned char * dataBuf, int dataLen) {
 	int ret = -1;
 	int size = dataLen;
@@ -186,19 +180,19 @@ int read_i2c_addr_bytes(unsigned char i2c_addr, unsigned char reg_addr, unsigned
 
 
 /* Universal I2C/SMBUS read-write transaction
- * wrlen = 0..127 ! */
-_I2C_SEG_
-int I2CBusUtr(void * outdata, i2c_utr_t * tr, unsigned int wrlen) {
-	unsigned char * pwrdata = (unsigned char *) &tr->wrdata;
-	unsigned char * poutdata = (unsigned char *) outdata;
-	unsigned int cntstart = wrlen - (tr->mode & 0x7f);
-	unsigned int rdlen = tr->rdlen & 0x7f;
+ * wrlen = 0..127 !
+ * return NAK (=0 - ok) */
+int I2CBusUtr(void * outdata, i2c_utr_t * tr, u32 wrlen) {
+	u8 * pwrdata = (u8 *) &tr->wrdata;
+	u8 * poutdata = (u8 *) outdata;
+	u32 cntstart = wrlen - (tr->mode & 0x7f);
+	u32 rdlen = tr->rdlen & 0x7f;
 
-	unsigned char r = irq_disable();
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 			init_i2c();
+	u8 r = irq_disable();
 
-	reg_i2c_id = *pwrdata++;
+	reg_i2c_id = *pwrdata++; // or (wrlen == 0 && rdlen)
 	reg_i2c_ctrl = FLD_I2C_CMD_START | FLD_I2C_CMD_ID;
 	while(reg_i2c_status & FLD_I2C_CMD_BUSY);
 
@@ -418,6 +412,43 @@ int read_i2c_addr_bytes(unsigned char i2c_addr, unsigned char reg_addr, unsigned
 				p++;
 			}
 			ret = 0;
+		}
+	}
+	soft_i2c_stop();
+	return ret;
+}
+
+/* Universal I2C/SMBUS read-write transaction
+ * wrlen = 0..127 !
+ * return NAK (=0 - ok) */
+int I2CBusUtr(void * outdata, i2c_utr_t * tr, u32 wrlen) {
+	u8 * pwrdata = (u8 *) &tr->wrdata;
+	u8 * poutdata = (u8 *) outdata;
+	u32 cntstart = wrlen - (tr->mode & 0x7f);
+	u32 rdlen = tr->rdlen & 0x7f;
+	int ret;
+	soft_i2c_start();
+	ret = soft_i2c_wr_byte(*pwrdata++);
+	while(ret == 0 && wrlen) {
+		// write data
+		ret = soft_i2c_wr_byte(*pwrdata++);
+
+		if(--wrlen == cntstart && ret == 0) { // + send start & id
+			if(tr->mode & 0x80) {
+				soft_i2c_stop();
+				sleep_us16(I2C_TCLK_US);
+			}
+			soft_i2c_start();
+			ret = soft_i2c_wr_byte(tr->wrdata[0] | 1);
+		}
+	}
+	if(ret == 0) {
+		while(rdlen) {
+			if(--rdlen == 0 && (tr->rdlen & 0x80) == 0)
+				*poutdata = soft_i2c_rd_byte(1);
+			else
+				*poutdata = soft_i2c_rd_byte(0);
+			poutdata++;
 		}
 	}
 	soft_i2c_stop();

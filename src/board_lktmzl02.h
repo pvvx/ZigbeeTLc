@@ -11,38 +11,116 @@
 
 #if (BOARD == BOARD_LKTMZL02)
 
-/* Enable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-extern "C" {
-#endif
-
 #define ZIGBEE_TUYA_OTA 	1
 
-// https://pvvx.github.io/LKTMZL02
-// TLSR8258
-// GPIO_PA0 - free (Reed Switch, input)
-// GPIO_PA1 - free
-// GPIO_PA7 - SWS, (debug TX)
-// GPIO_PB1 - free
-// GPIO_PB4 - LED - "1" On
-// GPIO_PB5 - free, (TRG)
-// GPIO_PB6 - free
-// GPIO_PB7 - free
-// GPIO_PC0 - KEY
-// GPIO_PC1 - SDA1, used I2C LCD
-// GPIO_PC2 - SDA, used I2C Sensor
-// GPIO_PC3 - SCL, used I2C Sensor
-// GPIO_PC4 - SCL1, used I2C LCD
-// GPIO_PD2 - free
-// GPIO_PD3 - free
-// GPIO_PD4 - free
-// GPIO_PD7 - free
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_SCREEN | SERVICE_THS)
+
+/* https://pvvx.github.io/LKTMZL02
+
+TLSR8258
+
+GPIO_PA0 - free (Reed Switch, input)
+GPIO_PA1 - free
+GPIO_PA7 - SWS, (debug TX)
+GPIO_PB1 - free
+GPIO_PB4 - LED - "1" On
+GPIO_PB5 - free, (TRG)
+GPIO_PB6 - free
+GPIO_PB7 - free
+GPIO_PC0 - KEY
+GPIO_PC1 - SDA1, used I2C LCD
+GPIO_PC2 - SDA, used I2C Sensor
+GPIO_PC3 - SCL, used I2C Sensor
+GPIO_PC4 - SCL1, used I2C LCD
+GPIO_PD2 - free
+GPIO_PD3 - free
+GPIO_PD4 - free
+GPIO_PD7 - free
+
+LCD LKTMZL02 real buffer:  byte.bit
+
+                                ------------|
+ 0.2 0.1 0.0					0.5 0.6	0.4 |
+  .   i   |                      |   |   |  |0.7
+                                ------------|
+
+              --1.4--         --2.4--            --3.0--
+       |    |         |     |         |        |         |
+       |   1.5       1.1   2.5       2.1      3.1       4.5
+       |    |         |     |         |        |         |      o 3.5
+-1.0- 0.3     --1.2--         --2.2--            --4.6--          +--- 3.5
+       |    |         |     |         |        |         |     3.5|
+       |   1.6       1.3   2.6       2.3      3.2       4.7       ---- 3.4
+       |    |         |     |         |        |         |     3.5|
+              --1.7--         --2.7--     *      --3.3--          ---- 3.6
+                                         3.7
+
+          --4.0--         --5.0--
+        |         |     |         |
+       4.1       5.5   5.1       6.5
+        |         |     |         |
+          --5.6--         --6.6--
+        |         |     |         |
+       4.2       5.7   5.2       6.7     %
+        |         |     |         |     6.4
+          --4.3--         --5.3--
+
+
+  None: 2.0, 4.4, 5.4, 6.0..6.3
+
+* Work buffer:  byte.bit
+
+                                ------------|
+ 0.2 0.1 0.0					0.5 0.6	0.4 |
+  .   i   |                      |   |   |  |0.7
+                                ------------|
+
+              --1.4--         --2.4--            --4.4--
+       |    |         |     |         |        |         |
+       |   1.5       1.1   2.5       2.1      4.5       4.1
+       |    |         |     |         |        |         |      o 3.1
+-1.0- 0.3     --1.2--         --2.2--            --4.2--          +--- 3.1
+       |    |         |     |         |        |         |     3.1|
+       |   1.6       1.3   2.6       2.3      4.6       4.3       ---- 3.0
+       |    |         |     |         |        |         |     3.1|
+              --1.7--         --2.7--     *      --4.7--          ---- 3.2
+                                         3.3
+
+          --5.4--         --6.4--
+        |         |     |         |
+       5.5       5.1   6.5       6.1
+        |         |     |         |
+          --5.2--         --6.2--
+        |         |     |         |
+       5.6       5.3   6.6       6.3     %
+        |         |     |         |     6.0
+          --5.7--         --6.7--
+
+
+  None: 2.0, 3.4..3.7, 4.0, 5.0
+*/
+
+#define BLE_MODEL_STR		"LKTMZLZ02"
+#define BLE_MAN_STR			"Tuya"
+
+#define ZCL_BASIC_MFG_NAME     {4,'T','u','y','a'} // Tuya
+#define ZCL_BASIC_MODEL_ID	   {10,'L','K','T','M','Z','L','0','2','-','z'} // LKTMZL02
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_2AAA
 
+// DISPLAY
+#define SHOW_SMILEY			0
+#define	USE_DISPLAY			2
+#define LCD_BUF_SIZE		18
+#define LCD_INIT_DELAY()
+#define USE_DISPLAY_BATTERY_LEVEL		1
+#define USE_DISPLAY_OFF					1
+
 // KEY, BUTTON
 #define BUTTON1				GPIO_PC0
+#define BUTTON1_ON 			0
+#define BUTTON1_OFF 		1
 #define PC0_INPUT_ENABLE	1
 #define PC0_DATA_OUT		0
 #define PC0_OUTPUT_ENABLE	0
@@ -76,12 +154,6 @@ extern "C" {
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		0
 
-// DISPLAY
-#define SHOW_SMILEY			0
-#define	USE_DISPLAY			6
-#define LCD_BUF_SIZE		7
-#define LCD_INIT_DELAY()
-
 // I2C LCD
 #define I2C_SCL_LCD			GPIO_PC4
 #define I2C_SDA_LCD			GPIO_PC1
@@ -114,9 +186,5 @@ extern "C" {
 	#define	DEBUG_INFO_TX_PIN	    GPIO_SWS //print
 #endif
 
-/* Disable C linkage for C++ Compilers: */
-#if defined(__cplusplus)
-}
-#endif
 #endif // (BOARD == BOARD_LKTMZL02)
 #endif // _BOARD_LKTMZL02_H_
