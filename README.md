@@ -3,6 +3,8 @@
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
 Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/),
+ [CGG1](https://pvvx.github.io/CGG1/),
+ [CGG1N](https://pvvx.github.io/CGG1_2022),
  [CGDK2](https://pvvx.github.io/CGDK2/),
  [MHO-C122](https://pvvx.github.io/MHO_C122),
  [MHO-C401(old)](https://pvvx.github.io/MHO_C401),
@@ -13,8 +15,12 @@ Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermomet
  [LKTMZL02](https://pvvx.github.io/LKTMZL02),
  [ZG-227Z](https://pvvx.github.io/ZG-227Z),
  [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
- [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
- [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/) work with modification - [requires unsoldering an extra chip and soldering jumpers](https://github.com/pvvx/BLE_THSensor/issues/13#issuecomment-2148975619).
+ [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro),
+ [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/).
+
+* Work with modification:
+ [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/),
+ [ZTH05](https://pvvx.github.io/TS0601_TZE204).
 
 Additional alternative firmware options for some devices with TLSR825x can be found at [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
 
@@ -106,7 +112,10 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x021c | ZTH02 |
 | 0x021e | TH03 |
 | 0x021f | LKTMZL02 |
+| 0x0221 | ZTH05 |
 | 0x0225 | ZY-ZTH02 |
+| 0x0226 | ZY-ZTH01 |
+| 0x0227 | ZG227 |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
@@ -187,7 +196,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 24. Ver 0.1.2.4. Added firmware for [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02), [ZG-227Z](https://pvvx.github.io/ZG-227Z). Prevent ZHA from incorrectly setting LongPoll to a short interval contrary to Zigbee 3.0 standards.
 
-25. Ver 0.1.2.5 Alpha. Migration to SDK V3.7.1.2. Reduced battery consumption for thermometers with SHTC3 sensor. Changes to storage area for user settings. Additions and corrections to button functions. ...
+25. Ver 0.1.2.5 Alpha. Completely reworked version on SDK v3.7.1.2. Reduced battery consumption for thermometers with SHTC3 sensor. Changes to storage area for user settings. Additions to button functions. Multiple fixes. Adding new devices. ...
 
 ## Make
 

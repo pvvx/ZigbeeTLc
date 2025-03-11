@@ -442,6 +442,8 @@ void user_app_init(void)
 #if	USE_DISPLAY
 	LCD_INIT_DELAY();
 	init_lcd();
+	show_light(false);
+	show_connected_symbol(false);
 #endif
 #if DEBUG_ENABLE
 	/* Register except handler for test */
