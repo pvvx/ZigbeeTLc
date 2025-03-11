@@ -232,7 +232,7 @@ typedef enum{
  * Modules configuration
  */
 #ifndef ZIGBEE_TUYA_OTA
-#define ZIGBEE_TUYA_OTA		!USE_BLE
+#define ZIGBEE_TUYA_OTA		1 // !USE_BLE
 #endif
 
 /* Configure startup */

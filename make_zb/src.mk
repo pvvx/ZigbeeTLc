@@ -13,7 +13,6 @@ $(OUT_PATH)$(SRC_DIR)/patch_zb_sdk/hw_drv.o \
 $(OUT_PATH)$(SRC_DIR)/patch_zb_sdk/cstartup_8258.o \
 $(OUT_PATH)$(SRC_DIR)/patch_zb_sdk/drv_nv.o \
 $(OUT_PATH)$(SRC_DIR)/bthome_beacon.o \
-$(OUT_PATH)$(SRC_DIR)/zigbee_ble_switch.o \
 $(OUT_PATH)$(SRC_DIR)/app_ui.o \
 $(OUT_PATH)$(SRC_DIR)/app_pm.o \
 $(OUT_PATH)$(SRC_DIR)/battery.o \
@@ -37,6 +36,7 @@ $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_thermostat_ui_cfg.o \
 $(OUT_PATH)$(SRC_DIR)/zcl_sensorCb.o \
 $(OUT_PATH)$(SRC_DIR)/reporting.o \
+$(OUT_PATH)$(SRC_DIR)/zigbee_ble_switch.o \
 $(OUT_PATH)$(SRC_DIR)/cmd_parser.o \
 $(OUT_PATH)$(SRC_DIR)/main.o \
 $(OUT_PATH)$(SRC_DIR)/ext_ota.o

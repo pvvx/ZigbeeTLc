@@ -18,7 +18,7 @@ TEL_PATH ?= .
 SDK_z_PATH ?= ./SDK_z
 SDK_bz_PATH ?= ./SDK_bz
 
-USE_BZ ?=0
+USE_ZB ?=0
 
 OUT_PATH ?=./build
 BIN_PATH ?=./bin
@@ -79,13 +79,13 @@ ASM_FLAGS := \
 -fno-rtti \
 -fno-threadsafe-statics
 
-ifeq ($(USE_BZ),1)
+ifeq ($(USE_ZB),1)
 
 # MAKE_PATH: project all make
 
 TEL_CHIP +=-DUSE_BLE=1
 
-MAKE_PATH ?= ./make_bz
+MAKE_PATH ?= ./make_zb
 
 SDK_PATH ?= $(SDK_bz_PATH)
 
@@ -273,9 +273,7 @@ install: $(SDK_FLAGS) $(TC32_PATH)
 $(SDK_FLAGS): $(SDK_PATH)
 ifneq ($(SDK_FLAGS),$(wildcard $(SDK_FLAGS)))
 	#@wget -P $(SDK_PATH) http://wiki.telink-semi.cn/tools_and_sdk/Zigbee/Zigbee_SDK.zip
-	@mkdir -p $(SDK_z_PATH)
 	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_v3.6.8.6.zip -d $(SDK_z_PATH)
-	@mkdir -p  $(SDK_bz_PATH)
 	@unzip -o $(TEL_PATH)/tools/SDK_Zigbee_BLE_v2.4.0.1.zip -d $(SDK_bz_PATH)
 endif
 

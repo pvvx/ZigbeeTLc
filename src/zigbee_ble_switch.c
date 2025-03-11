@@ -22,7 +22,7 @@
  *******************************************************************************************************/
 
 #include "tl_common.h"
-#include "zigbee_ble_switch.h"
+#include "lcd.h"
 #include "zb_common.h"
 #include "stack/ble/ble.h"
 #include "stack/ble/ble_config.h"
@@ -31,8 +31,8 @@
 #include "sensors.h"
 #include "battery.h"
 #include "ble_cfg.h"
-#include "lcd.h"
 #include "bthome_beacon.h"
+#include "zigbee_ble_switch.h"
 
 app_dualModeInfo_t g_dualModeInfo = {
 		.slot     = DUALMODE_SLOT_BLE,

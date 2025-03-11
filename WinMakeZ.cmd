@@ -1,7 +1,8 @@
 @set TLPATH=D:\MCU\TelinkIoTStudio
 @set PATH=%TLPATH%\bin;%TLPATH%\opt\tc32\bin;%TLPATH%\mingw\bin;%TLPATH%\opt\tc32\tc32-elf\bin;%PATH%
 @set SWVER=_v0125
-@rem del /Q .\bin
+@del /Q .\bin
+@del /Q .\build
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZMHOC401 POJECT_DEF="-DBOARD=BOARD_MHO_C401"
 @if not exist "bin\ZMHOC401%SWVER%.bin" goto :error

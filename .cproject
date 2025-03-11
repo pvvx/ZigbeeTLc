@@ -2,7 +2,7 @@
 <?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979" moduleId="org.eclipse.cdt.core.settings" name="Default">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979" moduleId="org.eclipse.cdt.core.settings" name="Zigbee">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -12,7 +12,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" description="" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979" name="Default" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactName="${ProjName}" buildProperties="" description="Zigbee only" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979" name="Zigbee" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775" name="/" resourcePath="">
 						<toolChain id="com.telink.tc32eclipse.toolchain.TC32Win.base.1233489413" name="TC32-GCC Toolchain" superClass="com.telink.tc32eclipse.toolchain.TC32Win.base">
 							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash.1853442872" name="Generate binary file for Flash memory" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash"/>
@@ -61,7 +61,7 @@
 			<storageModule moduleId="ilg.gnuarmeclipse.managedbuild.packs"/>
 		</cconfiguration>
 		<cconfiguration id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937" moduleId="org.eclipse.cdt.core.settings" name="bz">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937" moduleId="org.eclipse.cdt.core.settings" name="Zigbee and BLE">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.ELF" point="org.eclipse.cdt.core.BinaryParser"/>
@@ -71,7 +71,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" description="" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937" name="bz" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="org.eclipse.cdt.build.core.emptycfg">
+				<configuration artifactName="${ProjName}" buildProperties="" description="Zigbee and BLE" id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937" name="Zigbee and BLE" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="org.eclipse.cdt.build.core.emptycfg">
 					<folderInfo id="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937." name="/" resourcePath="">
 						<toolChain id="com.telink.tc32eclipse.toolchain.TC32Win.base.120146541" name="TC32-GCC Toolchain" superClass="com.telink.tc32eclipse.toolchain.TC32Win.base">
 							<option id="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash.1973975322" name="Generate binary file for Flash memory" superClass="com.telink.tc32eclipse.toolchain.options.toolchain.objcopy.flash"/>
@@ -126,6 +126,9 @@
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope" versionNumber="2">
+		<configuration configurationName="Zigbee and BLE">
+			<resource resourceType="PROJECT" workspacePath="/ZigbeeTLc"/>
+		</configuration>
 		<configuration configurationName="bz">
 			<resource resourceType="PROJECT" workspacePath="/ZigbeeTLc"/>
 		</configuration>
@@ -138,6 +141,21 @@
 		<project-mappings>
 			<content-type-mapping configuration="" content-type="org.eclipse.cdt.core.cHeader" language="org.eclipse.cdt.core.gcc"/>
 		</project-mappings>
+	</storageModule>
+	<storageModule moduleId="scannerConfiguration">
+		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
+		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937.">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775;com.telink.tc32eclipse.tool.compiler.TC32Win.base.1839982702;com.telink.tc32eclipse.compiler.TC32Win.input.1226291045">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937.;com.telink.tc32eclipse.tool.compiler.TC32Win.base.1456995557;com.telink.tc32eclipse.compiler.TC32Win.input.1822314260">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
+		</scannerConfigBuildInfo>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
 		<buildTargets>
@@ -213,29 +231,14 @@
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>
 			</target>
-			<target name="USE_BZ=1" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+			<target name="USE_ZB=1" path="" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
 				<buildCommand>make</buildCommand>
 				<buildArguments>-j24</buildArguments>
-				<buildTarget>USE_BZ=1</buildTarget>
+				<buildTarget>USE_ZB=1</buildTarget>
 				<stopOnError>true</stopOnError>
 				<useDefaultCommand>true</useDefaultCommand>
 				<runAllBuilders>true</runAllBuilders>
 			</target>
 		</buildTargets>
-	</storageModule>
-	<storageModule moduleId="scannerConfiguration">
-		<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId=""/>
-		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937.">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.2062185775;com.telink.tc32eclipse.tool.compiler.TC32Win.base.1839982702;com.telink.tc32eclipse.compiler.TC32Win.input.1226291045">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937;com.telink.tc32eclipse.toolchain.TC32Win.base.775882979.1108892937.;com.telink.tc32eclipse.tool.compiler.TC32Win.base.1456995557;com.telink.tc32eclipse.compiler.TC32Win.input.1822314260">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.telink.tc32eclipse.core.TC32GCCManagedMakePerProjectProfileC"/>
-		</scannerConfigBuildInfo>
 	</storageModule>
 </cproject>
