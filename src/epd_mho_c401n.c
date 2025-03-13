@@ -256,11 +256,12 @@ __attribute__((optimize("-Os")))
 void show_big_number_x10(s16 number, u8 symbol){
 
 	scr.display_buff[14] &= ~(BIT(0) | BIT(2) | BIT(4));
- 	if (symbol == 1) {
- 		scr.display_buff[14] |= BIT(4) | BIT(0);
- 	} else if(symbol == 2) {
- 		scr.display_buff[14] |= BIT(4) | BIT(2);
- 	}
+ 	if (symbol & 0x20)
+ 		scr.display_buff[14] |= BIT(4); // "Г", "%", "( )", "."
+	if (symbol & 0x40)
+		scr.display_buff[14] |= BIT(2); //"-"
+	if (symbol & 0x80)
+		scr.display_buff[14] |= BIT(0); // "_"
 
 	scr.display_buff[8] = 0;
 	scr.display_buff[9] = 0;

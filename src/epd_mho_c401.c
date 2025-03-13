@@ -281,12 +281,12 @@ void show_big_number_x10(s16 number, u8 symbol){
 	scr.display_buff[14] = 0;
 	scr.display_buff[15] = 0;
 	scr.display_buff[16] &= BIT(4); // "bat"
-	if (symbol == 1) {
-		scr.display_buff[14] = BIT(2); //"_"
-		scr.display_buff[16] |= BIT(5); // "°Г"
-	} else if(symbol == 2) {
-		scr.display_buff[16] |= BIT(5) | BIT(6); // "°Г", "-"
-	}
+	if (symbol & 0x20)
+		scr.display_buff[16] |= BIT(5); // "Г", "%", "( )", "."
+	if (symbol & 0x40)
+		scr.display_buff[16] |= BIT(6); //"-"
+	if (symbol & 0x80)
+		scr.display_buff[14] |= BIT(2); // "_"
 	if (number > 19995) {
 		// "Hi"
 		epd_set_digit(scr.display_buff, Symbol_H, top_left);
