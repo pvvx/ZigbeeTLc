@@ -1,5 +1,5 @@
 
-v0.1.2.4 - beta!
+v0.1.2.5 - beta!
 
 * 1141-02tt-nnnn3001-xxxxz_vNN.zigbee - ZigbeeTlc firmware
 * 1141-d3a3-01993001-xxxxz_vNN.zigbee - firmware for transferring Tuya to ZigbeeTlc
