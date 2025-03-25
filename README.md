@@ -198,7 +198,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 24. Ver 0.1.2.4. Added firmware for [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02), [ZG-227Z](https://pvvx.github.io/ZG-227Z). Prevent ZHA from incorrectly setting LongPoll to a short interval contrary to Zigbee 3.0 standards.
 
-25. Ver 0.1.2.5 Alpha. Completely reworked version on SDK v3.7.1.2. Merging with [ZBdevice](https://github.com/pvvx/ZigbeeTLc/blob/master/ZBdevices.md). Reduced battery consumption for thermometers with SHTC3 sensor. Changes to storage area for user settings. Additions to button functions. Multiple fixes. Adding new devices. ...
+25. Ver 0.1.2.5. Completely reworked version on SDK v3.7.1.2. Merging with [ZBdevice](https://github.com/pvvx/ZigbeeTLc/blob/master/ZBdevices.md). Reduced battery consumption for thermometers with SHTC3 sensor. Changes to storage area for user settings. Additions to button functions. Multiple fixes. Adding new devices. ...
 
 ## Make
 

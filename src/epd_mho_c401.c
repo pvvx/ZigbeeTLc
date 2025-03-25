@@ -379,6 +379,7 @@ int task_lcd(void) {
 			transmit(0, POWER_ON);
 			// wait ~30 ms for the display to become ready to receive new
 			scr.stage = 2;
+			pm_wait_us(200);
 			break;
 		case 2: // Update/Init lcd, stage 2
 			if (scr.updated == 0) {
@@ -456,6 +457,7 @@ int task_lcd(void) {
 			// Refresh
 			transmit(0, DISPLAY_REFRESH);
 			// wait ~1256 ms for the display to become ready to receive new
+			pm_wait_us(200);
 			break;
 		case 3: // Update/Init lcd, stage 3
 			// send Charge Pump OFF command

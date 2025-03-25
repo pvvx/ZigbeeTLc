@@ -29,7 +29,9 @@ void battery_detect(void)
 #if USE_DISPLAY
 		display_off();
 #endif
+#if USE_SENSOR_TH
 		sensor_go_sleep();
+#endif
 		drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, LOW_POWER_SLEEP_TIME_ms);
 #else
 		SYSTEM_RESET();

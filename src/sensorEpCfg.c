@@ -67,6 +67,9 @@ const u16 sensorDevice_inClusterList[] =
 #ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
     ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
 #endif
+#ifdef ZCL_OCCUPANCY_SENSING
+	ZCL_CLUSTER_MS_OCCUPANCY_SENSING,
+#endif
 #ifdef ZCL_IAS_ZONE
 	ZCL_CLUSTER_SS_IAS_ZONE,
 #endif
@@ -304,8 +307,27 @@ const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 };
 
 #define	ZCL_THERMOSTAT_UI_CFG_ATTR_NUM		 sizeof(thermostat_ui_cfg_attrTbl) / sizeof(zclAttrInfo_t)
-#endif
+#endif // ZCL_THERMOSTAT_UI_CFG
 
+#ifdef ZCL_OCCUPANCY_SENSING
+zcl_occupancyAttr_t zcl_occupAttr = {
+	.occupancy	= 0,
+	.sensor_type	= 0,
+	.delay	= DEF_OCCUPANCY_DELAY
+};
+
+/* Attribute record list */
+const zclAttrInfo_t occupancy_attrTbl[] = {
+	{ ZCL_ATTRID_OCCUPANCY,  ZCL_DATA_TYPE_BITMAP8,   ACCESS_CONTROL_READ,  (u8*)&zcl_occupAttr.occupancy},
+	{ ZCL_ATTRID_OCCUPANCY_SENSOR_TYPE,  ZCL_DATA_TYPE_ENUM8,   ACCESS_CONTROL_READ,  (u8*)&zcl_occupAttr.sensor_type},
+	{ ZCL_ATTRID_PIR_OCCU2UNOCCU_DELAY,  ZCL_DATA_TYPE_UINT16,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.delay},
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  (u8*)&zcl_attr_global_clusterRevision},
+};
+
+#define	ZCL_OCCUPANCY_ATTR_NUM sizeof(occupancy_attrTbl) / sizeof(zclAttrInfo_t)
+//const u8 zcl_occupancy_attrNum = ( sizeof(occupancy_attrTbl) / sizeof(zclAttrInfo_t) );
+
+#endif // ZCL_OCCUPANCY_SENSING
 
 #ifdef ZCL_POLL_CTRL
 /* Poll Control */
@@ -360,6 +382,9 @@ const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 #endif
 #ifdef ZCL_RELATIVE_HUMIDITY
 	{ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,	MANUFACTURER_CODE_NONE, ZCL_RELATIVE_HUMIDITY_ATTR_NUM, 		relative_humdity_attrTbl,	zcl_relative_humidity_register, 	NULL},
+#endif
+#ifdef ZCL_OCCUPANCY_SENSING
+	{ZCL_CLUSTER_MS_OCCUPANCY_SENSING, MANUFACTURER_CODE_NONE, ZCL_OCCUPANCY_ATTR_NUM,	occupancy_attrTbl, zcl_occupancySensing_register, 	NULL},
 #endif
 #ifdef ZCL_IAS_ZONE
 	{ZCL_CLUSTER_SS_IAS_ZONE,		MANUFACTURER_CODE_NONE, ZCL_IASZONE_ATTR_NUM,	iasZone_attrTbl,	zcl_iasZone_register,	sensorDevice_iasZoneCb},
@@ -483,7 +508,9 @@ void init_nv_app(void) {
 #endif
 		nv_resetAll();
 		nv_resetModule(NV_MODULE_APP);
+#ifdef ZCL_THERMOSTAT_UI_CFG
 		nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_nv_thermostatUiCfg), (u8*)&zcl_nv_thermostatUiCfg);
+#endif
 		ver = USE_NV_APP;
 		nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_VER, sizeof(ver), (u8 *)&ver);
 	}

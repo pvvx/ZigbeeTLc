@@ -77,6 +77,7 @@
 #define SERVICE_FINDMY		0x00400000	// FindMy
 #define SERVICE_SCANTIM		0x00800000	// Scan Time (develop, test only!)
 #define SERVICE_ZIGBEE		0x01000000	// ZB-version
+#define SERVICE_PIR			0x02000000	// use PIR sensor
 #define SERVICE_EXTENDED	0x80000000  //
 
 
@@ -108,6 +109,7 @@
 #include "board_zyzth02.h"
 #include "board_zyzth02pro.h"
 #include "board_zg_227z.h"
+#include "board_pirs.h"
 #else
 #error "Define BOARD!"
 #endif
@@ -167,9 +169,18 @@
 #define USE_SENSOR_TH  (USE_SENSOR_CHT8305 || USE_SENSOR_CHT8215 || USE_SENSOR_AHT20_30 || USE_SENSOR_SHT4X || USE_SENSOR_SHTC3 || USE_SENSOR_SHT30)
 #endif
 
+
+#define DEF_OCCUPANCY_DELAY		60 // sec
+
+#ifndef USE_SENSOR_TH
 #define READ_SENSOR_TIMER_MIN_SEC 	3 // second
 #define READ_SENSOR_TIMER_SEC 		10 // default, second
 #define DEFAULT_POLL_RATE			(g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
+#else
+#define READ_SENSOR_TIMER_MIN_SEC 	3 // second
+#define READ_SENSOR_TIMER_SEC 		60 // default, second
+#define DEFAULT_POLL_RATE			(READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
+#endif
 #define READ_SENSOR_TIMER_MS 		DEFAULT_POLL_RATE // (READ_SENSOR_TIMER_SEC*1000) // msecond
 
 /**********************************************************************
@@ -184,6 +195,7 @@ typedef enum{
 	NV_ITEM_APP_DEV_NAME,
 	NV_ITEM_APP_MAN_NAME,
 	NV_ITEM_APP_THERMOSTAT_UI_CFG,
+	NV_ITEM_APP_PIR_CFG,
 } nv_item_app_t;
 
 /**********************************************************************
@@ -194,9 +206,14 @@ typedef enum{
 #define ZCL_LIGHT_COLOR_CONTROL_SUPPORT	0 // =0 (!)
 #define ZCL_POWER_CFG_SUPPORT						1
 //#define ZCL_IAS_ZONE_SUPPORT						1
+#if (DEV_SERVICES & SERVICE_THS)
 #define ZCL_TEMPERATURE_MEASUREMENT_SUPPORT			1
 #define ZCL_RELATIVE_HUMIDITY_SUPPORT   			1
 #define ZCL_THERMOSTAT_UI_CFG_SUPPORT				1
+#endif
+#if (DEV_SERVICES & SERVICE_PIR)
+#define ZCL_OCCUPANCY_SENSING_SUPPORT				1
+#endif
 #define ZCL_POLL_CTRL_SUPPORT						1
 #define ZCL_GROUP_SUPPORT							0
 #define ZCL_OTA_SUPPORT								1

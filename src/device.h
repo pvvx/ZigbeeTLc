@@ -132,6 +132,14 @@ typedef struct {
 	u8 measure_interval;
 }zcl_thermostatUICfgAttr_t;
 
+/**
+ *  @brief Defined for Occupancy cluster attributes
+ */
+typedef struct {
+	u8  occupancy;
+	u8  sensor_type;
+	u16 delay;
+} zcl_occupancyAttr_t;
 
 /**
  *  @brief  Defined for poll control cluster attributes

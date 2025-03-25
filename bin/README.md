@@ -1,6 +1,4 @@
 
-v0.1.2.5 - beta!
-
 * 1141-02tt-nnnn3001-xxxxz_vNN.zigbee - ZigbeeTlc firmware
 * 1141-d3a3-01993001-xxxxz_vNN.zigbee - firmware for transferring Tuya to ZigbeeTlc
 * 1286-0202-10993607-TH03Zz_xxxx.zigbee - firmware for transferring TH03 Tuya/Sonoff to ZigbeeTlc

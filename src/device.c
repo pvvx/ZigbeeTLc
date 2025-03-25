@@ -216,11 +216,13 @@ u8 is_comfort(s16 t, u16 h) {
 
 void read_sensor_and_save(void) {
 	if(!read_sensor()) {
+#if USE_SENSOR_TH
 		if(sensor_ht.flag & FLG_MEASURE_HT_RP) {
 			sensor_ht.flag &= ~FLG_MEASURE_HT_RP;
 			g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
 			g_zcl_relHumidityAttrs.measuredValue = sensor_ht.humi;
 		}
+#endif
 	}
 	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
     g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;
@@ -298,7 +300,7 @@ s32 sensors_task(void *arg) {
 void app_task(void)
 {
 	u16 rep_uptime_sec;
-#if !USE_BLE
+#if !USE_BLE  && USE_SENSOR_TH
 	static u8 flg_cnt;
 	sensors_task(NULL);
 	task_keys();
@@ -351,6 +353,7 @@ void app_task(void)
 		task_lcd();
 #endif
 #if !USE_BLE
+#if	USE_SENSOR_TH
 		if(flg_cnt)
 			flg_cnt--;
 		else {
@@ -360,10 +363,13 @@ void app_task(void)
 				drv_pm_lowPowerEnter();
 			}
 		}
+#else
+		drv_pm_lowPowerEnter();
+#endif // USE_SENSOR_TH
 #endif // !USE_BLE
 #endif // PM_ENABLE
 	}
-#if !USE_BLE
+#if !USE_BLE && USE_SENSOR_TH
 	else
 		flg_cnt = 1;
 #endif // !USE_BLE

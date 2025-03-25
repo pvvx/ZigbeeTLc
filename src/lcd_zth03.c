@@ -229,7 +229,7 @@ void show_battery_symbol(bool state){
 _SCR_CODE_SEC_
 __attribute__((optimize("-Os")))
 void show_big_number_x10(s16 number, u8 symbol){
-	scr.display_buff[3] &= ~(BIT(5) | BIT(7)); // "bat" & smiley
+	scr.display_buff[3] &= ~(BIT(3) | BIT(5) | BIT(7)); // "-" "bat" & smiley
 	scr.display_buff[2] = 0;
 
 	if (symbol & 0x20)
@@ -263,7 +263,7 @@ void show_big_number_x10(s16 number, u8 symbol){
 		if (number < 0) {
 			number = -number;
 			if(number > 99)
-				scr.display_buff[3] = BIT(3); // "-"
+				scr.display_buff[3] |= BIT(3); // "-"
 			else
 				scr.display_buff[0] = BIT(2); // "-"
 		}
