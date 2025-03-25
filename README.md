@@ -79,10 +79,6 @@ Power configuration (ClusterID: 0x0001), Battery Percentage Remaining (Attr: 0x0
 Temperature Measurement (ClusterID: 0x0402), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 10 (0.1°).<br>
 Relative Humidity Measurement (ClusterID: 0x0405), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 50 (0.5%).
 
-## Z2M
-
-Use [External convertors](https://github.com/pvvx/ZigbeeTLc/tree/master/z2m) (for now for version 0.1.2.0)
-
 ## Zigbee OTA
 
 [OTA update in ZHA](https://github.com/pvvx/ZigbeeTLc/issues/7)
