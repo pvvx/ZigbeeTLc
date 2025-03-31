@@ -3,7 +3,10 @@ ZigBee devices with BLE-OTA function on Telink chipset.
 
 ![image](https://github.com/user-attachments/assets/9fea94d4-8313-493a-a4e3-ae15f18a1c65)
 
-Beta versions... 
+
+This is a "trial" firmware. Created to be able to test the operation with Zigbee, but having the ability to use BLE and Zigbee OTA for those whose Zigbee coordinator does not allow Zigbee OTA. Which is relevant for closed gateways of different brands.
+If everything works correctly with your Zigbee coordinator, then it is advisable to make Zigbee or BLE OTA on a clean Zigbee firmware. It consumes a little less battery ...
+
 (At the moment, the following devices have been tested with the ZBdevice firmware:<br>
 Xiaomi LYWSD03MMC B 1.4, CGG1, CGG1N, LKTMZL02. The other options have not been tested yet...)
 
