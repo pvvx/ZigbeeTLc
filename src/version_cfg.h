@@ -57,6 +57,8 @@
 #define BOARD_LYWSD03MMC_B15		10 // number used for BLE firmware!
 #define BOARD_LYWSD03MMC			10
 #define BOARD_MHO_C122				11
+//#define BOARD_MJWSD06MMC_EN		12
+//#define BOARD_MJWSD06MMC			13
 // 12..15 - number used for BLE firmware - https://github.com/pvvx/ATC_MiThermometer
 //#define BOARD_TB03F				16 // DIY TB-03F-Kit (not yet published at the moment)
 #define BOARD_TS0201_TZ3000			17 // ZigBee TS0201_TZ3000
@@ -76,7 +78,7 @@
 #define BOARD_LKTMZL02				31 // ZigBee LKTMZL02 LCD
 //#define BOARD_KEY2 				32 // KEY2(iSearching) https://github.com/pvvx/THB2
 #define BOARD_ZTH05					33 // Tuya ZigBee TS0601_TZE204
-//#define BOARD_PHY6252				34 // Tuya BLE (not yet published at the moment)
+//#define BOARD_TH04				34 // https://github.com/pvvx/THB2
 #define BOARD_CB3S					35  // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
 #define BOARD_HS09					36  // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
 #define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x

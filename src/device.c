@@ -526,8 +526,13 @@ void user_app_init(void)
 		HA_PROFILE_ID,
 		ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT,
 		ZCL_TEMPERATURE_MEASUREMENT_ATTRID_MEASUREDVALUE,
+#if READ_SENSOR_TIMER_SEC > 30
 		30,
 		180,
+#else
+		READ_SENSOR_TIMER_SEC,
+		5*60,
+#endif
 		(u8 *)&reportableChange
 	);
     reportableChange = 50;
@@ -536,8 +541,13 @@ void user_app_init(void)
 		HA_PROFILE_ID,
 		ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
 		ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,
+#if READ_SENSOR_TIMER_SEC > 30
 		30,
 		180,
+#else
+		READ_SENSOR_TIMER_SEC,
+		5*60,
+#endif
 		(u8 *)&reportableChange
 	);
 

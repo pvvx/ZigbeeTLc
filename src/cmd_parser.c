@@ -96,6 +96,8 @@ int cmd_parser(void * p) {
 		} else if (cmd == CMD_ID_ZB_DEF) {
 			memcpy(&g_zcl_thermostatUICfgAttrs, &g_zcl_thermostatUICfgDefault, sizeof(g_zcl_thermostatUICfgAttrs));
 			zcl_thermostatConfig_save();
+			memcpy(&send_buf[1], &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
+			olen = sizeof(g_zcl_thermostatUICfgAttrs) + 1;
 #endif
 #if (DEV_SERVICES & SERVICE_PINCODE)
 		} else if (cmd == CMD_ID_PINCODE && len >= 4) { // Set new pinCode 0..999999
