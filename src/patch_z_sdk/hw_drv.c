@@ -109,9 +109,6 @@ startup_state_e drv_platform_init(void)
 	/* Get system ticks per US, must be after the clock is initialized. */
 	sysTimerPerUs = sys_tick_per_us;
 
-//	if(state == SYSTEM_BOOT)
-//		tuya_zigbee_ota();
-
 	gpio_init(TRUE);
 
 #if UART_PRINTF_MODE
@@ -120,6 +117,7 @@ startup_state_e drv_platform_init(void)
 
 	/* Get calibration info to improve performance */
 	if(state != SYSTEM_DEEP_RETENTION){
+		tuya_zigbee_ota();
 #if PM_ENABLE
 		/* Initialize 32K for timer wakeup. */
 		clock_32k_init(CLK_32K_RC);

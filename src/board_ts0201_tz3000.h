@@ -10,8 +10,6 @@
 
 #if (BOARD == BOARD_TS0201_TZ3000)
 
-#define ZIGBEE_TUYA_OTA 	1
-
 #define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
 
 /* https://pvvx.github.io/TS0201_TZ3000

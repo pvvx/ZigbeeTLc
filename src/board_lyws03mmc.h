@@ -50,6 +50,7 @@ GPIO_PD7 - free [B1.4], UART TX LCD [B1.6], pcb mark "P7"
                            BAT 1.3
 */
 
+
 #define BLE_MODEL_STR		"LYWSD03MMC"
 #define BLE_MAN_STR			"miaomiaoce.com"
 #define ZCL_BASIC_MFG_NAME	{6,'X','i','a','o','m','i'}

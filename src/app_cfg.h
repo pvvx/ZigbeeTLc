@@ -115,13 +115,6 @@
 #endif
 
 /**********************************************************************
- * Tuya OTA compatible
- */
-#ifndef ZIGBEE_TUYA_OTA
-#define ZIGBEE_TUYA_OTA 	0
-#endif
-
-/**********************************************************************
  * Battery & RF Power
  */
 #ifndef USE_BATTERY
@@ -248,9 +241,6 @@ typedef enum{
 /**********************************************************************
  * Modules configuration
  */
-#ifndef ZIGBEE_TUYA_OTA
-#define ZIGBEE_TUYA_OTA		1 // !USE_BLE
-#endif
 
 /* Configure startup */
 #define STARTUP_IN_BLE				1	// always =1 (if BLE)!

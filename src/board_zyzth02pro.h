@@ -9,8 +9,6 @@
 
 #if (BOARD == BOARD_ZYZTH01)
 
-#define ZIGBEE_TUYA_OTA 	1
-
 /* https://pvvx.github.io/ZY-ZTH02Pro
 
 *TLSR8258

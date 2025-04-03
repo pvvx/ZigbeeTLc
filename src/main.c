@@ -20,19 +20,8 @@
 /*
  * main:
  * */
-#if ZIGBEE_TUYA_OTA
 int flash_main(void)
-#else
-int main(void)
-#endif
 {
-#if ZIGBEE_TUYA_OTA
-	if(*(u32 *)(0x08008) == 0x544c4e4b) {
-		//clock_init(SYS_CLK_24M_Crystal);
-		tuya_zigbee_ota();
-	}
-#endif
-
 	u8 isRetention = (drv_platform_init() == SYSTEM_DEEP_RETENTION) ? 1 : 0;
 
 	os_init(isRetention);

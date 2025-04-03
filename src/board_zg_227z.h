@@ -9,8 +9,6 @@
 
 #if (BOARD == BOARD_ZG_227Z)
 
-#define ZIGBEE_TUYA_OTA 	1
-
 #define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
 
 /* https://pvvx.github.io/ZG-227Z/ | https://pvvx.github.io/ZG-103Z/
