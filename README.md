@@ -17,10 +17,10 @@ Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermomet
  [LKTMZL02](https://pvvx.github.io/LKTMZL02),
  [ZG-227Z](https://pvvx.github.io/ZG-227Z),
  [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
- [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro),
- [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/).
+ [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro).
 
 * Work with modification:
+ [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
  [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/),
  [ZTH05](https://pvvx.github.io/TS0601_TZE204).
 
