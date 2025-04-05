@@ -47,13 +47,14 @@ Action of the button (or contact "reset" to "gnd" for LYWSD03MMC):
 
 * Short press - send temperature, humidity and battery data.
 * Hold for 2 seconds - Switches temperature between Celsius and Fahrenheit. The change will immediately appear on the screen.
-* Hold for 7 seconds - reset the binding and restart. The screen will briefly display “---” (for devices using a screen with fast refresh capabilities, not E-Ink). After restarting, the thermometer will wait forever for registration. Jerking the battery won't change anything.
+* Hold for 7 seconds — reset binding. The screen will display "ooo" (for devices with fast screen refresh, not E-Ink). After restarting, the thermometer will wait forever for registration. Twitching the battery does not change anything.
+* Hold for 15 seconds - resets bindings and all user settings. The screen will no longer display "ooo" and will display temperature and humidity. After restarting, the thermometer will wait forever for registration. Jerking the battery does not change anything.
 
 * After flashing from BLE, the thermometer is already in standby mode for registration in the Zigbee network.
 
-## Additional settings
+* (!) When changing (Zigbee OTA) the firmware version, if there were changes in the FW functionality, re-registration of the device is required.
 
-_For firmware version 0.1.2.1_
+## Additional settings
 
 ### ClusterID: 0x0000 (Basic)
 Attr: 0x0005, CHAR_STR (id: 0x42), ModelIdentifer (Device Name): 3..23 Chars.
