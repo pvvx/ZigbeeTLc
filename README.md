@@ -28,6 +28,8 @@ Additional alternative firmware options for some devices with TLSR825x can be fo
 
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
+Warning(!): Firmware version 0.1.2.5 is built on a new version of SDK from Telink. Requires reset of all previous settings and new binding. Old values from previous versions remembered by the device are incompatible.
+
 * Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
 * [Average consumption](https://github.com/pvvx/ZigbeeTLc/issues/37#issuecomment-1937844181) for Xiaomi LYWSD03MMC HW: B1.4 - ~15 uA.
 
