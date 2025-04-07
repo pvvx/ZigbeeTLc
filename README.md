@@ -38,10 +38,10 @@ Warning(!): Firmware version 0.1.2.5 is built on a new version of SDK from Telin
 1. Go to the [Over-the-air Webupdater Page TelinkMiFlasher.html](https://pvvx.github.io/ATC_MiThermometer/TelinkMiFlasher.html)
 2. If using Android, Windows, Linux: Ensure you enabled "experimental web platform features". Therefore copy the according link (i.e. chrome://flags/#enable-experimental-web-platform-features for Chrome), open a new browser tab, paste the copied URL. Now sten the _Experimental Web Platform features_ flag to _Enabled_. Then restart the browser.
 3. In the Telink Flasher Page: Press `Connect:`. The browser should open a popup with visible Bluetooth devices. Choose the according target device (i.e. LYWSD03MMC) to pair.
-4. After connection is established a _Do Acivation_ button appears. Press this button to start the decryption key process.
-5. Now you can press the Zigbee Firmware button to directly flash the `Zigbee Firmware`:<br>Alternatively you can choose a specific firmware binary (i.e. the original firmware) via the file chooser. Example: in the file name field paste "https://github.com/devbis/z03mmc/releases/download/1.0.6/1141-0203-10063001-z03mmc.zigbee". If the firmware file is larger than 128 kilobytes, then you will have to download BLE version 4.6 or later. BLE versions below 4.6 do not support OTA downloads with fw sizes larger than 128 kilobytes. Xiaomi firmwares, excluding MJWSD05MMC, also do not support OTA downloads with fw sizes larger than 128 kilobytes.
-6. Press Start Flashing. Wait for the firmware to finish.
-7. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 7..8 seconds.
+4. After connection is established a _Do Acivation_ button appears. Press this button to start the decryption key process. For original firmware versions 2.1.1_0159 and higher, further description [is provided separately](https://github.com/pvvx/ATC_MiThermometer/issues/602).
+5. Install the BLE firmware. When finished, use "Reconnect".
+6. Select and install Zigbee firmware.
+7. The device should now show up in your Zigbee bridge (If joining is enabled, of course). If this does not happen, reinsert the battery and/or short-circuit the RESET and GND pins on the LYWSD03MMC board, and on sensors with a button, press the button and hold it for 15 seconds.
 
 ## Action of the button
 
