@@ -165,13 +165,13 @@
 
 #define DEF_OCCUPANCY_DELAY		60 // sec
 
-#ifndef USE_SENSOR_TH
+#if USE_SENSOR_TH
 #define READ_SENSOR_TIMER_MIN_SEC 	3 // second
 #define READ_SENSOR_TIMER_SEC 		10 // default, second
 #define DEFAULT_POLL_RATE			(g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
 #else
 #define READ_SENSOR_TIMER_MIN_SEC 	3 // second
-#define READ_SENSOR_TIMER_SEC 		60 // default, second
+#define READ_SENSOR_TIMER_SEC 		30 // default, second
 #define DEFAULT_POLL_RATE			(READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
 #endif
 #define READ_SENSOR_TIMER_MS 		DEFAULT_POLL_RATE // (READ_SENSOR_TIMER_SEC*1000) // msecond

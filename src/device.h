@@ -217,6 +217,7 @@ status_t sensorDevice_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 status_t sensorDevice_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t sensorDevice_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void sensorDevice_zclCheckInStart(void);
+void set_PollRate(void);
 
 void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);

@@ -195,12 +195,13 @@ void task_keys(void) {
 		else if((g_sensorAppCtx.key_on_flag & 2)
 		 && clock_time_exceed(g_sensorAppCtx.keyPressedTime, 6900 * 1000)) { // 7 sec
 			g_sensorAppCtx.key_on_flag &= ~2;
-			tl_bdbReset2FN();
 #if	USE_DISPLAY
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
 				show_reset_screen();
 			}
 #endif // USE_DISPLAY
+			nv_resetAll();
+			//tl_bdbReset2FN();
 		}
 #if USE_DISPLAY && defined(ZCL_THERMOSTAT_UI_CFG)
 		else if((g_sensorAppCtx.key_on_flag & 1)

@@ -201,6 +201,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 25. Ver 0.1.2.5. Completely reworked version on SDK v3.7.1.2. Merging with [ZBdevice](https://github.com/pvvx/ZigbeeTLc/blob/master/ZBdevices.md). Reduced battery consumption for thermometers with SHTC3 sensor. Changes to storage area for user settings. Additions to button functions. Multiple fixes. Adding new devices. ...
 
+26. Ver 0.1.2.6. Fix - In some cases the timer did not turn off, which led to increased battery consumption. Changes in PollControl. Version 0.1.2.5 has been removed due to bugs.
+
 ## Make
 
 To build under Linux, run:

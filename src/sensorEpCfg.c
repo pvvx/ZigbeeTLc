@@ -473,7 +473,8 @@ nv_sts_t zcl_thermostatConfig_save(void)
 		g_zcl_pollCtrlAttrs.longPollIntervalMin = g_zcl_thermostatUICfgAttrs.measure_interval * 4;
 		if(g_zcl_pollCtrlAttrs.longPollIntervalMin > g_zcl_pollCtrlAttrs.longPollInterval)
 			g_zcl_pollCtrlAttrs.longPollInterval = g_zcl_pollCtrlAttrs.longPollIntervalMin;
-		zb_setPollRate(g_zcl_pollCtrlAttrs.longPollIntervalMin * POLL_RATE_QUARTERSECONDS); // TODO ZHA ?
+		if(zb_getPollRate() > g_zcl_pollCtrlAttrs.shortPollInterval * POLL_RATE_QUARTERSECONDS)
+			zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
 		st = nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
 	}
 	return st;

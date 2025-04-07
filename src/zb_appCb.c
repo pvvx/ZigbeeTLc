@@ -130,7 +130,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
 			}
 #endif
-			zb_setPollRate(DEFAULT_POLL_RATE);
+			set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
 
 #ifdef ZCL_OTA
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL); // 15 * 60);	// 15 m
@@ -168,6 +168,15 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 #endif // REJOIN_FAILURE_TIMER
 }
 
+
+
+void set_PollRate(void) {
+// Fix ZHA/Z2M?
+//	if(zb_getPollRate() > g_zcl_pollCtrlAttrs.shortPollInterval * POLL_RATE_QUARTERSECONDS)
+//		zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
+	zb_setPollRate(DEFAULT_POLL_RATE);
+}
+
 /*********************************************************************
  * @fn      zbdemo_bdbCommissioningCb
  *
@@ -201,7 +210,8 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			g_sensorAppCtx.rejoin_cnt = REJOIN_FAILURE_COUNT;
 
 			light_blink_start(7, 500, 500);
-			zb_setPollRate(DEFAULT_POLL_RATE);
+
+			set_PollRate();
 
 #ifdef ZCL_POLL_CTRL
 		    sensorDevice_zclCheckInStart();
@@ -319,7 +329,7 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 
 		}
 	}else if(evt == OTA_EVT_COMPLETE){
-		zb_setPollRate(DEFAULT_POLL_RATE);
+		set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
 
 		if(status == ZCL_STA_SUCCESS){
 			ota_mcuReboot();
@@ -327,7 +337,7 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
 		}
 	}else if(evt == OTA_EVT_IMAGE_DONE){
-		zb_setPollRate(DEFAULT_POLL_RATE);
+		set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
 	}
 }
 #endif
