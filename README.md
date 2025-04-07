@@ -28,7 +28,7 @@ Additional alternative firmware options for some devices with TLSR825x can be fo
 
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
-### Warning(!): Firmware version 0.1.2.5 is built on a new version of SDK from Telink. Requires reset of all previous settings and new binding. Old values from previous versions remembered by the device are incompatible.
+### Warning(!): Firmware version 0.1.2.6 is built on a new version of SDK from Telink. Requires reset of all previous settings and new binding. Old values from previous versions remembered by the device are incompatible.
 
 New versions check that the configuration written to the device is compatible with the one updated for the new SDK (i.e. compatible with version 0.1.2.5). If it is not compatible, all settings, including bindings, are deleted. In this case, the Zigbee coordinator sees a device with the same IEEE number and a "rebinding" is performed.
 
