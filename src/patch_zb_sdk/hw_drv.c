@@ -111,7 +111,7 @@ startup_state_e drv_platform_init(void)
 #if UART_PRINTF_MODE
 		DEBUG_TX_PIN_INIT();
 #endif
-		battery_detect();
+		battery_detect(1);
 		random_generator_init();
 //		internalFlashSizeCheck();
 #if PM_ENABLE

@@ -766,7 +766,7 @@ int read_sensor(void) {
 			re = sensor_ht.stage1_measure((void *) &sensor_ht);
 		}
 		// battery +  wakeup time
-		battery_detect();
+		battery_detect(0);
 		if(!re && sensor_ht.stage2_measure) { // start, next start
 			re = sensor_ht.stage2_measure((void *) &sensor_ht);
 		}
@@ -775,7 +775,7 @@ int read_sensor(void) {
 			sensor_ht.start_measure_tik = clock_time();
 		}
 	} else
-		battery_detect();
+		battery_detect(0);
 	if(re) {
 		check_sensor();
 	}

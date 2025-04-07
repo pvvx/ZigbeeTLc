@@ -513,6 +513,12 @@ void init_nv_app(void) {
 #endif
 		ver = USE_NV_APP;
 		nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_DEV_VER, sizeof(ver), (u8 *)&ver);
+#if	USE_DISPLAY
+		if(!g_zcl_thermostatUICfgAttrs.display_off) {
+			show_reset_screen();
+		}
+#endif // USE_DISPLAY
+		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 1000);
 	}
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	if(g_zcl_thermostatUICfgAttrs.measure_interval < READ_SENSOR_TIMER_MIN_SEC)

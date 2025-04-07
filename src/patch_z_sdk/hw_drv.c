@@ -125,7 +125,7 @@ startup_state_e drv_platform_init(void)
 		pm_select_internal_32k_rc();
 #endif
 		drv_calib_adc_verf();
-		battery_detect();
+		battery_detect(1);
 		random_generator_init();
 		internalFlashSizeCheck();
 	} else {

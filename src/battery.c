@@ -19,12 +19,14 @@ measured_battery_t measured_battery;
 
 _BAT_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
-void battery_detect(void)
+void battery_detect(bool startup_flg)
 {
-	u16 battery_level = 0;
+	u16 battery_level = BATTERY_LOW_POWER;
+	if(startup_flg)
+		battery_level = BATTERY_SAFETY_THRESHOLD;
 	adc_channel_init(SHL_ADC_VBAT);
 	measured_battery.mv = get_adc_mv();
-	if(measured_battery.mv < BATTERY_SAFETY_THRESHOLD){
+	if(measured_battery.mv < battery_level){
 #if PM_ENABLE
 #if USE_DISPLAY
 		display_off();
@@ -50,7 +52,8 @@ void battery_detect(void)
 		battery_level = (measured_battery.average_mv - BATTERY_SAFETY_THRESHOLD) / 4;
 		if(battery_level > 200)
 			battery_level = 200;
-	}
+	} else
+		battery_level = 0;
     measured_battery.level = (u8)battery_level;
 #if USE_BLE
     measured_battery.batVal = (u8)(battery_level >> 1);
