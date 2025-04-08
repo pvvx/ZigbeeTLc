@@ -77,7 +77,7 @@ int start_measure_sht4x(void *cfg);
 
 #define SHT4x_POWER_TIMEOUT_us	1000	// time us, 0.3..1 ms
 #define SHT4x_SOFT_RESET_us		1000	// time us, 1 ms
-#define SHT4x_HI_MEASURE_us		7000	// time us, 6.9..8.3 ms
+#define SHT4x_HI_MEASURE_us		9000	// time us, 6.9..8.3 ms
 #define SHT4x_MD_MEASURE_us		4000	// time us, 3.7..4.5 ms
 #define SHT4x_LO_MEASURE_us		1600	// time us, 1.3..1.6 ms
 
@@ -704,6 +704,7 @@ static int check_sensor(void) {
 							&& buf[5] == sensor_crc(buf[4] ^ sensor_crc(buf[3] ^ 0xff))
 							) {
 								sensor_ht.id = (buf[3] << 24) | (buf[4] << 16) | (buf[0] << 8) | buf[1];
+								// start_measure_sht4x((void *) &sensor_ht);
 								ptabinit = (sensor_def_cfg_t *)&def_thcoef_sht4x;
 								break;
 							}
@@ -786,9 +787,9 @@ void init_sensor(void) {
 	send_i2c_byte(0, 0x06); // Reset command using the general call address
 	sleep_us(190);	// 190 us
 	if(check_sensor()) {
-		if(sensor_ht.mode == MMODE_READ_START && sensor_ht.measure_timeout_us)
+		if(sensor_ht.mode == MMODE_READ_START && sensor_ht.measure_timeout_us) {
 			pm_wait_us(sensor_ht.measure_timeout_us);
-		if(sensor_ht.mode == MMODE_START_WAIT_READ && (!read_sensor())) {
+		} else if(sensor_ht.mode == MMODE_START_WAIT_READ && (!read_sensor())) {
 			if(sensor_ht.measure_timeout_us && sensor_ht.read_callback) {
 				pm_wait_us(sensor_ht.measure_timeout_us);
 				sensor_ht.read_callback();

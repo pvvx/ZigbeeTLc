@@ -22,7 +22,7 @@
 void light_blink_start(u8 times, u16 ledOnTime, u16 ledOffTime);
 void light_blink_stop(void);
 
-void light_init(void);
+void light_init(void); // = light_off();
 void light_on(void);
 void light_off(void);
 

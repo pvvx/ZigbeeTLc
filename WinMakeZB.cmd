@@ -25,6 +25,9 @@ make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZMHOC122 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_MHO_C122"
 @if not exist "bin\ZMHOC122%SWVER%.bin" goto :error
 make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=Z06MMC USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_MJWSD06MMC"
+@if not exist "bin\Z06MMC%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTS0201Z3000 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_TS0201_TZ3000"
 @if not exist "bin\ZTS0201Z3000%SWVER%.bin" goto :error
 make -s -j clean USE_ZB=1

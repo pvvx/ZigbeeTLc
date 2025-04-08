@@ -1,10 +1,10 @@
 [
     {
         "fileVersion": 26816513,
-        "fileSize": 128290,
+        "fileSize": 128370,
         "manufacturerCode": 4417,
         "imageType": 54179,
-        "sha512": "24ff9e96167325fed78a25e9374af8c965378fa4e6ece5a2d0efcb6e100bc34cb8c54ad8cfa8d2564513e4946a1725bd58a46e54bd856e23c61a45a9fd79592b",
+        "sha512": "65106fa10b8a4defd27fbab95385660b060ed0cea26a226191ad29f491d0066f39979020858596c8975d4bd3ff45c00d16c4470b11d8002d242f59ded72607ce",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-d3a3-01993001-TH03Zz_v0126.zigbee"
     }
 ]

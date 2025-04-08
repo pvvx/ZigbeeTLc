@@ -1,4 +1,9 @@
 
+## Files "*.bin" are designed only for a hardware programmer!
+
+## For BLE-OTA in [TelinkMiFlasher](https://pvvx.github.io/ATC_MiThermometer/TelinkMiFlasher.html) use only "*.zigbee" files!
+
+
 * 1141-02tt-nnnn3001-xxxxz_vNN.zigbee - ZigbeeTlc firmware
 * 1141-d3a3-01993001-xxxxz_vNN.zigbee - firmware for transferring Tuya to ZigbeeTlc
 * 1286-0202-10993607-TH03Zz_xxxx.zigbee - firmware for transferring TH03 Tuya/Sonoff to ZigbeeTlc
@@ -42,6 +47,7 @@
 | 10 | 0x020A | LYWSD03MMC_B15    | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 11 | 0x020B | [MHO-C122](https://pvvx.github.io/MHO_C122) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 12 | 0x020C | [MJWSD05MMC(en)](https://pvvx.github.io/MJWSD05MMC) | [BLE](https://github.com/pvvx/ATC_MiThermometer) |
+| 13 | 0x020C | [MJWSD06MMC](https://pvvx.github.io/MJWSD06MMC) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 17 | 0x0211 | TS0201 [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000)  | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 22 | 0x0216 | [TH03Z](https://pvvx.github.io/TH03Z) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 27 | 0x021B | [ZTH01(TS0601_TZE200)](https://pvvx.github.io/TS0601_TZE200_zth01) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |

@@ -68,7 +68,7 @@ None: 3.3, 3.7 ?
 #define LCD_BUF_SIZE		6
 #define PULL_WAKEUP_SRC_PB6 PM_PIN_PULLUP_10K // LCD ?
 #define LCD_INIT_DELAY()	// pm_wait_ms(50)
-#define USE_DISPLAY_CONNECT_SYMBOL		1
+#define USE_DISPLAY_CONNECT_SYMBOL		2 // =2 inverted
 
 // BUTTON
 #define BUTTON1               		GPIO_PA5  // reset test point

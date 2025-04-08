@@ -58,7 +58,7 @@
 #define BOARD_LYWSD03MMC			10
 #define BOARD_MHO_C122				11
 //#define BOARD_MJWSD06MMC_EN		12
-//#define BOARD_MJWSD06MMC			13
+#define BOARD_MJWSD06MMC			13
 // 12..15 - number used for BLE firmware - https://github.com/pvvx/ATC_MiThermometer
 //#define BOARD_TB03F				16 // DIY TB-03F-Kit (not yet published at the moment)
 #define BOARD_TS0201_TZ3000			17 // ZigBee TS0201_TZ3000
@@ -91,7 +91,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_MJWSD06MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */

@@ -4,11 +4,13 @@ Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/
 
 * Merging with [ZBdevice](https://github.com/pvvx/ZigbeeTLc/blob/master/ZBdevices.md)
 
-Currently supported devices: [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/),
+Currently supported devices:
+ [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/),
  [CGG1](https://pvvx.github.io/CGG1/),
  [CGG1N](https://pvvx.github.io/CGG1_2022),
  [CGDK2](https://pvvx.github.io/CGDK2/),
  [MHO-C122](https://pvvx.github.io/MHO_C122),
+ [MJWSD06MMC](https://pvvx.github.io/MJWSD06MMC),
  [MHO-C401(old)](https://pvvx.github.io/MHO_C401),
  [MHO-C401N](https://pvvx.github.io/MHO_C401N),
  [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000),
@@ -109,6 +111,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x0209 | MJWSD05MMC |
 | 0x020A | LYWSD03MMC ver https://github.com/pvvx/ZigbeeTLc |
 | 0x020B | MHO-C122 |
+| 0x020D | MJWSD06MMC |
 | 0x0211 | TS0201-TZ3000 |
 | 0x0216 | TH03Z |
 | 0x021b | ZTH01 |
@@ -201,7 +204,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 25. Ver 0.1.2.5. Completely reworked version on SDK v3.7.1.2. Merging with [ZBdevice](https://github.com/pvvx/ZigbeeTLc/blob/master/ZBdevices.md). Reduced battery consumption for thermometers with SHTC3 sensor. Changes to storage area for user settings. Additions to button functions. Multiple fixes. Adding new devices. ...
 
-26. Ver 0.1.2.6. Fix - In some cases the timer did not turn off, which led to increased battery consumption. Changes in PollControl. Version 0.1.2.5 has been removed due to bugs.
+26. Ver 0.1.2.6. Fix - In some cases the 2 timers did not turn off, which led to increased battery consumption. Changes in PollControl. Added [MJWSD06MMC](https://pvvx.github.io/MJWSD06MMC).
 
 ## Make
 

@@ -291,7 +291,11 @@ s32 sensors_task(void *arg) {
 #ifdef USE_EPD
 	task_lcd();
 #endif
-    return 0;
+#if !USE_BLE && USE_DISPLAY
+	if(zb_isDeviceJoinedNwk())
+			return -1; // delete timer
+#endif
+	return 0;
 }
 
 /**********************************************************************
@@ -313,11 +317,6 @@ void app_task(void)
 				if(!g_sensorAppCtx.timerLedEvt)
 					show_connected_symbol(true);
 			}
-#if !USE_BLE
-			if(g_sensorAppCtx.timerTaskEvt) {
-				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
-			}
-#endif
 #ifdef USE_BLINK_LED
 			if(!g_sensorAppCtx.timerLedEvt)
 				light_off();
@@ -448,7 +447,6 @@ void user_app_init(void)
 #if	USE_DISPLAY
 	LCD_INIT_DELAY();
 	init_lcd();
-	show_light(false);
 	show_connected_symbol(false);
 #endif
 #if DEBUG_ENABLE
@@ -484,6 +482,8 @@ void user_app_init(void)
 
     // read sensors
 	read_sensor_and_save();
+
+    light_off();
 
 	// keys init
 	keys_init();

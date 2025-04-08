@@ -21,6 +21,7 @@ $(OUT_PATH)$(SRC_DIR)/lcd_mho_c122.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zth03.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zth05.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zy_zth02pro.o \
+$(OUT_PATH)$(SRC_DIR)/lcd_mjwsd06mmc.o \
 $(OUT_PATH)$(SRC_DIR)/epd_cgg1.o \
 $(OUT_PATH)$(SRC_DIR)/epd_cgg1n.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401.o \

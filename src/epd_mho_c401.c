@@ -1,6 +1,6 @@
 #include <stdint.h>
 #include "tl_common.h"
-#if BOARD == BOARD_MHO_C401
+#if (DEV_SERVICES & SERVICE_SCREEN) && (BOARD == BOARD_MHO_C401)
 /* Based on source: https://github.com/znanev/ATC_MiThermometer */
 #include "chip_8258/timer.h"
 #include "lcd.h"

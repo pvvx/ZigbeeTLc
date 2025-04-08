@@ -110,6 +110,7 @@
 #include "board_zyzth02pro.h"
 #include "board_zg_227z.h"
 #include "board_pirs.h"
+#include "board_mjwsd06mmc.h"
 #else
 #error "Define BOARD!"
 #endif

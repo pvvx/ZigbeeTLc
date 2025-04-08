@@ -125,11 +125,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 		 *
 		 */
 		if(joinedNetwork){
-#if	!USE_BLE && USE_DISPLAY
-			if(g_sensorAppCtx.timerTaskEvt) {
-				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
-			}
-#endif
+
 			set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
 
 #ifdef ZCL_OTA
@@ -169,11 +165,22 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 }
 
 
-
+/*********************************************************************
+ * @fn      set_PollRate
+ *
+ * @brief   set timer PollRate
+ *   (g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)))
+ *
+ * @param   none
+ *
+ * @return  None
+ */
 void set_PollRate(void) {
-// Fix ZHA/Z2M?
-//	if(zb_getPollRate() > g_zcl_pollCtrlAttrs.shortPollInterval * POLL_RATE_QUARTERSECONDS)
-//		zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
+#if	!USE_BLE && USE_DISPLAY
+	if(g_sensorAppCtx.timerTaskEvt) {
+		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
+	}
+#endif
 	zb_setPollRate(DEFAULT_POLL_RATE);
 }
 
@@ -193,12 +200,6 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 		case BDB_COMMISSION_STA_SUCCESS:
 #if	USE_BLE
 			ble_task_stop();	// отключение BLE
-#else
-#if	USE_DISPLAY
-			if(g_sensorAppCtx.timerTaskEvt) {
-				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
-			}
-#endif
 #endif
 			if(g_sensorAppCtx.timerSteerEvt){
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
@@ -209,7 +210,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 
 			g_sensorAppCtx.rejoin_cnt = REJOIN_FAILURE_COUNT;
 
-			light_blink_start(7, 500, 500);
+			light_blink_start(8, 500, 500);
 
 			set_PollRate();
 

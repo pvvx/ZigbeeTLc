@@ -179,7 +179,11 @@ void show_ble_symbol(bool state){
 
 _SCR_CODE_SEC_
 void show_connected_symbol(bool state){
+#if USE_DISPLAY_CONNECT_SYMBOL == 2
+ 	if (!state)
+#else
  	if (state)
+#endif
 		scr.display_buff[3] |= BIT(7); // "*"
 	else
 		scr.display_buff[3] &= ~BIT(7);

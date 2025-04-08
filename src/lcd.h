@@ -98,7 +98,11 @@ void show_small_number(s16 number, bool percent);
 void show_ble_symbol(bool state);
 #ifdef USE_DISPLAY_CONNECT_SYMBOL
 void show_connected_symbol(bool state);
+#if USE_DISPLAY_CONNECT_SYMBOL == 2 // =2 inverted
+#define show_light(a) show_connected_symbol(!(a))
+#else
 #define show_light(a) show_connected_symbol(a)
+#endif
 #else
 #define show_connected_symbol(a) // none
 #define show_light(a) show_ble_symbol(a)

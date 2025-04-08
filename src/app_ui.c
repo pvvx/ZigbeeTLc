@@ -200,8 +200,8 @@ void task_keys(void) {
 				show_reset_screen();
 			}
 #endif // USE_DISPLAY
-			nv_resetAll();
-			//tl_bdbReset2FN();
+			tl_bdbReset2FN();
+			//nv_resetAll();
 		}
 #if USE_DISPLAY && defined(ZCL_THERMOSTAT_UI_CFG)
 		else if((g_sensorAppCtx.key_on_flag & 1)
