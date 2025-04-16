@@ -145,51 +145,36 @@ void show_temp_symbol(u8 symbol) {
 	else
 		scr.display_buff[14] &= ~BIT(0); // "_"
 }
-/* 0 = "   " off,
- * 1 = " o "
- * 2 = "o^o"
- * 3 = "o-o"
- * 4 = "oVo"
- * 5 = "vVv" happy
- * 6 = "^-^" sad
- * 7 = "oOo" */
+
+/* 0 = "     " off,
+ * 1 = " uuu "
+ * 2 = " ^^^ "
+ * 3 = " o-o "
+ * 4 = "(   )"
+ * 5 = "(uuu)" happy
+ * 6 = "(^^^)" sad
+ * 7 = "(o_o)" */
 _SCR_CODE_SEC_
 void show_smiley(u8 state){
- 	// off
+ 	// all off
 	scr.display_buff[5] &= ~(BIT(2) | BIT(4) | BIT(6)); // do not reset %
 	scr.display_buff[6] = 0;
-	scr.display_buff[7] &= ~(BIT(4));
-	if (state) {
-		scr.display_buff[7] |= BIT(0); /* (  ) */
+	scr.display_buff[7] &= ~(BIT(0) | BIT(2));
+
+	if(state & 4) {
+		scr.display_buff[7] |= BIT(0);
 	}
-	switch(state & 7) {
-		case 1:
-			scr.display_buff[5] |= BIT(4);
-			scr.display_buff[6] |= BIT(0);
+	switch(state & 3) {
+		case 1: // "uuu"
+			scr.display_buff[5] |= BIT(4); // " u " happy
+			scr.display_buff[6] |= BIT(4); // "u u"
 			break;
-		case 2:
-			scr.display_buff[5] |= BIT(6);
-			scr.display_buff[6] |= BIT(4) | BIT(6);
+		case 2: // "^^^" sad
+			scr.display_buff[6] |= BIT(0) | BIT(6); // "^ ^"
 			break;
-		case 3:
-			scr.display_buff[6] |= BIT(0) | BIT(4) | BIT(6);
-			scr.display_buff[7] |= BIT(2);
-			break;
-		case 4:
-			scr.display_buff[5] |= BIT(2);
-			scr.display_buff[6] |= BIT(0) | BIT(2) | BIT(4) | BIT(6);
-			scr.display_buff[7] |= BIT(2);
-			break;
-		case 5:
-			scr.display_buff[5] |= BIT(4) | BIT(6);
-			scr.display_buff[6] |= BIT(4) | BIT(6);
-			break;
-		case 6:
-			scr.display_buff[6] |= BIT(0) | BIT(4) | BIT(6);
-			break;
-		case 7:
-			scr.display_buff[5] |= BIT(4);
-			scr.display_buff[6] |= BIT(0) | BIT(4) | BIT(6);
+		case 3: // "o-o"
+			scr.display_buff[5] |= BIT(6); // " _ "
+			scr.display_buff[6] |= BIT(4) | BIT(6); // "o o"
 			break;
 	}
 }

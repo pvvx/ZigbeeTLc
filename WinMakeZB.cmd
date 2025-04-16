@@ -1,7 +1,8 @@
 @set TLPATH=D:\MCU\TelinkIoTStudio
 @set PATH=%TLPATH%\bin;%TLPATH%\opt\tc32\bin;%TLPATH%\mingw\bin;%TLPATH%\opt\tc32\tc32-elf\bin;%PATH%
 @set SWVER=_zb0005
-@del /Q .\bin
+@del /Q .\bin\*.bin
+@del /Q .\bin\*.zigbee
 @del /Q .\build
 make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZMHOC401 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_MHO_C401"

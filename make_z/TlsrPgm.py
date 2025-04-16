@@ -711,7 +711,7 @@ class TLSRPGM:
 		if data == None:
 			print('\rError Erase All Flash! (%d)' % self.err)
 			return False
-		return self.WaitingFlashReady(3000)
+		return self.WaitingFlashReady(5000) # GD25LD80E - Chip Erase time: 8s typical
 	# Write Blocks Flash from stream
 	def WriteBlockFlash(self, stream, offset = 0, size = 0, erase = True):
 		wrsize = 0x100
