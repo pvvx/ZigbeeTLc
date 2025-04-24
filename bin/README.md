@@ -10,11 +10,11 @@
 * 1286-0203-10983001-ZG227Zz_xxxx.zigbee - firmware for transferring ZG227Z Tuya/Sonoff to ZigbeeTlc
 * 1002-0203-57013001-ZYZTH02z_v0124.zigbee - firmware for transferring Tuya to ZigbeeTlc
 
-* xxxxx_vNN.bin - firmware files for the programmer or BLE OTA
+* xxxxx_vNN.bin - firmware files for the hardware programmer
 
 * devbis - firmware files for the option https://github.com/devbis
 
-* indexNNNN.json - index file for ZigbeeTlc firmware
+* index_vNNNN.json - index file for ZigbeeTlc firmware
 
 ---
 
@@ -47,7 +47,7 @@
 | 10 | 0x020A | LYWSD03MMC_B15    | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 11 | 0x020B | [MHO-C122](https://pvvx.github.io/MHO_C122) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 12 | 0x020C | [MJWSD05MMC(en)](https://pvvx.github.io/MJWSD05MMC) | [BLE](https://github.com/pvvx/ATC_MiThermometer) |
-| 13 | 0x020C | [MJWSD06MMC](https://pvvx.github.io/MJWSD06MMC) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
+| 13 | 0x020D | [MJWSD06MMC](https://pvvx.github.io/MJWSD06MMC) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 17 | 0x0211 | TS0201 [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000)  | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 22 | 0x0216 | [TH03Z](https://pvvx.github.io/TH03Z) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 27 | 0x021B | [ZTH01(TS0601_TZE200)](https://pvvx.github.io/TS0601_TZE200_zth01) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |

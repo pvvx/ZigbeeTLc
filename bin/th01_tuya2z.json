@@ -1,1 +1,10 @@
-[] 
+[
+    {
+        "fileVersion": 26816513,
+        "fileSize": 128082,
+        "manufacturerCode": 4417,
+        "imageType": 54179,
+        "sha512": "ec049a1a70e6d357a23418871352902b299b4bb9ae365fde3a8421ee7d7acb8e6a1c58abc3df4d520c95c0ba585c3d6a18e14de036d6741b43cae15bc8001a9f",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-d3a3-01993001-TH01Zz_v0126.zigbee"
+    }
+]

@@ -84,14 +84,14 @@
 #define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x
 #define BOARD_ZYZTH01				38  // Tuya ZY-ZTH02Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
 #define BOARD_ZG_227Z				39  // Zigbee ZG-227Z
-
 #define BOARD_TS0202_PIR1 			40 // Tuya TS0202_TZ3000_6ygjfyll PIR
 #define BOARD_TS0202_PIR2 			41 // Tuya TS0202_TZ3040_bb6xaihh PIR
+//#define BOARD_MINTAGF2			42 // https://github.com/pvvx/THB2
 
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_MJWSD06MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */

@@ -252,6 +252,7 @@ void show_big_number_x10(s16 number, u8 symbol){
 	if (symbol & 0x80)
 		scr.display_buff[14] |= BIT(0); // "_"
 
+	scr.display_buff[7] &= ~BIT(4); // "1"
 	scr.display_buff[8] = 0;
 	scr.display_buff[9] = 0;
 	scr.display_buff[10] = 0;
@@ -329,8 +330,8 @@ void init_lcd(void) {
 	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
     scr.stage = 1; // Update/Init, stage 1
     scr.updated = 0;
-	memset(scr.display_buff, 0, sizeof(scr.display_buff));
-	memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
+    memset(scr.display_buff, 0, sizeof(scr.display_buff));
+    memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
     gpio_write(EPD_RST, HIGH);
 	//scr.display_buff[15] = 0;
 #if PM_ENABLE
