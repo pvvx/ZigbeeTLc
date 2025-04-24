@@ -535,6 +535,7 @@ int read_sensor_sht30_shtc3_sht4x(void *cfg) {
 		if (reg_i2c_status & FLD_I2C_NAK) {
 			reg_i2c_ctrl = FLD_I2C_CMD_STOP;
 			while (reg_i2c_status & FLD_I2C_CMD_BUSY);
+			irq_restore(r);
 		} else { // ACK ok
 			reg_i2c_ctrl = FLD_I2C_CMD_DI | FLD_I2C_CMD_READ_ID;
 			while (reg_i2c_status & FLD_I2C_CMD_BUSY);
