@@ -168,6 +168,7 @@
 
 #if USE_SENSOR_TH
 #define READ_SENSOR_TIMER_MIN_SEC 	3 // second
+#define READ_SENSOR_TIMER_MAX_SEC 	30 // second
 #define READ_SENSOR_TIMER_SEC 		10 // default, second
 #define DEFAULT_POLL_RATE			(g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
 #else

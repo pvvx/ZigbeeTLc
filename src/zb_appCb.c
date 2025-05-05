@@ -81,12 +81,13 @@ inline void sensorDevice_rejoin_faillure_timer_set(void) {
 	}
 	if(++g_sensorAppCtx.rejoin_cnt > 200) // max 240 sec
 		g_sensorAppCtx.rejoin_cnt = 200;
+
 	if(g_sensorAppCtx.rejoin_cnt < 7)
 		period = 9 << 10; // ~9 sec
 	else if(g_sensorAppCtx.rejoin_cnt < REJOIN_FAILURE_COUNT)
-		period = REJOIN_FAILURE_COUNT << 10; // ~50 sec
+		period = REJOIN_FAILURE_COUNT << 10; // (ms), ~50 sec
 	else
-		period = g_sensorAppCtx.rejoin_cnt << 10; // * 1024, 50..180 sec
+		period = g_sensorAppCtx.rejoin_cnt << 10; //(ms),  * 1024, 55..200 sec
 	g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, period);
 }
 

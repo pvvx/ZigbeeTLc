@@ -206,7 +206,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 26. Ver 0.1.2.6. Fix - In some cases the 2 timers did not turn off, which led to increased battery consumption. Changes in PollControl. Added [MJWSD06MMC](https://pvvx.github.io/MJWSD06MMC).
 
-27. Ver 0.1.2.7. Fix "1" MHO-C401N, added irq_restore() in sensors SHT4X/SHTC3/SHT30/CHT832x.
+27. Ver 0.1.2.7. Fix "1" MHO-C401N, added irq_restore() in sensors SHT4X/SHTC3/SHT30/CHT832x. Limitation "Measurement interval" from 3 to 30 seconds. 
 
 
 ## Make
