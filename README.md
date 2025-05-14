@@ -208,6 +208,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 27. Ver 0.1.2.7. Fix "1" MHO-C401N, added irq_restore() in sensors SHT4X/SHTC3/SHT30/CHT832x. Limitation "Measurement interval" from 3 to 30 seconds. 
 
+28. Ver 0.1.2.8. Changed LongPollControl (ZHA) setting control algorithm and measurement interval (limit 3..30 seconds). For MHO-C401N added E-Ink refresh after 1024 display updates.
+
 
 ## Make
 

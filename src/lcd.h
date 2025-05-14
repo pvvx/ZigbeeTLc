@@ -52,7 +52,7 @@ typedef struct  {
 	u8 init;
 	u8 stage;
 	u8 updated;
-	u8 refresh_cnt;
+	u16 refresh_cnt;
 	u8 display_buff[LCD_BUF_SIZE];
 	u8 display_cmp_buff[LCD_BUF_SIZE];
 } scr_data_t;

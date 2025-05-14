@@ -91,7 +91,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_MHO_C401N // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -118,10 +118,10 @@
 
 #if USE_BLE
 #define APP_RELEASE				0x00	//BCD app release "0.0"
-#define APP_BUILD				0x06	//BCD app build "0.4"
+#define APP_BUILD				0x07	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x27	//BCD app build "2.5"
+#define APP_BUILD				0x28	//BCD app build "2.5"
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

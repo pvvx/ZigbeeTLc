@@ -452,8 +452,6 @@ void test_set_measure_longpoll_interval(void) {
 		g_zcl_thermostatUICfgAttrs.measure_interval = READ_SENSOR_TIMER_MAX_SEC;
 	g_sensorAppCtx.measure_interval = (g_zcl_thermostatUICfgAttrs.measure_interval * CLOCK_16M_SYS_TIMER_CLK_1S) - 25*CLOCK_16M_SYS_TIMER_CLK_1MS;
 	g_zcl_pollCtrlAttrs.longPollIntervalMin = g_zcl_thermostatUICfgAttrs.measure_interval * 4;
-	if(g_zcl_pollCtrlAttrs.longPollIntervalMin > g_zcl_pollCtrlAttrs.longPollInterval)
-		g_zcl_pollCtrlAttrs.longPollInterval = g_zcl_pollCtrlAttrs.longPollIntervalMin;
 }
 
 // cmp buf
@@ -480,7 +478,7 @@ nv_sts_t zcl_thermostatConfig_save(void)
 		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
 		test_set_measure_longpoll_interval();
 		if(zb_getPollRate() > g_zcl_pollCtrlAttrs.shortPollInterval * POLL_RATE_QUARTERSECONDS)
-			zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
+			zb_setPollRate(DEFAULT_POLL_RATE);
 		st = nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
 	}
 	return st;

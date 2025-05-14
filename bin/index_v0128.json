@@ -1,0 +1,146 @@
+[
+    {
+        "fileVersion": 19410945,
+        "fileSize": 132162,
+        "manufacturerCode": 4417,
+        "imageType": 513,
+        "sha512": "a11c2e02fa6fad8efdba9a6375d46ece17896ec5bb66df86e977f5f2aa486ed08506403533c05246ad54aa2699fe563b981e737dbad1e06d3029c3d47dbb473d",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0201-01283001-ZMHOC401.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 132594,
+        "manufacturerCode": 4417,
+        "imageType": 514,
+        "sha512": "c42a840f5bc515c478e100db836f7303b5192988334026ff027e67c13898a85c28fb66ed139c85da05498458a40912f28c4fb933e4f9c01a7030bbf0d6fb8e83",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0202-01283001-ZCGG1.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 131426,
+        "manufacturerCode": 4417,
+        "imageType": 518,
+        "sha512": "2170fdab95166f6844529153bc63188e34489e38107f9875bd26b0113375f68e9091c3069fd786cb3b2bb3aeaf7198c7b74a782b0dca32af8c45d3607c257c60",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0206-01283001-ZCGDK2.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 132082,
+        "manufacturerCode": 4417,
+        "imageType": 519,
+        "sha512": "6ec22ef024dca01354b30b69131275440e3ab8418bcf03a62a589217cc535284eb4876330c1f5f2e244178a8642826ac97ffb5b0412e18ee7f3d33c10c5e6aa6",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0207-01283001-ZCGG1N.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 131730,
+        "manufacturerCode": 4417,
+        "imageType": 520,
+        "sha512": "21fe362bbe37d9fcb90355b6ea495c927b2f33ab431b32eb428954d8aa7218b99e0b12ac544610d72b72fa7f2e040cdafb0a3142ade69641159368d35f9979e4",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0208-01283001-ZMHOC401N.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 131442,
+        "manufacturerCode": 4417,
+        "imageType": 522,
+        "sha512": "75eea4ef172f6c650002f5d3d427fbecdd15c2e74127818da4fcd11f519141ae0ac8db3c70096c173aa7655a8418e6343ff5b40327074f2e1a8f7988dc841241",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020a-01283001-Z03MMC.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 130898,
+        "manufacturerCode": 4417,
+        "imageType": 523,
+        "sha512": "5edda69a7347e40441dfcdedfa6e3e3244829cbf7055a573792b3b3d79ecdf52cf944bc142b0ca6df532695b9ce0395312adc9aff09d097bda52ab39c9e4ae6c",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020b-01283001-ZMHOC122.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 130114,
+        "manufacturerCode": 4417,
+        "imageType": 525,
+        "sha512": "6e0337b95194f0adc0b7a987d383fe10fe8b35ea5cf642d120d2f32b4b55d42b185fcae574807df7ed126bfc231febf050fa7670b1eb9fe8c6507fb5a454a9da",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020d-01283001-Z06MMC.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 128306,
+        "manufacturerCode": 4417,
+        "imageType": 529,
+        "sha512": "9ef347a0924b3a59ac919376ef3c0a4b99fd7e55b8a58a51e607386f0d3a39f259b7ea18f782a10735e541ba7559fb0e4eecc92a7fec8f82679595fc5f4c013a",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0211-01283001-ZTS0201Z3000.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 128354,
+        "manufacturerCode": 4417,
+        "imageType": 534,
+        "sha512": "1032697cc8a88621108617440df5925796dc3f8d5e9eb80d23dd575adfa7c3163ba15dcc54e92d0d09b273e77e906fbe46757d76ebe6ab091d0224913b83771f",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0216-01283001-ZTH03Z.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 128034,
+        "manufacturerCode": 4417,
+        "imageType": 539,
+        "sha512": "ec8645e3f66e985aee6f6d35af0c4474afb2074be083ea46f7e01dfadc3728f4a22d0fe58e27998687ec173af43badd5e285c2da039105fe6a8543f5526b55c2",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021b-01283001-ZTH01Z.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 128034,
+        "manufacturerCode": 4417,
+        "imageType": 540,
+        "sha512": "13bb4768bd0dd21ac5e694a53245da5a3a089efc90ef169ac7d64f4f8b30109047513dec6c5942f865cc591ead2e1cfa148137a8507f68b9304f55d67a69f78f",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021c-01283001-ZTH02Z.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 132834,
+        "manufacturerCode": 4417,
+        "imageType": 542,
+        "sha512": "f2cb364bfd9c14cfee4dafa02e6b16179a0067a2f8df13c8978c897bb5be9d798db5d06f4a2a0627f4e0879359d1d88aeb19a39bf90dfc2795d3d7c1cab9dfa8",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021e-01283001-TH03Z.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 129874,
+        "manufacturerCode": 4417,
+        "imageType": 543,
+        "sha512": "707b99c8931705c856b67b7eb0473846ef832b33b57652c07cdeffcd5dabf567a6643dd412dc369d1372c988aab9fae48866914b1bb263e0e6b1e21a62035cf6",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021f-01283001-LKTMZL02Z.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 132370,
+        "manufacturerCode": 4417,
+        "imageType": 545,
+        "sha512": "0147e645d14e197b02724624deee5c46733da60498c1ab79a28c82ce52e12b287bd4bb30e27e64d757d558c022acf7a933b3761a2e4116473f65674242c2d380",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0221-01283001-ZTH05.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 126450,
+        "manufacturerCode": 4417,
+        "imageType": 549,
+        "sha512": "29d193737d4ce4ed1fff2f036a65150006e1042264a2ce92ef76cecf64ee7e071e99f464d5620b8ade8bebf5bdbe6b87ad00634996641e74da9f210097399506",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0225-01283001-ZYZTH02.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 127826,
+        "manufacturerCode": 4417,
+        "imageType": 550,
+        "sha512": "02cc1b156f0f4977484ad70d6ac6ca003e06f7a3f536fc1a489ce73844b7339e57633b3f99d6db20b57094f086ac7c22884ee43e6272dea207f190e34c4db622",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0226-01283001-ZYZTH01.zigbee"
+    },
+    {
+        "fileVersion": 19410945,
+        "fileSize": 126306,
+        "manufacturerCode": 4417,
+        "imageType": 551,
+        "sha512": "a2555b5fb817f1e3989dc9f020a9f6a3d9df4fe8173b28c9ddb6698bf12d09392083930a7675ada830bcbf021cc422d8fac5837565453fe6dcec00f8fefc9df5",
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0227-01283001-ZG227Z.zigbee"
+    }
+]

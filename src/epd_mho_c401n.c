@@ -12,6 +12,8 @@
 #define LOW     0
 #define HIGH    1
 
+#define 	DEF_EPD_REFRESH_CNT	1024
+
 RAM scr_data_t scr;
 
 const u8 T_LUT_ping[5] = {0x07B, 0x081, 0x0E4, 0x0E7, 0x008};
@@ -330,7 +332,10 @@ void init_lcd(void) {
 	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
     scr.stage = 1; // Update/Init, stage 1
     scr.updated = 0;
-    memset(scr.display_buff, 0, sizeof(scr.display_buff));
+#ifdef 	DEF_EPD_REFRESH_CNT
+    scr.refresh_cnt = DEF_EPD_REFRESH_CNT; // 1024
+#endif
+    //memset(scr.display_buff, 0, sizeof(scr.display_buff));
     memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
     gpio_write(EPD_RST, HIGH);
 	//scr.display_buff[15] = 0;
@@ -367,6 +372,7 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 				scr.stage = 4;
 				// EPD_BUSY: ~500 ms
 			} else {
+				//memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_cmp_buff));
 				scr.updated = 1;
 				scr.stage = 2;
 				// EPD_BUSY: ~1000 ms
@@ -377,12 +383,22 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 			transmit(0, 0x0AE);
 			transmit(0, 0x028);
 			transmit(0, 0x0AD);
-			scr.init = 1;
 		default:
 			if((!scr.display_off) // g_zcl_thermostatUICfgAttrs.display_off
 			&& memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
 				memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_cmp_buff));
 				scr.stage = 1;
+#ifdef 	DEF_EPD_REFRESH_CNT
+				if (scr.refresh_cnt) {
+					scr.refresh_cnt--;
+				} else {
+				    gpio_write(EPD_RST, LOW);
+				    sleep_us(50);
+				    scr.refresh_cnt = DEF_EPD_REFRESH_CNT; // 1024
+				    scr.updated = 0;
+				    gpio_write(EPD_RST, HIGH);
+				}
+#endif
 			} else
 				scr.stage = 0;
 		}

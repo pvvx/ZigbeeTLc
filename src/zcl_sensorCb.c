@@ -650,23 +650,13 @@ static status_t sensorDevice_zclPollCtrlSetLongPollIntervalCmdHandler(zcl_setLon
 {
 	zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
-	if((pCmd->newLongPollInterval >= 0x04) && (pCmd->newLongPollInterval <= 0x6E0000)
+	if((pCmd->newLongPollInterval >= 4) && (pCmd->newLongPollInterval <= 0x6E0000)
 		&& (pCmd->newLongPollInterval <= pPollCtrlAttr->chkInInterval) // <= 1 hr
-//		 TODO: ZHA
-//	    && (pCmd->newLongPollInterval >= pPollCtrlAttr->shortPollInterval)
-//		&& (pCmd->newLongPollInterval >= pPollCtrlAttr->longPollIntervalMin)
+		&& (pCmd->newLongPollInterval >= pPollCtrlAttr->longPollIntervalMin) //	 TODO: ZHA
 		){
+		pPollCtrlAttr->longPollInterval = pCmd->newLongPollInterval;
 #ifdef ZCL_THERMOSTAT_UI_CFG
-		u32 t = g_zcl_thermostatUICfgAttrs.measure_interval * 4;
-		if(pCmd->newLongPollInterval < t)
-			pPollCtrlAttr->longPollInterval = t;
-		else
-			pPollCtrlAttr->longPollInterval = pCmd->newLongPollInterval;
-#else
-		if(pCmd->newLongPollInterval >= pPollCtrlAttr->longPollIntervalMin)
-			pPollCtrlAttr->longPollInterval = pCmd->newLongPollInterval;
-		else
-			pPollCtrlAttr->longPollInterval = pPollCtrlAttr->longPollIntervalMin;
+		g_zcl_thermostatUICfgAttrs.measure_interval = pCmd->newLongPollInterval >> 2; // div 4
 #endif
 		zb_setPollRate(pPollCtrlAttr->longPollInterval * POLL_RATE_QUARTERSECONDS);
 	}else{
@@ -682,8 +672,6 @@ static status_t sensorDevice_zclPollCtrlSetShortPollIntervalCmdHandler(zcl_setSh
 
 	if((pCmd->newShortPollInterval >= 0x01) && (pCmd->newShortPollInterval <= 0xff)
 	&& (pCmd->newShortPollInterval <= pPollCtrlAttr->longPollInterval)
-//		 TODO: ZHA
-//		&& (pCmd->newShortPollInterval < pPollCtrlAttr->longPollIntervalMin)
 		){
 		pPollCtrlAttr->shortPollInterval = pCmd->newShortPollInterval;
 		zb_setPollRate(pPollCtrlAttr->shortPollInterval * POLL_RATE_QUARTERSECONDS);
