@@ -10,6 +10,9 @@
 #if USE_BLE
 #include "zigbee_ble_switch.h"
 #endif
+#if USE_TRIGGER
+#include "trigger.h"
+#endif
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -82,6 +85,9 @@ const u16 sensorDevice_outClusterList[] =
 {
 #ifdef ZCL_GROUP
 	ZCL_CLUSTER_GEN_GROUPS,
+#endif
+#ifdef ZCL_ON_OFF
+	ZCL_CLUSTER_GEN_ON_OFF,
 #endif
 #ifdef ZCL_OTA
     ZCL_CLUSTER_OTA,
@@ -302,7 +308,12 @@ const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 #endif
 	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_MEASURE_INTERVAL,   ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_thermostatUICfgAttrs.measure_interval },
 
-
+#if USE_TRIGGER
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TRIGGER_TRH_T,   ZCL_DATA_TYPE_INT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&trg.temp_threshold },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TRIGGER_HST_T,   ZCL_DATA_TYPE_INT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&trg.temp_hysteresis },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TRIGGER_TRH_H,   ZCL_DATA_TYPE_INT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&trg.humi_threshold },
+	{ ZCL_THERMOSTAT_UI_CFG_ATTRID_TRIGGER_HST_H,   ZCL_DATA_TYPE_INT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&trg.humi_hysteresis },
+#endif
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
 };
 
@@ -481,6 +492,10 @@ nv_sts_t zcl_thermostatConfig_save(void)
 			zb_setPollRate(DEFAULT_POLL_RATE);
 		st = nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
 	}
+#if USE_TRIGGER
+	else
+		st = trigger_save();
+#endif
 	return st;
 }
 
@@ -505,7 +520,7 @@ void init_nv_app(void) {
 		} else {
 			memcpy(&g_zcl_thermostatUICfgAttrs, &g_zcl_thermostatUICfgDefault, sizeof(g_zcl_thermostatUICfgAttrs));
 		}
-#endif
+#endif // ZCL_THERMOSTAT_UI_CFG
 	} else {
 #ifdef ZCL_THERMOSTAT_UI_CFG
 		memcpy(&g_zcl_thermostatUICfgAttrs, &g_zcl_thermostatUICfgDefault, sizeof(g_zcl_thermostatUICfgAttrs));
@@ -525,6 +540,9 @@ void init_nv_app(void) {
 #endif // USE_DISPLAY
 		drv_pm_sleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 1000);
 	}
+#if USE_TRIGGER
+	trigger_init();
+#endif
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	test_set_measure_longpoll_interval();
 #endif

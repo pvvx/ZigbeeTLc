@@ -92,27 +92,53 @@
 
 /* Board include */
 #if defined(BOARD)
+#if BOARD == BOARD_CGG1
 #include "board_cgg1.h"
+#elif BOARD == BOARD_CGG1N
 #include "board_cgg1n.h"
+#elif BOARD == BOARD_LYWSD03MMC
 #include "board_lyws03mmc.h"
+#elif BOARD == BOARD_CGDK2
 #include "board_cgdk2.h"
+#elif BOARD == BOARD_MHO_C122
 #include "board_mho_c122.h"
+#elif BOARD == BOARD_MHO_C401
 #include "board_mho_c401.h"
+#elif BOARD == BOARD_MHO_C401N
 #include "board_mho_c401n.h"
+#elif BOARD == BOARD_TS0201_TZ3000
 #include "board_ts0201_tz3000.h"
+#elif BOARD == BOARD_TH03Z
 #include "board_th03z.h"
+#elif (BOARD == BOARD_ZTH01 || BOARD == BOARD_ZTH02)
 #include "board_zth01_02.h"
+#elif BOARD == BOARD_ZTH03
 #include "board_zth03.h"
+#elif BOARD == BOARD_ZTH05
 #include "board_zth05.h"
+#elif BOARD == BOARD_LKTMZL02
 #include "board_lktmzl02.h"
+#elif BOARD == BOARD_CB3S
 #include "board_cb3s.h"
+#elif BOARD == BOARD_ZYZTH02
 #include "board_zyzth02.h"
+#elif BOARD == BOARD_ZYZTH01
 #include "board_zyzth02pro.h"
+#elif BOARD == BOARD_ZG_227Z
 #include "board_zg_227z.h"
+#elif BOARD == BOARD_TS0202_PIR1
 #include "board_pirs.h"
+#elif BOARD == BOARD_MJWSD06MMC
 #include "board_mjwsd06mmc.h"
 #else
 #error "Define BOARD!"
+#endif
+#else
+#error "Define BOARD!"
+#endif
+
+#ifndef USE_TRIGGER
+#define USE_TRIGGER				0 // develop
 #endif
 
 /**********************************************************************
@@ -163,7 +189,6 @@
 #define USE_SENSOR_TH  (USE_SENSOR_CHT8305 || USE_SENSOR_CHT8215 || USE_SENSOR_AHT20_30 || USE_SENSOR_SHT4X || USE_SENSOR_SHTC3 || USE_SENSOR_SHT30)
 #endif
 
-
 #define DEF_OCCUPANCY_DELAY		60 // sec
 
 #if USE_SENSOR_TH
@@ -191,12 +216,13 @@ typedef enum{
 	NV_ITEM_APP_MAN_NAME,
 	NV_ITEM_APP_THERMOSTAT_UI_CFG,
 	NV_ITEM_APP_PIR_CFG,
+	NV_ITEM_APP_TRIGGER_UI_CFG,
 } nv_item_app_t;
 
 /**********************************************************************
  * ZCL cluster support setting
  */
-#define ZCL_ON_OFF_SUPPORT				0 // =0 (!)
+#define ZCL_ON_OFF_SUPPORT				USE_TRIGGER
 #define ZCL_LEVEL_CTRL_SUPPORT			0 // =0 (!)
 #define ZCL_LIGHT_COLOR_CONTROL_SUPPORT	0 // =0 (!)
 #define ZCL_POWER_CFG_SUPPORT						1
@@ -210,7 +236,7 @@ typedef enum{
 #define ZCL_OCCUPANCY_SENSING_SUPPORT				1
 #endif
 #define ZCL_POLL_CTRL_SUPPORT						1
-#define ZCL_GROUP_SUPPORT							0
+#define ZCL_GROUP_SUPPORT							USE_TRIGGER
 #define ZCL_OTA_SUPPORT								1
 #define TOUCHLINK_SUPPORT							0
 #define FIND_AND_BIND_SUPPORT						0
@@ -262,7 +288,6 @@ typedef enum{
  */
 #include "includes/zb_config.h"
 #include "stack_cfg.h"
-
 
 /**********************************************************************
  * EV configuration

@@ -25,6 +25,9 @@
 #include "ble_cfg.h"
 #include "zigbee_ble_switch.h"
 #endif
+#if USE_TRIGGER
+#include "trigger.h"
+#endif
 /**********************************************************************
  * LOCAL CONSTANTS
  */
@@ -221,6 +224,9 @@ void read_sensor_and_save(void) {
 			sensor_ht.flag &= ~FLG_MEASURE_HT_RP;
 			g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
 			g_zcl_relHumidityAttrs.measuredValue = sensor_ht.humi;
+#if USE_TRIGGER
+			set_trigger_out();
+#endif
 		}
 #endif
 	}
@@ -330,6 +336,9 @@ void app_task(void)
 			if(rep_uptime_sec) {
 				g_sensorAppCtx.reportupsec = 0;
 				app_chk_report(rep_uptime_sec);
+#if USE_TRIGGER
+				send_onoff();
+#endif
 			}
 		} else { // Device not Joined
 #if	USE_DISPLAY

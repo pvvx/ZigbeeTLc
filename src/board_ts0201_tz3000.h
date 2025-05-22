@@ -60,10 +60,10 @@ GPIO_PD7 - ALERT (CHT8305)
 // Sensor T&H
 #define USE_SENSOR_CHT8305		1
 #define USE_SENSOR_CHT8215		0
-#define USE_SENSOR_AHT20_30		0
-#define USE_SENSOR_SHT4X		0
+#define USE_SENSOR_AHT20_30		1
+#define USE_SENSOR_SHT4X		1
 #define USE_SENSOR_SHTC3		0
-#define USE_SENSOR_SHT30		0
+#define USE_SENSOR_SHT30		1
 
 // LED
 #define LED_ON				1

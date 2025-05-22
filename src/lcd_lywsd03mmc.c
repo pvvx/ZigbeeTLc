@@ -219,6 +219,20 @@ void show_ble_symbol(bool state){
 		scr.display_buff[2] &= ~0x10;
 }
 
+#ifdef USE_DISPLAY_CONNECT_SYMBOL
+_SCR_CODE_SEC_
+void show_connected_symbol(bool state){
+#if USE_DISPLAY_CONNECT_SYMBOL == 2
+ 	if (!state)
+#else
+ 	if (state)
+#endif
+		scr.display_buff[2] |= 0x10; // "ble"
+	else
+		scr.display_buff[2] &= ~0x10;
+}
+#endif
+
 _SCR_CODE_SEC_
 void show_battery_symbol(bool state) {
 	if(state)
@@ -364,8 +378,9 @@ void init_lcd(void){
 			}
 		} // else B1.5, B1.6 uses UART (scr.i2c_address = 0)
 	}
-	memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
-	update_lcd();
+	//memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
+	//update_lcd();
+	show_reset_screen();
 }
 
 
