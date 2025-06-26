@@ -19,7 +19,8 @@ Currently supported devices:
  [LKTMZL02](https://pvvx.github.io/LKTMZL02),
  [ZG-227Z](https://pvvx.github.io/ZG-227Z),
  [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
- [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro).
+ [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro),
+ [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd).
 
 * Work with modification:
  [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
@@ -31,6 +32,8 @@ Additional alternative firmware options for some devices with TLSR825x can be fo
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
 ### Warning(!): Firmware version 0.1.2.6 is built on a new version of SDK from Telink. Requires reset of all previous settings and new binding. Old values from previous versions remembered by the device are incompatible.
+
+* For new LYWSD03MMC variants released since 03.2025 there is no Zigbee firmware (not supported yet).
 
 New versions check that the configuration written to the device is compatible with the one updated for the new SDK (i.e. compatible with version 0.1.2.5). If it is not compatible, all settings, including bindings, are deleted. In this case, the Zigbee coordinator sees a device with the same IEEE number and a "rebinding" is performed.
 
