@@ -1,6 +1,6 @@
 @set TLPATH=D:\MCU\TelinkIoTStudio
 @set PATH=%TLPATH%\bin;%TLPATH%\opt\tc32\bin;%TLPATH%\mingw\bin;%TLPATH%\opt\tc32\tc32-elf\bin;%PATH%
-@set SWVER=_zb0006
+@set SWVER=_zb0008
 @del /Q .\bin\*.bin
 @del /Q .\bin\*.zigbee
 @del /Q .\build

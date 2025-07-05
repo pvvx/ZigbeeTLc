@@ -59,6 +59,7 @@
 #define BOARD_MHO_C122				11
 //#define BOARD_MJWSD06MMC_EN		12
 #define BOARD_MJWSD06MMC			13
+#define BOARD_LYWSD03MMC_N16		14 // (B1.6 new 2025) number used for BLE firmware!
 // 12..15 - number used for BLE firmware - https://github.com/pvvx/ATC_MiThermometer
 //#define BOARD_TB03F				16 // DIY TB-03F-Kit (not yet published at the moment)
 #define BOARD_TS0201_TZ3000			17 // ZigBee TS0201_TZ3000
@@ -121,7 +122,7 @@
 #define APP_BUILD				0x07	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x28	//BCD app build "2.5"
+#define APP_BUILD				0x29	//BCD app build "2.9"
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

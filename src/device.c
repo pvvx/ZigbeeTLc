@@ -179,6 +179,11 @@ B2.0 | 0x3C         | 0x44   (SHT4x)  | Test   original string HW
 #if USE_BLE
             ble_attr.my_HardStr[3] = '5';
 #endif
+        } else if (scr.i2c_address == N16_I2C_ADDR) {
+            g_zcl_basicAttrs.hwVersion = BOARD_LYWSD03MMC_N16; // N1.6
+#if USE_BLE
+            ble_attr.my_HardStr[3] = '1';
+#endif
         } else {
             g_zcl_basicAttrs.hwVersion = BOARD_LYWSD03MMC_B16; // B1.6
 #if USE_BLE

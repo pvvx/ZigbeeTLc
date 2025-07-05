@@ -31,7 +31,8 @@
 
 // LCD controller I2C address
 #define B14_I2C_ADDR		0x3C
-#define B16_I2C_ADDR		0	 // UART
+#define B16_I2C_ADDR			0	 // UART
+#define N16_I2C_ADDR			1	 // SPI
 #define B19_I2C_ADDR		0x3E // BU9792AFUV
 #define BU9792AFUV_I2C_ADDR		0x3E // BU9792AFUV
 #define BL55028_I2C_ADDR		0x3E // BL55028

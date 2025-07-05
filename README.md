@@ -213,6 +213,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 28. Ver 0.1.2.8. Changed LongPollControl (ZHA) setting control algorithm and measurement interval (limit 3..30 seconds). For MHO-C401N added E-Ink refresh after 1024 display updates.
 
+29. Ver 0.1.2.9. Added new version LYWSD03MMC HW:B1.6 (custom name B1.1).
 
 ## Make
 
