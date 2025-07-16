@@ -119,7 +119,7 @@
 
 #if USE_BLE
 #define APP_RELEASE				0x00	//BCD app release "0.0"
-#define APP_BUILD				0x07	//BCD app build "0.4"
+#define APP_BUILD				0x08	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
 #define APP_BUILD				0x29	//BCD app build "2.9"

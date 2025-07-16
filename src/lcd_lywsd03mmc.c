@@ -4,6 +4,7 @@
 #include "i2c_drv.h"
 #include "lcd.h"
 #include "device.h"
+#include "sensors.h"
 
 // UART 38400 BAUD
 #define LCD_UART_BAUD 38400
@@ -439,6 +440,12 @@ void init_lcd(void){
 		} else {
 			lcd_set_buf_uart_spi(scr.display_buff);
 			// else B1.5, B1.6 uses UART (scr.i2c_address = 0)
+			if (sensor_ht.sensor_type == TH_SENSOR_SHTC3) { // B1.5 (UART)
+				unsigned char r = irq_disable();
+				lcd_send_uart();
+				irq_restore(r);
+				return;
+			}
 			// B1.6 (UART/SPI)
 			// Test SPI/UART ?
 			gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLDOWN_100K);

@@ -460,6 +460,11 @@ void user_app_init(void)
 
 #if	USE_DISPLAY
 	LCD_INIT_DELAY();
+#endif
+
+	init_sensor();
+
+#if	USE_DISPLAY
 	init_lcd();
 	show_connected_symbol(false);
 #endif
@@ -468,7 +473,6 @@ void user_app_init(void)
 	sys_exceptHandlerRegister(sensorDeviceSysException);
 #endif
 
-	init_sensor();
 
 	populate_hw_version();
 
