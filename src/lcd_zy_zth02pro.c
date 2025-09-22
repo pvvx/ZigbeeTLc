@@ -78,8 +78,12 @@ void send_to_lcd(void){
 _SCR_CODE_SEC_
 void update_lcd(void){
 	if(!scr.display_off
+/*
 	 && memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
 		memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff));
+*/
+	 && memcmp(&scr.display_cmp_buff[1], scr.display_buff, sizeof(scr.display_buff))) {			// don't override src.display_cmp_buff[0] !
+		memcpy(&scr.display_cmp_buff[1], scr.display_buff, sizeof(scr.display_buff));
 		send_to_lcd();
 	}
 }
@@ -213,8 +217,10 @@ void init_lcd(void){
 			pm_wait_us(200);
 			scr.blink_flg = 0;
 			scr.display_cmp_buff[0] = 8;
-			memset(&scr.display_cmp_buff, 0xff, sizeof(scr.display_cmp_buff));
-			send_to_lcd();
+//			memset(&scr.display_cmp_buff, 0xff, sizeof(scr.display_cmp_buff));
+			memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));		// set src.display_buff to 0xff, not src.display_cmp_buff !
+//			send_to_lcd();
+			update_lcd();								// always use update_lcd to keep buffers in sync
 		}
 	}
 }
@@ -242,7 +248,8 @@ void show_ble_ota(void) {
 	scr.display_buff[4] = BIT(3); // "ble"
 	scr.display_buff[5] = 0;
 	scr.blink_flg = 0xf2;
-	send_to_lcd();
+//	send_to_lcd();
+	update_lcd();						// always use update_lcd to keep buffers in sync
 }
 
 void show_err_sensors(void) {
@@ -252,6 +259,7 @@ void show_err_sensors(void) {
 	scr.display_buff[3] &= BIT(5); // "bat"
 	scr.display_buff[4] = LCD_SYM_E; // "E"
 	scr.display_buff[5] = LCD_SYM_E; // "E"
+	update_lcd();						// update_lcd missing
 }
 
 void show_reset_screen(void) {
