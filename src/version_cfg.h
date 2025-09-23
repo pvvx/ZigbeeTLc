@@ -83,7 +83,7 @@
 #define BOARD_CB3S					35  // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
 #define BOARD_HS09					36  // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
 #define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x
-#define BOARD_ZYZTH01				38  // Tuya ZY-ZTH02Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
+#define BOARD_ZYZTH01				38  // Tuya ZY-ZTH02Pro/ZY-ZTH03Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
 #define BOARD_ZG_227Z				39  // Zigbee ZG-227Z
 #define BOARD_TS0202_PIR1 			40 // Tuya TS0202_TZ3000_6ygjfyll PIR
 #define BOARD_TS0202_PIR2 			41 // Tuya TS0202_TZ3040_bb6xaihh PIR

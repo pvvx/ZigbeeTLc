@@ -78,8 +78,8 @@ void send_to_lcd(void){
 _SCR_CODE_SEC_
 void update_lcd(void){
 	if(!scr.display_off
-	 && memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
-		memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff));
+	 && memcmp(&scr.display_cmp_buff[1], scr.display_buff, sizeof(scr.display_buff))) {
+		memcpy(&scr.display_cmp_buff[1], scr.display_buff, sizeof(scr.display_buff));
 		send_to_lcd();
 	}
 }
@@ -212,8 +212,8 @@ void init_lcd(void){
 		} else {
 			pm_wait_us(200);
 			scr.blink_flg = 0;
+			memset(scr.display_cmp_buff, 0xff, sizeof(scr.display_cmp_buff));
 			scr.display_cmp_buff[0] = 8;
-			memset(&scr.display_cmp_buff, 0xff, sizeof(scr.display_cmp_buff));
 			send_to_lcd();
 		}
 	}
@@ -242,7 +242,7 @@ void show_ble_ota(void) {
 	scr.display_buff[4] = BIT(3); // "ble"
 	scr.display_buff[5] = 0;
 	scr.blink_flg = 0xf2;
-	send_to_lcd();
+	update_lcd();
 }
 
 void show_err_sensors(void) {
