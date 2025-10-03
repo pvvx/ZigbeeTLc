@@ -58,6 +58,9 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZYZTH01 POJECT_DEF="-DBOARD=BOARD_ZY
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG227Z POJECT_DEF="-DBOARD=BOARD_ZG_227Z"
 @if not exist "bin\ZG227Z%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG303Z POJECT_DEF="-DBOARD=BOARD_ZG303Z"
+@if not exist "bin\ZG303Z%SWVER%.bin" goto :error
 python3 make_z\zb_bin_ota.py bin\ZTS0201Z3000%SWVER%.bin bin\TS0201z%SWVER% -m0x1141 -i0xd3a3 -v0x01983001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZTH01Z%SWVER%.bin bin\TH01Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZTH02Z%SWVER%.bin bin\TH02Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
@@ -66,7 +69,8 @@ python3 make_z\zb_bin_ota.py bin\TH03Z%SWVER%.bin bin\TH03Zz%SWVER% -m0x1286 -i0
 python3 make_z\zb_bin_ota.py bin\LKTMZL02Z%SWVER%.bin bin\LKTMZL02z%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZYZTH02%SWVER%.bin bin\ZYZTH02z%SWVER% -m0x1002 -i0xd3a3 -v0x66993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZYZTH01%SWVER%.bin bin\ZYZTH03pz%SWVER% -m0x1002 -i0xd3a3 -v0x66993001 -s"Tuya to ZigbeeTlc"
-python3 make_z\zb_bin_ota.py bin\ZG227Z%SWVER%.bin bin\ZG227Zz%SWVER% -m0x1286 -i0x0203 -v0x10983001 -s"Tuya to ZigbeeTlc"
+python3 make_z\zb_bin_ota.py bin\ZG227Z%SWVER%.bin bin\ZG227Zz%SWVER% -m0x1286 -i0x0203 -v0x10983001 -s"Sonoff to ZigbeeTlc"
+python3 make_z\zb_bin_ota.py bin\ZG303Z%SWVER%.bin bin\ZG303Zz%SWVER% -m0x1286 -i0x0203 -v0x20973001 -s"Sonoff to ZigbeeTlc"
 cd .\zigpy_ota
 call update.cmd %SWVER%
 cd ..

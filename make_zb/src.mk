@@ -29,6 +29,7 @@ $(OUT_PATH)$(SRC_DIR)/epd_cgg1n.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/sensors.o \
+$(OUT_PATH)$(SRC_DIR)/rh2.o \
 $(OUT_PATH)$(SRC_DIR)/device.o \
 $(OUT_PATH)$(SRC_DIR)/sensorEpCfg.o \
 $(OUT_PATH)$(SRC_DIR)/sensorBLESlave.o \

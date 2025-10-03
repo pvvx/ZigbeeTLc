@@ -124,6 +124,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x0225 | ZYZTH02 | ZY-ZTH02 |
 | 0x0226 | ZYZTH01 | ZY-ZTH02-Pro, ZY-ZTH03-Pro |
 | 0x0227 | ZG227 | ZG227 |
+| 0x022C | ZG303Z | ZG-303Z |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
@@ -212,7 +213,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 28. Ver 0.1.2.8. Changed LongPollControl (ZHA) setting control algorithm and measurement interval (limit 3..30 seconds). For MHO-C401N added E-Ink refresh after 1024 display updates.
 
-29. Ver 0.1.2.9. Added new version LYWSD03MMC HW:B1.6 (custom name B1.1).
+29. Ver 0.1.2.9. Added new version LYWSD03MMC HW:B1.6 (custom name B1.1). Added ZG-303Z.
 
 ## Make
 

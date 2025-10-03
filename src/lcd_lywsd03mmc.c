@@ -160,10 +160,10 @@ static void lcd_send_uart(void){
 	///reg_dma_chn_irq_msk |= FLD_DMA_IRQ_UART_TX;
 
 	// GPIO_PD7 set TX UART pin
-	REG_ADDR8(0x5AF) = (REG_ADDR8(0x5AF) &  (~(BIT(7)|BIT(6)))) | BIT(7);
+	REG_ADDR8(0x5AF) = (REG_ADDR8(0x5AF) &  (~BIT(6))) | BIT(7);
 	BM_CLR(reg_gpio_func(GPIO_LCD_URX), GPIO_LCD_URX & 0xff);
-	// GPIO_PDB set RX UART pin
-	REG_ADDR8(0x5AB) = (REG_ADDR8(0x5AB) &  (~(BIT(7)|BIT(6)))) | BIT(7);
+	// GPIO_PB7 set RX UART pin
+	REG_ADDR8(0x5AB) = (REG_ADDR8(0x5AB) &  (~BIT(6))) | BIT(7);
 	BM_CLR(reg_gpio_func(GPIO_LCD_UTX), GPIO_LCD_UTX & 0xff);
 	// start send DMA
 
@@ -444,30 +444,34 @@ void init_lcd(void){
 				unsigned char r = irq_disable();
 				lcd_send_uart();
 				irq_restore(r);
-				return;
+				return; // B1.5, UART LCD
 			}
 			// B1.6 (UART/SPI)
 			// Test SPI/UART ?
 			gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLDOWN_100K);
-			sleep_us(256);
-			if(BM_IS_SET(reg_gpio_in(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff) == 0)
-				scr.i2c_address = N16_I2C_ADDR;
-			gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLUP_1M);
-			if(scr.i2c_address == 0) { // UART ?
+			BM_SET(reg_gpio_func(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // GPIO_PB7 set GPIO pin
+			BM_SET(reg_gpio_oen(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // SDI output disable
+			sleep_us(512);
+			if(BM_IS_SET(reg_gpio_in(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff) == 0) {
+				gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLUP_1M);
+				scr.i2c_address = N16_I2C_ADDR; // B1.6 new (SPI LCD)
+			} else {
+				gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLUP_1M);
 				unsigned char r = irq_disable();
 				lcd_send_uart();
 				irq_restore(r);
-				if(utxb.end != 0xAA) { // Not UART send ok?
-					scr.i2c_address = N16_I2C_ADDR; // SPI
-					// restore gpio func fot SPI
-					BM_SET(reg_gpio_func(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // GPIO_PB7 set GPIO pin
-					BM_SET(reg_gpio_func(GPIO_LCD_CLK), GPIO_LCD_CLK & 0xff); // GPIO_PD7 set GPIO pin
-				} // else UART LCD
+				if(utxb.end == 0xAA) { // UART LCD?
+					return; // B1.6, UART LCD
+				}
+				// SPI LCD. Restore gpio func fot SPI
+				BM_SET(reg_gpio_func(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // GPIO_PB7 set GPIO pin
+				BM_SET(reg_gpio_func(GPIO_LCD_CLK), GPIO_LCD_CLK & 0xff); // GPIO_PD7 set GPIO pin
+				scr.i2c_address = N16_I2C_ADDR; // SPI LCD
 			}
+			// SPI LCD
 			pm_wait_us(1024);
 		}
 	}
-	//update_lcd();
 	show_reset_screen();
 }
 

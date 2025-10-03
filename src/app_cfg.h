@@ -130,6 +130,8 @@
 #include "board_pirs.h"
 #elif BOARD == BOARD_MJWSD06MMC
 #include "board_mjwsd06mmc.h"
+#elif BOARD == BOARD_ZG303Z
+#include "board_zg303z.h"
 #else
 #error "Define BOARD!"
 #endif

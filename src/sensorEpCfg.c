@@ -78,6 +78,13 @@ const u16 sensorDevice_inClusterList[] =
 #endif
 };
 
+#if (DEV_SERVICES & SERVICE_PLM)
+const u16 sensorDevice_inClusterList2[] =
+{
+    ZCL_CLUSTER_MS_RELATIVE_HUMIDITY
+};
+#endif
+
 /**
  *  @brief Definition for Outgoing cluster / Client Cluster
  */
@@ -99,6 +106,9 @@ const u16 sensorDevice_outClusterList[] =
  */
 #define sensorDevice_IN_CLUSTER_NUM		(sizeof(sensorDevice_inClusterList)/sizeof(sensorDevice_inClusterList[0]))
 #define sensorDevice_OUT_CLUSTER_NUM	(sizeof(sensorDevice_outClusterList)/sizeof(sensorDevice_outClusterList[0]))
+#if (DEV_SERVICES & SERVICE_PLM)
+#define sensorDevice_IN_CLUSTER_NUM2		(sizeof(sensorDevice_inClusterList2)/sizeof(sensorDevice_inClusterList2[0]))
+#endif
 
 /**
  *  @brief Definition for simple description for HA profile
@@ -115,6 +125,21 @@ const af_simple_descriptor_t sensorDevice_simpleDesc =
 	(u16 *)sensorDevice_inClusterList,    	/* Application input cluster list */
 	(u16 *)sensorDevice_outClusterList,   	/* Application output cluster list */
 };
+
+#if (DEV_SERVICES & SERVICE_PLM)
+const af_simple_descriptor_t sensorDevice_simpleDesc2 =
+{
+	HA_PROFILE_ID,                      	/* Application profile identifier */
+	HA_DEV_TEMPERATURE_SENSOR,              		/* Application device identifier */
+	SENSOR_DEVICE_ENDPOINT2,         		/* Endpoint */
+	1,										/* Application device version */
+	0,										/* Reserved */
+	sensorDevice_IN_CLUSTER_NUM2,           	/* Application input cluster count */
+	0,//	sensorDevice_OUT_CLUSTER_NUM2,          	/* Application output cluster count */
+	(u16 *)sensorDevice_inClusterList2,    	/* Application input cluster list */
+	0 //	(u16 *)sensorDevice_outClusterList1,   	/* Application output cluster list */
+};
+#endif
 
 /* Basic */
 zcl_basicAttr_t g_zcl_basicAttrs =
@@ -266,7 +291,31 @@ const zclAttrInfo_t relative_humdity_attrTbl[] =
 };
 
 #define	ZCL_RELATIVE_HUMIDITY_ATTR_NUM		 sizeof(relative_humdity_attrTbl) / sizeof(zclAttrInfo_t)
+
+#if (DEV_SERVICES & SERVICE_PLM)
+
+zcl_MoistureAttr_t g_zcl_MoistureAttrs =
+{
+	.measuredValue	= 0xffff,
+	.minValue 		= 0,
+	.maxValue		= 9999,
+	.tolerance		= 0,
+};
+
+const zclAttrInfo_t relative_humdity_attrTbl2[] =
+{
+	{ ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,       ZCL_DATA_TYPE_UINT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE, (u8*)&g_zcl_MoistureAttrs.measuredValue },
+	{ ZCL_RELATIVE_HUMIDITY_ATTRID_MINMEASUREDVALUE,    ZCL_DATA_TYPE_UINT16,    ACCESS_CONTROL_READ, (u8*)&g_zcl_MoistureAttrs.minValue },
+	{ ZCL_RELATIVE_HUMIDITY_ATTRID_MAXMEASUREDVALUE,    ZCL_DATA_TYPE_UINT16,    ACCESS_CONTROL_READ, (u8*)&g_zcl_MoistureAttrs.maxValue },
+	{ ZCL_RELATIVE_HUMIDITY_ATTRID_TOLERANCE,      		ZCL_DATA_TYPE_UINT16,    ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE, (u8*)&g_zcl_MoistureAttrs.tolerance },
+
+	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, 	ZCL_DATA_TYPE_UINT16,  	ACCESS_CONTROL_READ,  						(u8*)&zcl_attr_global_clusterRevision},
+};
 #endif
+
+#define	ZCL_RELATIVE_HUMIDITY_ATTR_NUM2		 sizeof(relative_humdity_attrTbl2) / sizeof(zclAttrInfo_t)
+
+#endif // ZCL_RELATIVE_HUMIDITY
 
 #ifdef ZCL_THERMOSTAT_UI_CFG
 zcl_thermostatUICfgAttr_t g_zcl_thermostatUICfgAttrs;
@@ -402,7 +451,18 @@ const zcl_specClusterInfo_t g_sensorDeviceClusterList[] =
 #endif
 };
 
-u8 SENSOR_DEVICE_CB_CLUSTER_NUM = (sizeof(g_sensorDeviceClusterList)/sizeof(g_sensorDeviceClusterList[0]));
+const u8 SENSOR_DEVICE_CB_CLUSTER_NUM = (sizeof(g_sensorDeviceClusterList)/sizeof(g_sensorDeviceClusterList[0]));
+
+#if (DEV_SERVICES & SERVICE_PLM)
+
+const zcl_specClusterInfo_t g_sensorDeviceClusterList2[] =
+{
+//	{ZCL_CLUSTER_GEN_BASIC,			MANUFACTURER_CODE_NONE, ZCL_BASIC_ATTR_NUM, 	basic_attrTbl,  	zcl_basic_register,		sensorDevice_basicCb},
+	{ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,	MANUFACTURER_CODE_NONE, ZCL_RELATIVE_HUMIDITY_ATTR_NUM2, relative_humdity_attrTbl2,	zcl_relative_humidity_register, 	NULL}
+};
+
+const u8 SENSOR_DEVICE_CB_CLUSTER_NUM2 = (sizeof(g_sensorDeviceClusterList2)/sizeof(g_sensorDeviceClusterList2[0]));
+#endif
 
 
 #if NV_ENABLE

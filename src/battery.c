@@ -25,7 +25,7 @@ void battery_detect(bool startup_flg)
 	if(startup_flg)
 		battery_level = BATTERY_SAFETY_THRESHOLD;
 	adc_channel_init(SHL_ADC_VBAT);
-	measured_battery.mv = get_adc_mv();
+	measured_battery.mv = get_adc_mv(0);
 	if(measured_battery.mv < battery_level){
 #if PM_ENABLE
 #if USE_DISPLAY

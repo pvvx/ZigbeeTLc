@@ -28,6 +28,10 @@
 #if USE_TRIGGER
 #include "trigger.h"
 #endif
+#if (DEV_SERVICES & SERVICE_PLM)
+#include "rh.h"
+#endif
+
 /**********************************************************************
  * LOCAL CONSTANTS
  */
@@ -235,6 +239,9 @@ void read_sensor_and_save(void) {
 		}
 #endif
 	}
+#if (DEV_SERVICES & SERVICE_PLM)
+	g_zcl_MoistureAttrs.measuredValue = sensor_rh.rh;
+#endif
 	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
     g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;
 #if	USE_DISPLAY
@@ -488,11 +495,16 @@ void user_app_init(void)
 
 	/* Register endPoint */
 	af_endpointRegister(SENSOR_DEVICE_ENDPOINT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, zcl_rx_handler, NULL);
-
+#if (DEV_SERVICES & SERVICE_PLM)
+	af_endpointRegister(SENSOR_DEVICE_ENDPOINT2, (af_simple_descriptor_t *)&sensorDevice_simpleDesc2, zcl_rx_handler, NULL);
+#endif
 	zcl_reportingTabInit();
 
 	/* Register ZCL specific cluster information */
 	zcl_register(SENSOR_DEVICE_ENDPOINT, SENSOR_DEVICE_CB_CLUSTER_NUM, (zcl_specClusterInfo_t *)g_sensorDeviceClusterList);
+#if (DEV_SERVICES & SERVICE_PLM)
+	zcl_register(SENSOR_DEVICE_ENDPOINT2, SENSOR_DEVICE_CB_CLUSTER_NUM2, (zcl_specClusterInfo_t *)g_sensorDeviceClusterList2);
+#endif
 
 #if ZCL_OTA_SUPPORT
     ota_init(OTA_TYPE_CLIENT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, &sensorDevice_otaInfo, &sensorDevice_otaCb);
@@ -553,6 +565,23 @@ void user_app_init(void)
 #endif
 		(u8 *)&reportableChange
 	);
+#if (DEV_SERVICES & SERVICE_PLM)
+    reportableChange = 50;
+	bdb_defaultReportingCfg(
+		SENSOR_DEVICE_ENDPOINT2,
+		HA_PROFILE_ID,
+		ZCL_CLUSTER_MS_RELATIVE_HUMIDITY,
+		ZCL_RELATIVE_HUMIDITY_ATTRID_MEASUREDVALUE,
+#if READ_SENSOR_TIMER_SEC > 30
+		30,
+		180,
+#else
+		READ_SENSOR_TIMER_SEC,
+		5*60,
+#endif
+		(u8 *)&reportableChange
+	);
+#endif
     reportableChange = 50;
 	bdb_defaultReportingCfg(
 		SENSOR_DEVICE_ENDPOINT,

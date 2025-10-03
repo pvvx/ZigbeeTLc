@@ -28,6 +28,7 @@ $(OUT_PATH)$(SRC_DIR)/epd_mho_c401.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/battery.o \
 $(OUT_PATH)$(SRC_DIR)/sensors.o \
+$(OUT_PATH)$(SRC_DIR)/rh2.o \
 $(OUT_PATH)$(SRC_DIR)/sensorEpCfg.o \
 $(OUT_PATH)$(SRC_DIR)/zb_appCb.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \

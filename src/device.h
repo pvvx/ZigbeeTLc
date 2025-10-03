@@ -7,6 +7,9 @@
  * CONSTANT
  */
 #define SENSOR_DEVICE_ENDPOINT  0x01
+#define SENSOR_DEVICE_ENDPOINT2  0x02
+#define SENSOR_DEVICE_ENDPOINT3  0x03
+#define SENSOR_DEVICE_ENDPOINT4  0x04
 
 /**********************************************************************
  * TYPEDEFS
@@ -114,6 +117,13 @@ typedef struct {
 	u16 tolerance;
 }zcl_relHumidityAttr_t;
 
+typedef struct {
+	u16 measuredValue;
+	u16 minValue;
+	u16 maxValue;
+	u16 tolerance;
+}zcl_MoistureAttr_t;
+
 /**
  *  @brief Defined for thermostat UI config cluster attributes
  */
@@ -169,7 +179,7 @@ extern bdb_appCb_t g_zbDemoBdbCb;
 
 extern bdb_commissionSetting_t g_bdbCommissionSetting;
 
-extern u8 SENSOR_DEVICE_CB_CLUSTER_NUM;
+extern const u8 SENSOR_DEVICE_CB_CLUSTER_NUM;
 extern const zcl_specClusterInfo_t g_sensorDeviceClusterList[];
 extern const af_simple_descriptor_t sensorDevice_simpleDesc;
 
@@ -187,6 +197,13 @@ extern zcl_temperatureAttr_t g_zcl_temperatureAttrs;
 #ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
 extern zcl_relHumidityAttr_t g_zcl_relHumidityAttrs;
 #endif
+#if (DEV_SERVICES & SERVICE_PLM)
+extern const u8 SENSOR_DEVICE_CB_CLUSTER_NUM2;
+extern const zcl_specClusterInfo_t g_sensorDeviceClusterList2[];
+extern const af_simple_descriptor_t sensorDevice_simpleDesc2;
+extern zcl_MoistureAttr_t g_zcl_MoistureAttrs;
+#endif
+
 // extern zcl_iasZoneAttr_t g_zcl_iasZoneAttrs;
 extern zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs;
 

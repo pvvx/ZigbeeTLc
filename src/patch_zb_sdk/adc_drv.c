@@ -106,7 +106,7 @@ void adc_channel_init(ADC_InputPchTypeDef p_ain) {
 }
 
 _attribute_ram_code_sec_
-u16 get_adc_mv(void) { // ADC_InputPchTypeDef
+u16 get_adc_mv(int flg) { // ADC_InputPchTypeDef
 	volatile unsigned int adc_dat_buf[ADC_BUF_COUNT];
 	u16 temp;
 	int i, j;
@@ -142,8 +142,16 @@ u16 get_adc_mv(void) { // ADC_InputPchTypeDef
 	}
 	dfifo_disable_dfifo2();
 	adc_power_on_sar_adc(0); // - 0.4 mA
-	adc_average = (adc_sample[2] + adc_sample[3] + adc_sample[4]
-			+ adc_sample[5]) / 4;
+	adc_average = adc_sample[2] + adc_sample[3] + adc_sample[4]
+			+ adc_sample[5];
+	if(flg)
+		return adc_average;
+	adc_average >>= 2;
+#if BOARD == BOARD_MJWSD05MMC
+	return (adc_average * 1686) >> 10; // adc_vref default: 1175 (mV)
+#else
 	return (adc_average * ADC_CALIBRATION_VREF) >> 10; // adc_vref default: 1175 (mV)
+#endif
+
 }
 

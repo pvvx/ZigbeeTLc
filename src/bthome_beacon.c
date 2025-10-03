@@ -13,6 +13,9 @@
 #include "battery.h"
 #include "bthome_beacon.h"
 #include "zigbee_ble_switch.h"
+#if (DEV_SERVICES & SERVICE_PLM)
+#include "rh.h"
+#endif
 
 #define USE_OUT_AVERAGE_BATTERY		1
 
@@ -51,6 +54,10 @@ u8 bthome_data_beacon(padv_bthome_ns_ht_t p, u32 count) {
 		p->data.temperature = sensor_ht.temp; // x0.01 C
 		p->data.h_id = BtHomeID_humidity;
 		p->data.humidity = sensor_ht.humi; // x0.01 %
+#if (DEV_SERVICES & SERVICE_PLM)
+		p->data.m_id = BtHomeID_moisture16;
+		p->data.moisture = sensor_rh.rh; // x0.01 %
+#endif
 #if USE_OUT_AVERAGE_BATTERY
 		p->data.battery_mv = measured_battery.mv; // x mV
 #else
