@@ -20,7 +20,8 @@ Currently supported devices:
  [ZG-227Z](https://pvvx.github.io/ZG-227Z),
  [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
  [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro),
- [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd).
+ [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd),
+ [ZG-303Z](https://pvvx.github.io/ZG-303Z).
 
 * Work with modification:
  [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
