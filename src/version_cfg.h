@@ -89,7 +89,7 @@
 #define BOARD_TS0202_PIR2 			41 // Tuya TS0202_TZ3040_bb6xaihh PIR
 //#define BOARD_MINTAGF2			42 // https://github.com/pvvx/THB2
 #define BOARD_ZG303Z				44  // ZG-303Z Plant monitor, 2xAAA, AHT20
-
+#define BOARD_ZBEACON_TH01			45  // Zigbee ZBEACON-TH01
 
 /* Board define */
 #ifndef BOARD

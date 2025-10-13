@@ -126,6 +126,8 @@
 #include "board_zyzth02pro.h"
 #elif BOARD == BOARD_ZG_227Z
 #include "board_zg_227z.h"
+#elif BOARD == BOARD_ZBEACON_TH01
+#include "board_zbeacon_th01.h"
 #elif BOARD == BOARD_TS0202_PIR1
 #include "board_pirs.h"
 #elif BOARD == BOARD_MJWSD06MMC
