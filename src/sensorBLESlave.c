@@ -683,6 +683,10 @@ void user_ble_init(bool isRetention){
 		tbl_scanRsp.name[0] = 'Z';
 		tbl_scanRsp.name[1] = 'G';
 		tbl_scanRsp.name[2] = '2';
+#elif BOARD == BOARD_ZBEACON_TH01
+		tbl_scanRsp.name[0] = 'Z';
+		tbl_scanRsp.name[1] = 'B';
+		tbl_scanRsp.name[2] = '1';
 #elif BOARD == BOARD_MJWSD06MMC
 		tbl_scanRsp.name[0] = 'M';
 		tbl_scanRsp.name[1] = 'J';
