@@ -89,11 +89,12 @@
 #define BOARD_TS0202_PIR2 			41 // Tuya TS0202_TZ3040_bb6xaihh PIR
 //#define BOARD_MINTAGF2			42 // https://github.com/pvvx/THB2
 #define BOARD_ZG303Z				44  // ZG-303Z Plant monitor, 2xAAA, AHT20
+#define BOARD_ZBEACON_TH01			45  // ZBEACON-TH01, 2xAAA , SHT4X
 
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_ZG303Z // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_ZBEACON_TH01 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -120,10 +121,10 @@
 
 #if USE_BLE
 #define APP_RELEASE				0x00	//BCD app release "0.0"
-#define APP_BUILD				0x08	//BCD app build "0.4"
+#define APP_BUILD				0x09	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x29	//BCD app build "2.9"
+#define APP_BUILD				0x30	//BCD app build "2.9"
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

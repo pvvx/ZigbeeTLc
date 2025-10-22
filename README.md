@@ -21,7 +21,8 @@ Currently supported devices:
  [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
  [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro),
  [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd),
- [ZG-303Z](https://pvvx.github.io/ZG-303Z).
+ [ZG-303Z](https://pvvx.github.io/ZG-303Z),
+ [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01).
 
 * Work with modification:
  [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
@@ -126,6 +127,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x0226 | ZYZTH01 | ZY-ZTH02-Pro, ZY-ZTH03-Pro |
 | 0x0227 | ZG227 | ZG227 |
 | 0x022C | ZG303Z | ZG-303Z |
+| 0x022D | ZBTH01 | ZBeacon-TH01 |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
@@ -214,7 +216,10 @@ The flashing "BT" icon is called by the "identify" command.
 
 28. Ver 0.1.2.8. Changed LongPollControl (ZHA) setting control algorithm and measurement interval (limit 3..30 seconds). For MHO-C401N added E-Ink refresh after 1024 display updates.
 
-29. Ver 0.1.2.9. Added new version LYWSD03MMC HW:B1.6 (custom name B1.1). Added ZG-303Z.
+29. Ver 0.1.2.9. Added new version LYWSD03MMC HW:B1.6 (custom name B1.1). Added [ZG-303Z](https://pvvx.github.io/ZG-303Z).
+
+30. Beta Ver 0.1.3.0. Added [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01). Display auto-detection update for LYWSD03MMC B1.6.
+
 
 ## Make
 
@@ -264,7 +269,7 @@ On Windows, it is possible to enable multi-threaded assembly to build the entire
 
 The start of the project with Zigbee on TLSR825x was inspired by the following original works:
 
-* https://github.com/slacky1965/watermeter_zed
+* https://github.com/slacky1965
 
 * https://github.com/devbis/z03mmc
 

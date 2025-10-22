@@ -132,6 +132,8 @@
 #include "board_mjwsd06mmc.h"
 #elif BOARD == BOARD_ZG303Z
 #include "board_zg303z.h"
+#elif BOARD == BOARD_ZBEACON_TH01
+#include "board_zbeacon_th01.h"
 #else
 #error "Define BOARD!"
 #endif

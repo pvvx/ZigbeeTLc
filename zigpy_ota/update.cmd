@@ -58,6 +58,12 @@ start /wait node scripts/add.js ../bin/%%a
 )
 copy /Y index.json ..\bin\zg303z_sonoff2z.json
 
+echo [] > index.json
+for %%a in (../bin/1286-0202-10933607-ZBTH01*.zigbee) do (
+start /wait node scripts/add.js ../bin/%%a
+)
+copy /Y index.json ..\bin\zbeaconth01_tuya2z.json
+
 
 del *.zigbee
 del index.json
