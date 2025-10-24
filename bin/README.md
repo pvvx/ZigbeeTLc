@@ -11,6 +11,7 @@
 * 1002-0203-57013001-ZYZTH02z_xxxx.zigbee - firmware for transferring ZYZTH02 Tuya to ZigbeeTlc
 * 1002-d3a3-66993001-ZYZTH03pz_xxxx.zigbee  - firmware for transferring ZYZTH02/03-pro Tuya to ZigbeeTlc
 * 1286-0202-10933607-ZBTH01z__xxxx.zigbee - firmware for transferring ZBTH01 Tuya to ZigbeeTlc
+* 1286-0203-20973001-ZG303Zz_xxxx.zigbee  - firmware for transferring ZG-303Z Tuya to ZigbeeTlc
 
 * xxxxx_vNN.bin - firmware files for the hardware programmer
 
@@ -27,6 +28,7 @@
 * 1002-0203-57013001-ZYZTH02z_xxxxx.zigbee - прошивки для перехода ZYZTH02 из Tuya в ZigbeeTlc
 * 1002-d3a3-66993001-ZYZTH03pz_xxxx.zigbee  - прошивки для перехода ZYZTH02/03-pro Tuya в ZigbeeTlc
 * 1286-0202-10933607-ZBTH01z__xxxx.zigbee  - прошивки для перехода ZBTH01 из Tuya в ZigbeeTlc
+* 1286-0203-20973001-ZG303Zz_xxxx.zigbee  - прошивки для перехода ZG-303Z из Tuya в ZigbeeTlc
 * xxxxx_vNN.bin - файлы прошивки для программатора или BLE OTA
 
 * devbis - файлы прошивок для варианта https://github.com/devbis

@@ -133,7 +133,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 
 * Zigbee OTA for 128 KB firmware takes 677 seconds with an average consumption of about 1 mA.
 
-* [Full list of supported devices](https://pvvx.github.io/).
+* [Full list of supported devices](https://github.com/pvvx/pvvx.github.io/blob/master/README.md).
 
 
 ## Display decimal places for temperature, humidity and battery charge in ZHA.
