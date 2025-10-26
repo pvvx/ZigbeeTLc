@@ -29,20 +29,18 @@ Currently supported devices:
  [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/),
  [ZTH05](https://pvvx.github.io/TS0601_TZE204).
 
-Additional alternative firmware options for some devices with TLSR825x can be found at [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
+Additional alternative firmware options for some devices with TLSR825x can be found at [github.com/slacky1965](https://github.com/slacky1965?tab=repositories), [romasku/tuya-zigbee-switch](https://github.com/romasku/tuya-zigbee-switch), [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
 
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
-### Warning(!): Firmware version 0.1.2.6 is built on a new version of SDK from Telink. Requires reset of all previous settings and new binding. Old values from previous versions remembered by the device are incompatible.
-
-* For new LYWSD03MMC variants released since 03.2025 there is no Zigbee firmware (not supported yet).
+### Warning(!)
 
 New versions check that the configuration written to the device is compatible with the one updated for the new SDK (i.e. compatible with version 0.1.2.5). If it is not compatible, all settings, including bindings, are deleted. In this case, the Zigbee coordinator sees a device with the same IEEE number and a "rebinding" is performed.
 
 * Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
 * [Average consumption](https://github.com/pvvx/ZigbeeTLc/issues/37#issuecomment-1937844181) for Xiaomi LYWSD03MMC HW: B1.4 - ~15 uA.
 
-## To flash the Zigbee firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
+## To flash the Zigbee from BLE firmware, use a Google Chrome, Microsoft Edge or Opera Browser.*
 
 1. Go to the [Over-the-air Webupdater Page TelinkMiFlasher.html](https://pvvx.github.io/ATC_MiThermometer/TelinkMiFlasher.html)
 2. If using Android, Windows, Linux: Ensure you enabled "experimental web platform features". Therefore copy the according link (i.e. chrome://flags/#enable-experimental-web-platform-features for Chrome), open a new browser tab, paste the copied URL. Now sten the _Experimental Web Platform features_ flag to _Enabled_. Then restart the browser.
