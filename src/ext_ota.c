@@ -18,7 +18,6 @@
 #define BIN_SIZE_MAX_OTA		0x036000
 #define BLE_MAC_FADDR			0x076000
 
-
 static const u32 flag_addr_ok = 0x33CC55AA;
 
 extern int flash_main(void);
@@ -41,6 +40,7 @@ void tuya_zigbee_ota(void) {
 		if(buf_blk[2] != id) // 0x020000 != bootable
 			return;
 	}
+	// Run time: ~3700 ms
 	// faddrr: 0x008000 == bootable || 0x020000 == bootable
 	flash_read_page(faddrr, sizeof(buf_blk), (unsigned char *) &buf_blk);
 	if(buf_blk[2] == id && buf_blk[6] > FLASH_SECTOR_SIZE && buf_blk[6] < BIN_SIZE_MAX_OTA) {
@@ -72,6 +72,7 @@ void tuya_zigbee_ota(void) {
 
 _attribute_ram_code_
 int main(void) {
+	// Проверка на старт из Tuya boot_loder (старт с 0x20000 не проверяется)
 	if(*(u32 *)(ZIGBEE_BOOT_OTA_FADDR + 8) == ID_BOOTABLE
 	|| flag_addr_ok != 0x33CC55AA) {
 		// clock_init(SYS_CLK_24M_Crystal);

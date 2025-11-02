@@ -107,6 +107,7 @@ startup_state_e drv_platform_init(void)
 	gpio_init(TRUE);
 
 	if(state != SYSTEM_DEEP_RETENTION) {
+		// Проверка на старт по 0x20000
 		tuya_zigbee_ota();
 #if UART_PRINTF_MODE
 		DEBUG_TX_PIN_INIT();

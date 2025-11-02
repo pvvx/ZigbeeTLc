@@ -90,11 +90,12 @@
 //#define BOARD_MINTAGF2			42 // https://github.com/pvvx/THB2
 #define BOARD_ZG303Z				44  // ZG-303Z Plant monitor, 2xAAA, AHT20
 #define BOARD_ZBEACON_TH01			45  // ZBEACON-TH01, 2xAAA , SHT4X
+#define BOARD_ZB_MC					46  // ZigBee-MC, 2xAAA, CHT8305
 
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_ZBEACON_TH01 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_ZB_MC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */

@@ -117,6 +117,7 @@ startup_state_e drv_platform_init(void)
 
 	/* Get calibration info to improve performance */
 	if(state != SYSTEM_DEEP_RETENTION){
+		// Проверка на старт по 0x20000
 		tuya_zigbee_ota();
 #if PM_ENABLE
 		/* Initialize 32K for timer wakeup. */

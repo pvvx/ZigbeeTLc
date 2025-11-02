@@ -245,6 +245,13 @@ flash_ble: $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) we 0x20000 $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -m i
 
+# test start from Tuya boot_loader
+flash_tuya: $(BIN_FILE)
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z15 -a-50 -s i
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) we 0 tuya_boot.bin
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) we 0x8000 $(BIN_FILE)
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -m i	
+
 reset:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -z15 -m -w i
 

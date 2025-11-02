@@ -172,7 +172,7 @@ _attribute_ram_code_sec_noinline_ unsigned char flash_mspi_write_ram(unsigned ch
  *              If an abnormality occurs, the firmware and user data may be rewritten, resulting in the final Product failure)
  */
 
-_attribute_ram_code_sec_
+_attribute_ram_code_sec_noinline_
 void flash_erase_sector(unsigned long addr)
 {
 	flash_mspi_write_ram(FLASH_SECT_ERASE_CMD, addr, 1, NULL, 0);
@@ -194,7 +194,7 @@ void flash_erase_sector(unsigned long addr)
  *              there may be a risk of error in the operation of the flash (especially for the write and erase operations.
  *              If an abnormality occurs, the firmware and user data may be rewritten, resulting in the final Product failure)
  */
-_attribute_ram_code_sec_
+_attribute_ram_code_sec_noinline_
 void flash_read_page(unsigned long addr, unsigned long len, unsigned char *buf)
 {
 	flash_mspi_read_ram(FLASH_READ_CMD, addr, 1, 0, buf, len);
@@ -218,7 +218,7 @@ void flash_read_page(unsigned long addr, unsigned long len, unsigned char *buf)
  *              there may be a risk of error in the operation of the flash (especially for the write and erase operations.
  *              If an abnormality occurs, the firmware and user data may be rewritten, resulting in the final Product failure)
  */
-_attribute_ram_code_sec_
+_attribute_ram_code_sec_noinline_
 void flash_write_page(unsigned long addr, unsigned long len, unsigned char *buf)
 {
 	unsigned int ns = PAGE_SIZE - (addr&(PAGE_SIZE - 1));
@@ -272,7 +272,7 @@ unsigned char flash_read_status(unsigned char cmd)
  *              there may be a risk of error in the operation of the flash (especially for the write and erase operations.
  *              If an abnormality occurs, the firmware and user data may be rewritten, resulting in the final Product failure)
  */
-_attribute_ram_code_sec_
+_attribute_ram_code_sec_noinline_
 void flash_write_status(flash_status_typedef_e type , unsigned short data)
 {
 	unsigned char buf[2];
