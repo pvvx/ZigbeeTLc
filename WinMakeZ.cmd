@@ -64,6 +64,9 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG303Z POJECT_DEF="-DBOARD=BOARD_ZG3
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZBTH01 POJECT_DEF="-DBOARD=BOARD_ZBEACON_TH01"
 @if not exist "bin\ZBTH01%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZB_MC POJECT_DEF="-DBOARD=BOARD_ZB_MC"
+@if not exist "bin\ZB_MC%SWVER%.bin" goto :error
 python3 make_z\zb_bin_ota.py bin\ZTS0201Z3000%SWVER%.bin bin\TS0201z%SWVER% -m0x1141 -i0xd3a3 -v0x01983001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZTH01Z%SWVER%.bin bin\TH01Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZTH02Z%SWVER%.bin bin\TH02Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
