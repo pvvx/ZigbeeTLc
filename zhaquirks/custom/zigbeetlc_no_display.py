@@ -13,7 +13,7 @@ from zigpy.zcl.foundation import ZCLAttributeDef
 from zhaquirks import CustomCluster
 
 
-class CustomUserInterface2Cluster(CustomCluster, UserInterface):
+class ZigbeeTlcUserInterface2Cluster(CustomCluster, UserInterface):
     """Custom User Interface Cluster with smiley control."""
 
     class AttributeDefs(UserInterface.AttributeDefs):
@@ -53,11 +53,11 @@ class CustomUserInterface2Cluster(CustomCluster, UserInterface):
     .applies_to("Tuya", "ZG-227Z-z")
     .applies_to("Tuya", "MC-z")
     .applies_to("ZBeacon", "TH01-z")
-    .removes(CustomUserInterface2Cluster.cluster_id, cluster_type=ClusterType.Client)
-    .adds(CustomUserInterface2Cluster)
+    .removes(ZigbeeTlcUserInterface2Cluster.cluster_id, cluster_type=ClusterType.Client)
+    .adds(ZigbeeTlcUserInterface2Cluster)
     .number(
-        CustomUserInterface2Cluster.AttributeDefs.temperature_offset.name,
-        CustomUserInterface2Cluster.cluster_id,
+        ZigbeeTlcUserInterface2Cluster.AttributeDefs.temperature_offset.name,
+        ZigbeeTlcUserInterface2Cluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -68,8 +68,8 @@ class CustomUserInterface2Cluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterface2Cluster.AttributeDefs.humidity_offset.name,
-        CustomUserInterface2Cluster.cluster_id,
+        ZigbeeTlcUserInterface2Cluster.AttributeDefs.humidity_offset.name,
+        ZigbeeTlcUserInterface2Cluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -80,8 +80,8 @@ class CustomUserInterface2Cluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterface2Cluster.AttributeDefs.measurement_interval.name,
-        CustomUserInterface2Cluster.cluster_id,
+        ZigbeeTlcUserInterface2Cluster.AttributeDefs.measurement_interval.name,
+        ZigbeeTlcUserInterface2Cluster.cluster_id,
         min_value=3,
         max_value=255,
         unit=UnitOfTime.SECONDS,

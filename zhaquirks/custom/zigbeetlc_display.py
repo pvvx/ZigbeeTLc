@@ -20,7 +20,7 @@ class Display(t.enum8):
     On = 0x00
 
 
-class CustomUserInterfaceCluster(CustomCluster, UserInterface):
+class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
     """Custom User Interface Cluster with smiley control."""
 
     class AttributeDefs(UserInterface.AttributeDefs):
@@ -105,11 +105,11 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
     .applies_to("Tuya", "TH05-z")
     .applies_to("Tuya", "LKTMZL02-z")
     .applies_to("Tuya", "ZY-ZTH01-z")
-    .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
-    .adds(CustomUserInterfaceCluster)
+    .removes(ZigbeeTlcUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
+    .adds(ZigbeeTlcUserInterfaceCluster)
     .number(
-        CustomUserInterfaceCluster.AttributeDefs.temperature_offset.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.temperature_offset.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -120,8 +120,8 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterfaceCluster.AttributeDefs.humidity_offset.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.humidity_offset.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -132,8 +132,8 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterfaceCluster.AttributeDefs.comfort_temperature_min.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_temperature_min.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -144,8 +144,8 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterfaceCluster.AttributeDefs.comfort_temperature_max.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_temperature_max.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -156,8 +156,8 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterfaceCluster.AttributeDefs.comfort_humidity_min.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_humidity_min.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         min_value=0,
         max_value=99,
         step=1,
@@ -168,8 +168,8 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterfaceCluster.AttributeDefs.comfort_humidity_max.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_humidity_max.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         min_value=0,
         max_value=99,
         step=1,
@@ -180,8 +180,8 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        CustomUserInterfaceCluster.AttributeDefs.measurement_interval.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.measurement_interval.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         min_value=3,
         max_value=255,
         unit=UnitOfTime.SECONDS,
@@ -190,16 +190,16 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .switch(
-        CustomUserInterfaceCluster.AttributeDefs.display.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.display.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         off_value=1,
         on_value=0,
         translation_key="display_enabled",
         fallback_name="Display enabled",
     )
     .switch(
-        CustomUserInterfaceCluster.AttributeDefs.schedule_programming_visibility.name,
-        CustomUserInterfaceCluster.cluster_id,
+        ZigbeeTlcUserInterfaceCluster.AttributeDefs.schedule_programming_visibility.name,
+        ZigbeeTlcUserInterfaceCluster.cluster_id,
         translation_key="show_smiley",
         fallback_name="Show smiley",
         off_value=ScheduleProgrammingVisibility.Disabled,
