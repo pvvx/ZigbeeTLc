@@ -113,7 +113,7 @@ static void lcd_set_buf_uart_spi(u8 *p) {
 //---------------------
 // new B1.6 (SPI LCD)
 
-#define CLK_DELAY_US	24 // 48 -> 10 kHz
+#define CLK_DELAY_US	32 // =24 -> 20 kHz, =48 -> 10 kHz
 
 _SCR_CODE_SEC_
 static void lcd_send_spi_byte(u8 b) {

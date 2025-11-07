@@ -22,7 +22,8 @@ Currently supported devices:
  [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro),
  [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd),
  [ZG-303Z](https://pvvx.github.io/ZG-303Z),
- [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01).
+ [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01),
+ [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC).
 
 * Work with modification:
  [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
@@ -216,7 +217,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 29. Ver 0.1.2.9. Added new version LYWSD03MMC HW:B1.6 (custom name B1.1). Added [ZG-303Z](https://pvvx.github.io/ZG-303Z).
 
-30. Beta Ver 0.1.3.0. Added [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01). Display auto-detection update for LYWSD03MMC B1.6.
+30. Ver 0.1.3.0. Added [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01), [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC). Display auto-detection update for LYWSD03MMC B1.6 (SPI speed has been reduced). Zigbee SDK update to V3.7.2.0(PR).
 
 
 ## Make

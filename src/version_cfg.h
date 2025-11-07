@@ -74,28 +74,28 @@
 //#define BOARD_THB3				26 // https://github.com/pvvx/THB2
 #define BOARD_ZTH01   				27 // ZigBee ZTH01
 #define BOARD_ZTH02   				28 // ZigBee ZTH02
-//#define BOARD_PLM1 				29  // Tuya BLE Plant monitor ECF-SGS01-A rev1.3 (BT3L Tuya module)  (not yet published at the moment)
+//#define BOARD_PLM1 				29 // Tuya BLE Plant monitor ECF-SGS01-A rev1.3 (BT3L Tuya module)  (not yet published at the moment)
 #define BOARD_ZTH03   				30 // ZigBee TH03 TS0201(_TZ3000_gohcgzj7, _TZ3000_bguser20) LCD
 #define BOARD_LKTMZL02				31 // ZigBee LKTMZL02 LCD
 //#define BOARD_KEY2 				32 // KEY2(iSearching) https://github.com/pvvx/THB2
 #define BOARD_ZTH05					33 // Tuya ZigBee TS0601_TZE204
 //#define BOARD_TH04				34 // https://github.com/pvvx/THB2
-#define BOARD_CB3S					35  // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
-#define BOARD_HS09					36  // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
+#define BOARD_CB3S					35 // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
+#define BOARD_HS09					36 // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
 #define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x
-#define BOARD_ZYZTH01				38  // Tuya ZY-ZTH02Pro/ZY-ZTH03Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
-#define BOARD_ZG_227Z				39  // Zigbee ZG-227Z
+#define BOARD_ZYZTH01				38 // Tuya ZY-ZTH02Pro/ZY-ZTH03Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
+#define BOARD_ZG_227Z				39 // Zigbee ZG-227Z
 #define BOARD_TS0202_PIR1 			40 // Tuya TS0202_TZ3000_6ygjfyll PIR
 #define BOARD_TS0202_PIR2 			41 // Tuya TS0202_TZ3040_bb6xaihh PIR
 //#define BOARD_MINTAGF2			42 // https://github.com/pvvx/THB2
-#define BOARD_ZG303Z				44  // ZG-303Z Plant monitor, 2xAAA, AHT20
-#define BOARD_ZBEACON_TH01			45  // ZBEACON-TH01, 2xAAA , SHT4X
-#define BOARD_ZB_MC					46  // ZigBee-MC, 2xAAA, CHT8305
+#define BOARD_ZG303Z				44 // ZG-303Z Plant monitor, 2xAAA, AHT20
+#define BOARD_ZBEACON_TH01			45 // ZBEACON-TH01, 2xAAA , SHT4X
+#define BOARD_ZB_MC					46 // ZigBee-MC, 2xAAA, CHT8305
 
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_ZB_MC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */

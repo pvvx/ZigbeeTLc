@@ -201,3 +201,10 @@ void drv_generateRandomData(u8 *pData, u8 len)
 		randNums >>= 8;
 	}
 }
+
+
+bool drv_get_primary_ieee_addr(u8 *addr)
+{
+    /* no primary IEEE */
+    return FALSE;
+}

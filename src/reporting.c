@@ -7,6 +7,8 @@
 
 //old sdk:  extern void reportAttr(reportCfgInfo_t *pEntry);
 
+extern bool reportableChangeValueChk(u8 dataType, u8 *curValue, u8 *prevValue, u8 *reportableChange);
+
 /*********************************************************************
  * @fn      reportAttr
  *

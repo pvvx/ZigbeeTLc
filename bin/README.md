@@ -66,5 +66,17 @@
 | 38 | 0x0226 | [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro), [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd) TS0201_TZ3000_v1w2k9dd LCD | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 | 39 | 0x0227 | [ZG-227Z](https://pvvx.github.io/ZG-227Z) TS0601_TZE200_a8sdabtg | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |	
 | 44 | 0x022C | [ZG-303Z](https://pvvx.github.io/ZG-303Z) - HOBEIAN ZG-303Z Sonoff/Tuya ZigBee Soil moisture sensor | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
-| 45 | 0x022D | [ZBEACON-TH01](https://www.zigbee2mqtt.io/devices/TH01.html) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
+| 45 | 0x022D | [ZBEACON-TH01](https://pvvx.github.io/Zbeacon-TH01) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
+| 46 | 0x022E | [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 
+* [Identification numbers of all firmwares](https://github.com/pvvx/pvvx.github.io?tab=readme-ov-file#id-numbers-of-alternative-firmware)
+
+### All [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc):
+
+| Manufacturer Code | Image Type | File Version | Stack Version |
+| -- | -- | -- | -- |
+| 0x1141 - Telink | 0x02nn - 02: TLSR825x, nn: HW | 0xrrbb - rr: App release, bb: App build | 0x3001 - Zigbee v3.0, Release 0.1 |
+
+* "Manufacture name" and "Device name" are user-defined. They have the write permission attribute.
+When changing the name, it is saved in Flash.
+It is reset to default only by holding down the button (more than 15 seconds).
