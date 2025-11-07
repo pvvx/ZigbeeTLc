@@ -53,6 +53,12 @@ start /wait node scripts/add.js ../bin/%%a
 copy /Y index.json ..\bin\zyzth02_tuya2z.json
 
 echo [] > index.json
+for %%a in (../bin/1002-d3a3-66993001-ZYZTH03pz_*.zigbee) do (
+start /wait node scripts/add.js ../bin/%%a
+)
+copy /Y index.json ..\bin\zyzth03p_tuya2z.json
+
+echo [] > index.json
 for %%a in (../bin/1286-0203-20973001-*.zigbee) do (
 start /wait node scripts/add.js ../bin/%%a
 )
