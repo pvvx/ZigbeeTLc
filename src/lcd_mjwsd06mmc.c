@@ -46,7 +46,7 @@ const u8 display_numbers[] = {
 const u8 display_small_numbers[] = {
         //76543210
 		0b11111010, // 0
-		0b00001010, // 1
+		0b01100000, // 1
 		0b11010110, // 2
 		0b11110100, // 3
 		0b01101100, // 4
@@ -131,8 +131,11 @@ void init_lcd(void){
 		else {
 			pm_wait_us(200);
 			scr.blink_flg = 0;
-			memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
-			update_lcd();
+			memset(&scr.display_cmp_buff[1], 0xff, sizeof(scr.display_cmp_buff) - 1);
+#if !USE_BLE
+			show_ble_symbol(false);
+#endif
+			send_to_lcd();
 		}
 	}
 }

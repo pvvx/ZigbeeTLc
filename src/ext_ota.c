@@ -69,7 +69,7 @@ void tuya_zigbee_ota(void) {
 			reg_pwdn_ctrl = BIT(5);
 	}
 }
-
+	
 _attribute_ram_code_
 int main(void) {
 	// Проверка на старт из Tuya boot_loder (старт с 0x20000 не проверяется)

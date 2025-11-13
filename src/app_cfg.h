@@ -282,9 +282,6 @@ typedef enum{
 /* Watch dog module */
 #define MODULE_WATCHDOG_ENABLE						0
 
-/* UART module */
-#define	MODULE_UART_ENABLE							0
-
 #if (ZBHCI_USB_PRINT || ZBHCI_USB_CDC || ZBHCI_USB_HID || ZBHCI_UART)
 	#define ZBHCI_EN								1
 #endif
