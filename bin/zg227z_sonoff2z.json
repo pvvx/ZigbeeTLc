@@ -5,6 +5,7 @@
         "manufacturerCode": 4742,
         "imageType": 515,
         "sha512": "af050e3647a15ce6c64e1d6a52ee69e3eb4a14769c9142bcdc941eb5f83894b6440a0d8cd715c6468bef93c4dbef385e3c67061ddaf9f293913b2816d1f075b2",
+        "otaHeaderString": "Sonoff to ZigbeeTlc",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1286-0203-10983001-ZG227Zz_v0130.zigbee"
     }
 ]

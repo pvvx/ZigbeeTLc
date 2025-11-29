@@ -5,6 +5,7 @@
         "manufacturerCode": 4417,
         "imageType": 513,
         "sha512": "918e866a8da789eea97a7fcc6469b2e7a0612cf6409e0c1c870ffab267fca25d42b62af9628ae67cb2afc991f855152abcafd3169b6d6c8f4e88b240c4c254f4",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0201-01303001-ZMHOC401.zigbee"
     },
     {
@@ -13,6 +14,7 @@
         "manufacturerCode": 4417,
         "imageType": 514,
         "sha512": "f84ce057b939696311f7dd91a07c6e62ad8502c9e30dbacfbc444c580db8aa61afc0c8328d8dc60c36365e1ea68d2721c9bb323a6176077933dee55e1acbe64b",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0202-01303001-ZCGG1.zigbee"
     },
     {
@@ -21,6 +23,7 @@
         "manufacturerCode": 4417,
         "imageType": 518,
         "sha512": "ade707fe7a355687a2f74e37b645f0e140e3782f453f6642894012a6b18f07d9801fa8daefadd3576f190ce9069371f15ff2b378aa01ecca8ca743b279e925bc",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0206-01303001-ZCGDK2.zigbee"
     },
     {
@@ -29,6 +32,7 @@
         "manufacturerCode": 4417,
         "imageType": 519,
         "sha512": "5cf171116fd41a2e8d8b679dc5752d3009d1a6d0f6777582fce24af8cf60d5f2ab2ddf54cf715289245c201bd6b27d8d0e948cad6f34c6a1b53547a8470bf2f8",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0207-01303001-ZCGG1N.zigbee"
     },
     {
@@ -37,6 +41,7 @@
         "manufacturerCode": 4417,
         "imageType": 520,
         "sha512": "b5428807a575193ad946850594c2f73647e295eda26062bab1bfc3d80f104a52b0080cb4aa32e4624027d9fb98bd845280f19233cd0d43f08af1df65504921c0",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0208-01303001-ZMHOC401N.zigbee"
     },
     {
@@ -45,6 +50,7 @@
         "manufacturerCode": 4417,
         "imageType": 522,
         "sha512": "72de1fbf188b93ed0b64f7297414c0b03b70c9297c348afd68687df69d717e4ec255b45eef2bc8cbee7a847d65163b7040c63d6ecb9300109ca919af509efb2a",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020a-01303001-Z03MMC.zigbee"
     },
     {
@@ -53,6 +59,7 @@
         "manufacturerCode": 4417,
         "imageType": 523,
         "sha512": "9cafb367f9e5d36b9b2975067c7a2979c21a6ad2c634a0726615ec113b980b8ae5b9685be11cb532aa3361e581c80e2d949a50a9080980e7a27eb0b90b18c5dc",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020b-01303001-ZMHOC122.zigbee"
     },
     {
@@ -61,6 +68,7 @@
         "manufacturerCode": 4417,
         "imageType": 525,
         "sha512": "f4e9e108000f93fef1b80f2a9c61c6d1aff5b2dddd7773615be0c0c20f982bb3db058d8fb59cc7cd3f7090e93751d53a50c3e74026ede26dc75c55238ea71aa2",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020d-01303001-Z06MMC.zigbee"
     },
     {
@@ -69,6 +77,7 @@
         "manufacturerCode": 4417,
         "imageType": 529,
         "sha512": "e28d02e33214dc4c95ecf5bf8b95376f6deff3f80b197a63fc9e39be3a652bf0068fcbe17b74f6632144fa758e1cc502a54aee47d8ad853f31123a271797a9c9",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0211-01303001-ZTS0201Z3000.zigbee"
     },
     {
@@ -77,6 +86,7 @@
         "manufacturerCode": 4417,
         "imageType": 534,
         "sha512": "e5ec535029710cd9fd0de07db7b380bf42c85d465ccf805714e5da28ad4aabd90644189a1e7712559fc80b7591b44843db7e8809f057c4a499a6b0a0b44ca481",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0216-01303001-ZTH03Z.zigbee"
     },
     {
@@ -85,6 +95,7 @@
         "manufacturerCode": 4417,
         "imageType": 539,
         "sha512": "2767cfd1b1da886b5eccdc316d36982214943134987ef84d819bbcc32c3188d58a14abc08bdd3e528bf5a8ad10d96d4012f350c63845b85927dce545c3128d80",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021b-01303001-ZTH01Z.zigbee"
     },
     {
@@ -93,6 +104,7 @@
         "manufacturerCode": 4417,
         "imageType": 540,
         "sha512": "02c4cf07c2a51ff7a7e9e863e624a7ed4e440c030b260229307b33dfd16c125151e77cc46176545865d2ca2c576576312762fdc2e2dae13dcf41c38d8d1d7b91",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021c-01303001-ZTH02Z.zigbee"
     },
     {
@@ -101,6 +113,7 @@
         "manufacturerCode": 4417,
         "imageType": 542,
         "sha512": "58fba7896a79a2240fcfe69232ed4e7aeb1170e747266b3ad359973aed9f0b168e51c0ef238cad18ed942bc30ffb1c0659cbbe9d0c58ed9c86dbcf18757a548b",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021e-01303001-TH03Z.zigbee"
     },
     {
@@ -109,6 +122,7 @@
         "manufacturerCode": 4417,
         "imageType": 543,
         "sha512": "d1a69d015bdbc5d0beef4c9660430c12e6553983e51fbbadaa3727e2c15a3887d692bbb2708c719aaefe034313e68e859bca6f70efb2678f2bc0a7dbd29766db",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021f-01303001-LKTMZL02Z.zigbee"
     },
     {
@@ -117,6 +131,7 @@
         "manufacturerCode": 4417,
         "imageType": 545,
         "sha512": "3da9bc1f6bfcb571b5c2b6743afc16de081ca4a04a4cac1f5cda2965a053e69e6f019be9ef41a9b1534112257ad2407a9d3d14f0801a49ca1e399f3860db5145",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0221-01303001-ZTH05.zigbee"
     },
     {
@@ -125,6 +140,7 @@
         "manufacturerCode": 4417,
         "imageType": 549,
         "sha512": "9898df5bcb948cfc9296be1c905518c5d87da4f928a606464a97e53747959851c6432596c62834279b171e3944dba17125add712cb9c7583cded334aff310bab",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0225-01303001-ZYZTH02.zigbee"
     },
     {
@@ -133,6 +149,7 @@
         "manufacturerCode": 4417,
         "imageType": 550,
         "sha512": "15edae37d8642f6af35cbafd7d7edd4c74c75ac7ea221e4a601604d10ac25e5c9a20aa8b2697bd50150cda3a67ed5973bbb429d58e27c51bb87df7646976a637",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0226-01303001-ZYZTH01.zigbee"
     },
     {
@@ -141,6 +158,7 @@
         "manufacturerCode": 4417,
         "imageType": 551,
         "sha512": "ef735427acc828b3af940b6516b6a7ea61c1bd517c97f2f95ce0aa8949c386218f00b5aeae990ef23ce0242063127693773e9f82d4bd7b51cbed8efa37ccd2ef",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0227-01303001-ZG227Z.zigbee"
     },
     {
@@ -149,6 +167,7 @@
         "manufacturerCode": 4417,
         "imageType": 556,
         "sha512": "532494c30fe301e602444734cf0f55779b46e21b76cc917cd53d78edc80f1bfe0bfef83201d67ff8e4a86d6bac0b7e3b6ecff08b7b647122d9f1f3a425f5db9f",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-022c-01303001-ZG303Z.zigbee"
     },
     {
@@ -157,6 +176,7 @@
         "manufacturerCode": 4417,
         "imageType": 557,
         "sha512": "869cf96652bc5f1e05a5e066a47d23bc1dc61bf5586582f5985996bdb7797b7b1064a20a3b5c538da60e0c1bab029e9331e902001ffc8b1b2306a1b2b095d16f",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-022d-01303001-ZBTH01.zigbee"
     },
     {
@@ -165,6 +185,7 @@
         "manufacturerCode": 4417,
         "imageType": 558,
         "sha512": "7684e6d0264f77eb0be1043f7d19eff89cf9a7369e67eb420515e08dc67cf865db8136d1bbb4492261fb89218d7bd81da43d95797df83c3943859acf91db99d3",
+        "otaHeaderString": "ZigbeeTLc OTA",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-022e-01303001-ZB_MC.zigbee"
     }
 ]

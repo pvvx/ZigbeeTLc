@@ -2,6 +2,8 @@
 PROJECT_NAME ?= test
 VERSION_BIN ?=
 
+ZNAME?="ZigbeeTLc OTA"
+
 TEL_CHIP := $(POJECT_DEF) -DMCU_CORE_8258=1 -DEND_DEVICE=1 -DMCU_STARTUP_8258=1
 
 #All libs: -ldrivers_826x -ldrivers_8258 -ldrivers_8278 -lsoft-fp -lfirmware_encrypt -lzb_coordinator -lzb_ed -lzb_router
@@ -21,7 +23,6 @@ SDK_bz_PATH ?= ./SDK_bz
 USE_ZB ?=0
 
 OUT_PATH ?=./build
-BIN_PATH ?=./bin
 
 PYTHON ?= python
 
@@ -83,6 +84,8 @@ ifeq ($(USE_ZB),1)
 
 # MAKE_PATH: project all make
 
+BIN_PATH ?=./bin_zb
+
 TEL_CHIP +=-DUSE_BLE=1
 
 MAKE_PATH ?= ./make_zb
@@ -129,6 +132,8 @@ LS_INCLUDE := -L$(SDK_PATH)/platform/lib -L$(SDK_PATH)/stack/zigbee/lib/tc32 -L$
 else
 
 # MAKE_PATH: project all make
+
+BIN_PATH ?=./bin
 
 MAKE_PATH ?= ./make_z
 
@@ -211,7 +216,7 @@ $(BIN_FILE): $(ELF_FILE)
 $(OTA_FILE): $(BIN_FILE)
 	@echo 'Create OTA image'
 	@echo ' '
-	@$(PYTHON) $(MAKE_PATH)/zigbee_ota.py $(BIN_FILE) -p $(BIN_PATH) -n $(PROJECT_NAME)
+	@$(PYTHON) $(MAKE_PATH)/zigbee_ota.py $(BIN_FILE) -p $(BIN_PATH) -n $(PROJECT_NAME) -s $(ZNAME)
 	@echo ' '
 
 sizedummy: $(ELF_FILE)

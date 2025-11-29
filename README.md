@@ -135,6 +135,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 
 * [Full list of supported devices](https://github.com/pvvx/pvvx.github.io/blob/master/README.md).
 
+* [ZigbeeTLc Index Configurator for Zigbee OTA](https://pvvx.github.io/ATC_MiThermometer/ZigbeeTlcIdxOTA.html)
 
 ## Display decimal places for temperature, humidity and battery charge in ZHA.
 

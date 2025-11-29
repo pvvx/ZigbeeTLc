@@ -5,6 +5,7 @@
         "manufacturerCode": 4098,
         "imageType": 54179,
         "sha512": "3ccb2ac8ff43fcd9d7c49abe5007851161d83fcfbc1a0c78a19896d659c0b19651a1983a4c1004be7f9a20fbbcd4ab929b50662d2b75f9c2320731d1b5a7bdac",
+        "otaHeaderString": "Tuya to ZigbeeTlc",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1002-d3a3-66993001-ZYZTH03pz_v0130.zigbee"
     }
 ]
