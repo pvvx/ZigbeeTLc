@@ -219,7 +219,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 29. Ver 0.1.2.9. Added new version LYWSD03MMC HW:B1.6 (custom name B1.1). Added [ZG-303Z](https://pvvx.github.io/ZG-303Z).
 
-30. Ver 0.1.3.0. Added [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01), [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC). Display auto-detection update for LYWSD03MMC B1.6 (SPI speed has been reduced). Zigbee SDK update to V3.7.2.0(PR).
+30. Ver 0.1.3.0. Added [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01), [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC). Display auto-detection update for LYWSD03MMC B1.6 (SPI speed has been reduced). Zigbee SDK update to V3.7.2.0(PR). Modified initialization of LCD displays for Xiaomi LYWSD03MMC B1.1, B1.5, B1.6.
 
 
 ## Make

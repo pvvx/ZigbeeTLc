@@ -134,12 +134,16 @@ static void lcd_send_spi_byte(u8 b) {
 
 // send spi buffer (new B1.6 (SPI LCD))
 static void lcd_send_spi(void) {
+	BM_CLR(reg_gpio_out(GPIO_LCD_CLK), GPIO_LCD_CLK & 0xff); // CLK down
+	BM_CLR(reg_gpio_oen(GPIO_LCD_CLK), GPIO_LCD_CLK & 0xff); // CLK output enable
 	BM_CLR(reg_gpio_oen(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // SDI output enable
 	u8 * pd = &utxb.start;
 	do {
 		lcd_send_spi_byte(*pd++);
 	} while(pd <= &utxb.end);
 	BM_SET(reg_gpio_oen(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // SDI output disable
+//	gpio_setup_up_down_resistor(GPIO_LCD_CLK, PM_PIN_PULLDOWN_100K); // = GPIO_LCD_URX
+	BM_SET(reg_gpio_oen(GPIO_LCD_CLK), GPIO_LCD_CLK & 0xff); // CLK output disable
 }
 
 /* B1.5, B1.6 (UART LCD) */
@@ -451,42 +455,50 @@ void init_lcd(void){
 			}
 
 		} else {
+			// B1.6 (UART/SPI)
+			// Test SPI/UART
 			lcd_set_buf_uart_spi(scr.display_buff);
 			// else B1.5, B1.6 uses UART (scr.i2c_address = 0)
 			if (sensor_ht.sensor_type == TH_SENSOR_SHTC3) { // B1.5 (UART)
+				gpio_setup_up_down_resistor(GPIO_LCD_UTX, PM_PIN_PULLUP_1M); // = GPIO_LCD_SDI
+				gpio_setup_up_down_resistor(GPIO_LCD_URX, PM_PIN_PULLUP_1M); // = GPIO_LCD_CLK
 				unsigned char r = irq_disable();
 				lcd_send_uart(0);
 				irq_restore(r);
 				return; // B1.5, UART LCD
 			}
-			// B1.6 (UART/SPI)
-			// Test SPI/UART ?
-			gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLDOWN_100K);
-			BM_SET(reg_gpio_func(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // GPIO_PB7 set GPIO pin
-			BM_SET(reg_gpio_oen(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // SDI output disable
-			sleep_us(512);
-			if(BM_IS_SET(reg_gpio_in(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff) == 0) {
-				gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLUP_1M);
-				scr.i2c_address = N16_I2C_ADDR; // B1.6 new (SPI LCD)
+			gpio_setup_up_down_resistor(GPIO_LCD_URX, PM_PIN_PULLDOWN_100K); // = GPIO_LCD_SDI
+			BM_SET(reg_gpio_func(GPIO_LCD_URX), GPIO_LCD_URX & 0xff); // GPIO_PB7 set GPIO pin
+			BM_SET(reg_gpio_oen(GPIO_LCD_URX), GPIO_LCD_URX & 0xff); // LCD_SDI/LCD_URX output disable
+			sleep_us(256);
+			// UART GPIO RX = "0"?
+			if(BM_IS_SET(reg_gpio_in(GPIO_LCD_URX), GPIO_LCD_URX & 0xff) == 0) {
+				// UART GPIO RX = "0"
+				// SPI LCD
 			} else {
-				gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_PULLUP_1M);
+				// UART GPIO RX = "1"
 				for(int i = 0; i < 3; i++) {
 					unsigned char r = irq_disable();
 					lcd_send_uart(1);
 					irq_restore(r);
 					if(utxb.end == 0xAA) { // UART LCD?
+						// UART LCD
+						gpio_setup_up_down_resistor(GPIO_LCD_UTX, PM_PIN_PULLUP_1M); // = GPIO_LCD_SDI
+						gpio_setup_up_down_resistor(GPIO_LCD_URX, PM_PIN_PULLUP_1M); // = GPIO_LCD_CLK
 						return; // B1.6, UART LCD
 					}
 					utxb.end = 0x55;
 					pm_wait_us(512);
 				}
 				// SPI LCD. Restore gpio func for SPI
-				BM_SET(reg_gpio_func(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // GPIO_PB7 set GPIO pin
-				BM_SET(reg_gpio_func(GPIO_LCD_CLK), GPIO_LCD_CLK & 0xff); // GPIO_PD7 set GPIO pin
-				scr.i2c_address = N16_I2C_ADDR; // SPI LCD
+				BM_SET(reg_gpio_func(GPIO_LCD_SDI), GPIO_LCD_SDI & 0xff); // GPIO_PB7 set GPIO pin, = GPIO_LCD_UTX
+				BM_SET(reg_gpio_func(GPIO_LCD_CLK), GPIO_LCD_CLK & 0xff); // GPIO_PD7 set GPIO pin, = GPIO_LCD_URX
 			}
+			gpio_setup_up_down_resistor(GPIO_LCD_CLK, PM_PIN_PULLDOWN_100K); // = GPIO_LCD_URX
+			gpio_setup_up_down_resistor(GPIO_LCD_SDI, PM_PIN_UP_DOWN_FLOAT); // = GPIO_LCD_UTX
+			scr.i2c_address = N16_I2C_ADDR; // SPI LCD
 			// SPI LCD
-			pm_wait_us(1024);
+			pm_wait_us(512);
 		}
 	}
 	show_reset_screen();
