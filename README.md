@@ -223,6 +223,9 @@ The flashing "BT" icon is called by the "identify" command.
 
 31. Ver 0.1.3.1. Fix LCD displays for Xiaomi LYWSD03MMC B1.6(old).
 
+32. Ver 0.1.3.2. Added new version HW LYWSD03MMC (10/2025 LCD-SPI, SHTC3).
+ 
+
 ## Make
 
 To build under Linux, run:
