@@ -304,7 +304,7 @@ __attribute__((optimize("-Os")))
 void show_small_number_x10(s16 number, bool percent){
 	scr.display_buff[0] = 0;
 	scr.display_buff[1] = 0;
-	scr.display_buff[4] &= BIT(5) | BIT(4); // point top and "---"
+	scr.display_buff[4] &= ~(BIT(6));
 	scr.display_buff[8] = 0;
 	scr.display_buff[9] &= BIT(6); // BLE
 	scr.display_buff[13] = 0;

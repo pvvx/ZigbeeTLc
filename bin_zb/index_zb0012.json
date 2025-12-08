@@ -1,0 +1,15 @@
+[
+    {
+        "fileVersion": 1191937,
+        "fileSize": 166370,
+        "manufacturerCode": 4417,
+        "imageType": 519,
+        "sha512": "b38f640581eefd07982686846283eef169fa9611089b52ea41702bbdf88bef3be9ec2eacdbdaf8247d2f05ae7733fe7df37eb0a8aaccfbce07db68a02f8e3e80",
+        "otaHeaderString": "Qingping:CGG1N-z",
+        "modelId": "CGG1N-z",
+        "manufacturerName": [
+            "Qingping"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin_zb/1141-0207-00123001-ZCGG1N.zigbee"
+    }
+]

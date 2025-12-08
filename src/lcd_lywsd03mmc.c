@@ -458,6 +458,7 @@ void init_lcd(void){
 			// Test SPI/UART
 			lcd_set_buf_uart_spi(scr.display_buff);
 			// else B1.5, B1.6 uses UART (scr.i2c_address = 0)
+#if 0 
 			// B1.5 (UART) ?
 			if (sensor_ht.sensor_type == TH_SENSOR_SHTC3) {
 				// B1.5 (UART)
@@ -466,6 +467,7 @@ void init_lcd(void){
 				irq_restore(r);
 				return; // B1.5, UART LCD
 			}
+#endif
 			// Test SPI/UART
 			// UART GPIO RX = "1"
 			for(int i = 0; i < 3; i++) {
