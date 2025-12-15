@@ -30,7 +30,7 @@ Currently supported devices:
  [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/),
  [ZTH05](https://pvvx.github.io/TS0601_TZE204).
 
-Additional alternative firmware options for some devices with TLSR825x can be found at [github.com/slacky1965](https://github.com/slacky1965?tab=repositories), [romasku/tuya-zigbee-switch](https://github.com/romasku/tuya-zigbee-switch), [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
+Additional alternative firmware options for some devices with TLSR825x can be found at [github.com/slacky1965](https://github.com/slacky1965?tab=repositories), [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
 
 Please direct questions regarding use and configuration in [ZHA](https://www.home-assistant.io/integrations/zha/), [Zigbee2MQTT](https://www.zigbee2mqtt.io/), [Home Assistant](https://www.home-assistant.io/) to the appropriate resources.
 
