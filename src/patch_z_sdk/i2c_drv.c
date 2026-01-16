@@ -10,7 +10,7 @@
 #endif
 
 void init_i2c(void) {
-	i2c_gpio_set(I2C_GROUP); // I2C_GPIO_GROUP_C0C1, I2C_GPIO_GROUP_C2C3, I2C_GPIO_GROUP_B6D7, I2C_GPIO_GROUP_A3A4
+	unsigned char r = irq_disable();
 	reg_i2c_speed = (unsigned char)(CLOCK_SYS_CLOCK_HZ/(4*I2C_CLOCK)); // 100, 400, 700 kHz
     //reg_i2c_id  = slave address
     reg_i2c_mode |= FLD_I2C_MASTER_EN; //enable master mode
@@ -18,6 +18,8 @@ void init_i2c(void) {
 
     reg_clk_en0 |= FLD_CLK0_I2C_EN;    //enable i2c clock
     reg_spi_sp  &= ~FLD_SPI_ENABLE;   //force PADs act as I2C; i2c and spi share the hardware of IC
+	i2c_gpio_set(I2C_GROUP); // I2C_GPIO_GROUP_C0C1, I2C_GPIO_GROUP_C2C3, I2C_GPIO_GROUP_B6D7, I2C_GPIO_GROUP_A3A4
+    irq_restore(r);
 }
 
 /* scan_i2c_addr() return: address (=0 - NAK) */

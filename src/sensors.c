@@ -15,6 +15,9 @@
 #include "rh.h"
 #endif
 
+#ifndef USE_GXHT4x
+#define USE_GXHT4x		0
+#endif
 
 sensor_th_t sensor_ht;
 
@@ -23,6 +26,10 @@ sensor_th_t sensor_ht;
 #if USE_SENSOR_SHT30 || USE_SENSOR_SHT4X || USE_SENSOR_SHT30
 int read_sensor_sht30_shtc3_sht4x(void *cfg);
 #endif
+#if USE_GXHT4x
+void measure_gxht4x_callback(void);
+#endif
+
 //==================================== SHTC3
 #if USE_SENSOR_SHTC3
 //  I2C addres
@@ -81,7 +88,7 @@ int start_measure_sht4x(void *cfg);
 
 #define SHT4x_POWER_TIMEOUT_us	1000	// time us, 0.3..1 ms
 #define SHT4x_SOFT_RESET_us		1000	// time us, 1 ms
-#define SHT4x_HI_MEASURE_us		9000	// time us, 6.9..8.3 ms
+#define SHT4x_HI_MEASURE_us		8300	// time us, 6.9..8.3 ms
 #define SHT4x_MD_MEASURE_us		4000	// time us, 3.7..4.5 ms
 #define SHT4x_LO_MEASURE_us		1600	// time us, 1.3..1.6 ms
 
@@ -93,12 +100,20 @@ const sensor_def_cfg_t def_thcoef_sht4x = {
 		.coef.val1_z = -4500, // temp_z
 		.coef.val2_k = 12500, // humi_k
 		.coef.val2_z = -600, // humi_z
+		.sensor_type = TH_SENSOR_SHT4x,
+#if USE_GXHT4x
+		.measure_timeout_us = 8000, // 8 ms
+		.stage1_measure = start_measure_sht4x,
+		.stage2_measure = NULL,
+		.measure_callback = measure_gxht4x_callback,
+		.mode = MMODE_START_WAIT_READ
+#else
 		.measure_timeout_us = SHT4x_MEASURING_TIMEOUT, // 7 ms
 		.stage1_measure = read_sensor_sht30_shtc3_sht4x,
 		.stage2_measure = start_measure_sht4x,
 		.measure_callback = NULL,
-		.sensor_type = TH_SENSOR_SHT4x,
 		.mode = MMODE_READ_START
+#endif
 };
 #endif //  USE_SENSOR_SHT4X
 
@@ -458,9 +473,9 @@ void measure_shtc3_callback(void) {
 	sensor_th_t *p = &sensor_ht;
 	int re = 0;
 	if(clock_time() - p->start_measure_tik >= p->measure_timeout_us * CLOCK_16M_SYS_TIMER_CLK_1US) {
+		p->read_callback = NULL;
 		re = read_sensor_sht30_shtc3_sht4x((void *)p);
 		if(!re) {
-			p->read_callback = NULL;
 			re = send_i2c_word(p->i2c_addr, SHTC3_GO_SLEEP); // Sleep command of the sensor
 		}
 		if(re)
@@ -469,12 +484,26 @@ void measure_shtc3_callback(void) {
 }
 #endif // USE_SENSOR_SHTC3
 
+#if USE_GXHT4x
+void measure_gxht4x_callback(void) {
+	sensor_th_t *p = &sensor_ht;
+	if(clock_time() - p->start_measure_tik >= p->measure_timeout_us * CLOCK_16M_SYS_TIMER_CLK_1US) {
+		p->read_callback = NULL;
+		if(read_sensor_sht30_shtc3_sht4x((void *)p)) {
+			p->i2c_addr = 0;
+		}
+	}
+}
+#endif
+
+
 #if USE_SENSOR_SHT4X
 int start_measure_sht4x(void *cfg) {
 	sensor_th_t *p = (sensor_th_t *)cfg;
 	return send_i2c_byte(p->i2c_addr, SHT4x_MEASURE_HI);
 }
 #endif
+
 
 #if USE_SENSOR_SHT30
 int start_measure_sht30(void *cfg) {
@@ -493,11 +522,11 @@ int read_sensor_sht30_shtc3_sht4x(void *cfg) {
 	u16 _humi;
 #if USE_I2C_DRV == I2C_DRV_SOFT // Soft I2C
 	u8 buf[6];
-	i = 256; // ~55 us * 256 = 14080 us min
+	i = 64; // ~55 us * 256 = 3520 us min
 #else
 	u8 crc; // calculated checksum
 	u8 data;
-	i = 512;
+	i = 100; // 100 * 32.8us = 3280 us if CLK 400 kHz
 	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
 		init_i2c();
 #if (I2C_CLOCK > 400000)
@@ -742,6 +771,7 @@ static int check_sensor(void) {
 		} while(test_i2c_addr <= (SHT4x_I2C_ADDR_MAX << 1));
 #endif // (USE_SENSOR_CHT8305 || USE_SENSOR_CHT8215 || USE_SENSOR_SHT4X || USE_SENSOR_SHT30)
 	}
+
 	if(ptabinit) {
 		if(sensor_ht.coef.val1_k == 0) {
 			memcpy(&sensor_ht.coef, &ptabinit->coef, sizeof(sensor_ht.coef));
