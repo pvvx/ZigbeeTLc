@@ -101,9 +101,10 @@ typedef struct {
 } sensor_th_t;
 
 #define FLG_MEASURE_HT_ADV		0x01
-#define FLG_MEASURE_HT_LCD		0x02
-#define FLG_MEASURE_HT_RP		0x04
-#define FLG_MEASURE_HT_CC		0x08
+#define FLG_MEASURE_HT_RP		0x02
+#define FLG_MEASURE_HT_TRG		0x04
+#define FLG_MEASURE_HT_LCD		0x08
+//#define FLG_MEASURE_HT_CC		0x10
 
 
 extern sensor_th_t sensor_ht;

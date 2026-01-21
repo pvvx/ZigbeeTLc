@@ -272,6 +272,9 @@ extern poll_ctrl_wrk_t poll_ctrl_wrk;
 
 void scan_task(void);
 s32 sensors_task(void *arg);
-void read_sensor_and_save(void);
+void read_sensor_and_show(void);
+#if	USE_DISPLAY
+void show_th(void);
+#endif
 
 #endif /* _DEVICE_H_ */

@@ -9,6 +9,7 @@
 #include "battery.h"
 #include "sensors.h"
 #include "rh.h"
+#include "device.h"
 
 #define DEF_ADC_DIODE	8810 // ADC value GPIO PWM = "1", Ubat: 2995 mV
 #define DEF_ADC_RH_Z	820  // ADC value at 100%
@@ -133,6 +134,7 @@ int	read_rh_sensor(void) {
 	}
 #endif
 	sensor_rh.rh = (u16)adc_uint;
+	g_zcl_MoistureAttrs.measuredValue = sensor_rh.rh;
 	return 1;
 }
 

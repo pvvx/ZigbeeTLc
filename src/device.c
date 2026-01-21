@@ -225,29 +225,8 @@ u8 is_comfort(s16 t, u16 h) {
 }
 #endif
 
-
-void read_sensor_and_save(void) {
-	if(!read_sensor()) {
-#if USE_SENSOR_TH
-		if(sensor_ht.flag & FLG_MEASURE_HT_RP) {
-			sensor_ht.flag &= ~FLG_MEASURE_HT_RP;
-			g_zcl_temperatureAttrs.measuredValue = sensor_ht.temp;
-			g_zcl_relHumidityAttrs.measuredValue = sensor_ht.humi;
-#if USE_TRIGGER
-			set_trigger_out();
-#endif
-		}
-#endif
-	}
-#if (DEV_SERVICES & SERVICE_PLM)
-	g_zcl_MoistureAttrs.measuredValue = sensor_rh.rh;
-#endif
-	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
-    g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;
 #if	USE_DISPLAY
-    if(!g_zcl_thermostatUICfgAttrs.display_off) {
-    	if(sensor_ht.flag & FLG_MEASURE_HT_LCD) {
-    		sensor_ht.flag &= ~FLG_MEASURE_HT_LCD;
+void show_th(void) {
 #ifdef ZCL_THERMOSTAT_UI_CFG
     		if (g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode) {
     			// (°F) = (Temperature in degrees Celsius (°C) * 9/5) + 32.
@@ -279,18 +258,39 @@ void read_sensor_and_save(void) {
     		show_smiley(is_comfort(sensor_ht.temp, sensor_ht.humi) ? SMILE_HAPPY : SMILE_SAD);
 #endif // ZCL_THERMOSTAT_UI_CFG
 #endif // SHOW_SMILEY
+}
+#endif // USE_DISPLAY
+
+
+void read_sensor_and_show(void) {
+	if(sensor_ht.read_callback)
+		sensor_ht.read_callback();
+	else read_sensor();
+#if USE_SENSOR_TH && USE_TRIGGER
+	if(sensor_ht.flag & FLG_MEASURE_HT_TRG) {
+		sensor_ht.flag &= ~FLG_MEASURE_HT_TRG;
+		set_trigger_out();
+	}
+#endif
+#if	USE_DISPLAY
+#ifdef ZCL_THERMOSTAT_UI_CFG
+    if(!g_zcl_thermostatUICfgAttrs.display_off) {
+#endif // ZCL_THERMOSTAT_UI_CFG
+    	if(sensor_ht.flag & FLG_MEASURE_HT_LCD) {
+    		sensor_ht.flag &= ~FLG_MEASURE_HT_LCD;
+    		show_th();
     	} else {
     		show_err_sensors();
     	}
 #if USE_BLE
-    	extern u8 blt_state;
-   		show_ble_symbol(blt_state);
+extern u8 blt_state;
+		show_ble_symbol(blt_state);
 #endif
-    	update_lcd();
+		update_lcd();
+#ifdef ZCL_THERMOSTAT_UI_CFG
     }
-
+#endif
 #endif // USE_DISPLAY
-    g_sensorAppCtx.readSensorTime = clock_time();
 	while(clock_time() - g_sensorAppCtx.secTimeTik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
 		g_sensorAppCtx.secTimeTik += CLOCK_16M_SYS_TIMER_CLK_1S;
 		g_sensorAppCtx.reportupsec++; // + 1 sec
@@ -303,8 +303,15 @@ void read_sensor_and_save(void) {
  */
 s32 sensors_task(void *arg) {
 	(void) arg;
-	if(clock_time() - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measure_interval) {
-		read_sensor_and_save();
+	u32 tt;
+	if(sensor_ht.read_callback)
+		sensor_ht.read_callback();
+	else {
+		tt = clock_time();
+		if(tt - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measure_interval) {
+			g_sensorAppCtx.readSensorTime = tt;
+			read_sensor_and_show();
+		}
 	}
 #ifdef USE_EPD
 	task_lcd();
@@ -323,7 +330,7 @@ void app_task(void)
 {
 	u16 rep_uptime_sec;
 #if !USE_BLE  && USE_SENSOR_TH
-	static u8 flg_cnt;
+//	static u8 flg_cnt;
 	sensors_task(NULL);
 	task_keys();
 #endif
@@ -345,7 +352,8 @@ void app_task(void)
 				light_off();
 #endif // USE_DISPLAY
 			rep_uptime_sec = g_sensorAppCtx.reportupsec;
-			if(rep_uptime_sec) {
+			if(rep_uptime_sec || (sensor_ht.flag & FLG_MEASURE_HT_RP)) {
+				sensor_ht.flag &= ~FLG_MEASURE_HT_RP;
 				g_sensorAppCtx.reportupsec = 0;
 				app_chk_report(rep_uptime_sec);
 #if USE_TRIGGER
@@ -374,9 +382,10 @@ void app_task(void)
 #endif
 #if !USE_BLE
 #if	USE_SENSOR_TH
-		if(flg_cnt)
-			flg_cnt--;
-		else {
+//		if(flg_cnt)
+//			flg_cnt--;
+//		else
+		{
 			if(sensor_ht.read_callback) {
 				sensor_ht.read_callback();
 			} else {
@@ -390,8 +399,8 @@ void app_task(void)
 #endif // PM_ENABLE
 	}
 #if !USE_BLE && USE_SENSOR_TH
-	else
-		flg_cnt = 1;
+//	else
+//		flg_cnt = 1;
 #endif // !USE_BLE
 }
 
@@ -511,7 +520,7 @@ void user_app_init(void)
 #endif
 
     // read sensors
-	read_sensor_and_save();
+	read_sensor_and_show();
 
     light_off();
 

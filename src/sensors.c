@@ -361,11 +361,13 @@ u8 sensor_crc_buf(u8 * msg, int len) {
 
 inline void sensor_calk_and_offset(sensor_th_t *p, s32 t, u32 h) {
 	p->temp = ((s32)(t * p->coef.val1_k) >> 16) + p->coef.val1_z + g_zcl_thermostatUICfgAttrs.temp_offset; // x 0.01 C // 16500 -4000
+	g_zcl_temperatureAttrs.measuredValue = p->temp;
 	p->humi = ((u32)(h * p->coef.val2_k) >> 16) + p->coef.val2_z + g_zcl_thermostatUICfgAttrs.humi_offset;
 	if (p->humi < 0)
 		p->humi = 0;
 	else if (p->humi > 9999)
 		p->humi = 9999;
+	g_zcl_relHumidityAttrs.measuredValue = p->humi;
 	p->flag = 0xff; // read data ok
 }
 
@@ -812,6 +814,8 @@ int read_sensor(void) {
 		}
 	} else
 		battery_detect(0);
+	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
+    g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;
 #if (DEV_SERVICES & SERVICE_PLM)
 	read_rh_sensor();
 #endif
@@ -830,7 +834,7 @@ void init_sensor(void) {
 		} else if(sensor_ht.mode == MMODE_START_WAIT_READ && (!read_sensor())) {
 			if(sensor_ht.measure_timeout_us && sensor_ht.read_callback) {
 				pm_wait_us(sensor_ht.measure_timeout_us);
-				sensor_ht.read_callback();
+				//sensor_ht.read_callback();
 			}
 		}
 	}

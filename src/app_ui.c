@@ -210,7 +210,11 @@ void task_keys(void) {
 			g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode ^= 1;
 			g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode &= 1;
 //			zcl_thermostatConfig_save();
-			read_sensor_and_save();
+			sensor_ht.flag |= FLG_MEASURE_HT_LCD;
+			if(!g_zcl_thermostatUICfgAttrs.display_off) {
+				show_th();
+				update_lcd();
+			}
 		}
 #endif
 	}
