@@ -1,3 +1,3 @@
 cd .\zigpy_ota
-call update.cmd _v0132
+call update.cmd _v0133
 cd ..

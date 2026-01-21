@@ -227,7 +227,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 32. Ver 0.1.3.2. Added new version HW LYWSD03MMC (10/2025 LCD-SPI, SHTC3).
 
-33. Ver 0.1.3.3. Correction of display of the "C/F" symbol for CGG1N. Additions to T & RH sensor processing.
+33. Ver 0.1.3.3. Correction of display of the "C/F" symbol for CGG1N. Additions to T & RH sensor processing. Add test ver [ZBEACON2-TH01](https://github.com/pvvx/ZigbeeTLc/issues/243)
  
 
 ## Make

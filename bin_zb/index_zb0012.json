@@ -271,5 +271,18 @@
             "ZBeacon"
         ],
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin_zb/1141-022e-00123001-ZB_MC.zigbee"
+    },
+    {
+        "fileVersion": 1191937,
+        "fileSize": 162114,
+        "manufacturerCode": 4417,
+        "imageType": 559,
+        "sha512": "ec6bc263f177ece064384c4cebcba07d5cce399aee359ac83855a95fc31de068437c09b4fa6bf7ecbf58cd0701155c1e89a8a0c9c97eda4b10c8dbb74278cebc",
+        "otaHeaderString": "ZBeacon:TH01-2-z",
+        "modelId": "TH01-2-z",
+        "manufacturerName": [
+            "ZBeacon"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin_zb/1141-022f-00123001-ZB2TH01.zigbee"
     }
 ]
