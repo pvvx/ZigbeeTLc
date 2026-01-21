@@ -53,6 +53,7 @@ class ZigbeeTlcUserInterface2Cluster(CustomCluster, UserInterface):
     .applies_to("Tuya", "ZG-227Z-z")
     .applies_to("Tuya", "MC-z")
     .applies_to("ZBeacon", "TH01-z")
+    .applies_to("ZBeacon", "TH01-2-z")
     .removes(ZigbeeTlcUserInterface2Cluster.cluster_id, cluster_type=ClusterType.Client)
     .adds(ZigbeeTlcUserInterface2Cluster)
     .number(
