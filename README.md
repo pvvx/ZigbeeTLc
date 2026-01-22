@@ -36,8 +36,6 @@ Please direct questions regarding use and configuration in [ZHA](https://www.hom
 
 ### Warning(!)
 
-* About the MJWSD06MMC and LYWSD03MMC [models equipped with GXHT40 temperature and humidity sensors](https://github.com/pvvx/ZigbeeTLc/issues/258).
-
 New versions check that the configuration written to the device is compatible with the one updated for the new SDK (i.e. compatible with version 0.1.2.5). If it is not compatible, all settings, including bindings, are deleted. In this case, the Zigbee coordinator sees a device with the same IEEE number and a "rebinding" is performed.
 
 * Due to high consumption, limited transmit power of +2 dBm is used. A moderately discharged CR2032 battery cannot withstand higher power.
@@ -130,6 +128,7 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 0x022C | ZG303Z | ZG-303Z |
 | 0x022D | ZBTH01 | ZBeacon-TH01 |
 | 0x022E | ZB_MC | ZBeacon-MC |
+| 0x022F | ZB2TH01 | ZBeacon-TH01 v2.0 |
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
