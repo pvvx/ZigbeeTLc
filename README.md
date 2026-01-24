@@ -23,6 +23,7 @@ Currently supported devices:
  [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd),
  [ZG-303Z](https://pvvx.github.io/ZG-303Z),
  [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01),
+ [Zbeacon-TH01-v2.0](https://pvvx.github.io/Zbeacon-TH01-v2.0),
  [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC).
 
 * Work with modification:
