@@ -92,11 +92,12 @@
 #define BOARD_ZBEACON_TH01			45 // ZBEACON-TH01, 2xAAA , SHT4X
 #define BOARD_ZB_MC					46 // ZigBee-MC, 2xAAA, CHT8305
 #define BOARD_ZBEACON2_TH01			47 // ZBEACON-TH01-v2, 2xAAA , SHT4X/G40
+#define BOARD_RSH_HS03				48 // Tuya ZigBee Temperature/Humidity Sensor "TY0201_TZ3000_bjawzodf", PCB designator "RSH-HS03-V2.0-241018"
 
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_ZBEACON2_TH01 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_RSH_HS03 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */

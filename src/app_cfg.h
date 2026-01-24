@@ -138,6 +138,8 @@
 #include "board_zb_mc.h"
 #elif BOARD == BOARD_ZBEACON2_TH01
 #include "board_zbeacon2_th01.h"
+#elif BOARD == BOARD_RSH_HS03
+#include "board_rsh_hs03.h"
 #else
 #error "Define BOARD!"
 #endif
