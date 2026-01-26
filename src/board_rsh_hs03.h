@@ -18,10 +18,10 @@
   Zigbee model/manufacturer TY0201_TZ3000_bjawzodf
 
   There are 2 HW version of this sensor: with MRT08S SO-8 chip soldered on PCB
-  and a version without this chip but with 2 zero ohm resistors near PA0, PA1.
+  and version without this chip but with 2 zero ohm resistors near PA0, PA1.
 
-  HARDWARE MODIFICATION IS CURRENTLY REQUIRED TO RUN THIS FIRMWARE, see
-  https://github.com/pvvx/ZigbeeTLc/issues/107#issuecomment-2227385821
+  HARDWARE MODIFICATION IS REQUIRED TO RUN THIS FIRMWARE ON BOARDS WITH MRT08S,
+  see https://github.com/pvvx/ZigbeeTLc/issues/107#issuecomment-2227385821
 
 TLSR8258
 
@@ -77,7 +77,7 @@ GPIO_PC3 - UART RX on boards with MRT08S chip, debug header RX, used for HW I2C 
 #define BLE_MAN_STR			"Tuya"
 
 #define ZCL_BASIC_MFG_NAME	{4,'T','u','y','a'} // Tuya
-#define ZCL_BASIC_MODEL_ID	{6,'T','Y','0','2','0','1'} // TY0201
+#define ZCL_BASIC_MODEL_ID	{8,'T','Y','0','2','0','1','-','z'} // TY0201-z
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_2AAA
@@ -101,13 +101,33 @@ GPIO_PC3 - UART RX on boards with MRT08S chip, debug header RX, used for HW I2C 
 #define PULL_WAKEUP_SRC_PB4 PM_PIN_PULLUP_1M
 
 // I2C T&H sensor & Display
-#define	USE_I2C_DRV			I2C_DRV_HARD
-#define I2C_CLOCK			100000 // Hz
-#define I2C_SCL 			GPIO_PC3
-#define I2C_SDA 			GPIO_PC2
-#define I2C_GROUP 			I2C_GPIO_GROUP_C2C3
+// use I2C_DRV_HARD for boards, which originally had MRT08S soldered
+#define	USE_I2C_DRV			I2C_DRV_SOFT
+
+#if USE_I2C_DRV == I2C_DRV_HARD
+#define I2C_CLOCK			400000 // Hz
+#define I2C_SCL				GPIO_PC3
+#define I2C_SDA				GPIO_PC2
+#define I2C_GROUP			I2C_GPIO_GROUP_C2C3
 #define PULL_WAKEUP_SRC_PC2	PM_PIN_PULLUP_10K
 #define PULL_WAKEUP_SRC_PC3	PM_PIN_PULLUP_10K
+#else // I2C_DRV_SOFT
+#define I2C_CLOCK			400000 // Hz
+
+#define I2C_SCL				GPIO_PA0
+#define PA0_FUNC			AS_GPIO
+#define PA0_INPUT_ENABLE	1
+#define PA0_OUTPUT_ENABLE	0
+#define PA0_DATA_OUT		0
+#define PULL_WAKEUP_SRC_PA0	PM_PIN_PULLUP_10K
+
+#define I2C_SDA				GPIO_PA1
+#define PA1_FUNC			AS_GPIO
+#define PA1_INPUT_ENABLE	1
+#define PA1_OUTPUT_ENABLE	0
+#define PA1_DATA_OUT		0
+#define PULL_WAKEUP_SRC_PA1	PM_PIN_PULLUP_10K
+#endif
 
 // Sensor T&H
 #define USE_SENSOR_CHT8305		0
