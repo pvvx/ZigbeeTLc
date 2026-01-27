@@ -89,6 +89,7 @@ GPIO_PC3 - UART RX on boards with MRT08S chip, debug header RX, used for HW I2C 
 #define LCD_CMP_BUF_SIZE    9  // Extra byte for Set Display RAM command
 #define LCD_INIT_DELAY()
 #define USE_DISPLAY_BATTERY_LEVEL		1
+#define USE_DISPLAY_CONNECT_SYMBOL		1
 #define USE_DISPLAY_SMALL_NUMBER_X10	1
 #define USE_DISPLAY_OFF					1
 

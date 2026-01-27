@@ -241,17 +241,28 @@ void show_temp_symbol(u8 symbol) {
 }
 
 _SCR_CODE_SEC_
-void show_ble_symbol(bool state) {
+void show_connected_symbol(bool state) {
+	scr.display_buff[3] &= ~(BIT(3) | BIT(7));
+	scr.display_buff[4] &= ~BIT(3);
+	scr.display_buff[6] &= ~BIT(3);
+
 	if (state) {
-		// Show full signal strength on RSSI indicator
-		scr.display_buff[3] |= (BIT(3) | BIT(7));
-		scr.display_buff[4] |= BIT(3);
-		scr.display_buff[6] |= BIT(3);
-	} else {
-		scr.display_buff[3] &= ~(BIT(3) | BIT(7));
-		scr.display_buff[4] &= ~BIT(3);
-		scr.display_buff[6] &= ~BIT(3);
+		const s8 rssi = g_sysDiags.lastMessageRSSI;
+		scr.display_buff[3] |= BIT(7);
+		if (rssi >= -84) {
+			scr.display_buff[3] |= BIT(3);
+			if (rssi >= -74) {
+				scr.display_buff[4] |= BIT(3);
+				if (rssi >= -64)
+					scr.display_buff[6] |= BIT(3);
+			}
+		}
 	}
+}
+
+_SCR_CODE_SEC_
+void show_ble_symbol(bool state) {
+	// No BLE symbol on this LCD
 }
 
 _SCR_CODE_SEC_
