@@ -20,6 +20,7 @@ $(OUT_PATH)$(SRC_DIR)/lcd_cgdk2.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_lktmzl02.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_lywsd03mmc.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_mho_c122.o \
+$(OUT_PATH)$(SRC_DIR)/lcd_rsh_hs03.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zth03.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zth05.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_zy_zth02pro.o \
