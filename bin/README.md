@@ -10,9 +10,10 @@
 * 1286-0203-10983001-ZG227Zz_xxxx.zigbee - firmware for transferring ZG227Z Tuya/Sonoff to ZigbeeTlc
 * 1002-0203-57013001-ZYZTH02z_xxxx.zigbee - firmware for transferring ZYZTH02 Tuya to ZigbeeTlc
 * 1002-d3a3-66993001-ZYZTH03pz_xxxx.zigbee  - firmware for transferring ZYZTH02/03-pro Tuya to ZigbeeTlc
-* 1286-0202-10933607-ZBTH01z__xxxx.zigbee - firmware for transferring ZBTH01 Tuya/Sonoff to ZigbeeTlc
+* 1286-0202-10933607-ZBTH01z_xxxx.zigbee - firmware for transferring ZBTH01 Tuya/Sonoff to ZigbeeTlc
 * 1286-0203-20973001-ZG303Zz_xxxx.zigbee  - firmware for transferring ZG-303Z Tuya/Sonoff to ZigbeeTlc
-* 1286-0202-10933607-ZB2TH01z__xxxx.zigbee - firmware for transferring ZBTH01(v2) Tuya/Sonoff to ZigbeeTlc
+* 1286-0202-10933607-ZB2TH01z_xxxx.zigbee - firmware for transferring ZBTH01(v2) Tuya/Sonoff to ZigbeeTlc
+* 1141-0203-10923001-ZTY0201z_xxxx.zigbee - firmware for transferring ZTY0201 Tuya to ZigbeeTlc
 
 * xxxxx_vNN.bin - firmware files for the hardware programmer
 
@@ -28,9 +29,11 @@
 * 1286-0203-10983001-ZG227Zz_xxxx.zigbee - прошивки для перехода ZG227Z Tuya (Sonoff) в ZigbeeTlc
 * 1002-0203-57013001-ZYZTH02z_xxxxx.zigbee - прошивки для перехода ZYZTH02 из Tuya в ZigbeeTlc
 * 1002-d3a3-66993001-ZYZTH03pz_xxxx.zigbee  - прошивки для перехода ZYZTH02/03-pro Tuya в ZigbeeTlc
-* 1286-0202-10933607-ZBTH01z__xxxx.zigbee  - прошивки для перехода ZBTH01 из Tuya (Sonoff) в ZigbeeTlc
+* 1286-0202-10933607-ZBTH01z_xxxx.zigbee  - прошивки для перехода ZBTH01 из Tuya (Sonoff) в ZigbeeTlc
 * 1286-0203-20973001-ZG303Zz_xxxx.zigbee  - прошивки для перехода ZG-303Z из Tuya (Sonoff) в ZigbeeTlc
-* 1286-0202-10933607-ZB2TH01z__xxxx.zigbee  - прошивки для перехода ZBTH01(v2) из Tuya (Sonoff) в ZigbeeTlc
+* 1286-0202-10933607-ZB2TH01z_xxxx.zigbee  - прошивки для перехода ZBTH01(v2) из Tuya (Sonoff) в ZigbeeTlc
+* 1141-0203-10923001-ZTY0201z_xxxx.zigbee - прошивки для перехода ZTY0201 из Tuya в ZigbeeTlc
+
 * xxxxx_vNN.bin - файлы прошивки для программатора или BLE OTA
 
 * devbis - файлы прошивок для варианта https://github.com/devbis
@@ -70,7 +73,8 @@
 | 44 | 0x022C | [ZG-303Z](https://pvvx.github.io/ZG-303Z) - HOBEIAN ZG-303Z Sonoff/Tuya ZigBee Soil moisture sensor | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 45 | 0x022D | [ZBEACON-TH01](https://pvvx.github.io/Zbeacon-TH01) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 46 | 0x022E | [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
-| 47 | 0x022F | [ZBEACON2-TH01](https://github.com/pvvx/ZigbeeTLc/issues/243) | [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
+| 47 | 0x022F | [ZBEACON2-TH01](https://pvvx.github.io/Zbeacon-TH01-v2.0) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
+| 48 | 0x0230 | [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf)_TZ3000_bjawzodf | [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 
 * [Identification numbers of all firmwares](https://github.com/pvvx/pvvx.github.io?tab=readme-ov-file#id-numbers-of-alternative-firmware)
 

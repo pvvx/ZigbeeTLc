@@ -352,8 +352,12 @@ void app_task(void)
 				light_off();
 #endif // USE_DISPLAY
 			rep_uptime_sec = g_sensorAppCtx.reportupsec;
+#if USE_SENSOR_TH
 			if(rep_uptime_sec || (sensor_ht.flag & FLG_MEASURE_HT_RP)) {
 				sensor_ht.flag &= ~FLG_MEASURE_HT_RP;
+#else
+			if(rep_uptime_sec) {
+#endif
 				g_sensorAppCtx.reportupsec = 0;
 				app_chk_report(rep_uptime_sec);
 #if USE_TRIGGER
@@ -382,26 +386,16 @@ void app_task(void)
 #endif
 #if !USE_BLE
 #if	USE_SENSOR_TH
-//		if(flg_cnt)
-//			flg_cnt--;
-//		else
-		{
-			if(sensor_ht.read_callback) {
-				sensor_ht.read_callback();
-			} else {
-				drv_pm_lowPowerEnter();
-			}
-		}
-#else
-		drv_pm_lowPowerEnter();
+		if(sensor_ht.read_callback) {
+			sensor_ht.read_callback();
+		} else
 #endif // USE_SENSOR_TH
+		{
+			drv_pm_lowPowerEnter();
+		}
 #endif // !USE_BLE
 #endif // PM_ENABLE
 	}
-#if !USE_BLE && USE_SENSOR_TH
-//	else
-//		flg_cnt = 1;
-#endif // !USE_BLE
 }
 
 void sensorDeviceSysException(void)

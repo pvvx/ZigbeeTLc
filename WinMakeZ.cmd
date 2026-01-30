@@ -1,6 +1,6 @@
 @set TLPATH=D:\MCU\TelinkIoTStudio
 @set PATH=%TLPATH%\bin;%TLPATH%\opt\tc32\bin;%TLPATH%\mingw\bin;%TLPATH%\opt\tc32\tc32-elf\bin;%PATH%
-@set SWVER=_v0133
+@set SWVER=_v0134
 @del /Q .\bin\*.bin
 @del /Q .\bin\*.zigbee
 @del /Q .\build
@@ -86,7 +86,7 @@ python3 make_z\zb_bin_ota.py bin\ZG227Z%SWVER%.bin bin\ZG227Zz%SWVER% -m0x1286 -
 python3 make_z\zb_bin_ota.py bin\ZG303Z%SWVER%.bin bin\ZG303Zz%SWVER% -m0x1286 -i0x0203 -v0x20973001 -s"Sonoff to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZBTH01%SWVER%.bin bin\ZBTH01z%SWVER% -m0x1286 -i0x0202 -v0x10933607 -s"Sonoff to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZB2TH01%SWVER%.bin bin\ZB2TH01z%SWVER% -m0x1286 -i0x0202 -v0x10933607 -s"Sonoff to ZigbeeTlc"
-python3 make_z\zb_bin_ota.py bin\ZTY0201%SWVER%.bin bin\ZTY0201z%SWVER% -m0x1141 -i0x0203 -v0x10023001 -s"Tuya to ZigbeeTlc"
+python3 make_z\zb_bin_ota.py bin\ZTY0201%SWVER%.bin bin\ZTY0201z%SWVER% -m0x1141 -i0x0203 -v0x10923001 -s"Tuya to ZigbeeTlc"
 @rem
 cd .\zigpy_ota
 call update.cmd %SWVER%

@@ -1,0 +1,15 @@
+[
+    {
+        "fileVersion": 20197377,
+        "fileSize": 130802,
+        "manufacturerCode": 4417,
+        "imageType": 560,
+        "sha512": "ff05f7e9e75f1ad19badca34aa17daa909793d1c071b218e90f62647e61fab6e881822f8ddf1a8b230de5358162f06cf559d5af399e384418b859fe165c14e30",
+        "otaHeaderString": "Tuya:TY0201-z",
+        "modelId": "TY0201-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0230-01343001-ZTY0201.zigbee"
+    }
+]

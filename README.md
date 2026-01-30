@@ -24,7 +24,8 @@ Currently supported devices:
  [ZG-303Z](https://pvvx.github.io/ZG-303Z),
  [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01),
  [Zbeacon-TH01-v2.0](https://pvvx.github.io/Zbeacon-TH01-v2.0),
- [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC).
+ [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC),
+ [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf).
 
 * Work with modification:
  [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
@@ -229,6 +230,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 33. Ver 0.1.3.3. Correction of display of the "C/F" symbol for CGG1N. Additions to T & RH sensor processing. Add test ver [ZBEACON2-TH01](https://github.com/pvvx/ZigbeeTLc/issues/243)
  
+34. Beta Ver 0.1.3.4. Added [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf) (TY0201_TZ3000_bjawzodf)
 
 ## Make
 

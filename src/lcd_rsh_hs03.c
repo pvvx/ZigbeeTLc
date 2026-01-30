@@ -247,7 +247,7 @@ void show_connected_symbol(bool state) {
 	scr.display_buff[6] &= ~BIT(3);
 
 	if (state) {
-		const s8 rssi = g_sysDiags.lastMessageRSSI;
+		s8 rssi = g_sysDiags.lastMessageRSSI;
 		scr.display_buff[3] |= BIT(7);
 		if (rssi >= -84) {
 			scr.display_buff[3] |= BIT(3);
