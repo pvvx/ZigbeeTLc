@@ -112,12 +112,19 @@
 #define USE_SENSOR_SHT30		0
 
 // VBAT
+//#define USE_RC_VBAT 		1 // Vbat (+V-R/RC-GND)
+#ifdef USE_RC_VBAT
+#define GPIO_VBAT			GPIO_PC4 // Vbat (+V-R/RC-GND)
+#define SHL_ADC_VBAT		C4P  	// "C4P" in adc.h
+#define ADC_BAT_VREF_MV		1686
+#else
 #define SHL_ADC_VBAT		C5P // see in adc.h ADC_InputPchTypeDef
 #define GPIO_VBAT			GPIO_PC5 // missing pin on case TLSR825x
 #define PC5_INPUT_ENABLE	0
 #define PC5_DATA_OUT		1
 #define PC5_OUTPUT_ENABLE	1
 #define PC5_FUNC			AS_GPIO
+#endif
 
 // UART
 #if ZBHCI_UART

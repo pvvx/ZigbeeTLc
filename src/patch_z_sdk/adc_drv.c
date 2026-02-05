@@ -2,10 +2,12 @@
 //#include "sensors.h"
 
 #define USE_READ_ADC_CALIBRATION	0
-#define ADC_CALIBRATION_VREF		1175
+#ifndef ADC_BAT_VREF_MV
+#define ADC_BAT_VREF_MV		1175
+#endif
 
 #define ADC_BUF_COUNT	8
-
+#if USE_READ_ADC_CALIBRATION
 //ADC reference voltage cfg
 typedef struct {
 	u16 vref; //default: 1175 mV
@@ -14,9 +16,10 @@ typedef struct {
 
 _attribute_data_retention_
 adc_vref_ctr_t adc_vref_cfg; /* = {
-	.vref 		= ADC_CALIBRATION_VREF, //default ADC ref voltage (unit:mV)
+	.vref 		= ADC_BAT_VREF_MV, //default ADC ref voltage (unit:mV)
 	.offset		= 0 	//default disable
 }; */
+#endif
 
 /**
  * @brief This function serves to set the channel reference voltage.
@@ -77,14 +80,8 @@ void drv_calib_adc_verf(void)
 	u8 adc_vref_calib_value[7] = {0};
 
 	flash_read(CFG_ADC_CALIBRATION, 7, adc_vref_calib_value);
-#if BOARD == BOARD_MJWSD05MMC
-#warning "Calculate adc_vref!"
-#endif
-#endif
-	adc_vref_cfg.vref = ADC_CALIBRATION_VREF;
+	adc_vref_cfg.vref = ADC_BAT_VREF_MV;
 	adc_vref_cfg.offset = 0;
-
-#if USE_READ_ADC_CALIBRATION
 	//Check the two-point gpio calibration value whether is exist
 	if((adc_vref_calib_value[4] != 0xff) &&
 	   (adc_vref_calib_value[4] <= 0x7f) &&
@@ -101,8 +98,8 @@ void drv_calib_adc_verf(void)
 		/****** Vref = [1175 +First_Byte-255+Second_Byte] mV = [920 + First_Byte + Second_Byte] mV ********/
 		adc_vref_cfg.vref = 920 + adc_vref_calib_value[0] + adc_vref_calib_value[1];
 		/****** Check the one-point calibration value whether is correct ********/
-		if(adc_vref_cfg.vref < ADC_CALIBRATION_VREF - 128 || adc_vref_cfg.vref > ADC_CALIBRATION_VREF - 127)
-			adc_vref_cfg.vref = ADC_CALIBRATION_VREF;
+		if(adc_vref_cfg.vref < ADC_BAT_VREF_MV - 128 || adc_vref_cfg.vref > ADC_BAT_VREF_MV - 127)
+			adc_vref_cfg.vref = ADC_BAT_VREF_MV;
 	}
 #endif
 }
@@ -121,12 +118,12 @@ void adc_set_gpio_calib_vref(u16 x) {
 
 _attribute_ram_code_sec_
 void adc_channel_init(ADC_InputPchTypeDef p_ain) {
-#if 0 // gpio set in app_config.h ?
+#ifndef USE_RC_VBAT
 	if(p_ain == SHL_ADC_VBAT) {
 		// Set missing pin on case TLSR8251F512ET24/TLSR8253F512ET32
-		gpio_set_output_en(GPIO_VBAT, 1);
-		gpio_set_input_en(GPIO_VBAT, 0);
+		//gpio_set_input_en(GPIO_VBAT, 0);
 		gpio_write(GPIO_VBAT, 1);
+		gpio_set_output_en(GPIO_VBAT, 1);
 	}
 #endif
 	adc_power_on_sar_adc(0);
@@ -194,11 +191,11 @@ u16 get_adc_mv(int flg) { // ADC_InputPchTypeDef
 			+ adc_sample[5];
 	if(flg)
 		return adc_average;
+#if USE_READ_ADC_CALIBRATION
 	adc_average >>= 2;
-#if BOARD == BOARD_MJWSD05MMC
-	return ((adc_average + adc_vref_cfg.offset) * 1686) >> 10; // adc_vref default: 1175 (mV)
-#else
 	return ((adc_average + adc_vref_cfg.offset) * adc_vref_cfg.vref) >> 10; // adc_vref default: 1175 (mV)
+#else
+	return ((adc_average) * ADC_BAT_VREF_MV) >> 12;
 #endif
 }
 
