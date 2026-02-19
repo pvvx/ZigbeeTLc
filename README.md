@@ -231,7 +231,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 33. Ver 0.1.3.3. Correction of display of the "C/F" symbol for CGG1N. Additions to T & RH sensor processing. Add test ver [ZBEACON2-TH01](https://github.com/pvvx/ZigbeeTLc/issues/243)
  
-34. Beta Ver 0.1.3.4. Added [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf) (TY0201_TZ3000_bjawzodf)
+34. Ver 0.1.3.4. Added [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf) (TY0201_TZ3000_bjawzodf). Indicate the loss of the Zigbee network with the “BLE” icon in all firmware versions that do not have an additional icon.
 
 ## Make
 

@@ -91,8 +91,8 @@ inline void sensorDevice_rejoin_faillure_timer_set(void) {
 	g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, period);
 }
 
-s32 sensorDevice_rejoinBackoff(void *arg){
-
+static s32 sensorDevice_rejoinBackoff(void *arg){
+#if REJOIN_FAILURE_TIMER // & OLD_SDK
 	if(zb_isDeviceFactoryNew()){
 		g_sensorAppCtx.timerRejoinBackoffEvt = NULL;
 		return -1;
@@ -100,6 +100,21 @@ s32 sensorDevice_rejoinBackoff(void *arg){
 
     zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
     return 0;
+#else
+    static bool rejoinMode = REJOIN_SECURITY;
+
+    if (zb_isDeviceFactoryNew()) {
+    	g_sensorAppCtx.timerRejoinBackoffEvt = NULL;
+        return -1;
+    }
+
+    //printf("rejoin mode = %d\n", rejoinMode);
+
+    zb_rejoinSecModeSet(rejoinMode);
+    zb_rejoinReq(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
+
+    rejoinMode = !rejoinMode;
+#endif
 }
 
 #endif
@@ -156,7 +171,16 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
 	else
 	{
 		if(joinedNetwork) {
+#if 1	// OLD_SDK
 			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
+			if(!g_sensorAppCtx.timerRejoinBackoffEvt){
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerRejoinBackoffEvt);
+			}
+#else
+			if(!g_sensorAppCtx.timerRejoinBackoffEvt){
+				g_sensorAppCtx.timerRejoinBackoffEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 60 * 1000);
+			}
+#endif
 		}
 #if USE_BLE
 			g_dualModeInfo.bleStart = 1;
@@ -376,3 +400,30 @@ void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd)
     //printf("sensorDevice_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
     //printfArray(pLeaveInd->device_address, 8);
 }
+
+#if !USE_BLE
+/*********************************************************************
+ * @fn      sensorDevice_nwkStatusIndHandler
+ *
+ * @brief   Handler for NWK status indication message.
+ *
+ * @param   pInd - parameter of NWK status indication
+ *
+ * @return  None
+ */
+void sensorDevice_nwkStatusIndHandler(zdo_nwk_status_ind_t *pNwkStatusInd)
+{
+    //printf("nwkStatusIndHandler: addr = %x, status = %x\n", pNwkStatusInd->shortAddr, pNwkStatusInd->status);
+
+    if (pNwkStatusInd->status == NWK_COMMAND_STATUS_BAD_FRAME_COUNTER) {
+        tl_zb_normal_neighbor_entry_t *nbe = nwk_neTblGetByShortAddr(pNwkStatusInd->shortAddr);
+        if (nbe) {
+            //printf("curFC = %d, rcvFC = %d, failCnt = %d\n", nbe->incomingFrameCnt, nbe->receivedFrameCnt, nbe->frameCounterFailCnt);
+        }
+    } else if (pNwkStatusInd->status == NWK_COMMAND_STATUS_BAD_KEY_SEQUENCE_NUMBER) {
+        zb_rejoinSecModeSet(REJOIN_INSECURITY);
+        zb_rejoinReq(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
+    }
+}
+#endif
+

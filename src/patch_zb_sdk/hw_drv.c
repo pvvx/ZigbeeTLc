@@ -43,7 +43,7 @@
 
 //system ticks per US (used libzb_ed.a: mac_trx.c)
 u32 sysTimerPerUs; // = sys_tick_per_us = 16 = CLOCK_16M_SYS_TIMER_CLK_1US
-#if 0
+#if 1
 /*********************************************************************
  * @fn      internalFlashSizeCheck
  *
@@ -114,7 +114,7 @@ startup_state_e drv_platform_init(void)
 #endif
 		battery_detect(1);
 		random_generator_init();
-//		internalFlashSizeCheck();
+		internalFlashSizeCheck();
 #if PM_ENABLE
 		/// PM_CLOCK_INIT(); ///
 		/* Initialize 32K for timer wakeup. */

@@ -238,6 +238,9 @@ void set_PollRate(void);
 
 void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
 void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd);
+#if !USE_BLE
+void sensorDevice_nwkStatusIndHandler(zdo_nwk_status_ind_t *pNwkStatusInd);
+#endif
 void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status);
 
 #if USE_BLE

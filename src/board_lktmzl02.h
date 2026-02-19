@@ -114,6 +114,7 @@ LCD LKTMZL02 real buffer:  byte.bit
 #define LCD_INIT_DELAY()
 #define USE_DISPLAY_BATTERY_LEVEL		1
 #define USE_DISPLAY_OFF					1
+#define USE_DISPLAY_CONNECT_SYMBOL		2 // =2 inverted
 
 // KEY, BUTTON
 #define BUTTON1				GPIO_PC0

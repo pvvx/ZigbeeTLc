@@ -116,6 +116,17 @@ void show_ble_symbol(bool state){
 		scr.display_buff[4] &= ~BIT(3);
 }
 
+#ifdef USE_DISPLAY_CONNECT_SYMBOL
+_SCR_CODE_SEC_
+void show_connected_symbol(bool state){
+#if USE_DISPLAY_CONNECT_SYMBOL == 2
+	show_ble_symbol(!state);
+#else
+	show_ble_symbol(state);
+#endif
+}
+#endif
+
 _SCR_CODE_SEC_
 void show_battery_symbol(bool state){
 	if (state)

@@ -297,13 +297,10 @@ void show_ble_symbol(bool state){
 _SCR_CODE_SEC_
 void show_connected_symbol(bool state){
 #if USE_DISPLAY_CONNECT_SYMBOL == 2
- 	if (!state)
+	show_ble_symbol(!state);
 #else
- 	if (state)
+	show_ble_symbol(state);
 #endif
-		scr.display_buff[2] |= 0x10; // "ble"
-	else
-		scr.display_buff[2] &= ~0x10;
 }
 #endif
 

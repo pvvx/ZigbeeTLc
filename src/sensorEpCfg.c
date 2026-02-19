@@ -147,11 +147,7 @@ zcl_basicAttr_t g_zcl_basicAttrs =
 	.zclVersion 	= 0x03,
 	.appVersion 	= APP_BUILD,
 	.stackVersion 	= (STACK_RELEASE|STACK_BUILD),
-#if BOARD == BOARD_LYWSD03MMC
-	.hwVersion		= 0x00,
-#else
 	.hwVersion		= BOARD,
-#endif
 	.manuName		= ZCL_BASIC_MFG_NAME,
 	.modelId		= ZCL_BASIC_MODEL_ID,
 #ifdef ZCL_BASIC_SW_BUILD_ID
@@ -206,8 +202,8 @@ const zclAttrInfo_t identify_attrTbl[] =
 /* power */
 zcl_powerAttr_t g_zcl_powerAttrs =
 {
-    .batteryVoltage    = 30, //in 100 mV units, 0xff - unknown
-    .batteryPercentage = 200 //in 0,5% units, 0xff - unknown
+    .batteryVoltage    = 0xff, //in 100 mV units, 0xff - unknown
+    .batteryPercentage = 0xff //in 0,5% units, 0xff - unknown
 };
 
 const zclAttrInfo_t powerCfg_attrTbl[] =

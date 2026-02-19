@@ -78,6 +78,7 @@ GPIO_PD7 - free
 #define LCD_CMP_BUF_SIZE	7
 #define LCD_INIT_DELAY()
 #define USE_DISPLAY_OFF		1
+#define USE_DISPLAY_CONNECT_SYMBOL 2
 
 // KEY, BUTTON
 #define BUTTON1				GPIO_PD4

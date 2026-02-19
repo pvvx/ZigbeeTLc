@@ -138,18 +138,18 @@ void concurrent_mode_main_loop(void){
 			 if(BLE_BLT_STATE_GET() == BLS_LINK_STATE_ADV){
 				 bls_pm_setSuspendMask (SUSPEND_DISABLE);
 			 }
-#endif
+#endif // PM_ENABLE
 			 blt_sdk_main_loop();
 		 }while((BLE_BLT_STATE_GET() == BLS_LINK_STATE_ADV) && blc_scan_busy_in_adv(g_dualModeInfo.bleTaskTick,2));//MY_ADV_INTERVAL*3/4
 
 		 /* enable pm after scan */
 #if PM_ENABLE
 		 bls_pm_setSuspendMask (SUSPEND_ADV | SUSPEND_CONN);
-#endif
+#endif // PM_ENABLE
 
-#else
+#else // SCAN_IN_ADV_STATE
 		 blt_sdk_main_loop();
-#endif
+#endif // SCAN_IN_ADV_STATE
 #if USE_BLE_OTA
 		 if(ble_attr.ota_is_working) {
 			 bls_pm_setManualLatency(0);

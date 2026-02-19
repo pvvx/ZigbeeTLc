@@ -71,6 +71,9 @@ const zdo_appIndCb_t appCbLst = {
 	NULL,//nlme sync cnf cb
 	NULL,//tc join ind cb
 	NULL,//tc detects that the frame counter is near limit
+#if !USE_BLE
+	NULL // sensorDevice_nwkStatusIndHandler //nwk status ind cb
+#endif
 };
 
 

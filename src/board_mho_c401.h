@@ -47,6 +47,7 @@ EPD: https://github.com/znanev/MHO-C401
 #define USE_EPD				50 // while(task_lcd()) pm_wait_ms(50 ms);
 #define LCD_BUF_SIZE		18
 #define LCD_INIT_DELAY()
+#define USE_DISPLAY_CONNECT_SYMBOL		2 // =2 inverted
 
 // DISPLAY GPIO
 #define EPD_SHD				GPIO_PC4 // should be high

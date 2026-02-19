@@ -75,6 +75,7 @@ None: 3.0..3.4
 #define LCD_CMP_BUF_SIZE	(LCD_BUF_SIZE + 1)
 #define LCD_INIT_DELAY()
 #define USE_DISPLAY_OFF		1
+#define USE_DISPLAY_CONNECT_SYMBOL		2 // =2 inverted
 
 // KEY, BUTTON
 #define BUTTON1             GPIO_PB4

@@ -67,6 +67,7 @@ GPIO_PD7 - free [B1.4], UART TX LCD [B1.6], pcb mark "P7"
 #define PULL_WAKEUP_SRC_PD7	PM_PIN_PULLUP_1M // UART TX (B1.6)
 #define LCD_INIT_DELAY()	//pm_wait_ms(50)
 #define USE_DISPLAY_OFF		1
+#define USE_DISPLAY_CONNECT_SYMBOL		2 // =2 inverted
 
 // BUTTON
 #define BUTTON1				GPIO_PA5  // reset test point
