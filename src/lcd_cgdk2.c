@@ -253,15 +253,16 @@ void show_ble_symbol(bool state){
 		scr.display_buff[1] &= ~BIT(4);
 }
 
-/* None
+#ifdef USE_DISPLAY_CONNECT_SYMBOL
 _SCR_CODE_SEC_
-void show_connected_symbol(bool state) {
-	if (state)
-		scr.display_buff[5] |= BIT(4); // "---" = "."
-	else
-		scr.display_buff[5] &= ~BIT(4);
+void show_connected_symbol(bool state){
+#if USE_DISPLAY_CONNECT_SYMBOL == 2
+	show_ble_symbol(!state);
+#else
+	show_ble_symbol(state);
+#endif
 }
-*/
+#endif
 
 /* number:
  * in 0.1 (-995..19995), Show: -99..-9.9 .. 199.9 .. 1999
