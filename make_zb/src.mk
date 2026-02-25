@@ -41,8 +41,7 @@ $(OUT_PATH)$(SRC_DIR)/zcl_sensorCb.o \
 $(OUT_PATH)$(SRC_DIR)/reporting.o \
 $(OUT_PATH)$(SRC_DIR)/zigbee_ble_switch.o \
 $(OUT_PATH)$(SRC_DIR)/cmd_parser.o \
-$(OUT_PATH)$(SRC_DIR)/main.o \
-$(OUT_PATH)$(SRC_DIR)/ext_ota.o
+$(OUT_PATH)$(SRC_DIR)/main.o
 
 #$(OUT_PATH)$(SRC_DIR)/common/firmwareEncryptChk.o \
 #$(OUT_PATH)$(SRC_DIR)/app_bleCmdHandle.o \

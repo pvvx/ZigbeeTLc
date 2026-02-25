@@ -1,10 +1,10 @@
 [
     {
         "fileVersion": 26750977,
-        "fileSize": 132626,
+        "fileSize": 132594,
         "manufacturerCode": 4417,
         "imageType": 54179,
-        "sha512": "7665947b9dd01e37936c544a9d7761a5b340d6aa1bd5f6a475e20022a1cf226a92ad0348468f5c86b97bbb9babf755f4afa3fcf1dd9799639a66dfeba03a4e7a",
+        "sha512": "934d5a05e8dafb6dafc86688cb10449df5e300d37466f44007b3b7c91296dccffe1b3b5cfd7330c4bee1e5e4cd4423521dffcd1459830f734924e9a2d9076711",
         "otaHeaderString": "Tuya to ZigbeeTlc",
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-d3a3-01983001-TS0201z_v0134.zigbee"
     }

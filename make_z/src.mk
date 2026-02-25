@@ -37,7 +37,6 @@ $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_thermostat_ui_cfg.o \
 $(OUT_PATH)$(SRC_DIR)/zcl_sensorCb.o \
 $(OUT_PATH)$(SRC_DIR)/reporting.o \
 $(OUT_PATH)$(SRC_DIR)/main.o \
-$(OUT_PATH)$(SRC_DIR)/ext_ota.o \
 $(OUT_PATH)$(SRC_DIR)/trigger.o
 
 #$(OUT_PATH)$(SRC_DIR)/common/firmwareEncryptChk.o \
