@@ -144,6 +144,14 @@ const u8 lcd_init_cmd[]	= {
 		0x00,0x00,0x00,0x10,0x00,0x00,0x00,0x00  // Write Display RAM default values
 };
 
+/* LCD controller off
+ * All chips sleep power 2..3 uA */
+const u8 lcd_off_cmd[]	=	{ // sleep all 3.0 uA
+		0xea, // Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
+		0xbc, // Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
+		0xd0  // Mode Set (MODE SET): Display disable, 1/3 Bias, power saving
+};
+
 /* position - position on the screen: 0-2 top line (temperature), 3-5 Bottom line (humidity)
  * digit - symbol to show on the LCD (0-9, A-F, o, t) in this position
  */
@@ -182,6 +190,11 @@ void send_to_lcd(void) {
 	}
 }
 
+void display_off(void) {
+	scr.display_off = 1;
+	send_i2c_bytes(BL55072_I2C_ADDR << 1, (u8 *) lcd_off_cmd, sizeof(lcd_off_cmd));
+}
+
 void init_lcd(void){
 	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
 	scr.i2c_address = BL55072_I2C_ADDR << 1;
@@ -191,6 +204,7 @@ void init_lcd(void){
 		if (lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd))) {
 			display_off();
 		} else {
+			sleep_us(200);
 			scr.blink_flg = 0;
 			scr.display_cmp_buff[0] = 0;  // Set Display RAM address to 0
 			memset(&(scr.display_cmp_buff[1]), 0xff, LCD_BUF_SIZE);
@@ -207,10 +221,6 @@ void update_lcd(void){
 	}
 }
 
-void display_off(void) {
-	send_i2c_byte(BL55072_I2C_ADDR << 1, 0xea);
-	scr.display_off = 1;
-}
 
 /* 0x00 = "  "
  * 0x20 = "°Г"

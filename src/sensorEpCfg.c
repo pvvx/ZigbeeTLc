@@ -50,6 +50,7 @@
 /**********************************************************************
  * GLOBAL VARIABLES
  */
+// Set the number of clusters to ZCL_CLUSTER_NUM_MAX !
 /**
  *  @brief Definition for Incoming cluster / Sever Cluster
  */
@@ -540,6 +541,7 @@ nv_sts_t zcl_thermostatConfig_save(void)
 #if USE_DISPLAY
 		if(zcl_nv_thermostatUiCfg.display_off ^ g_zcl_thermostatUICfgAttrs.display_off) {
 			init_lcd();
+			update_lcd();
 		}
 #endif
 		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));

@@ -71,6 +71,15 @@ const u8 lcd_init_b19[]	=	{
 		0,0, 0,0, 0,0, 0,0,
 		LCD_SYM_o,LCD_SYM_o, 0,LCD_SYM_o, LCD_SYM_o,LCD_SYM_o, 0,0, 0,0
 };
+
+/* LCD B1.9 controller off
+ * All chips sleep power 2..3 uA */
+const u8 lcd_off_b19[]	=	{ // sleep all 3.0 uA
+		0xea, // Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
+		0xbc, // Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
+		0xd0  // Mode Set (MODE SET): Display disable, 1/3 Bias, power saving
+};
+
 /* 0,1,2,3,4,5,6,7,8,9,A,b,C,d,E,F*/
 const u8 display_numbers[] = {
 	//76543210
@@ -412,9 +421,8 @@ void update_lcd(void){
 }
 
 void display_off(void) {
-	send_i2c_byte(B19_I2C_ADDR << 1, 0xea);
-	//send_i2c_byte(B19_I2C_ADDR << 1, 0xd0);
 	scr.display_off = 1;
+	send_i2c_bytes(B19_I2C_ADDR << 1, (u8 *) lcd_off_b19, sizeof(lcd_off_b19));
 }
 
 void init_lcd(void){
@@ -445,9 +453,11 @@ void init_lcd(void){
 			scr.blink_flg = 0;
 			if(scr.display_off) {
 				display_off();
+				return;
 			} else {
 				lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));
 				lcd_send_i2c_buf((u8 *) lcd_init_b19, sizeof(lcd_init_b19));
+				sleep_us(200);
 			}
 
 		} else {

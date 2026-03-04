@@ -123,6 +123,7 @@ int soft_i2c_send_byte(u8 addr, u8 b) {
 #define lcd_send_i2c_byte(a)  soft_i2c_send_byte(scr.i2c_address, a)
 #define lcd_send_i2c_buf(b, a)  soft_i2c_send_buf(scr.i2c_address, (u8 *) b, a)
 
+/* LCD controller initialize */
 const u8 lcd_init_cmd[]	=	{
 		// LCD controller initialize:
 		0xea, // System Set: Software Reset, Internal oscillator circuit
@@ -135,6 +136,13 @@ const u8 lcd_init_cmd[]	=	{
 		0x0c, 0,0,0,0,0,0,0
 };
 
+/* LCD controller off
+ * All chips sleep power 2..3 uA */
+const u8 lcd_off_cmd[]	=	{ // sleep all 3.0 uA
+		0xea, // Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
+		0xbc, // Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
+		0xd0  // Mode Set (MODE SET): Display disable, 1/3 Bias, power saving
+};
 
 _SCR_CODE_SEC_
 void send_to_lcd(void){
@@ -327,8 +335,7 @@ void update_lcd(void){
 }
 void display_off(void) {
 	scr.display_off = 1;
-	soft_i2c_send_byte(VKL060_I2C_ADDR << 1, 0xea);
-//	soft_i2c_send_byte(VKL060_I2C_ADDR << 1, 0xd0);
+	send_i2c_bytes(VKL060_I2C_ADDR << 1, (u8 *) lcd_off_cmd, sizeof(lcd_off_cmd));
 }
 
 void init_lcd(void){
@@ -340,7 +347,7 @@ void init_lcd(void){
 		if(lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd)))
 			display_off();
 		else {
-			pm_wait_us(200);
+			sleep_us(200);
 			scr.blink_flg = 0;
 			memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
 			update_lcd();

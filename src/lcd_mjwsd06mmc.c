@@ -79,6 +79,8 @@ const u8 display_small_numbers[] = {
 #define lcd_send_i2c_byte(a)	send_i2c_byte(scr.i2c_address, a)
 #define lcd_send_i2c_buf(b, a)	send_i2c_bytes(scr.i2c_address, (u8 *) b, a)
 
+/* LCD controller initialize
+ *  All chips sleep power = 8.95 uA */
 const u8 lcd_init_cmd[]	=	{
 		// LCD controller initialize:
 		0xea, // Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
@@ -89,6 +91,14 @@ const u8 lcd_init_cmd[]	=	{
 		0xfc, // All pixel control (APCTL): Normal
 		0x0b,
 		0x00, 0x00,000,0x00,0x00,0x00,0x00,0x00,0x00
+};
+
+/* LCD controller off
+ * All chips sleep power = 3.8 uA */
+const u8 lcd_off_cmd[]	=	{
+		0xea, // Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
+		0xbc, // Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
+		0xd0  // Mode Set (MODE SET): Display disable, 1/3 Bias, power saving
 };
 
 _SCR_CODE_SEC_
@@ -115,21 +125,21 @@ void update_lcd(void){
 }
 
 void display_off(void) {
-	send_i2c_byte(AIP31620E_I2C_ADDR << 1, 0xd0);
-	send_i2c_byte(AIP31620E_I2C_ADDR << 1, 0xEA);
 	scr.display_off = 1;
+	send_i2c_bytes(AIP31620E_I2C_ADDR << 1, (u8 *) lcd_off_cmd, sizeof(lcd_off_cmd));
 }
 
 void init_lcd(void){
 	scr.i2c_address = AIP31620E_I2C_ADDR << 1;
 	scr.display_cmp_buff[0] = 0x0b;
+	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
 	if(scr.display_off) {
-		display_off();
+		display_off(); // All chips sleep power = 3.8 uA
 	} else {
 		if(lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd)))
-			display_off();
+			display_off(); // All chips sleep power = 8.95 uA
 		else {
-			pm_wait_us(200);
+			sleep_us(200);
 			scr.blink_flg = 0;
 			memset(&scr.display_cmp_buff[1], 0xff, sizeof(scr.display_cmp_buff) - 1);
 #if !USE_BLE

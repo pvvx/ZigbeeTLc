@@ -73,38 +73,22 @@ const u8 bottom_left[DEF_CGDK22_SUMBOL_SIGMENTS*2] = {6, 7, 8, 3, 6, 3, 6, 2, 6,
 const u8 bottom_middle[DEF_CGDK22_SUMBOL_SIGMENTS*2] = {7, 3, 8, 2, 8, 7, 8, 6, 8, 5, 8, 4, 7, 1, 7, 0, 7, 4, 7, 5, 7, 6, 7, 7, 7, 2};
 const u8 bottom_right[DEF_CGDK22_SUMBOL_SIGMENTS*2] = {9, 3, 17, 7, 10, 7, 10, 6, 10, 5, 10, 4, 9, 1, 9, 0, 9, 4, 9, 5, 9, 6, 9, 7, 9, 2};
 
-/* LCD controller initialize:
-1. 0xea - Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
-2. 0xbe - Display control (DISCTL): Power save mode3, FRAME flip 1, Normal mode // (0xb6) Power save mode2
-3. 0xf0 - Blink control (BLKCTL): Off
-4. 0xfc - All pixel control (APCTL): Normal
-*/
-//const u8 lcd_init_cmd[] = {0xea,0xbe,0xf0,0xfc}; // sleep all 16.6 uA
 /* LCD controller initialize
-1. 0xea - Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
-2. 0xf0 - Blink control (BLKCTL): Off
-4. 0xc0 - Mode Set (MODE SET): Display ON ?
-2. 0xbc - Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
-*/
-const u8 lcd_init_cmd[] = {0xea,0xf0, 0xc0, 0xbc}; // sleep all 9.4 uA
-
-/*
-static void lcd_send_i2c_buf(u8 * dataBuf, uint32_t dataLen) {
-	if ((reg_clk_en0 & FLD_CLK0_I2C_EN)==0)
-			init_i2c();
-	u8 * p = dataBuf;
-	reg_i2c_id = scr.i2c_address;
-	reg_i2c_ctrl = FLD_I2C_CMD_START | FLD_I2C_CMD_ID;
-	while (reg_i2c_status & FLD_I2C_CMD_BUSY);
-	while (dataLen--) {
-		reg_i2c_do = *p++;
-		reg_i2c_ctrl = FLD_I2C_CMD_DO;
-		while (reg_i2c_status & FLD_I2C_CMD_BUSY);
-	}
-    reg_i2c_ctrl = FLD_I2C_CMD_STOP;
-    while (reg_i2c_status & FLD_I2C_CMD_BUSY);
-}
-*/
+ *  All chips sleep power 9.4 uA */
+const u8 lcd_init_cmd[] = { //
+		0xea, // Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
+		0xf0, // Blink control (BLKCTL): Off
+		0xc0, // Mode Set (MODE SET): Display ON ?
+		0xbc  // Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
+};
+//const u8 lcd_init_cmd[] = {0xea,0xbe,0xf0,0xfc}; // sleep all 16.6 uA
+/* LCD controller off
+ * All chips sleep power 2..3 uA */
+const u8 lcd_off_cmd[]	=	{ // sleep all 3.0 uA
+		0xea, // Set IC Operation(ICSET): Software Reset, Internal oscillator circuit
+		0xbc, // Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
+		0xd0  // Mode Set (MODE SET): Display disable, 1/3 Bias, power saving
+};
 
 _SCR_CODE_SEC_
 static void send_to_lcd(void){
@@ -379,8 +363,8 @@ void show_small_number_x10(s16 number, bool percent){
 }
 
 void display_off(void) {
-	send_i2c_byte(CGDK2_I2C_ADDR << 1, 0xd0);
 	scr.display_off = 1;
+	send_i2c_bytes(CGDK2_I2C_ADDR << 1, (u8 *) lcd_off_cmd, sizeof(lcd_off_cmd));
 }
 
 void init_lcd(void){
@@ -392,7 +376,7 @@ void init_lcd(void){
 		if(lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd))) {
 			display_off();
 		} else {
-			pm_wait_us(200);
+			sleep_us(200);
 			scr.blink_flg = 0;
 			memset(&scr.display_cmp_buff, 0xff, sizeof(scr.display_cmp_buff));
 			send_to_lcd();
