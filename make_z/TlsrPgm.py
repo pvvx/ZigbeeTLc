@@ -17,7 +17,7 @@ import io
 
 __progname__ = 'TLSR82xx TlsrPgm'
 __filename__ = 'TlsrPgm'
-__version__ = '03.12.25'
+__version__ = '08.03.26'
 
 DEFAULT_UART_BAUD = 230400
 
@@ -340,6 +340,8 @@ class TLSRPGM:
 		(self.pgm_swdiv, self.pgm_swaddrlen) = struct.unpack('<BB', data[4:6])
 		self.pgm_swbuf = data[6:12]
 		print('PGM: swdiv %d, addrlen %d, swbuf [%s]' % (self.pgm_swdiv, self.pgm_swaddrlen, hex2str(self.pgm_swbuf)))
+		self.pgm_swsps = self.pgm_clk/5/self.pgm_swdiv
+		print('SWire bit rate: %.4f Mbits/s' % self.pgm_swsps)
 		return True
 	# Reset/Power pin On, Activate, get PC
 	def Activate(self, tms):
@@ -1097,6 +1099,11 @@ def main():
 		help='Show Worked Time',
 		action="store_true")
 	parser.add_argument(
+		'-d', '--div',
+		help='Set the SWire transfer rate divisor',
+		type=arg_auto_int,
+		default = 0)
+	parser.add_argument(
 		'-u', '--u2b',
 		help='Use 2 bytes swire address (TLSR826x)',
 		action="store_true")
@@ -1220,14 +1227,17 @@ def main():
 		sys.exit(1)
 	if not pgm.GetVersion():
 		sys.exit(1)
+	swd = int(round(pgm.pgm_clk/4.8,0))
+	if args.div != 0:
+		swd = args.div
 	if args.u2b:
-		if pgm.pgm_swaddrlen != 2:
-			if not pgm.SetPgmConfig(swdiv = int(round(pgm.pgm_clk/4.8,0)), swaddrlen=2, swbuf = b'\x5a\x00\x06\x02\x00\x05'):
+		if pgm.pgm_swaddrlen != 2 or pgm.pgm_swdiv != swd:
+			if not pgm.SetPgmConfig(swdiv = swd, swaddrlen=2, swbuf = b'\x5a\x00\x06\x02\x00\x05'):
 				pgm.close()
 				sys.exit(1)
 	else:
-		if pgm.pgm_swaddrlen != 3:
-			if not pgm.SetPgmConfig(swdiv = int(round(pgm.pgm_clk/4.8,0)), swaddrlen=3, swbuf = b'\x5a\x00\x06\x02\x00\x05'):
+		if pgm.pgm_swaddrlen != 3 or pgm.pgm_swdiv != swd:
+			if not pgm.SetPgmConfig(swdiv = swd, swaddrlen=3, swbuf = b'\x5a\x00\x06\x02\x00\x05'):
 				pgm.close()
 				sys.exit(1)
 	# set speed up?

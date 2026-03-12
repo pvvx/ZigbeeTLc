@@ -5,48 +5,8 @@
 #include "reporting.h"
 #include "utility.h"
 
-//old sdk:  extern void reportAttr(reportCfgInfo_t *pEntry);
-
 extern bool reportableChangeValueChk(u8 dataType, u8 *curValue, u8 *prevValue, u8 *reportableChange);
 
-/*********************************************************************
- * @fn      reportAttr
- *
- * @brief
- *
- * @param   pEntry
- *
- * @return	NULL
- */
-void reportAttr(reportCfgInfo_t *pEntry)
-{
-	if(!zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)){
-		return;
-	}
-
-	epInfo_t dstEpInfo;
-	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
-
-	dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
-	dstEpInfo.profileId = pEntry->profileID;
-
-	zclAttrInfo_t *pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
-	if(!pAttrEntry){
-		//should not happen.
-		ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
-		return;
-	}
-
-	u16 len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
-
-	len = (len>8) ? (8):(len);
-
-	//store for next compare
-	memcpy(pEntry->prevData, pAttrEntry->data, len);
-
-	zcl_sendReportCmd(pEntry->endPoint, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
-					  pEntry->clusterID, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
-}
 /*********************************************************************
  * @fn      app_chk_report
  *
@@ -56,19 +16,23 @@ void reportAttr(reportCfgInfo_t *pEntry)
  *
  * @return	NULL
  */
-void app_chk_report(u16 uptime_sec) {
+status_t app_chk_report(u16 uptime_sec) {
 	zclAttrInfo_t *pAttrEntry = NULL;
+    epInfo_t dstEpInfo;
 	u16 len;
 	bool flg_report, flg_chk_attr;
+	status_t status = ZCL_STA_SUCCESS;
 	if(reportingTab.reportNum) {
-		for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
+		for(int i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
 			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
 /**
  *  @brief  If minInterval is 0, then there is no minimum limit;
  *  		if maxInterval is 0xffff, then the configuration info for that attribute need not be maintained;
  *  		if minInterval is 0xffff and maxInterval is 0, than back to default reporting configuration, reportable change field set to 0.
  */
-			if(pEntry->used && (pEntry->maxInterval != 0xFFFF)) {
+			if(pEntry->used
+				&& pEntry->maxInterval != 0xFFFF
+				&& zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)) {
 				// used
 				flg_chk_attr = false;
 				flg_report = false;
@@ -98,33 +62,70 @@ void app_chk_report(u16 uptime_sec) {
 					if(!pAttrEntry){
 						// should not happen.
 						ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
-						return;
+						return ZCL_STA_FAILURE;
 					}
-				}
-				if(flg_chk_attr) {
-					// report pAttrEntry
-					if(zcl_analogDataType(pAttrEntry->type)) {
-						if(reportableChangeValueChk(pAttrEntry->type, pAttrEntry->data, pEntry->prevData, pEntry->reportableChange)) {
-							flg_report = true;
-						}
-					} else {
-						len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
-						len = (len > 8) ? (8): (len);
-						if(memcmp(pEntry->prevData, pAttrEntry->data, len) != SUCCESS) {
-							flg_report = true;
+					if(flg_chk_attr) {
+						// report pAttrEntry
+						if(zcl_analogDataType(pAttrEntry->type)) {
+							if(reportableChangeValueChk(pAttrEntry->type, pAttrEntry->data, pEntry->prevData, pEntry->reportableChange)) {
+								flg_chk_attr = false;
+								flg_report = true;
+							}
+						} else {
+							len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
+							len = (len > 8) ? (8): (len);
+							if(memcmp(pEntry->prevData, pAttrEntry->data, len) != SUCCESS) {
+								memcpy(pEntry->prevData, pAttrEntry->data, len);
+								flg_report = true;
+							}
 						}
 					}
 				}
 				if(flg_report) {
+
 					pEntry->minIntCnt = pEntry->minInterval;
-					pEntry->maxIntCnt = pEntry->maxInterval;
-					reportAttr(pEntry);
+
+					if(status == ZCL_STA_INSUFFICIENT_SPACE) {
+
+						pEntry->maxIntCnt = 1; // repeat after 1 sec.
+
+					} else {
+
+						pEntry->maxIntCnt = pEntry->maxInterval;
+
+						if (pEntry->clusterID != 0xFFFF) {
+
+							TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+				            dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+				            dstEpInfo.profileId = pEntry->profileID;
+
+				            if(!flg_chk_attr) {
+				            	len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
+				            	len = (len>8) ? (8):(len);
+				            	memcpy(pEntry->prevData, pAttrEntry->data, len);
+				            }
+
+				            if(zcl_sendReportCmd(pEntry->endPoint,
+									&dstEpInfo,
+									TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+									pEntry->clusterID,
+									pAttrEntry->id,
+									pAttrEntry->type,
+									pAttrEntry->data)
+				            		== ZCL_STA_INSUFFICIENT_SPACE) {
+				            	status = ZCL_STA_INSUFFICIENT_SPACE;
+				            	pEntry->maxIntCnt = 1; // repeat after 1 sec.
+							}
+						}
+			        }
 				}
 			}
 		}
 	} else {
 		// no report
 	}
+	return status;
 }
 /*********************************************************************
  * @fn      app_set_thb_report

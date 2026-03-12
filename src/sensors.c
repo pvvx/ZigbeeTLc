@@ -308,7 +308,7 @@ int read_sensor_cht8215(void *cfg);
 #define CHT8215_CFG_ATM			0x0001
 
 #define CHT8215_MID	0x5959
-#define CHT8215_VID	0x1582
+#define CHT8215_VID	0x8215
 
 
 #define CHT8215_POWER_TIMEOUT_us	5000	// time us, 5 ms
@@ -827,7 +827,11 @@ int read_sensor(void) {
 
 void init_sensor(void) {
 	send_i2c_byte(0, 0x06); // Reset command using the general call address
-	sleep_us(190);	// 190 us
+#if USE_SENSOR_CHT8215
+	sleep_us(1000);	// 1000 us
+#else
+	sleep_us(250);	// 250 us
+#endif
 	if(check_sensor()) {
 		if(sensor_ht.mode == MMODE_READ_START && sensor_ht.measure_timeout_us) {
 			pm_wait_us(sensor_ht.measure_timeout_us);

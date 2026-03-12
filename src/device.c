@@ -418,7 +418,8 @@ void sensorDeviceSysException(void)
 #endif
 	drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 20*1000);
 #else
-	zb_resetDevice();
+	//	zb_resetDevice();
+	drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 20*1000);
 #endif
 }
 
