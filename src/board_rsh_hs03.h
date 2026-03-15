@@ -132,7 +132,7 @@ GPIO_PC3 - UART RX on boards with MRT08S chip, debug header RX, used for HW I2C 
 
 // Sensor T&H
 #define USE_SENSOR_CHT8305		0
-#define USE_SENSOR_CHT8215		0
+#define USE_SENSOR_CHT8215		1
 #define USE_SENSOR_AHT20_30		1
 #define USE_SENSOR_SHT4X		0
 #define USE_SENSOR_SHTC3		0

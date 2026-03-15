@@ -233,7 +233,7 @@ The flashing "BT" icon is called by the "identify" command.
  
 34. Ver 0.1.3.4. Added [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf) (TY0201_TZ3000_bjawzodf). Indicate the loss of the Zigbee network with the “BLE” icon in all firmware versions that do not have an additional icon.
 
-35. Ver 0.1.3.5beta2. Fixed an issue where [MJWSD06MMC would not clear the screen](https://github.com/pvvx/ZigbeeTLc/issues/271) when turning off the screen. [Fixes for the CHT8310 sensor](https://github.com/pvvx/ZigbeeTLc/issues/272).
+35. Ver 0.1.3.5. Fixed an issue where [MJWSD06MMC would not clear the screen](https://github.com/pvvx/ZigbeeTLc/issues/271) when turning off the screen. [Fixes for the CHT8310 sensor](https://github.com/pvvx/ZigbeeTLc/issues/272). Added CHT8310 to other HWs.
 
 
 ## Make
