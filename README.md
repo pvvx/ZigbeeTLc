@@ -2,6 +2,10 @@
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
+
+**Due to limitations in ZHA regarding reading and writing unknown Zigbee attributes, as well as numerous bugs in this year's ZHA and ZHA toolkit versions, and numerous bugs in Z2M, support for this repository has been discontinued until these bugs are fixed or the situation in HA is improved. These integrations have closed all debugging capabilities for ZigBee devices.**
+
+
 * Merging with [ZBdevice](https://github.com/pvvx/ZigbeeTLc/blob/master/ZBdevices.md)
 
 Currently supported devices:
