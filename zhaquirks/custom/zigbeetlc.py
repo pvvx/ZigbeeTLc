@@ -91,17 +91,19 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
 
 (
     QuirkBuilder("MiaoMiaoCe", "MHO-C401N-z")
+    .applies_to("MiaoMiaoCe", "MHO-C401N-bz")
     .applies_to("MiaoMiaoCe", "MHO-C401-z")
     .applies_to("MiaoMiaoCe", "MHO-C122-z")
+    .applies_to("MiaoMiaoCe", "MHO-C122-bz")
     .applies_to("Xiaomi", "LYWSD03MMC-z")
+    .applies_to("Xiaomi", "LYWSD03MMC-bz")
     .applies_to("Xiaomi", "MJWSD06MMC-z")
     .applies_to("Sonoff", "TH03-z")
     .applies_to("Qingping", "CGDK2-z")
+    .applies_to("Qingping", "CGDK2-bz")
     .applies_to("Qingping", "CGG1-z")
     .applies_to("Qingping", "CGG1N-z")
     .applies_to("Tuya", "TH05-z")
-    .applies_to("Tuya", "ZY-ZTH01-z")
-    .applies_to("Tuya", "TY0201-z")
     .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
     .adds(CustomUserInterfaceCluster)
     .number(
@@ -218,6 +220,7 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
     .applies_to("Tuya", "TS0201-z")
     .applies_to("Tuya", "TS0201-bz")
     .applies_to("Tuya", "TH03Z-z")
+    .applies_to("Tuya", "TH03Z-bz")
     .applies_to("Tuya", "ZTH01-z")
     .applies_to("Tuya", "ZTH02-z")
     .applies_to("Tuya", "ZY-ZTH02-z")
@@ -265,6 +268,8 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
 )
 (
     QuirkBuilder("Tuya", "LKTMZL02-z")
+    .applies_to("Tuya", "ZY-ZTH01-z")
+    .applies_to("Tuya", "TY0201-z")
     .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
     .adds(CustomUserInterfaceCluster)
     .number(
