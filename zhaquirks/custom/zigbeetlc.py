@@ -7,7 +7,7 @@ from zigpy.quirks.v2 import QuirkBuilder
 from zigpy.quirks.v2.homeassistant import PERCENTAGE, UnitOfTemperature, UnitOfTime
 import zigpy.types as t
 from zigpy.zcl import ClusterType
-from zigpy.zcl.clusters.hvac import ScheduleProgrammingVisibility, UserInterface
+from zigpy.zcl.clusters.hvac import ScheduleProgrammingVisibility, TemperatureDisplayMode, UserInterface
 from zigpy.zcl.foundation import ZCLAttributeDef
 
 from zhaquirks import CustomCluster
@@ -20,7 +20,7 @@ class Display(t.enum8):
     On = 0x00
 
 
-class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
+class CustomUserInterfaceCluster(CustomCluster, UserInterface):
     """Custom User Interface Cluster with smiley control."""
 
     class AttributeDefs(UserInterface.AttributeDefs):
@@ -89,13 +89,10 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
             is_manufacturer_specific=True,
         )
 
-
 (
     QuirkBuilder("MiaoMiaoCe", "MHO-C401N-z")
-    .applies_to("MiaMiaoCe", "MHO-C401N-z")  # typo until v. 1.2.2
     .applies_to("MiaoMiaoCe", "MHO-C401-z")
     .applies_to("MiaoMiaoCe", "MHO-C122-z")
-    .applies_to("MiaMiaoCe", "MHO-C122-z")  # typo until v. 1.2.2
     .applies_to("Xiaomi", "LYWSD03MMC-z")
     .applies_to("Xiaomi", "MJWSD06MMC-z")
     .applies_to("Sonoff", "TH03-z")
@@ -103,13 +100,13 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
     .applies_to("Qingping", "CGG1-z")
     .applies_to("Qingping", "CGG1N-z")
     .applies_to("Tuya", "TH05-z")
-    .applies_to("Tuya", "LKTMZL02-z")
     .applies_to("Tuya", "ZY-ZTH01-z")
-    .removes(ZigbeeTlcUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
-    .adds(ZigbeeTlcUserInterfaceCluster)
+    .applies_to("Tuya", "TY0201-z")
+    .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
+    .adds(CustomUserInterfaceCluster)
     .number(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.temperature_offset.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.temperature_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -120,8 +117,8 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.humidity_offset.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.humidity_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -132,8 +129,8 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_temperature_min.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.comfort_temperature_min.name,
+        CustomUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -144,8 +141,8 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_temperature_max.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.comfort_temperature_max.name,
+        CustomUserInterfaceCluster.cluster_id,
         min_value=-327.67,
         max_value=327.67,
         step=0.01,
@@ -156,8 +153,8 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_humidity_min.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.comfort_humidity_min.name,
+        CustomUserInterfaceCluster.cluster_id,
         min_value=0,
         max_value=99,
         step=1,
@@ -168,8 +165,8 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.comfort_humidity_max.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.comfort_humidity_max.name,
+        CustomUserInterfaceCluster.cluster_id,
         min_value=0,
         max_value=99,
         step=1,
@@ -180,8 +177,8 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .number(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.measurement_interval.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.measurement_interval.name,
+        CustomUserInterfaceCluster.cluster_id,
         min_value=3,
         max_value=255,
         unit=UnitOfTime.SECONDS,
@@ -190,20 +187,135 @@ class ZigbeeTlcUserInterfaceCluster(CustomCluster, UserInterface):
         mode="box",
     )
     .switch(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.display.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.display.name,
+        CustomUserInterfaceCluster.cluster_id,
         off_value=1,
         on_value=0,
         translation_key="display_enabled",
         fallback_name="Display enabled",
     )
     .switch(
-        ZigbeeTlcUserInterfaceCluster.AttributeDefs.schedule_programming_visibility.name,
-        ZigbeeTlcUserInterfaceCluster.cluster_id,
+        CustomUserInterfaceCluster.AttributeDefs.schedule_programming_visibility.name,
+        CustomUserInterfaceCluster.cluster_id,
         translation_key="show_smiley",
         fallback_name="Show smiley",
         off_value=ScheduleProgrammingVisibility.Disabled,
         on_value=ScheduleProgrammingVisibility.Enabled,
+    )
+    .switch(
+        CustomUserInterfaceCluster.AttributeDefs.temperature_display_mode.name,
+        CustomUserInterfaceCluster.cluster_id,
+        translation_key="temperature_mode",
+        fallback_name="Temperature C/F",
+        off_value=TemperatureDisplayMode.Metric,
+        on_value=TemperatureDisplayMode.Imperial,
+    )
+    .add_to_registry()
+)
+(
+    QuirkBuilder("Sonoff", "ZG-303Z-z")
+    .applies_to("Tuya", "CB3S-z")
+    .applies_to("Tuya", "TS0201-z")
+    .applies_to("Tuya", "TS0201-bz")
+    .applies_to("Tuya", "TH03Z-z")
+    .applies_to("Tuya", "ZTH01-z")
+    .applies_to("Tuya", "ZTH02-z")
+    .applies_to("Tuya", "ZY-ZTH02-z")
+    .applies_to("Tuya", "ZG-227Z-z")
+    .applies_to("Tuya", "MC-z")
+    .applies_to("ZBeacon", "TH01-z")
+    .applies_to("ZBeacon", "TH01-2-z")
+    .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
+    .adds(CustomUserInterfaceCluster)
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.temperature_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=-327.67,
+        max_value=327.67,
+        step=0.01,
+        unit=UnitOfTemperature.CELSIUS,
+        translation_key="temperature_offset",
+        fallback_name="Temperature offset",
+        multiplier=0.01,
+        mode="box",
+    )
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.humidity_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=-327.67,
+        max_value=327.67,
+        step=0.01,
+        unit=PERCENTAGE,
+        translation_key="humidity_offset",
+        fallback_name="Humidity offset",
+        multiplier=0.01,
+        mode="box",
+    )
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.measurement_interval.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=3,
+        max_value=255,
+        unit=UnitOfTime.SECONDS,
+        translation_key="measurement_interval",
+        fallback_name="Measurement interval",
+        mode="box",
+    )
+    .add_to_registry()
+)
+(
+    QuirkBuilder("Tuya", "LKTMZL02-z")
+    .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
+    .adds(CustomUserInterfaceCluster)
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.temperature_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=-327.67,
+        max_value=327.67,
+        step=0.01,
+        unit=UnitOfTemperature.CELSIUS,
+        translation_key="temperature_offset",
+        fallback_name="Temperature offset",
+        multiplier=0.01,
+        mode="box",
+    )
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.humidity_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=-327.67,
+        max_value=327.67,
+        step=0.01,
+        unit=PERCENTAGE,
+        translation_key="humidity_offset",
+        fallback_name="Humidity offset",
+        multiplier=0.01,
+        mode="box",
+    )
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.measurement_interval.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=3,
+        max_value=255,
+        unit=UnitOfTime.SECONDS,
+        translation_key="measurement_interval",
+        fallback_name="Measurement interval",
+        mode="box",
+    )
+    .switch(
+        CustomUserInterfaceCluster.AttributeDefs.display.name,
+        CustomUserInterfaceCluster.cluster_id,
+        off_value=1,
+        on_value=0,
+        translation_key="display_enabled",
+        fallback_name="Display enabled",
+    )
+    .switch(
+        CustomUserInterfaceCluster.AttributeDefs.temperature_display_mode.name,
+        CustomUserInterfaceCluster.cluster_id,
+        translation_key="temperature_mode",
+        fallback_name="Temperature C/F",
+        off_value=TemperatureDisplayMode.Metric,
+        on_value=TemperatureDisplayMode.Imperial,
     )
     .add_to_registry()
 )
