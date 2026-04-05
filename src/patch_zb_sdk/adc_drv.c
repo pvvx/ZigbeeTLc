@@ -148,6 +148,6 @@ u16 get_adc_mv(int flg) { // ADC_InputPchTypeDef
 			+ adc_sample[5];
 	if(flg)
 		return adc_average;
-	return ((adc_average) * ADC_BAT_VREF_MV) >> 12; // adc_vref default: 1175 (mV)
+	return (adc_average * ADC_BAT_VREF_MV) >> 12; // adc_vref default: 1175 (mV)
 }
 
