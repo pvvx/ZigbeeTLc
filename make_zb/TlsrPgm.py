@@ -311,6 +311,9 @@ class TLSRPGM:
 		elif self.pgm_cid == 0x5327:
 			self.pgm_chip = 'TLSR8269'
 			self.pgm_clk = 32
+		elif self.pgm_cid == 0x5591:
+			self.pgm_chip = 'TLSR8208'
+			self.pgm_clk = 32
 		else:
 			self.pgm_clk = 32
 			self.pgm_chip = '?'
@@ -541,6 +544,8 @@ class TLSRPGM:
 			self.ext_chip = 'TLSR8267'
 		elif self.ext_cid == 0x5327:
 			self.ext_chip = 'TLSR8269'
+		elif self.ext_cid == 0x5591:
+			self.ext_chip = 'TLSR8208'
 		else:
 			self.ext_chip = None
 		if self.ext_chip == None:
@@ -989,6 +994,9 @@ class TLSRPGM:
 			return None
 		return ret
 	def SwsPrintf(self, offset = 0x84E700):
+		if self.pgm_ver_int < 8:
+			print('Attention: this program requires PGM version 0.0.0.8 or higher!')
+			return False
 		print('Open SWS Printf at SRAM address 0x%06x...' % (offset), end = '')
 		data = self.command(struct.pack('<BBHB', self.CMD_SWS_PRINTF, offset & 0xff, (offset>>8) & 0xffff, 0), 6)
 		if data == None or self.wcnt != 1:
@@ -1003,7 +1011,7 @@ class TLSRPGM:
 				print('Keyboard Break!')
 				break
 			try:
-				rblk = self._port.read(254)
+				rblk = self._port.read(253)
 			except:
 				#print('Error read %s!' % (self.port))
 				return False
