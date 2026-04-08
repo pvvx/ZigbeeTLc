@@ -17,7 +17,7 @@ import io
 
 __progname__ = 'TLSR82xx TlsrPgm'
 __filename__ = 'TlsrPgm'
-__version__ = '05.04.26'
+__version__ = '08.04.26'
 
 DEFAULT_UART_BAUD = 230400
 
@@ -441,7 +441,7 @@ class TLSRPGM:
 		if data == None:
 			print('\rError Write Flash Status! (%d)' % self.err, file=sys.stderr)
 			return None
-		if not self.WaitingFlashReady(10):
+		if not self.WaitingFlashReady():
 			return None
 		#data = self.command(struct.pack('<BBHHB', self.CMD_FLASH_WRRD, 0, 0, 1, 5), 7)
 		#if data == None:

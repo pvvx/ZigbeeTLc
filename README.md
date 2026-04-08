@@ -239,6 +239,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 35. Ver 0.1.3.5. Fixed an issue where [MJWSD06MMC would not clear the screen](https://github.com/pvvx/ZigbeeTLc/issues/271) when turning off the screen. [Fixes for the CHT8310 sensor](https://github.com/pvvx/ZigbeeTLc/issues/272). Added CHT8310 to other HWs.
 
+36. Ver 0.1.3.6. Added [TS0202_PIR1](https://pvvx.github.io/TS0202_TZ3000), [ZG-204ZL](https://pvvx.github.io/ZG-204ZL-3.0)
 
 ## Make
 

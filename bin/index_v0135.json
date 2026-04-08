@@ -297,5 +297,31 @@
             "Tuya"
         ],
         "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0230-01353001-ZTY0201.zigbee"
+    },
+    {
+        "fileVersion": 20328449,
+        "fileSize": 127362,
+        "manufacturerCode": 4417,
+        "imageType": 552,
+        "sha512": "a547f52ae3831e7a503bcd61647821bb40e1f771afa76346c83398d6633267a22dbd7a32736572bb71a9464c6b813755a010dc593d0af6ca7cce37ddaa1a5263",
+        "otaHeaderString": "Tuya:TS202PIR1-z",
+        "modelId": "TS202PIR1-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0228-01363001-TS202PIR1.zigbee"
+    },
+    {
+        "fileVersion": 20328449,
+        "fileSize": 129442,
+        "manufacturerCode": 4417,
+        "imageType": 562,
+        "sha512": "f02cb98291982cfc88d96f25cf9d4cd2d854607a18b1623c9f234a578f72b4d5e6d21d4c60f01b0e614e8794976684f923f7f9a78456c31b59476cd8b93ea0e1",
+        "otaHeaderString": "Sonoff:ZG-204ZL-z",
+        "modelId": "ZG-204ZL-z",
+        "manufacturerName": [
+            "Sonoff"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0232-01363001-ZG204ZL.zigbee"
     }
 ]
