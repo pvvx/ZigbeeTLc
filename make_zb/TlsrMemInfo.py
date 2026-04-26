@@ -48,13 +48,13 @@ class ELFFile:
 			#	tool_nm = "tc32-elf-nm"
 			proc = subprocess.Popen([self.tool_nm, self.name], stdout=subprocess.PIPE)
 		except OSError:
-			print("Error calling " + self.tool_nm + ", do you have toolchain in PATH?")
+			print("Error calling " + self.tool_nm + ", do you have toolchain in PATH?", file=sys.stderr)
 			sys.exit(1)
 		for l in proc.stdout:
 			fields = l.strip().split()
 			try:
 				if fields[0] == b"U":
-					print("Warning: Undefined symbol '%s'!" %(fields[1].decode('ASCII')))
+					print("Warning: Undefined symbol '%s'!" %(fields[1].decode('ASCII')), file=sys.stderr)
 					continue
 				if fields[0] == b"w":
 					continue  # can skip weak symbols
@@ -134,9 +134,9 @@ def main():
 	print("{0} : {1:d} {2} {3}".format("Total Used SRAM", ram_used, "from", chip_sram_size))
 	print("{0} : {1:d}{2}{3}{4}{5}".format("Total Free SRAM", sec_size[3], " + stack[", sec_size[10], '] = ',  sec_size[3] + sec_size[10]))
 	if sec_size[10] < 4096:
-		print("Warning: Stack is low!")
+		print("Warning: Stack is low!", file=sys.stderr)
 	if ram_used > 32768:
-		print("Warning: Overflow Retention RAM!")
+		print("Warning: Overflow Retention RAM!", file=sys.stderr)
 	sys.exit(0);
 	
 

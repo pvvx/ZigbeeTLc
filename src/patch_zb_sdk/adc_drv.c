@@ -107,26 +107,28 @@ void adc_channel_init(ADC_InputPchTypeDef p_ain) {
 	adc_set_mode(ADC_NORMAL_MODE);
 }
 
+u32 adc_average;
+
 _attribute_ram_code_sec_
 u16 get_adc_mv(int flg) { // ADC_InputPchTypeDef
 	volatile unsigned int adc_dat_buf[ADC_BUF_COUNT];
+	u16 adc_sample[ADC_BUF_COUNT]; // = { 0 };
 	u16 temp;
 	int i, j;
 	adc_power_on_sar_adc(1); // + 0.4 mA
 	adc_reset_adc_module();
-	u32 t0 = clock_time();
-	u16 adc_sample[ADC_BUF_COUNT]; // = { 0 };
-	u32 adc_average;
 	for (i = 0; i < ADC_BUF_COUNT; i++) {
 		adc_dat_buf[i] = 0;
 	}
-	while (!clock_time_exceed(t0, 25)); //wait at least 2 sample cycle(f = 96K, T = 10.4us)
 	adc_config_misc_channel_buf((u16 *) adc_dat_buf, sizeof(adc_dat_buf));
 	dfifo_enable_dfifo2();
-	sleep_us(20);
+	u16 rp = reg_dfifo2_wptr;
 	for (i = 0; i < ADC_BUF_COUNT; i++) {
-		while (!adc_dat_buf[i]);
+		while(rp == reg_dfifo2_wptr);
+		rp = reg_dfifo2_wptr; // 0,4,8,c,10,14,18,1c
 		if (adc_dat_buf[i] & BIT(13)) {
+			/* 14 bit resolution, BIT(13) is sign bit,
+			 * 1 means negative voltage in differential_mode  */
 			adc_sample[i] = 0;
 		} else {
 			adc_sample[i] = ((u16) adc_dat_buf[i] & 0x1FFF);

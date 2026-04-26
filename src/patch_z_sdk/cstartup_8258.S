@@ -46,7 +46,7 @@
 	#define  MOVE_BIN_CODE_EN				1
 #else
 
-	#define  FLL_STK_EN           			1
+	#define  FLL_STK_EN           			0
 	#define  ZERO_IC_TAG_EN		  			1
 
 	#if MCU_8258_A0
@@ -229,6 +229,10 @@ FLL_STK:
 	tadd    r1, #4							@r1 = r1+4
 	tj		FLL_STK							@jump to FLL_STK
 FLL_STK_END:
+#else
+	tloadr	r0, FLL_D						@r0 = 0xffffffff
+	tloadr	r1, FLL_D+4						@r1 = _end_custom_bss_
+	tstorer r0, [r1, #0]					@*(unsigned int*)(_end_custom_bss_)=0xffffffff
 #endif
 @********************************************************************************************************
 @                              		 UPDATE SP UNDER IRQ/SVC MODE
@@ -429,7 +433,7 @@ DAT0:
 	.word	0x12			    		@0		IRQ
 	.word	0x13			    		@4		SVC
 	.word	(irq_stk + IRQ_STK_SIZE)	@8
-	.word	(_stack_end_)		    	@12  	stack end
+	.word	(0x850000)		    		@12  	(_stack_end_) stack end
 	.word	(_start_bss_)               @16
 	.word	(_end_bss_)                 @20
 	.word	(0x80060c)                  @24
@@ -462,7 +466,7 @@ DATA_I:
 FLL_D:
 	.word	0xffffffff                	@0
 	.word	(_end_custom_bss_)  		@4
-	.word	(_stack_end_)               @8
+	.word	(0x850000)                  @8  (_stack_end_)
 	.word   _ramcode_size_div_256_      @12
 MULTI_ADDRESS_DATA:
 	.word	(0x0080063e)				@0

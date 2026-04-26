@@ -3,7 +3,7 @@
 #include "chip_8258/timer.h"
 #include "i2c_drv.h"
 #include "lcd.h"
-#include "device.h"
+#include "app_main.h"
 
 scr_data_t scr;
 

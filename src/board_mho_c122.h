@@ -73,7 +73,6 @@ None: 3.3, 3.7 ?
 // BUTTON
 #define BUTTON1               		GPIO_PA5  // reset test point
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PA5_FUNC			  		AS_GPIO
 #define PA5_OUTPUT_ENABLE	  		0
 #define PA5_INPUT_ENABLE	  		1

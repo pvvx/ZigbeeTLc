@@ -7,7 +7,7 @@
 #include "chip_8258/timer.h"
 
 #include "lcd.h"
-#include "device.h"
+#include "app_main.h"
 
 #define LOW     0
 #define HIGH    1
@@ -16,9 +16,8 @@
 
 RAM scr_data_t scr;
 
-const u8 T_LUT_ping[5] = {0x07B, 0x081, 0x0E4, 0x0E7, 0x008};
-const u8 T_LUT_init[14] = {0x082, 0x068, 0x050, 0x0E8, 0x0D0, 0x0A8, 0x065, 0x07B, 0x081, 0x0E4, 0x0E7, 0x008, 0x0AC, 0x02B };
-const u8 T_LUT_work[9] = {0x082, 0x080, 0x000, 0x0C0, 0x080, 0x080, 0x062, 0x0AC, 0x02B};
+const u8 T_LUT_init[14] = {0x082, 0x068, 0x050, 0x0E8, 0x0D0, 0x0A8, 0x065, 0x07B, 0x081, 0x0E4, 0x0E7, 0x008, 0x0AC, 0x02B};
+const u8 T_LUT_work[14] = {0x082, 0x080, 0x000, 0x0C0, 0x080, 0x080, 0x062, 0x07B, 0x081, 0x0E4, 0x0E7, 0x008, 0x0AC, 0x02B};
 
 //----------------------------------
 // define segments
@@ -349,18 +348,11 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 	while (gpio_read(EPD_BUSY)) {
 		switch (scr.stage) {
 		case 1: // Update/Init, stage 1
-			transmit_blk(0, T_LUT_ping, sizeof(T_LUT_ping));
-			scr.stage = 2;
-			break;
-		case 2: // Update/Init, stage 2
 			if (scr.updated == 0) {
 				transmit_blk(0, T_LUT_init, sizeof(T_LUT_init));
 			} else {
 				transmit_blk(0, T_LUT_work, sizeof(T_LUT_work));
 			}
-			scr.stage = 3;
-			break;
-		case 3: // Update/Init, stage 3
 			transmit(0, 0x040);
 			transmit(0, 0x0A9);
 			transmit(0, 0x0A8);
@@ -369,17 +361,16 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 			transmit(0, 0x0AA);
 			transmit(0, 0x0AF);
 			if (scr.updated) {
-				scr.stage = 4;
+				scr.stage = 2;
 				// EPD_BUSY: ~500 ms
 			} else {
 				//memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_cmp_buff));
 				scr.updated = 1;
-				scr.stage = 2;
 				// EPD_BUSY: ~1000 ms
 			}
 			pm_wait_us(200);
 			break;
-		case 4: // Update, stage 4
+		case 2: // Update, stage 4
 			transmit(0, 0x0AE);
 			transmit(0, 0x028);
 			transmit(0, 0x0AD);

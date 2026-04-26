@@ -49,7 +49,6 @@
 // BUTTON
 #define BUTTON1             GPIO_PB4
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PB4_FUNC			AS_GPIO
 #define PB4_OUTPUT_ENABLE	0
 #define PB4_INPUT_ENABLE	1

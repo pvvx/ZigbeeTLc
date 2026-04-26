@@ -2,39 +2,9 @@
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
-
-**Due to limitations in ZHA regarding reading and writing unknown Zigbee attributes, as well as numerous bugs in this year's ZHA and ZHA toolkit versions, and numerous bugs in Z2M, support for this repository has been discontinued until these bugs are fixed or the situation in HA is improved. These integrations have closed all debugging capabilities for ZigBee devices.**
-
-
 * Merging with [ZBdevice](https://github.com/pvvx/ZigbeeTLc/blob/master/ZBdevices.md)
 
-Currently supported devices:
- [LYWSD03MMC](https://pvvx.github.io/ATC_MiThermometer/),
- [CGG1](https://pvvx.github.io/CGG1/),
- [CGG1N](https://pvvx.github.io/CGG1_2022),
- [CGDK2](https://pvvx.github.io/CGDK2/),
- [MHO-C122](https://pvvx.github.io/MHO_C122),
- [MJWSD06MMC](https://pvvx.github.io/MJWSD06MMC),
- [MHO-C401(old)](https://pvvx.github.io/MHO_C401),
- [MHO-C401N](https://pvvx.github.io/MHO_C401N),
- [TS0201_TZ3000](https://pvvx.github.io/TS0201_TZ3000),
- [TH03Z](https://pvvx.github.io/TH03Z/),
- [TH03](https://pvvx.github.io/TS0201_TZ3000_TH03),
- [LKTMZL02](https://pvvx.github.io/LKTMZL02),
- [ZG-227Z](https://pvvx.github.io/ZG-227Z),
- [ZY-ZTH02](https://pvvx.github.io/ZY-ZTH02),
- [ZY-ZTH02Pro](https://pvvx.github.io/ZY-ZTH02Pro),
- [ZY-ZTH03Pro](https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd),
- [ZG-303Z](https://pvvx.github.io/ZG-303Z),
- [Zbeacon-TH01](https://pvvx.github.io/Zbeacon-TH01),
- [Zbeacon-TH01-v2.0](https://pvvx.github.io/Zbeacon-TH01-v2.0),
- [ZBEACON-MC](https://pvvx.github.io/Zbeacon-MC),
- [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf).
-
-* Work with modification:
- [ZTH01](https://pvvx.github.io/TS0601_TZE200_zth01/),
- [ZTH02](https://pvvx.github.io/TS0601_TZE200_zth02/),
- [ZTH05](https://pvvx.github.io/TS0601_TZE204).
+* [Full list of supported devices](https://github.com/pvvx/pvvx.github.io/blob/master/README.md)
 
 Additional alternative firmware options for some devices with TLSR825x can be found at [github.com/slacky1965](https://github.com/slacky1965?tab=repositories), [doctor64/tuyaZigbee](https://github.com/doctor64/tuyaZigbee)
 
@@ -109,39 +79,11 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 | 1141 | 020a | 0123 | 3001 | Z03MMC | zigbee |
 | 0x1141 - Telink | 0x02 - TLSR825x, 0x0a - Xiaomi LYWSD03MMC | App release 0.1, App build 2.3 | Zigbee v3.0, Release 0.1 |  Z03MMC | OTA |
 
-|Image Type| File Name | Device, note |
-| -- | -- | -- |
-| 0x0201 | ZMHOC401 | MHO-C401 (old version) |
-| 0x0202 | ZCGG1 | CGG1 (old version) |
-| 0x0203 | Z03MMC | LYWSD03MMC ver https://github.com/devbis/z03mmc |
-| 0x0204 | --- | WATERMETER ver https://github.com/slacky1965/watermeter_zed |
-| 0x0206 | ZCGDK2 | CGDK2 |
-| 0x0207 | ZCGG1N | CGG1 (new version) |
-| 0x0208 | ZMHOC401N | MHO-C401 (new version) |
-| 0x020A | Z03MMC | LYWSD03MMC ver https://github.com/pvvx/ZigbeeTLc |
-| 0x020B | ZMHOC122 | MHO-C122 |
-| 0x020D | Z06MMC | MJWSD06MMC |
-| 0x0211 | ZTS0201 | TS0201-TZ3000 |
-| 0x0216 | ZTH03 | TH03Z |
-| 0x021b | ZTH01 | ZTH01 |
-| 0x021c | ZTH02 | ZTH02 |
-| 0x021e | TH03 | TH03 |
-| 0x021f | LKTMZL02 | LKTMZL02 |
-| 0x0221 | ZTH05 | ZTH05 |
-| 0x0225 | ZYZTH02 | ZY-ZTH02 |
-| 0x0226 | ZYZTH01 | ZY-ZTH02-Pro, ZY-ZTH03-Pro |
-| 0x0227 | ZG227 | ZG227 |
-| 0x022C | ZG303Z | ZG-303Z |
-| 0x022D | ZBTH01 | ZBeacon-TH01 |
-| 0x022E | ZB_MC | ZBeacon-MC |
-| 0x022F | ZB2TH01 | ZBeacon-TH01 v2.0 |
-| 0x0230 | [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf) | TY0201_TZ3000_bjawzodf |
+* [Full list of supported devices](https://github.com/pvvx/pvvx.github.io/blob/master/README.md).
 
 * To restore to BLE, use the Zigbee OTA file with the same number device from: https://github.com/pvvx/ATC_MiThermometer/tree/master/zigbee_ota
 
 * Zigbee OTA for 128 KB firmware takes 677 seconds with an average consumption of about 1 mA.
-
-* [Full list of supported devices](https://github.com/pvvx/pvvx.github.io/blob/master/README.md).
 
 * [ZigbeeTLc Index Configurator for Zigbee OTA](https://pvvx.github.io/ATC_MiThermometer/ZigbeeTlcIdxOTA.html)
 

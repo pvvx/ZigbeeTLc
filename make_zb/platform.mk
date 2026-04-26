@@ -20,7 +20,6 @@ $(OUT_PATH)/platform/chip_8258/analog.o \
 $(OUT_PATH)/platform/chip_8258/timer.o \
 $(OUT_PATH)/platform/tc32/div_mod.o 
 
-
 #$(OUT_PATH)/platform/chip_8258/flash.o \
 #$(OUT_PATH)/platform/chip_8258/flash/flash_mid13325e.o
 

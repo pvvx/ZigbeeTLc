@@ -103,7 +103,7 @@ EPD: https://pvvx.github.io/CGG1
 #define USE_SENSOR_SHT30		1
 
 // VBAT
-#define SHL_ADC_VBAT		1  // "B0P" in adc.h
+#define SHL_ADC_VBAT		B0P  // "B0P" in adc.h
 #define GPIO_VBAT			GPIO_PB0 // missing pin on case TLSR8253F512ET32
 #define PB0_INPUT_ENABLE	1
 #define PB0_DATA_OUT		1
@@ -123,7 +123,6 @@ EPD: https://pvvx.github.io/CGG1
 // BUTTON PC4
 #define BUTTON1				GPIO_PC4
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PC4_INPUT_ENABLE	1
 #define PC4_DATA_OUT		0
 #define PC4_OUTPUT_ENABLE	0

@@ -24,7 +24,7 @@
 */
 
 #define BLE_MODEL_STR		"ZG-303Z"
-#define BLE_MAN_STR			"Tuya"
+#define BLE_MAN_STR			"Sonoff"
 
 #define ZCL_BASIC_MFG_NAME     {6,'S','o','n','o','f','f'} // Sonoff
 #define ZCL_BASIC_MODEL_ID	   {9,'Z','G','-','3','0','3','Z','-','z'} // ZY-ZG-303Z-z
@@ -38,7 +38,6 @@
 // BUTTON
 #define BUTTON1             GPIO_PD4
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PD4_FUNC			AS_GPIO
 #define PD4_OUTPUT_ENABLE	0
 #define PD4_INPUT_ENABLE	1

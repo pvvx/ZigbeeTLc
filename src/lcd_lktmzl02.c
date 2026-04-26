@@ -1,10 +1,9 @@
 #include "tl_common.h"
 #if BOARD == BOARD_LKTMZL02
 #include "chip_8258/timer.h"
+#include "i2c_drv.h"
 #include "lcd.h"
-#include "device.h"
-#include "sensors.h"
-#include "battery.h"
+#include "app_main.h"
 
 #define VKL060_I2C_ADDR		0x3E // VKL060
 

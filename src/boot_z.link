@@ -129,7 +129,9 @@ SECTIONS
     PROVIDE(_bin_size_div_16 = ( _bin_size_ + 15 ) / 16 );
     PROVIDE(_ictag_start_ = 0x840000 + _ramcode_size_align_256_);
     PROVIDE(_ictag_end_ = 0x840000 + _ramcode_size_align_256_ + 0x100);
-    PROVIDE(_stack_end_ = (((_end_custom_bss_ + SIZEOF(.sdk_version) + 0x800) + 255) / 256 ) * 256);
-    
-    ASSERT((_stack_end_ < 0x850000), "STACK OVERFOLWN!!!!!")
+
+     /* stack end: 0x850000, user can modify it, nut must ensure _stack_end_ < 0x850000 */
+    PROVIDE(_stack_end_ = 0x850000);
+    PROVIDE(_ram_end_ = (((_end_custom_bss_ + SIZEOF(.sdk_version) + 0x800) + 255) / 256 ) * 256);
+    ASSERT((_ram_end_ < _stack_end_), "STACK OVERFOLWN!!!!!")
 }

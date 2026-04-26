@@ -4,7 +4,7 @@
 /* Based on source: https://github.com/znanev/ATC_MiThermometer */
 #include "chip_8258/timer.h"
 #include "lcd.h"
-#include "device.h"
+#include "app_main.h"
 
 #define DEF_EPD_REFRESH_CNT	32
 #define LOW     0

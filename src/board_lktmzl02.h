@@ -119,7 +119,6 @@ LCD LKTMZL02 real buffer:  byte.bit
 // KEY, BUTTON
 #define BUTTON1				GPIO_PC0
 #define BUTTON1_ON 			0
-#define BUTTON1_OFF 		1
 #define PC0_INPUT_ENABLE	1
 #define PC0_DATA_OUT		0
 #define PC0_OUTPUT_ENABLE	0

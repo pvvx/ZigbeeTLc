@@ -8,7 +8,7 @@ TEL_CHIP := $(POJECT_DEF) -DMCU_CORE_8258=1 -DEND_DEVICE=1 -DMCU_STARTUP_8258=1
 
 #All libs: -ldrivers_826x -ldrivers_8258 -ldrivers_8278 -lsoft-fp -lfirmware_encrypt -lzb_coordinator -lzb_ed -lzb_router
 
-PGM_PORT?=COM6
+PGM_PORT?=COM5
 PGM_PORT_BAUD?=1500000
 
 PROJECT_PATH ?= .
@@ -245,6 +245,10 @@ flash: $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -z15 -a-50 -s we 0 $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -m i
 
+flasho: $(BIN_FILE)
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -z15 -a-50 -s -m -o0x847F00 we 0 $(BIN_FILE)
+
+
 # test start from OTA BLE
 flash_ble: $(BIN_FILE)
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -z15 -a-50 -s i
@@ -262,6 +266,9 @@ flash_tuya: $(BIN_FILE)
 reset:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -z15 -m -w i
 
+reseto:
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -z15 -s -m -o0x847F00 i
+
 erase:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -z15 -s ea
 
@@ -274,6 +281,10 @@ stop:
 go:
 	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) -m
 
+sws_printf:	
+	@$(PYTHON) $(MAKE_PATH)/TlsrPgm.py -p$(PGM_PORT) -b$(PGM_PORT_BAUD) sws 0x847F00
+	
+	
 TADDR?=0x00842a4c
 TLEN?=128
 test_damp:

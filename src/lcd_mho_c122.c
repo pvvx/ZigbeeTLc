@@ -8,10 +8,9 @@
 #include "tl_common.h"
 #if BOARD == BOARD_MHO_C122
 #include "chip_8258/timer.h"
-
 #include "i2c_drv.h"
 #include "lcd.h"
-#include "device.h"
+#include "app_main.h"
 
 #define _SCR_CODE_SEC_
 

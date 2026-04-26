@@ -43,61 +43,63 @@
 
 /* Board ID */
 #define BOARD_LYWSD03MMC_B14		0 // number used for BLE firmware!
-#define BOARD_MHO_C401				1 // SHTC3/SHT4X
-#define BOARD_CGG1					2
+#define BOARD_MHO_C401				1 // SHTC3/SHT4X https://pvvx.github.io/MHO_C401
+#define BOARD_CGG1					2 // https://pvvx.github.io/CGG1
 #define BOARD_LYWSD03MMC_B19		3 // number used for BLE firmware!
 //#define BOARD_LYWSD03MMC_DEVBIS	3 // ver https://github.com/devbis/z03mmc
 #define BOARD_LYWSD03MMC_B16		4 // number used for BLE firmware!
 //#define BOARD_WATERMETER			4 // ver https://github.com/slacky1965/watermeter_zed
 #define BOARD_LYWSD03MMC_B20		5 // B2.0 or B1.7 number used for BLE firmware!
-#define BOARD_CGDK2					6 //
-#define BOARD_CGG1N					7 // 2022
-#define BOARD_MHO_C401N				8 // 2022, SHTC3/SHT4X
-//#define BOARD_MJWSD05MMC			9
+#define BOARD_CGDK2					6 // https://pvvx.github.io/CGDK2
+#define BOARD_CGG1N					7 // 2022 https://pvvx.github.io/CGG1_2022
+#define BOARD_MHO_C401N				8 // 2022, SHTC3/SHT4X https://pvvx.github.io/MHO_C401N
+//#define BOARD_MJWSD05MMC			9 // https://pvvx.github.io/MJWSD05MMC
 #define BOARD_LYWSD03MMC_B15		10 // number used for BLE firmware!
-#define BOARD_LYWSD03MMC			10
-#define BOARD_MHO_C122				11
-//#define BOARD_MJWSD06MMC_EN		12
-#define BOARD_MJWSD06MMC			13
+#define BOARD_LYWSD03MMC			10 // https://pvvx.github.io/ATC_MiThermometer/
+#define BOARD_MHO_C122				11 // https://pvvx.github.io/MHO_C122
+//#define BOARD_MJWSD06MMC_EN		12 // https://pvvx.github.io/MJWSD05MMC
+#define BOARD_MJWSD06MMC			13 // https://pvvx.github.io/MJWSD06MMC
 #define BOARD_LYWSD03MMC_N16		14 // (B1.6 new 2025) number used for BLE firmware!
 // 12..15 - number used for BLE firmware - https://github.com/pvvx/ATC_MiThermometer
 //#define BOARD_TB03F				16 // DIY TB-03F-Kit (not yet published at the moment)
-#define BOARD_TS0201_TZ3000			17 // ZigBee TS0201_TZ3000
+#define BOARD_TS0201_TZ3000			17 // ZigBee TS0201_TZ3000 https://pvvx.github.io/TS0201_TZ3000
 //#define BOARD_TNKS				18 // Water tank controller (not yet published at the moment)
 //#define BOARD_THB2				19 // https://github.com/pvvx/THB2
 //#define BOARD_BTH01				20 // https://github.com/pvvx/THB2
 //#define BOARD_TH05				21 // https://github.com/pvvx/THB2
-#define BOARD_TH03Z   				22 // ZigBee TH03Z
+#define BOARD_TH03Z   				22 // ZigBee TH03Z https://pvvx.github.io/TH03Z
 //#define BOARD_THB1				23 // https://github.com/pvvx/THB2
 //#define BOARD_TH05D				24 // TH05_V1.3 https://github.com/pvvx/THB2
 //#define BOARD_TH05F				25 // TH05Y_V1.2 https://github.com/pvvx/THB2
 //#define BOARD_THB3				26 // https://github.com/pvvx/THB2
-#define BOARD_ZTH01   				27 // ZigBee ZTH01
-#define BOARD_ZTH02   				28 // ZigBee ZTH02
+#define BOARD_ZTH01   				27 // ZigBee ZTH01 https://pvvx.github.io/TS0601_TZE200_zth01
+#define BOARD_ZTH02   				28 // ZigBee ZTH02 https://pvvx.github.io/TS0601_TZE200_zth02
 //#define BOARD_PLM1 				29 // Tuya BLE Plant monitor ECF-SGS01-A rev1.3 (BT3L Tuya module)  (not yet published at the moment)
-#define BOARD_ZTH03   				30 // ZigBee TH03 TS0201(_TZ3000_gohcgzj7, _TZ3000_bguser20) LCD
-#define BOARD_LKTMZL02				31 // ZigBee LKTMZL02 LCD
+#define BOARD_ZTH03   				30 // ZigBee TH03 TS0201(_TZ3000_gohcgzj7, _TZ3000_bguser20) LCD https://pvvx.github.io/TS0201_TZ3000_TH03
+#define BOARD_LKTMZL02				31 // ZigBee LKTMZL02 LCD https://pvvx.github.io/LKTMZL02
 //#define BOARD_KEY2 				32 // KEY2(iSearching) https://github.com/pvvx/THB2
-#define BOARD_ZTH05					33 // Tuya ZigBee TS0601_TZE204
+#define BOARD_ZTH05					33 // Tuya ZigBee TS0601_TZE204 https://pvvx.github.io/TS0601_TZE204
 //#define BOARD_TH04				34 // https://github.com/pvvx/THB2
-#define BOARD_CB3S					35 // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja
-#define BOARD_HS09					36 // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor"
-#define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x
-#define BOARD_ZYZTH01				38 // Tuya ZY-ZTH02Pro/ZY-ZTH03Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x
-#define BOARD_ZG_227Z				39 // Zigbee ZG-227Z
-#define BOARD_TS0202_PIR1 			40 // Tuya TS0202_TZ3000_6ygjfyll PIR
+#define BOARD_CB3S					35 // development is not completed!Tuya ZigBee "Smart Button" TS0041_TZ3000_fa9mlvja https://pvvx.github.io/TS0041_TZ3000_fa9mlvja
+#define BOARD_HS09					36 // development is not completed! TS0201_TZ3000_1twfmkcc: Tuya ZigBee "Smart Humidity Sensor" https://pvvx.github.io/TS0201_TZ3000_1twfmkcc
+#define BOARD_ZYZTH02				37 // Tuya ZY-ZTH02 Zigbee, 2 x AAA, SHT30/CHT832x https://pvvx.github.io/ZY-ZTH02
+#define BOARD_ZYZTH01				38 // Tuya ZY-ZTH02Pro/ZY-ZTH03Pro Zigbee LCD, 2 x AAA, SHT30/CHT832x https://pvvx.github.io/ZY-ZTH02Pro , https://pvvx.github.io/TS0201_TZ3000_v1w2k9dd
+#define BOARD_ZG_227Z				39 // Zigbee ZG-227Z https://pvvx.github.io/ZG-227Z
+#define BOARD_TS0202_PIR1 			40 // Tuya TS0202_TZ3000_lf56vpxj PIR https://pvvx.github.io/TS0202_TZ3000
 #define BOARD_TS0202_PIR2 			41 // Tuya TS0202_TZ3040_bb6xaihh PIR
 //#define BOARD_MINTAGF2			42 // https://github.com/pvvx/THB2
-#define BOARD_ZG303Z				44 // ZG-303Z Plant monitor, 2xAAA, AHT20
-#define BOARD_ZBEACON_TH01			45 // ZBEACON-TH01, 2xAAA , SHT4X
-#define BOARD_ZB_MC					46 // ZigBee-MC, 2xAAA, CHT8305
-#define BOARD_ZBEACON2_TH01			47 // ZBEACON-TH01-v2, 2xAAA , SHT4X/G40
-#define BOARD_RSH_HS03				48 // Tuya ZigBee Temperature/Humidity Sensor "TY0201_TZ3000_bjawzodf", PCB designator "RSH-HS03-V2.0-241018"
-
+//#define BOARD_HDP16				43 // https://github.com/pvvx/THB2
+#define BOARD_ZG303Z				44 // ZG-303Z Plant monitor, 2xAAA, AHT20 https://pvvx.github.io/ZG-303Z
+#define BOARD_ZBEACON_TH01			45 // ZBEACON-TH01, 2xAAA , SHT4X https://pvvx.github.io/Zbeacon-TH01
+#define BOARD_ZB_MC					46 // ZigBee-MC, 2xAAA, CHT8305 https://pvvx.github.io/Zbeacon-MC
+#define BOARD_ZBEACON2_TH01			47 // ZBEACON-TH01-v2, 2xAAA , SHT4X/G40 https://pvvx.github.io/Zbeacon-TH01-v2.0
+#define BOARD_RSH_HS03				48 // Tuya ZigBee Temperature/Humidity Sensor "TY0201_TZ3000_bjawzodf", PCB designator "RSH-HS03-V2.0-241018" https://pvvx.github.io/TY0201_TZ3000_bjawzodf
+//#define BOARD_LYWSD02MMC			49 // EInk display, Clock (BLE)
+#define BOARD_ZG204ZL				50 // HOBEIAN ZG-204ZL PIR + LUX sensor https://pvvx.github.io/ZG-204ZL-3.0
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_MJWSD06MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_TS0202_PIR1 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -124,10 +126,10 @@
 
 #if USE_BLE
 #define APP_RELEASE				0x00	//BCD app release "0.0"
-#define APP_BUILD				0x14	//BCD app build "0.4"
+#define APP_BUILD				0x15	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x35	//BCD app build "2.9"
+#define APP_BUILD				0x36	//BCD app build "2.9"
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

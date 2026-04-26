@@ -2,7 +2,7 @@
 #if (BOARD == BOARD_CGG1)
 #include "chip_8258/timer.h"
 #include "lcd.h"
-#include "device.h"
+#include "app_main.h"
 
 #define DEF_EPD_SUMBOL_SIGMENTS	13
 #define DEF_EPD_REFRESH_CNT		32

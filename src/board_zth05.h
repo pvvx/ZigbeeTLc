@@ -81,7 +81,6 @@ None: 3.2, 3.3
 // KEY, BUTTON
 #define BUTTON1				GPIO_PB4
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PB4_INPUT_ENABLE	1
 #define PB4_DATA_OUT		0
 #define PB4_OUTPUT_ENABLE	0

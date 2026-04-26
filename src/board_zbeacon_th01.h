@@ -37,7 +37,6 @@ GPIO_C3 - LED
 // BUTTON
 #define BUTTON1             GPIO_PB5
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PB5_FUNC			AS_GPIO
 #define PB5_OUTPUT_ENABLE	0
 #define PB5_INPUT_ENABLE	1

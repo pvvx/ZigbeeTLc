@@ -4,7 +4,6 @@ OUT_DIR += /proj/common /proj/drivers /proj/os
 OBJS += \
 $(OUT_PATH)/proj/common/list.o \
 $(OUT_PATH)/proj/common/mempool.o \
-$(OUT_PATH)/proj/common/tlPrintf.o \
 $(OUT_PATH)/proj/common/string.o \
 $(OUT_PATH)/proj/common/utility.o \
 $(OUT_PATH)/proj/drivers/drv_gpio.o \
@@ -22,6 +21,7 @@ $(OUT_PATH)/proj/os/ev_timer.o \
 $(OUT_PATH)/proj/os/ev_rtc.o 
 
 
+#$(OUT_PATH)/proj/common/tlPrintf.o \
 #$(OUT_PATH)/proj/drivers/drv_nv.o \
 #$(OUT_PATH)/proj/drivers/drv_spi.o \
 #$(OUT_PATH)/proj/drivers/drv_adc.o \

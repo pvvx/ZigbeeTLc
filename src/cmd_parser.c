@@ -1,11 +1,10 @@
 #include "tl_common.h"
-#include "device.h"
+#include "app_main.h"
 #include "stack/ble/ble.h"
 #include "ble_cfg.h"
 #include "flash.h"
 #include "i2c_drv.h"
-#include "device.h"
-#include "sensors.h"
+#include "sensor_th.h"
 #include "cmd_parser.h"
 #include "zcl_thermostat_ui_cfg.h"
 

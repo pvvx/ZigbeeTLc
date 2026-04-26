@@ -27,7 +27,7 @@
 #include "zcl_include.h"
 #include "bdb.h"
 #include "ota.h"
-#include "device.h"
+//#include "device.h"
 #include "app_ui.h"
 #include "zigbee_ble_switch.h"
 #include "stack/ble/ble_config.h"
@@ -35,7 +35,7 @@
 #include "stack/ble/ble.h"
 #include "ble_cfg.h"
 #include "bthome_beacon.h"
-#include "sensors.h"
+#include "sensor_th.h"
 
 #if PM_ENABLE
 

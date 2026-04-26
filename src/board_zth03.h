@@ -83,7 +83,6 @@ GPIO_PD7 - free
 // KEY, BUTTON
 #define BUTTON1				GPIO_PD4
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PD4_INPUT_ENABLE	1
 #define PD4_DATA_OUT		0
 #define PD4_OUTPUT_ENABLE	0

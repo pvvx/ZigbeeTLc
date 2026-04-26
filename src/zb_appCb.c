@@ -15,7 +15,7 @@
 #include "zcl_include.h"
 #include "bdb.h"
 #include "ota.h"
-#include "device.h"
+#include "app_main.h"
 #include "app_ui.h"
 #include "lcd.h"
 #if USE_BLE
@@ -36,20 +36,20 @@
 /**********************************************************************
  * LOCAL FUNCTIONS
  */
-void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork);
-void zbdemo_bdbCommissioningCb(u8 status, void *arg);
-void zbdemo_bdbIdentifyCb(u8 endpoint, u16 srcAddr, u16 identifyTime);
-
+void zb_bdbInitCb(u8 status, u8 joinedNetwork);
+void zb_bdbCommissioningCb(u8 status, void *arg);
+void zb_bdbIdentifyCb(u8 endpoint, u16 srcAddr, u16 identifyTime);
+void zb_bdbFindBindSuccessCb(findBindDst_t *pDstInfo);
 
 /**********************************************************************
  * LOCAL VARIABLES
  */
 bdb_appCb_t g_zbDemoBdbCb =
 {
-	zbdemo_bdbInitCb,
-	zbdemo_bdbCommissioningCb,
-	zbdemo_bdbIdentifyCb,
-	NULL
+	zb_bdbInitCb,
+	zb_bdbCommissioningCb,
+	zb_bdbIdentifyCb,
+	zb_bdbFindBindSuccessCb
 };
 
 #ifdef ZCL_OTA
@@ -70,24 +70,40 @@ s32 sensorDevice_bdbNetworkSteerStart(void *arg){
 	return -1;
 }
 
+#if FIND_AND_BIND_SUPPORT
+s32 sensorSwitch_bdbFindAndBindStart(void *arg){
+	BDB_ATTR_GROUP_ID_SET(0x1234);//only for initiator
+	bdb_findAndBindStart(BDB_COMMISSIONING_ROLE_INITIATOR);
+
+	g_sensorAppCtx.bdbFBTimerEvt = NULL;
+	return -1;
+}
+#endif
+
 #if REJOIN_FAILURE_TIMER
 
-#define REJOIN_FAILURE_COUNT	55 // 55 sec
-
+#define REJOIN_FAILURE_COUNT  4 // рестарт с 2-x периодов по 10 sec
+/*
+ * Первые 6 периодов по 10 секунд (~1 минута)
+ * Далее 25 периодов по 55 секунды (~22 минуты)
+ * Далее 96 пероиодов с увеличением на 2 секунды от 65 секунды до 262 секунд
+ * (этот цикл длится ~261 минута, 4.4 часа)
+ * Далее бесконечно с периодом в 262 секунды (4.4 минуты)
+ */
 inline void sensorDevice_rejoin_faillure_timer_set(void) {
 	u32 period;
 	if(g_sensorAppCtx.timerSteerEvt) {
 		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
 	}
-	if(++g_sensorAppCtx.rejoin_cnt > 200) // max 240 sec
-		g_sensorAppCtx.rejoin_cnt = 200;
+	if(++g_sensorAppCtx.rejoin_cnt > 128) // max 128*2 = 256 sec
+		g_sensorAppCtx.rejoin_cnt = 128;
 
 	if(g_sensorAppCtx.rejoin_cnt < 7)
-		period = 9 << 10; // ~9 sec
-	else if(g_sensorAppCtx.rejoin_cnt < REJOIN_FAILURE_COUNT)
-		period = REJOIN_FAILURE_COUNT << 10; // (ms), ~50 sec
-	else
-		period = g_sensorAppCtx.rejoin_cnt << 10; //(ms),  * 1024, 55..200 sec
+		period = 10 << 10; // ~10 sec
+	else if(g_sensorAppCtx.rejoin_cnt < (7+25))
+		period = 55 << 10; // (ms), ~55 sec
+	else // g_sensorAppCtx.rejoin_cnt > 32 ...
+		period = g_sensorAppCtx.rejoin_cnt << 11; //(ms), 32*2048..128*2048, 65..262 sec
 	g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, period);
 }
 
@@ -130,7 +146,8 @@ static s32 sensorDevice_rejoinBackoff(void *arg){
  *
  * @return  None
  */
-void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
+void zb_bdbInitCb(u8 status, u8 joinedNetwork){
+	sws_printf("BDB: InitCb: %02x\n", status);
 	if(status == BDB_INIT_STATUS_SUCCESS){
 		/*
 		 * for non-factory-new device:
@@ -194,7 +211,7 @@ void zbdemo_bdbInitCb(u8 status, u8 joinedNetwork){
  * @fn      set_PollRate
  *
  * @brief   set timer PollRate
- *   (g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)))
+ *   (g_zcl_thermostatUICfgAttrs.measureInterval * (4 * POLL_RATE_QUARTERSECONDS)))
  *
  * @param   none
  *
@@ -206,7 +223,8 @@ void set_PollRate(void) {
 		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
 	}
 #endif
-	zb_setPollRate(DEFAULT_POLL_RATE);
+	zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
+	sws_printf("set_PollRate: %dqt\n", g_zcl_pollCtrlAttrs.longPollInterval);
 }
 
 /*********************************************************************
@@ -220,11 +238,13 @@ void set_PollRate(void) {
  *
  * @return  None
  */
-void zbdemo_bdbCommissioningCb(u8 status, void *arg){
+void zb_bdbCommissioningCb(u8 status, void *arg){
+	sws_printf("BDB Status: %02x\n", status);
 	switch(status){
 		case BDB_COMMISSION_STA_SUCCESS:
+			sws_puts("BDB: join\n");
 #if	USE_BLE
-			ble_task_stop();	// отключение BLE
+			ble_task_stop();	// BLE off
 #endif
 			if(g_sensorAppCtx.timerSteerEvt){
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
@@ -235,8 +255,9 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 
 			g_sensorAppCtx.rejoin_cnt = REJOIN_FAILURE_COUNT;
 
-			light_blink_start(8, 500, 500);
+			light_blink_start(10, 500, 500);
 
+			//zb_setPollRate(POLL_RATE * 3);
 			set_PollRate();
 
 #ifdef ZCL_POLL_CTRL
@@ -248,6 +269,12 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #if	USE_DISPLAY
 			show_connected_symbol(true);
 #endif
+#if FIND_AND_BIND_SUPPORT
+			//start Finding & Binding
+			if (!g_switchAppCtx.bdbFBTimerEvt) {
+				g_switchAppCtx.bdbFBTimerEvt = TL_ZB_TIMER_SCHEDULE(sampleSwitch_bdbFindAndBindStart, NULL, 50);
+			}
+#endif
 			break;
 		case BDB_COMMISSION_STA_IN_PROGRESS:
 			break;
@@ -256,32 +283,31 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 		case BDB_COMMISSION_STA_NO_NETWORK:
 		case BDB_COMMISSION_STA_TCLK_EX_FAILURE:
 		case BDB_COMMISSION_STA_TARGET_FAILURE:
-			{
+			sws_puts("BDB: join\n");
 #if REJOIN_FAILURE_TIMER
-				sensorDevice_rejoin_faillure_timer_set();
+			sensorDevice_rejoin_faillure_timer_set();
 #else
-				u16 jitter = 0;
-				do{
-					jitter = zb_random() % 0x0fff;
-				}while(jitter == 0);
+			u16 jitter = 0;
+			do {
+				jitter = zb_random() % 0x0fff;
+			} while(jitter == 0);
 
-				if(g_sensorAppCtx.timerSteerEvt){
-					TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
-				}
-				g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
+			if(g_sensorAppCtx.timerSteerEvt) {
+				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
+			}
+			g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
 #endif
 #if	USE_DISPLAY
-				show_connected_symbol(false);
+			show_connected_symbol(false);
 #endif
 #if	USE_BLE
-				g_dualModeInfo.bleStart = 1;
+			g_dualModeInfo.bleStart = 1;
 #else
 #if	USE_DISPLAY
-				if(!g_sensorAppCtx.timerTaskEvt)
-					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+			if(!g_sensorAppCtx.timerTaskEvt)
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 #endif
-			}
 			break;
 		case BDB_COMMISSION_STA_FORMATION_FAILURE:
 			break;
@@ -293,6 +319,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 			break;
 		case BDB_COMMISSION_STA_NO_SCAN_RESPONSE:
 		case BDB_COMMISSION_STA_PARENT_LOST:
+			sws_puts("BDB: no response or parent lost\n");
 #if REJOIN_FAILURE_TIMER
 			sensorDevice_rejoinBackoff(NULL);
 #else
@@ -311,6 +338,7 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 #endif
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
+			sws_puts("BDB: rejoin failure\n");
 			if(!zb_isDeviceFactoryNew()){
 #if REJOIN_FAILURE_TIMER
                 // sleep for 6 minutes before reconnect if rejoin failed
@@ -341,9 +369,35 @@ void zbdemo_bdbCommissioningCb(u8 status, void *arg){
 
 
 extern void sensorDevice_zclIdentifyCmdHandler(u8 endpoint, u16 srcAddr, u16 identifyTime);
-void zbdemo_bdbIdentifyCb(u8 endpoint, u16 srcAddr, u16 identifyTime){
+void zb_bdbIdentifyCb(u8 endpoint, u16 srcAddr, u16 identifyTime){
+#if FIND_AND_BIND_SUPPORT
 	sensorDevice_zclIdentifyCmdHandler(endpoint, srcAddr, identifyTime);
+#endif
 }
+
+/*********************************************************************
+ * @fn      zbdemo_bdbFindBindSuccessCb
+ *
+ * @brief   application callback for finding & binding
+ *
+ * @param   pDstInfo
+ *
+ * @return  None
+ */
+void zb_bdbFindBindSuccessCb(findBindDst_t *pDstInfo){
+#if FIND_AND_BIND_SUPPORT
+	epInfo_t dstEpInfo;
+	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+	dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+	dstEpInfo.dstAddr.shortAddr = pDstInfo->addr;
+	dstEpInfo.dstEp = pDstInfo->endpoint;
+	dstEpInfo.profileId = HA_PROFILE_ID;
+
+	zcl_identify_identifyCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo, FALSE, 0, 0);
+#endif
+}
+
 
 #ifdef ZCL_OTA
 void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
@@ -400,8 +454,7 @@ void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf)
  */
 void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd)
 {
-    //printf("sensorDevice_leaveIndHandler, rejoin = %d\n", pLeaveInd->rejoin);
-    //printfArray(pLeaveInd->device_address, 8);
+    sws_printf("leaveIndHandler, rejoin = %d, %8p\n", pLeaveInd->rejoin, pLeaveInd->deviceAddr);
 }
 
 #if !USE_BLE
@@ -416,12 +469,12 @@ void sensorDevice_leaveIndHandler(nlme_leave_ind_t *pLeaveInd)
  */
 void sensorDevice_nwkStatusIndHandler(zdo_nwk_status_ind_t *pNwkStatusInd)
 {
-    //printf("nwkStatusIndHandler: addr = %x, status = %x\n", pNwkStatusInd->shortAddr, pNwkStatusInd->status);
+    sws_printf("nwkStatusIndHandler: addr = %x, status = %x\n", pNwkStatusInd->shortAddr, pNwkStatusInd->status);
 
     if (pNwkStatusInd->status == NWK_COMMAND_STATUS_BAD_FRAME_COUNTER) {
         tl_zb_normal_neighbor_entry_t *nbe = nwk_neTblGetByShortAddr(pNwkStatusInd->shortAddr);
         if (nbe) {
-            //printf("curFC = %d, rcvFC = %d, failCnt = %d\n", nbe->incomingFrameCnt, nbe->receivedFrameCnt, nbe->frameCounterFailCnt);
+            sws_printf("curFC = %d, rcvFC = %d, failCnt = %d\n", nbe->incomingFrameCnt, nbe->receivedFrameCnt, nbe->frameCounterFailCnt);
         }
     } else if (pNwkStatusInd->status == NWK_COMMAND_STATUS_BAD_KEY_SEQUENCE_NUMBER) {
         zb_rejoinSecModeSet(REJOIN_INSECURITY);

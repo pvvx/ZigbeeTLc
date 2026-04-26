@@ -5,7 +5,7 @@
  *******************************************************************************************************/
 #include "tl_common.h"
 #include "zb_common.h"
-#include "device.h"
+#include "app_main.h"
 #include "ext_ota.h"
 #if USE_BLE
 #include "stack/ble/ble_config.h"
@@ -123,7 +123,7 @@ int flash_main(void)
 #if USE_BLE_OTA
 		if(!ble_attr.ota_is_working)
 #endif
-			sensors_task(NULL);
+		sensors_task(NULL);
 		concurrent_mode_main_loop();
 		task_keys();
 #if PM_ENABLE

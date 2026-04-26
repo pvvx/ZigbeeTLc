@@ -22,4 +22,4 @@ if firmware[6:8] != b'\x5d\x02':
         f.write(firmware)
     print(f"Firmware for OTA has been adjusted.")
 else:
-    print(f"Firmware already patched!")
+    print(f"Firmware for OTA has already been adjusted!")

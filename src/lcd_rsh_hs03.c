@@ -3,7 +3,7 @@
 #include "chip_8258/timer.h"
 #include "i2c_drv.h"
 #include "lcd.h"
-#include "device.h"
+#include "app_main.h"
 
 #define lcd_send_i2c_byte(a)  send_i2c_byte(scr.i2c_address, a)
 #define lcd_send_i2c_buf(b, a)  send_i2c_bytes(scr.i2c_address, (u8 *) b, a)

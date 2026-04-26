@@ -23,7 +23,7 @@
  *
  *******************************************************************************************************/
 
-#include "../tl_common.h"
+#include "tl_common.h"
 
 #if FLASH_CAP_SIZE_1M
 u32 g_u32MacFlashAddr = FLASH_ADDR_OF_MAC_ADDR_1M;

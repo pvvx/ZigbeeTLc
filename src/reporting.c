@@ -8,13 +8,49 @@
 extern bool reportableChangeValueChk(u8 dataType, u8 *curValue, u8 *prevValue, u8 *reportableChange);
 
 /*********************************************************************
+ * @fn      app_forcedReport
+ *
+ * @brief	forced report.
+ *
+ * @param   endpoint, claster_id, attr_id
+ *
+ * @return	status
+ */
+status_t app_forcedReport(u8 endpoint, u16 claster_id, u16 attr_id) {
+
+	status_t status = ZCL_STA_SUCCESS;
+
+    if (zb_isDeviceJoinedNwk()) {
+
+        epInfo_t dstEpInfo;
+        TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+
+        dstEpInfo.profileId = HA_PROFILE_ID;
+        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+
+        zclAttrInfo_t *pAttrEntry = zcl_findAttribute(endpoint, claster_id, attr_id);
+
+        if (!pAttrEntry) {
+            //should not happen.
+            ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
+            return ZCL_STA_FAILURE;
+        }
+        {
+        	status = zcl_sendReportCmd(endpoint, &dstEpInfo,  TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
+                    claster_id, pAttrEntry->id, pAttrEntry->type, pAttrEntry->data);
+        }
+        sws_printf("forceReport: %04x:%04x %02x\n", claster_id, pAttrEntry->id, status);
+    }
+    return status;
+}
+/*********************************************************************
  * @fn      app_chk_report
  *
  * @brief	check if there is report.
  *
  * @param   time from old check in sec
  *
- * @return	NULL
+ * @return	status ZCL_STA_SUCCESS or ZCL_STA_INSUFFICIENT_SPACE
  */
 status_t app_chk_report(u16 uptime_sec) {
 	zclAttrInfo_t *pAttrEntry = NULL;
@@ -32,7 +68,8 @@ status_t app_chk_report(u16 uptime_sec) {
  */
 			if(pEntry->used
 				&& pEntry->maxInterval != 0xFFFF
-				&& zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)) {
+				&& zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)
+			    ) {
 				// used
 				flg_chk_attr = false;
 				flg_report = false;
@@ -87,7 +124,7 @@ status_t app_chk_report(u16 uptime_sec) {
 
 					if(status == ZCL_STA_INSUFFICIENT_SPACE) {
 
-						pEntry->maxIntCnt = 1; // repeat after 1 sec.
+						pEntry->maxIntCnt = 0; // repeat after
 
 					} else {
 
@@ -114,9 +151,18 @@ status_t app_chk_report(u16 uptime_sec) {
 									pAttrEntry->type,
 									pAttrEntry->data)
 				            		== ZCL_STA_INSUFFICIENT_SPACE) {
+
 				            	status = ZCL_STA_INSUFFICIENT_SPACE;
-				            	pEntry->maxIntCnt = 1; // repeat after 1 sec.
+
+				            	pEntry->maxIntCnt = 0; // repeat after
 							}
+				            sws_printf("checkReport: %04x:%04x %d,%d,%d:%d %02x\n",
+				            		pEntry->clusterID, pAttrEntry->id,
+									pEntry->minInterval,
+									pEntry->maxInterval,
+									pEntry->reportableChange[0],
+									pEntry->prevData[0],
+									status);
 						}
 			        }
 				}
@@ -127,6 +173,7 @@ status_t app_chk_report(u16 uptime_sec) {
 	}
 	return status;
 }
+
 /*********************************************************************
  * @fn      app_set_thb_report
  *

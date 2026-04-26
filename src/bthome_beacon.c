@@ -8,14 +8,15 @@
 #include "tl_common.h"
 #include "ble_cfg.h" // 8258/gap/gap.h"
 #include "stack/ble/ble.h" // 8258/gap/gap.h"
-#include "device.h"
-#include "sensors.h"
+#include "app_main.h"
+#include "sensor_th.h"
 #include "battery.h"
 #include "bthome_beacon.h"
 #include "zigbee_ble_switch.h"
 #if (DEV_SERVICES & SERVICE_PLM)
-#include "rh.h"
+#include "sensor_rh.h"
 #endif
+#include "app_utils.h"
 
 #define USE_OUT_AVERAGE_BATTERY		1
 

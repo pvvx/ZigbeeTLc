@@ -101,7 +101,6 @@ $(OUT_PATH)/zigbee/zcl/zcl_wwah/zcl_wwah_attr.o \
 $(OUT_PATH)/zigbee/zcl/ota_upgrading/zcl_ota.o \
 $(OUT_PATH)/zigbee/zcl/ota_upgrading/zcl_ota_attr.o \
 $(OUT_PATH)/zigbee/common/zb_config.o \
-$(OUT_PATH)/zigbee/common/zb_version.o \
 $(OUT_PATH)/zigbee/af/zb_af.o \
 $(OUT_PATH)/zigbee/wwah/wwah.o \
 $(OUT_PATH)/zigbee/wwah/wwahEpCfg.o \
@@ -111,6 +110,8 @@ $(OUT_PATH)/zigbee/gp/gp_proxyTab.o \
 $(OUT_PATH)/zigbee/ss/ss_nv.o \
 $(OUT_PATH)/zigbee/ota/ota.o \
 $(OUT_PATH)/zigbee/ota/otaEpCfg.o
+
+#$(OUT_PATH)/zigbee/common/zb_version.o 
 
 # Each subdirectory must supply rules for building sources it contributes
 $(OUT_PATH)/zigbee/%.o: $(SDK_PATH)/stack/zigbee/%.c

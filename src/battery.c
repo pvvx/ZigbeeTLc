@@ -6,9 +6,11 @@
  */
 
 #include "tl_common.h"
-#include "device.h"
-#include "sensors.h"
+#include "app_main.h"
 #include "battery.h"
+#if USE_SENSOR_TH
+#include "sensor_th.h"
+#endif
 #include "lcd.h"
 
 measured_battery_t measured_battery;

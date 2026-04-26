@@ -9,8 +9,8 @@
  * INCLUDES
  */
 #include "tl_common.h"
-#include "device.h"
-#include "sensors.h"
+#include "app_main.h"
+#include "sensor_th.h"
 #include "zb_api.h"
 #include "zcl_include.h"
 #include "lcd.h"
@@ -33,7 +33,10 @@
  */
 #ifndef BUTTON1_ON
 #define BUTTON1_ON 		0
-#define BUTTON1_OFF 	1
+#define BUTTON1_OFF 	(!BUTTON1_ON)
+#endif
+#ifndef BUTTON1_OFF
+#define BUTTON1_OFF 	(!BUTTON1_ON)
 #endif
 
 /**********************************************************************
@@ -247,8 +250,10 @@ void task_keys(void) {
 			if(g_sensorAppCtx.key_on_flag) {
 				if((g_sensorAppCtx.key_on_flag & 2) == 0)
 					drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 3*1000);
+#if	USE_DISPLAY && defined(ZCL_THERMOSTAT_UI_CFG)
 				else if((g_sensorAppCtx.key_on_flag & 1) == 0)
 					zcl_thermostatConfig_save();
+#endif
 			}
 		}
 		g_sensorAppCtx.key_on_flag = 0;

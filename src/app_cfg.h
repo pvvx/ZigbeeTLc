@@ -17,6 +17,10 @@
  */
 /* Debug mode config */
 #define	DEBUG_ENABLE					0 // lcd = DeviceSysException
+//#define	GPIO_PRINTF_MODE			1 // sws_printf() GPIO 1Mbit
+//#define	SWS_PRINTF_MODE				1 // sws_printf() SWS
+
+#define USB_PRINTF_MODE         		0 // SDK, always = 0!
 
 /* Flash protect module */
 /* Only the firmware area will be locked, the NV data area will not be locked.
@@ -24,8 +28,6 @@
  */
 #define FLASH_PROTECT_ENABLE			0
 
-#define	UART_PRINTF_MODE				0
-#define USB_PRINTF_MODE         		0
 
 /* HCI interface */
 #define ZBHCI_BLE						0  // not used !
@@ -78,6 +80,7 @@
 #define SERVICE_SCANTIM		0x00800000	// Scan Time (develop, test only!)
 #define SERVICE_ZIGBEE		0x01000000	// ZB-version
 #define SERVICE_PIR			0x02000000	// use PIR sensor
+#define SERVICE_ILLUMI		0x04000000	// use Illuminance sensor
 #define SERVICE_EXTENDED	0x80000000  //
 
 
@@ -127,7 +130,7 @@
 #elif BOARD == BOARD_ZG_227Z
 #include "board_zg_227z.h"
 #elif BOARD == BOARD_TS0202_PIR1
-#include "board_pirs.h"
+#include "board_ts202.h"
 #elif BOARD == BOARD_MJWSD06MMC
 #include "board_mjwsd06mmc.h"
 #elif BOARD == BOARD_ZG303Z
@@ -140,6 +143,8 @@
 #include "board_zbeacon2_th01.h"
 #elif BOARD == BOARD_RSH_HS03
 #include "board_rsh_hs03.h"
+#elif BOARD == BOARD_ZG204ZL
+#include "board_zg204zl.h"
 #else
 #error "Define BOARD!"
 #endif
@@ -199,19 +204,28 @@
 #define USE_SENSOR_TH  (USE_SENSOR_CHT8305 || USE_SENSOR_CHT8215 || USE_SENSOR_AHT20_30 || USE_SENSOR_SHT4X || USE_SENSOR_SHTC3 || USE_SENSOR_SHT30)
 #endif
 
-#define DEF_OCCUPANCY_DELAY		60 // sec
+#define READ_SENSOR_TIMER_MIN_SEC 	3 // second
 
-#if USE_SENSOR_TH
-#define READ_SENSOR_TIMER_MIN_SEC 	3 // second
-#define READ_SENSOR_TIMER_MAX_SEC 	30 // second
-#define READ_SENSOR_TIMER_SEC 		10 // default, second
-#define DEFAULT_POLL_RATE			(g_zcl_thermostatUICfgAttrs.measure_interval * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
-#else
-#define READ_SENSOR_TIMER_MIN_SEC 	3 // second
-#define READ_SENSOR_TIMER_SEC 		30 // default, second
-#define DEFAULT_POLL_RATE			(READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) //   (READ_SENSOR_TIMER_SEC * (4 * POLL_RATE_QUARTERSECONDS)) // msecond
+#ifndef READ_SENSOR_TIMER_SEC
+#define READ_SENSOR_TIMER_SEC 		20 // default, second
 #endif
-#define READ_SENSOR_TIMER_MS 		DEFAULT_POLL_RATE // (READ_SENSOR_TIMER_SEC*1000) // msecond
+
+#ifndef READ_SENSOR_TIMER_MAX_SEC
+ #if READ_SENSOR_TIMER_SEC < 20
+ #define READ_SENSOR_TIMER_MAX_SEC 	40 // second
+ #else
+ #define READ_SENSOR_TIMER_MAX_SEC 	60 // second
+ #endif
+#endif
+
+#if READ_SENSOR_TIMER_MAX_SEC > 240
+#warning "READ_SENSOR_TIMER_MAX_SEC max 240 second!"
+#endif
+
+#define REPORTABLE_SENSOR_TIMER_MIN_SEC 	READ_SENSOR_TIMER_SEC // second
+#define REPORTABLE_SENSOR_TIMER_MAX_SEC 	(5*60) // 300 second
+
+#define READ_SENSOR_TIMER_MS 		(READ_SENSOR_TIMER_SEC*1000) // msecond
 
 /**********************************************************************
  * NVM configuration
@@ -226,13 +240,16 @@ typedef enum{
 	NV_ITEM_APP_MAN_NAME,
 	NV_ITEM_APP_THERMOSTAT_UI_CFG,
 	NV_ITEM_APP_PIR_CFG,
+	NV_ITEM_APP_ILLUMI_LEVEL,
+	NV_ITEM_APP_ILLUMI_CFG,
 	NV_ITEM_APP_TRIGGER_UI_CFG,
+	NV_ITEM_APP_ONOFF_CFG,
 } nv_item_app_t;
 
 /**********************************************************************
  * ZCL cluster support setting
  */
-#define ZCL_ON_OFF_SUPPORT				USE_TRIGGER
+#define ZCL_ON_OFF_SUPPORT				(USE_TRIGGER || USE_ONOFF)
 #define ZCL_LEVEL_CTRL_SUPPORT			0 // =0 (!)
 #define ZCL_LIGHT_COLOR_CONTROL_SUPPORT	0 // =0 (!)
 #define ZCL_POWER_CFG_SUPPORT						1
@@ -241,6 +258,10 @@ typedef enum{
 #define ZCL_TEMPERATURE_MEASUREMENT_SUPPORT			1
 #define ZCL_RELATIVE_HUMIDITY_SUPPORT   			1
 #define ZCL_THERMOSTAT_UI_CFG_SUPPORT				1
+#endif
+#if (DEV_SERVICES & SERVICE_ILLUMI)
+#define ZCL_ILLUMINANCE_MEASUREMENT_SUPPORT			1
+#define ZCL_ILLUMINANCE_LEVEL_SENSING_SUPPORT		1
 #endif
 #if (DEV_SERVICES & SERVICE_PIR)
 #define ZCL_OCCUPANCY_SENSING_SUPPORT				1
@@ -254,7 +275,7 @@ typedef enum{
 #define ZCL_ZLL_COMMISSIONING_SUPPORT				1
 #endif
 #define REJOIN_FAILURE_TIMER						1
-#define USE_CHG_NAME								1
+#define USE_CHG_NAME								0
 
 // for consistency
 #if ZCL_RELATIVE_HUMIDITY_SUPPORT
@@ -291,12 +312,6 @@ typedef enum{
 #endif
 
 /**********************************************************************
- * Stack configuration
- */
-#include "includes/zb_config.h"
-#include "stack_cfg.h"
-
-/**********************************************************************
  * EV configuration
  */
 typedef enum{
@@ -305,5 +320,14 @@ typedef enum{
     EV_POLL_IDLE,
 	EV_POLL_MAX,
 }ev_poll_e;
+
+/**********************************************************************
+ * Stack configuration
+ */
+#include "includes/zb_config.h"
+#include "stack_cfg.h"
+
+//#define USE_DEBUG_PRINTF (SWS_PRINTF_MODE)
+#include "sws_printf.h"
 
 #endif // _APP_CFG_H_

@@ -13,7 +13,9 @@ $(OUT_PATH)$(SRC_DIR)/patch_z_sdk/i2c_drv.o \
 $(OUT_PATH)$(SRC_DIR)/patch_z_sdk/hw_drv.o \
 $(OUT_PATH)$(SRC_DIR)/patch_z_sdk/drv_nv.o \
 $(OUT_PATH)$(SRC_DIR)/app_ui.o \
-$(OUT_PATH)$(SRC_DIR)/device.o \
+$(OUT_PATH)$(SRC_DIR)/app_main.o \
+$(OUT_PATH)$(SRC_DIR)/app_utils.o \
+$(OUT_PATH)$(SRC_DIR)/app_EpCfg.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_cgdk2.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_lktmzl02.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_lywsd03mmc.o \
@@ -28,15 +30,18 @@ $(OUT_PATH)$(SRC_DIR)/epd_cgg1n.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/battery.o \
-$(OUT_PATH)$(SRC_DIR)/sensors.o \
-$(OUT_PATH)$(SRC_DIR)/rh2.o \
-$(OUT_PATH)$(SRC_DIR)/sensorEpCfg.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_th.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_rh.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_pir.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_lx.o \
 $(OUT_PATH)$(SRC_DIR)/zb_appCb.o \
+$(OUT_PATH)$(SRC_DIR)/zcl_appCb.o \
+$(OUT_PATH)$(SRC_DIR)/reporting.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_thermostat_ui_cfg.o \
-$(OUT_PATH)$(SRC_DIR)/zcl_sensorCb.o \
-$(OUT_PATH)$(SRC_DIR)/reporting.o \
+$(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_illuminance_level_sensing.o \
 $(OUT_PATH)$(SRC_DIR)/main.o \
+$(OUT_PATH)$(SRC_DIR)/sws_printf.o \
 $(OUT_PATH)$(SRC_DIR)/trigger.o
 
 #$(OUT_PATH)$(SRC_DIR)/common/firmwareEncryptChk.o \

@@ -60,8 +60,10 @@ SECTIONS
 	    }
 	.rodata :
 	    {
+	    PROVIDE(_start_rodata_ = . );
 	    *(.rodata)
 	    *(.rodata.*)
+	    PROVIDE(_end_rodata_ = . );
 	    }
 	
 	. = (((. + 3) / 4)*4);

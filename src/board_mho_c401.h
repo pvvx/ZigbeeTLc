@@ -89,7 +89,6 @@ EPD: https://github.com/znanev/MHO-C401
 // BUTTON
 #define BUTTON1 			GPIO_PB6
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PB6_INPUT_ENABLE	1
 #define PB6_DATA_OUT		0
 #define PB6_OUTPUT_ENABLE	0

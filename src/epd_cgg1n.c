@@ -2,7 +2,7 @@
 #if (BOARD == BOARD_CGG1N)
 #include "chip_8258/timer.h"
 #include "lcd.h"
-#include "device.h"
+#include "app_main.h"
 
 #define LOW     0
 #define HIGH    1
@@ -71,10 +71,8 @@ const u8 digits[22][DEF_EPD_SUMBOL_SIGMENTS + 1] = {
 // T_LUT_ping, T_LUT_init, T_LUT_work values taken from the actual device with a
 // logic analyzer
 //----------------------------------
-const u8 T_LUT_ping[5] = {0x07B, 0x081, 0x0E4, 0x0E7, 0x008};
-const u8 T_LUT_init[14] = {0x082, 0x068, 0x050, 0x0E8, 0x0D0, 0x0A8, 0x065, 0x07B, 0x081, 0x0E4, 0x0E7, 0x008, 0x0AC, 0x02B };
-const u8 T_LUT_work[9] = {0x082, 0x080, 0x000, 0x0C0, 0x080, 0x080, 0x062, 0x0AC, 0x02B};
-//const u8 T_LUT_test[16] = {0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0xFF,0x00};
+const u8 T_LUT_init[14] = {0x082, 0x068, 0x050, 0x0E8, 0x0D0, 0x0A8, 0x065, 0x07B, 0x081, 0x0E4, 0x0E7, 0x008, 0x0AC, 0x02B};
+const u8 T_LUT_work[14] = {0x082, 0x080, 0x000, 0x0C0, 0x080, 0x080, 0x062, 0x07B, 0x081, 0x0E4, 0x0E7, 0x008, 0x0AC, 0x02B};
 
 #define delay_SPI_end_cycle() sleep_us(2)
 #define delay_EPD_SCL_pulse() sleep_us(2)
@@ -371,19 +369,11 @@ int task_lcd(void) {
 	while(gpio_read(EPD_BUSY)) {
 		switch (scr.stage) {
 		case 1: // Update/Init, stage 1
-			transmit_blk(0, T_LUT_ping, sizeof(T_LUT_ping));
-			scr.stage = 2;
-			//sleep_us(200); // Waiting for EPD BUSY to be setting?
-			break;
-		case 2: // Update/Init, stage 2
 			if (scr.updated == 0) {
 				transmit_blk(0, T_LUT_init, sizeof(T_LUT_init));
 			} else {
 				transmit_blk(0, T_LUT_work, sizeof(T_LUT_work));
 			}
-			scr.stage = 3;
-			break;
-		case 3: // Update/Init, stage 3
 			transmit(0, 0x040);
 			transmit(0, 0x0A9);
 			transmit(0, 0x0A8);
@@ -392,16 +382,15 @@ int task_lcd(void) {
 			transmit(0, 0x0AA);
 			transmit(0, 0x0AF);
 			if (scr.updated) {
-				scr.stage = 4;
+				scr.stage = 2;
 				// EPD_BUSY: ~500 ms
 			} else {
 				scr.updated = 1;
-				scr.stage = 2;
 				// EPD_BUSY: ~1000 ms
 			}
 			pm_wait_us(200); // Waiting for EPD BUSY to be setting?
 			break;
-		case 4: // Update, stage 4
+		case 2: // Update, stage 4
 			transmit(0, 0x0AE);
 			transmit(0, 0x028);
 			transmit(0, 0x0AD);

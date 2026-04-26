@@ -112,7 +112,6 @@ None: 0.1..0.3, 0.5..0.7, 2.3..2.7, 4.3..4.7, 5.1, 5,3, 5.5, 5.7, 6.1, 6.3, 6.7,
 // BUTTON
 #define BUTTON1 			GPIO_PB6	// Reed Switch, input, pcb mark "P5"
 #define BUTTON1_ON			0
-#define BUTTON1_OFF			1
 #define PB6_INPUT_ENABLE	1
 #define PB6_DATA_OUT		0
 #define PB6_OUTPUT_ENABLE	0

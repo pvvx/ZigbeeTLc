@@ -24,7 +24,6 @@
  *******************************************************************************************************/
 
 #include "tl_common.h"
-#include "sensors.h"
 #include "battery.h"
 #include "ext_ota.h"
 

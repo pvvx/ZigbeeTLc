@@ -3,8 +3,8 @@
 #include "chip_8258/timer.h"
 #include "i2c_drv.h"
 #include "lcd.h"
-#include "device.h"
-#include "sensors.h"
+#include "app_main.h"
+#include "sensor_th.h"
 
 // UART 38400 BAUD
 #define LCD_UART_BAUD 38400
