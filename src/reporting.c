@@ -3,6 +3,8 @@
  * Created: pvvx
  */
 #include "reporting.h"
+#include "app_main.h"
+#include "sensor_th.h"
 #include "utility.h"
 
 extern bool reportableChangeValueChk(u8 dataType, u8 *curValue, u8 *prevValue, u8 *reportableChange);
@@ -184,13 +186,29 @@ status_t app_chk_report(u16 uptime_sec) {
  * @return	NULL
  */
 void app_set_thb_report(void) {
-	if(reportingTab.reportNum) {
+	if(zb_isDeviceJoinedNwk() && reportingTab.reportNum) {
+#if USE_SENSOR_TH
+		sensor_ht.flag |= FLG_REPEAT_REPORT;
+#else
+		g_sensorAppCtx.reportFlg = 1;
+#endif
 		for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
 			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
 			if(pEntry->used && (
-					pEntry->clusterID == ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT
+					pEntry->clusterID == ZCL_CLUSTER_GEN_POWER_CFG
+#ifdef ZCL_TEMPERATURE_MEASUREMENT
+					|| pEntry->clusterID == ZCL_CLUSTER_MS_TEMPERATURE_MEASUREMENT
+#endif
+#ifdef ZCL_RELATIVE_HUMIDITY_MEASUREMENT
 					|| pEntry->clusterID == ZCL_CLUSTER_MS_RELATIVE_HUMIDITY
-					|| pEntry->clusterID == ZCL_CLUSTER_GEN_POWER_CFG)) {
+#endif
+#ifdef ZCL_OCCUPANCY_SENSING
+					||	ZCL_CLUSTER_MS_OCCUPANCY_SENSING
+#endif
+#ifdef ZCL_IAS_ZONE
+					|| pEntry->clusterID == ZCL_CLUSTER_SS_IAS_ZONE
+#endif
+			)) {
 				pEntry->maxIntCnt = 0;
 			}
 		}
