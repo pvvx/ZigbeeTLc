@@ -85,7 +85,3 @@
 | Manufacturer Code | Image Type | File Version | Stack Version |
 | -- | -- | -- | -- |
 | 0x1141 - Telink | 0x02nn - 02: TLSR825x, nn: HW | 0xrrbb - rr: App release, bb: App build | 0x3001 - Zigbee v3.0, Release 0.1 |
-
-* "Manufacture name" and "Device name" are user-defined. They have the write permission attribute.
-When changing the name, it is saved in Flash.
-It is reset to default only by holding down the button (more than 15 seconds).
