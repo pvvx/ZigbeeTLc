@@ -9,7 +9,7 @@
 
 #if (BOARD == BOARD_ZYZTH02)
 
-#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS | SERVICE_LED)
 
 /* https://pvvx.github.io/ZY-ZTH02 | https://pvvx.github.io/ZY-ZTH02Pro
 

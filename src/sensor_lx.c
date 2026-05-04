@@ -15,9 +15,9 @@
 
 extern u64 mul32x32_64(u32 a, u32 b); // hard function (in div_mod.S)
 
-#define USE_ILLUMI_AVERAGE_SHL 	2 // 2
+//#define USE_ILLUMI_AVERAGE_SHL 	2 // 2
 
-#if USE_ILLUMI_AVERAGE_SHL
+#ifdef USE_ILLUMI_AVERAGE_SHL
 struct {
 	u32 summ;
 	u16 cnt;
@@ -106,30 +106,53 @@ u16 calk_10000_log10(u32 x) {
 	return (u16)(base + log_table[index] + add);
 }
 
-u32 old_lx;
+//u32 old_lx;
 
 int read_illumi_sensor(void) {
-#if USE_SENSOR_LX == 1
 	u32 adcvbat, adclx;
+	// turning on the sensor power
 	gpio_write(GPIO_ILLUMI_ON, ILLUMI_POEWR_ON);
 	gpio_set_output_en(GPIO_ILLUMI_ON, 1);
-#if 1
+#ifdef GPIO_ADC_PULL
+	gpio_setup_up_down_resistor(GPIO_ADC_ILLUMI, GPIO_ADC_PULL);
+#endif
+	// sampling Ubat, Ux
 	battery_detect(0);
 	adcvbat = adc_average;
-#else
-	adc_channel_init(SHL_ADC_VBAT);
-	adcvbat = get_adc_mv(1);
-#endif
 	adc_channel_init(SHL_ADC_ILLUMI);
 	adclx = get_adc_mv(1);// adc value x4
-
+	// turning off the sensor power
 	gpio_write(GPIO_ILLUMI_ON, !ILLUMI_POEWR_ON);
 	gpio_set_output_en(GPIO_ILLUMI_ON, 0);
-
-	adclx <<= 16;
-	adclx /= adcvbat; // ~0..65535
-
-#if USE_ILLUMI_AVERAGE_SHL
+#ifdef GPIO_ADC_PULL
+	gpio_setup_up_down_resistor(GPIO_ADC_ILLUMI, PM_PIN_UP_DOWN_FLOAT);
+#endif
+	// calculation of values
+	if(adcvbat > adclx) {
+#if USE_SENSOR_LX == 2 // =1 - ADC = Ur, =2 - ADC = Us
+		adclx = adcvbat - adclx; // Ubat - Usense = Ur
+#endif
+		adclx <<= 16;
+		adclx /= adcvbat; // Ub/Ur = 0..65535
+		adclx *= adclx;
+		adclx >>= 16;	 // 0..0xfffe
+		adclx *= adclx;
+		adclx >>= 16; // 0..0xfffc
+		if(adclx < g_zcl_illuminanceAttrs.cfg.z) {
+			adclx = 0;
+		} else {
+			adclx -= g_zcl_illuminanceAttrs.cfg.z;
+			adclx *= g_zcl_illuminanceAttrs.cfg.k;
+			adclx >>= 16;
+		}
+	} else {
+#if USE_SENSOR_LX == 2 // =1 - ADC = Ur, =2 - ADC = Us
+		adclx = 0;
+#else
+		adclx = g_zcl_illuminanceAttrs.cfg.k;
+#endif
+	}
+#ifdef USE_ILLUMI_AVERAGE_SHL
 	illumi_summ.summ += adclx;
 	illumi_summ.cnt++;
 	if(illumi_summ.cnt >= (1<<USE_ILLUMI_AVERAGE_SHL)) {
@@ -139,31 +162,15 @@ int read_illumi_sensor(void) {
 	} else {
 		adclx = illumi_summ.summ / illumi_summ.cnt;
 	}
+#else
+/*	if(!old_lx)
+		old_lx = adclx;
+	old_lx += adclx;
+	adclx = old_lx >> 1;
+	old_lx -= adclx; */
 #endif
-    // 0 to 30000
-	adclx *= adclx;
-	adclx >>= 16;
-	if(adclx < g_zcl_illuminanceAttrs.cfg.z) {
-		adclx = 0;
-		old_lx = 0;
-	} else {
-		adclx -= g_zcl_illuminanceAttrs.cfg.z;
-		adclx *= g_zcl_illuminanceAttrs.cfg.k;
-		adclx >>= 16;
-
-		adcvbat = pow10_fixed(adclx);
-		if(adcvbat) {
-			if(adcvbat < old_lx - 1
-				|| 	adcvbat > old_lx + 1) {
-				old_lx = adcvbat;
-				adclx = calk_10000_log10(adcvbat + 1);
-				g_zcl_illuminanceAttrs.measuredVal = adclx;
-			} // else - not saved
-		} else {
-			g_zcl_illuminanceAttrs.measuredVal = 0;
-			old_lx = 0;
-		}
-	}
+	adclx = calk_10000_log10(adclx); // lx -> Zigbee lx
+	g_zcl_illuminanceAttrs.measuredVal = adclx;
 #ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
 	u8 il_status = ILSC_NONE;
 	u32 min_lx = (u32)g_zcl_illuminanceAttrs.minLevelLx;
@@ -183,14 +190,17 @@ int read_illumi_sensor(void) {
 		il_status = ILSC_NONE;
 	}
 	g_zcl_illuminanceAttrs.levelStatus = il_status;
+	sws_printf("Sensor: %dzlx, %d\n", adclx, il_status);
+#else
+	sws_printf("Sensor: %dzlx\n", adclx);
 #endif // ZCL_ILLUMINANCE_LEVEL_SENSING
-#endif
-	sws_printf("sence: %dzlx, %dlx, %d\n", adclx, old_lx, il_status);
 	return 0;
 }
 
+#if USE_SENSOR_LX == 1 // =1 - ADC = Ur, =2 - ADC = Us
 void init_sensor(void) {
 
 }
+#endif
 
 #endif // USE_SENSOR_LX

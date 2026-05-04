@@ -5,11 +5,16 @@
  *  @brief Defined for on/off cluster attributes
  */
 typedef struct{
-//	u16	 onTime;
-//	u16	 offWaitTime;
+#if USE_REMOTE_ONOFF
+#if USE_RETRY_ONOFF
+	u32	 timeStamp; // save systick remoteOnOff
+#endif
+	u8 	 remoteOnOff; // last command sent to remoteOnOff()
+#endif
 	u8	 startUpOnOff;
 	bool onOff;
 //	bool globalSceneControl;
+//	u16	 offWaitTime;
 }zcl_onOffAttr_t;
 
 extern zcl_onOffAttr_t g_zcl_onOffAttrs;
@@ -26,5 +31,11 @@ void cmdOnOff_set(bool status);
 void remoteCmdOnOff(u8 srcEp, u8 cmd);
 status_t app_onOffCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void zcl_onoffConfig_save(void);
+void taskRetryOnOff(void);
+#if USE_RETRY_ONOFF
+void afTestOnOffCb(void *arg);
+#else
+#define afTestOnOffCb NULL
+#endif
 
 #endif /* _INCLUDE_APP_ONOFF_H_ */

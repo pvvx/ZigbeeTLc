@@ -35,6 +35,8 @@ $(OUT_PATH)$(SRC_DIR)/epd_mho_c401.o \
 $(OUT_PATH)$(SRC_DIR)/epd_mho_c401n.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_th.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_rh.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_lx.o \
+$(OUT_PATH)$(SRC_DIR)/sensor_xbr818.o \
 $(OUT_PATH)$(SRC_DIR)/zb_appCb.o \
 $(OUT_PATH)$(SRC_DIR)/zcl_appCb.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \

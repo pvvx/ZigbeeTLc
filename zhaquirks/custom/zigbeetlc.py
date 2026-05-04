@@ -8,6 +8,7 @@ from zigpy.quirks.v2.homeassistant import PERCENTAGE, UnitOfTemperature, UnitOfT
 import zigpy.types as t
 from zigpy.zcl import ClusterType
 from zigpy.zcl.clusters.hvac import ScheduleProgrammingVisibility, TemperatureDisplayMode, UserInterface
+from zigpy.zcl.clusters.measurement import IlluminanceLevelSensing, LevelStatus
 from zigpy.zcl.foundation import ZCLAttributeDef
 
 from zhaquirks import CustomCluster
@@ -228,6 +229,7 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
     .applies_to("Tuya", "MC-z")
     .applies_to("ZBeacon", "TH01-z")
     .applies_to("ZBeacon", "TH01-2-z")
+    .applies_to("Sonoff", "ZG-204ZV-z")
     .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
     .adds(CustomUserInterfaceCluster)
     .number(
@@ -322,5 +324,65 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         off_value=TemperatureDisplayMode.Metric,
         on_value=TemperatureDisplayMode.Imperial,
     )
+    .add_to_registry()
+)
+(
+    QuirkBuilder("Sonoff", "ZG-204ZV-z")
+    .removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
+    .adds(CustomUserInterfaceCluster)
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.temperature_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=-327.67,
+        max_value=327.67,
+        step=0.01,
+        unit=UnitOfTemperature.CELSIUS,
+        translation_key="temperature_offset",
+        fallback_name="Temperature offset",
+        multiplier=0.01,
+        mode="box",
+    )
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.humidity_offset.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=-327.67,
+        max_value=327.67,
+        step=0.01,
+        unit=PERCENTAGE,
+        translation_key="humidity_offset",
+        fallback_name="Humidity offset",
+        multiplier=0.01,
+        mode="box",
+    )
+    .number(
+        CustomUserInterfaceCluster.AttributeDefs.measurement_interval.name,
+        CustomUserInterfaceCluster.cluster_id,
+        min_value=3,
+        max_value=255,
+        unit=UnitOfTime.SECONDS,
+        translation_key="measurement_interval",
+        fallback_name="Measurement interval",
+        mode="box",
+    )
+"""
+    .number("illuminance_target_level",
+        cluster_id=0x0401,
+        endpoint_id=0x0000,
+        mode="box",
+        device_class=SensorDeviceClass.ILLUMINANCE,
+        min_value=0, max_value=65534, step=1,
+        translation_key="illuminance_target_level",
+        fallback_name="Illuminance Target Level")
+    .enum("level_status", LevelStatus,
+        cluster_id=0x0401,
+        endpoint_id=0x0010,
+        fallback_name="Illuminance Level Status",
+        translation_key="level_status")
+    .enum("pir_u_to_o_threshold", threshold,
+        cluster_id=0x0406,
+        endpoint_id=0x0012,
+        fallback_name="threshold",
+        translation_key="threshold")
+"""
     .add_to_registry()
 )

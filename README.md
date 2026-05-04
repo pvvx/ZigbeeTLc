@@ -183,6 +183,9 @@ The flashing "BT" icon is called by the "identify" command.
 
 36. Ver 0.1.3.6. Added [TS0202_PIR1](https://pvvx.github.io/TS0202_TZ3000), [ZG-204ZL](https://pvvx.github.io/ZG-204ZL-3.0)
 
+37. Ver 0.1.3.7. Added ZG-204ZV
+
+
 ## Make
 
 To build under Linux, run:

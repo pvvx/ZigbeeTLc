@@ -15,7 +15,7 @@
 
 #include "trigger.h"
 
-#ifndef ZCL_THERMOSTAT_UI_CFG
+#if !ZCL_THERMOSTAT_UI_CFG
 #error "Set ZCL_THERMOSTAT_UI_CFG!"
 #endif
 

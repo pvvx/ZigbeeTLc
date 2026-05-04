@@ -92,7 +92,6 @@
 #define BATTERY_CR2450		2
 #define BATTERY_2AAA		3
 
-
 /* Board include */
 #if defined(BOARD)
 #if BOARD == BOARD_CGG1
@@ -145,6 +144,8 @@
 #include "board_rsh_hs03.h"
 #elif BOARD == BOARD_ZG204ZL
 #include "board_zg204zl.h"
+#elif BOARD == BOARD_ZG204ZV
+#include "board_zg204zv.h"
 #else
 #error "Define BOARD!"
 #endif
@@ -249,7 +250,11 @@ typedef enum{
 /**********************************************************************
  * ZCL cluster support setting
  */
-#define ZCL_ON_OFF_SUPPORT				(USE_TRIGGER || USE_ONOFF)
+#ifndef USE_REMOTE_ONOFF
+#define USE_REMOTE_ONOFF		0
+#endif
+
+#define ZCL_ON_OFF_SUPPORT				(USE_TRIGGER || USE_REMOTE_ONOFF)
 #define ZCL_LEVEL_CTRL_SUPPORT			0 // =0 (!)
 #define ZCL_LIGHT_COLOR_CONTROL_SUPPORT	0 // =0 (!)
 #define ZCL_POWER_CFG_SUPPORT						1
@@ -302,7 +307,7 @@ typedef enum{
  */
 
 /* Configure startup */
-#define STARTUP_IN_BLE				1	// always =1 (if BLE)!
+#define STARTUP_IN_BLE		1	// always =1 (if BLE)!
 
 /* Watch dog module */
 #define MODULE_WATCHDOG_ENABLE						0
@@ -311,6 +316,11 @@ typedef enum{
 	#define ZBHCI_EN								1
 #endif
 
+#if USE_REMOTE_ONOFF
+#ifndef USE_RETRY_ONOFF
+#define USE_RETRY_ONOFF		240 // sec, =0 Off
+#endif
+#endif
 /**********************************************************************
  * EV configuration
  */

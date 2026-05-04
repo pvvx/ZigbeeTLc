@@ -14,7 +14,11 @@
 #define ZCL_CUSTOM_ATTRID_LX_SENSOR_COEF	0x5002
 
 #define ADC_LX_ZERO_DEF	0
-#define ADC_LX_COEF_DEF	30100  // = max 1000 lx // 10000*log10(30000)
+#if USE_SENSOR_LX == 2
+#define ADC_LX_COEF_DEF	5000  // = max 5000 lx
+#else
+#define ADC_LX_COEF_DEF	2000  // = max 2000 lx
+#endif
 
 /**
  *  @brief Defined for Illuminance Measure cluster attributes
@@ -23,7 +27,9 @@
 typedef struct {
 	u16 k; // coef
 	u16 z; // zero
+#ifndef ZCL_THERMOSTAT_UI_CFG
 	u8 measureInterval;
+#endif
 } ilumi_cfg_t;
 
 typedef struct {

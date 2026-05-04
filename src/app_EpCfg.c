@@ -20,6 +20,9 @@
 #include "zcl_illuminance_level_sensing.h"
 #include "sensor_lx.h"
 #endif
+#if USE_SENSOR_XBR818
+#include "sensor_xbr818.h"
+#endif
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -293,7 +296,9 @@ zcl_illuminanceAttr_t	g_zcl_illuminanceAttrs = {
 		.cfg = {
 			.z = ADC_LX_ZERO_DEF,
 			.k = ADC_LX_COEF_DEF,
+#if !ZCL_THERMOSTAT_UI_CFG
 			.measureInterval = READ_SENSOR_TIMER_SEC
+#endif
 		},
 		.measuredVal = 0xffff,
 		.minMeasuredVal = 1,
@@ -337,7 +342,9 @@ const zclAttrInfo_t ilsc_attrTbl[] = {
     { ZCL_ATTRID_ILSC_LIGHT_SENSOR_TYPE,  ZCL_DATA_TYPE_ENUM8,  ACCESS_CONTROL_READ, (u8*)&g_zcl_illuminanceAttrs.lightSensorType },
 #endif
     { ZCL_ATTRID_ILSC_TARGET_LEVEL,       ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_illuminanceAttrs.minLevelLx},
+#if !ZCL_THERMOSTAT_UI_CFG
 	{ ZCL_CUSTOM_ATTRID_MEASURE_INTERVAL, ZCL_DATA_TYPE_UINT8,    ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_illuminanceAttrs.cfg.measureInterval},
+#endif
     { ZCL_CUSTOM_ATTRID_LX_SENSOR_ZERO,   ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_illuminanceAttrs.cfg.z},
     { ZCL_CUSTOM_ATTRID_LX_SENSOR_COEF,   ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE, (u8*)&g_zcl_illuminanceAttrs.cfg.k},
     { ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16, ACCESS_CONTROL_READ, (u8*)&zcl_attr_global_clusterRevision },
@@ -473,16 +480,20 @@ const zclAttrInfo_t thermostat_ui_cfg_attrTbl[] =
 zcl_occupancyAttr_t zcl_occupAttr = {
 	.occupancy		= 0, // 1 = occupied, 0 = unoccupied.
 	.sensor_type	= 0, // = PIR
-	.delay	= DEF_OCCUPANCY_DELAY
+	.delay	= DEF_OCCUPANCY_DELAY,
+#if USE_SENSOR_XBR818
+	.thres	= DEF_OCCUPANCY_THRES
+#endif
 };
 /* Attribute record list */
 const zclAttrInfo_t occupancy_attrTbl[] = {
 	{ ZCL_ATTRID_OCCUPANCY,  ZCL_DATA_TYPE_BITMAP8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE,  (u8*)&zcl_occupAttr.occupancy},
 	{ ZCL_ATTRID_OCCUPANCY_SENSOR_TYPE,  ZCL_DATA_TYPE_ENUM8,   ACCESS_CONTROL_READ,  (u8*)&zcl_occupAttr.sensor_type},
 	{ ZCL_ATTRID_PIR_OCCU2UNOCCU_DELAY,  ZCL_DATA_TYPE_UINT16,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.delay},
-//	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_DELAY,  ZCL_DATA_TYPE_UINT16,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.delay},
-//	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.delay},
-
+//	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_DELAY,  ZCL_DATA_TYPE_UINT16,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.oc2un_delay},
+#if USE_SENSOR_XBR818
+	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.thres},
+#endif
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  (u8*)&zcl_attr_global_clusterRevision},
 };
 
@@ -640,25 +651,47 @@ void zcl_illuminanceLevel_save(void) {
 }
 void zcl_illuminanceConfig_save(void) {
 	ilumi_cfg_t icfg;
+#if !ZCL_THERMOSTAT_UI_CFG
 	test_set_measure_longpoll_interval(g_zcl_illuminanceAttrs.cfg.measureInterval);
+#endif
 	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_ILLUMI_CFG, sizeof(icfg), (u8*)&icfg) != NV_SUCC){
 		g_zcl_illuminanceAttrs.cfg.z = ADC_LX_ZERO_DEF;
 		g_zcl_illuminanceAttrs.cfg.k = ADC_LX_COEF_DEF;
+#if !ZCL_THERMOSTAT_UI_CFG
 		g_zcl_illuminanceAttrs.cfg.measureInterval = READ_SENSOR_TIMER_SEC;
+#endif
 	}
 	if(memcmp(&g_zcl_illuminanceAttrs.cfg, &icfg, sizeof(icfg))) {
+#if !ZCL_THERMOSTAT_UI_CFG
 		if(g_zcl_illuminanceAttrs.cfg.measureInterval != icfg.measureInterval) {
 			set_PollRate();
 		}
+#endif
 		if(memcmp(&g_zcl_illuminanceAttrs.cfg, &icfg, sizeof(icfg))) {
 			nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_PIR_CFG, sizeof(g_zcl_illuminanceAttrs.cfg), (u8*)&g_zcl_illuminanceAttrs.cfg);
 	    	sws_puts("NV: illumiCfg saved\n");
 		}
 	}
 }
-#endif
+#endif // ZCL_ILLUMINANCE_LEVEL_SENSING
+
 #ifdef ZCL_OCCUPANCY_SENSING
 void zcl_occupanceConfig_save(void) {
+#if USE_SENSOR_XBR818
+	zcl_occupancy_save_t occupancy_save;
+	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_PIR_CFG, sizeof(occupancy_save), (u8*)&occupancy_save) != NV_SUCC){
+		occupancy_save.delay = DEF_OCCUPANCY_DELAY;
+		occupancy_save.thres = DEF_OCCUPANCY_THRES;
+	}
+	if(occupancy_save.delay != zcl_occupAttr.delay
+		|| occupancy_save.thres != zcl_occupAttr.thres) {
+		xbr818_set_cfg();
+		occupancy_save.delay = zcl_occupAttr.delay;
+		occupancy_save.thres = zcl_occupAttr.thres;
+		nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_PIR_CFG, sizeof(occupancy_save), (u8*)&occupancy_save);
+    	sws_puts("NV: OccupDelay saved\n");
+	}
+#else // !USE_SENSOR_XBR818
 	u16 delay;
 	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_PIR_CFG, sizeof(delay), (u8*)&delay) != NV_SUCC){
 		delay = DEF_OCCUPANCY_DELAY;
@@ -667,8 +700,9 @@ void zcl_occupanceConfig_save(void) {
 		nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_PIR_CFG, sizeof(zcl_occupAttr.delay), (u8*)&zcl_occupAttr.delay);
     	sws_puts("NV: OccupDelay saved\n");
 	}
+#endif // USE_SENSOR_XBR818
 }
-#endif
+#endif // ZCL_OCCUPANCY_SENSING
 
 #ifdef ZCL_POLL_CTRL
 
@@ -714,7 +748,7 @@ nv_sts_t zcl_thermostatConfig_save(void)
 
 #ifdef ZCL_ON_OFF
 void zcl_onoffConfig_save(void) {
-	 zcl_nv_onOff_t zcl_nv_onOff;
+	zcl_nv_onOff_t zcl_nv_onOff;
 	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_ONOFF_CFG, sizeof(zcl_nv_onOff), (u8 *)&zcl_nv_onOff) != NV_SUCC) {
 		g_zcl_onOffAttrs.onOff = ZCL_ONOFF_STATUS_ON;
 		g_zcl_onOffAttrs.startUpOnOff = ZCL_START_UP_ONOFF_SET_ONOFF_TO_ON;
@@ -751,18 +785,35 @@ void init_nv_app(void) {
 		if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_ILLUMI_CFG, sizeof(g_zcl_illuminanceAttrs.cfg), (u8*)&g_zcl_illuminanceAttrs.cfg) != NV_SUCC){
 			g_zcl_illuminanceAttrs.cfg.z = ADC_LX_ZERO_DEF;
 			g_zcl_illuminanceAttrs.cfg.k = ADC_LX_COEF_DEF;
+#if !ZCL_THERMOSTAT_UI_CFG
 			g_zcl_illuminanceAttrs.cfg.measureInterval = READ_SENSOR_TIMER_SEC;
+#endif
 		}
 #endif
 #ifdef ZCL_OCCUPANCY_SENSING
+#if USE_SENSOR_XBR818
+		zcl_occupancy_save_t occupancy_save;
+		if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_PIR_CFG, sizeof(occupancy_save), (u8*)&occupancy_save) != NV_SUCC){
+			zcl_occupAttr.delay = DEF_OCCUPANCY_DELAY;
+			zcl_occupAttr.thres = DEF_OCCUPANCY_THRES;
+		} else {
+			zcl_occupAttr.delay = occupancy_save.delay;
+			zcl_occupAttr.thres = occupancy_save.thres;
+		}
+#else	//!USE_SENSOR_XBR818
 		if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_PIR_CFG, sizeof(zcl_occupAttr.delay), (u8*)&zcl_occupAttr.delay) != NV_SUCC){
 			zcl_occupAttr.delay = DEF_OCCUPANCY_DELAY;
 		}
 #endif
+#endif // ZCL_OCCUPANCY_SENSING
 #ifdef ZCL_ON_OFF
-		if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_ONOFF_CFG, sizeof(g_zcl_onOffAttrs.startUpOnOff), (u8*)&g_zcl_onOffAttrs.startUpOnOff) != NV_SUCC){
+		zcl_nv_onOff_t zcl_nv_onOff;
+		if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_ONOFF_CFG, sizeof(zcl_nv_onOff), (u8*)&zcl_nv_onOff) != NV_SUCC){
 			g_zcl_onOffAttrs.onOff = ZCL_ONOFF_STATUS_ON;
 			g_zcl_onOffAttrs.startUpOnOff = ZCL_START_UP_ONOFF_SET_ONOFF_TO_ON;
+		} else {
+			g_zcl_onOffAttrs.onOff = zcl_nv_onOff.onOff;
+			g_zcl_onOffAttrs.startUpOnOff = zcl_nv_onOff.startUpOnOff;
 		}
 #endif
 #ifdef ZCL_THERMOSTAT_UI_CFG
@@ -794,11 +845,12 @@ void init_nv_app(void) {
 #if USE_TRIGGER
 	trigger_init();
 #endif
+#if ZCL_THERMOSTAT_UI_CFG
+	test_set_measure_longpoll_interval(g_zcl_thermostatUICfgAttrs.measureInterval);
+#else
 #ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
 	test_set_measure_longpoll_interval(g_zcl_illuminanceAttrs.cfg.measureInterval);
 #endif
-#ifdef ZCL_THERMOSTAT_UI_CFG
-	test_set_measure_longpoll_interval(g_zcl_thermostatUICfgAttrs.measureInterval);
 #endif
 	set_PollRate();
 #if USE_CHG_NAME

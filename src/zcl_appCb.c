@@ -20,8 +20,9 @@
 #include "zcl_illuminance_level_sensing.h"
 #include "sensor_lx.h"
 #endif
-
-
+#if (DEV_SERVICES & SERVICE_PIR)
+#include "sensor_pir.h"
+#endif
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -174,15 +175,16 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 		for(int i = 0; i < numAttr; i++) {
 			if(attr[i].attrID == ZCL_ATTRID_CHK_IN_INTERVAL) {
 				sensorDevice_zclCheckInStart();
-#if defined(ZCL_THERMOSTAT_UI_CFG) || defined(ZCL_ILLUMINANCE_LEVEL_SENSING)
+#if ZCL_THERMOSTAT_UI_CFG || defined(ZCL_ILLUMINANCE_LEVEL_SENSING)
 			} else if(attr[i].attrID == ZCL_ATTRID_LONG_POLL_INTERVAL) {
 				if(test_set_measure_longpoll_interval(g_zcl_pollCtrlAttrs.longPollInterval >> 2)
 						== ZCL_STA_SUCCESS) {
-#ifdef ZCL_THERMOSTAT_UI_CFG
+#if ZCL_THERMOSTAT_UI_CFG
 					zcl_thermostatConfig_save();
-#endif
+#else
 #ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
 					zcl_illuminanceConfig_save();
+#endif
 #endif
 				}
 #endif
@@ -741,7 +743,7 @@ static status_t sensorDevice_zclPollCtrlFastPollStopCmdHandler(void)
 	return ZCL_STA_SUCCESS;
 }
 
-#if defined(ZCL_THERMOSTAT_UI_CFG) || USE_SENSOR_LX
+#if ZCL_THERMOSTAT_UI_CFG || USE_SENSOR_LX
 
 status_t test_set_measure_longpoll_interval(u32 measureInterval) {
 	status_t ret = ZCL_STA_SUCCESS;
@@ -756,7 +758,7 @@ status_t test_set_measure_longpoll_interval(u32 measureInterval) {
 	g_sensorAppCtx.measureInterval =
 			((u32)measureInterval * CLOCK_16M_SYS_TIMER_CLK_1S)
 			- 25*CLOCK_16M_SYS_TIMER_CLK_1MS;
-#ifdef ZCL_THERMOSTAT_UI_CFG
+#if ZCL_THERMOSTAT_UI_CFG
 	g_zcl_thermostatUICfgAttrs.measureInterval = (u8)measureInterval;
 #elif USE_SENSOR_LX
 	g_zcl_illuminanceAttrs.cfg.measureInterval = (u8)measureInterval;
@@ -946,21 +948,120 @@ status_t sensorDevice_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *
 
 #ifdef ZCL_ON_OFF
 
+#if USE_RETRY_ONOFF
+extern u32 rtcSeconds;
+/**********************************************************************
+ * FUNCTIONS
+ */
+/* if(zb_isDeviceJoinedNwk()) ! */
+void taskRetryOnOff(void) {
+	zcl_onOffAttr_t *pOnOff = zcl_onoffAttrGet();
+	if(pOnOff->timeStamp
+	  && rtcSeconds - pOnOff->timeStamp < USE_RETRY_ONOFF) {
+	    for (int j = 0; j < APS_BINDING_TABLE_NUM; j++) {
+	    	aps_binding_entry_t *bind_tbl = &g_apsBindingTbl[j];
+	        if (bind_tbl->used > 1 // статус не APS_STATUS_SUCCESS
+	         && bind_tbl->clusterId == ZCL_CLUSTER_GEN_ON_OFF
+			 && bind_tbl->srcEp == SENSOR_DEVICE_ENDPOINT) {
+			    sws_printf("RetryOnOff dst:%08p:%02x, ep:%02x, cmd:%02x\n",
+			    		&bind_tbl->dstExtAddrInfo, bind_tbl->used - 1,
+						SENSOR_DEVICE_ENDPOINT, pOnOff->onOffrm);
+				epInfo_t dstEpInfo;
+			    TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+			    dstEpInfo.profileId = HA_PROFILE_ID;
+			    dstEpInfo.txOptions = APS_TX_OPT_ACK_TX;
+			    dstEpInfo.dstEp = bind_tbl->used - 1;
+	        	bind_tbl->used = 1; // откл. повтор
+			    dstEpInfo.dstAddrMode = bind_tbl->dstAddrMode;
+			    memcpy(&dstEpInfo.dstAddr, &bind_tbl->dstExtAddrInfo,
+			    		sizeof(dstEpInfo.dstAddr));
+			    /* command 0x00 - off, 0x01 - on, 0x02 - toggle */
+			    zcl_sendCmd(SENSOR_DEVICE_ENDPOINT, &dstEpInfo, ZCL_CLUSTER_GEN_ON_OFF,
+			    	pOnOff->remoteOnOff, TRUE,
+			    	ZCL_FRAME_CLIENT_SERVER_DIR,
+					FALSE, 0, ZCL_SEQ_NUM, 0, NULL);
+			    return;
+	        }
+	    }
+	}
+}
+
+/**********************************************************************
+ * FUNCTIONS
+ */
+void afTestOnOffCb(void *arg) {
+	apsdeDataConf_t *pApsDataCnf = (apsdeDataConf_t *)arg;
+	if(zb_isDeviceJoinedNwk()
+		&& pApsDataCnf->clusterId == ZCL_CLUSTER_GEN_ON_OFF) {
+	    for (int j = 0; j < APS_BINDING_TABLE_NUM; j++) {
+	    	aps_binding_entry_t *bind_tbl = &g_apsBindingTbl[j];
+	        if (bind_tbl->used
+	         && bind_tbl->clusterId == ZCL_CLUSTER_GEN_ON_OFF
+			 && bind_tbl->srcEp == pApsDataCnf->srcEndpoint
+			 && !memcmp(&pApsDataCnf->dstAddr, &bind_tbl->dstExtAddrInfo, sizeof(pApsDataCnf->dstAddr))) {
+	        	sws_printf("aps: %08p:%02x %04x:%02x %02x\n",
+	        			&pApsDataCnf->dstAddr.addr_long,
+	        			pApsDataCnf->dstEndpoint,
+	        			pApsDataCnf->clusterId,
+	        			pApsDataCnf->srcEndpoint,
+	        			pApsDataCnf->status
+	        	);
+        		zcl_onOffAttr_t *pOnOff = zcl_onoffAttrGet();
+        		if(rtcSeconds - pOnOff->timeStamp < USE_RETRY_ONOFF) {
+        			if(pApsDataCnf->status == APS_STATUS_NO_ACK // 0xA7
+        				|| pApsDataCnf->status == MAC_STA_NO_ACK) { // 0xE9
+    	        		bind_tbl->used = pApsDataCnf->dstEndpoint + 1; // save dstEndpoint
+        			} else { // APS_STATUS_SUCCESS | APS_STATUS_SHORT_ADDR_REQUESTING
+    	        		bind_tbl->used = 1; // APS_STATUS_SUCCESS
+        			}
+        		} else { // время повторов вышло, больше не проверять
+        			pOnOff->timeStamp = 0;
+	        		bind_tbl->used = 1;
+	        	}
+	        }
+	    }
+	}
+}
+#endif
+
 /**********************************************************************
  * FUNCTIONS
  */
 void remoteCmdOnOff(u8 srcEp, u8 cmd) {
     if (zb_isDeviceJoinedNwk()) {
-        /* command 0x00 - off, 0x01 - on, 0x02 - toggle */
-        sws_printf("remoteCmdOnOff: %02x\n", cmd);
-        epInfo_t dstEpInfo;
-        TL_SETSTRUCTCONTENT(dstEpInfo, 0);
-        dstEpInfo.profileId = HA_PROFILE_ID;
-        dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
-	    zcl_sendCmd(srcEp, &dstEpInfo, ZCL_CLUSTER_GEN_ON_OFF,
-	    	cmd, TRUE,
-	    	ZCL_FRAME_CLIENT_SERVER_DIR,
-			FALSE, 0, ZCL_SEQ_NUM, 0, NULL);
+#if USE_REMOTE_ONOFF
+    	zcl_onOffAttr_t *pOnOff = zcl_onoffAttrGet();
+		pOnOff->remoteOnOff = cmd;
+#endif
+#if USE_RETRY_ONOFF
+    	int send_flg = 0;
+    	for (int j = 0; j < APS_BINDING_TABLE_NUM; j++) {
+    		aps_binding_entry_t *bind_tbl = &g_apsBindingTbl[j];
+            if (bind_tbl->used
+             && bind_tbl->clusterId == ZCL_CLUSTER_GEN_ON_OFF
+    		 && bind_tbl->srcEp == srcEp) {
+            	bind_tbl->used = 1; // restart On/Off
+            	send_flg = 1;
+            }
+        }
+    	if(send_flg)
+#endif
+    	{
+            /* command 0x00 - off, 0x01 - on, 0x02 - toggle */
+            sws_printf("remoteCmdOnOff: %02x\n", cmd);
+            epInfo_t dstEpInfo;
+            TL_SETSTRUCTCONTENT(dstEpInfo, 0);
+            dstEpInfo.profileId = HA_PROFILE_ID;
+            dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+#if USE_RETRY_ONOFF
+		    dstEpInfo.txOptions = APS_TX_OPT_ACK_TX;
+    		pOnOff->timeStamp = rtcSeconds;
+#endif
+    	    zcl_sendCmd(srcEp, &dstEpInfo, ZCL_CLUSTER_GEN_ON_OFF,
+    	    	cmd, TRUE,
+    	    	ZCL_FRAME_CLIENT_SERVER_DIR,
+    			FALSE, 0, ZCL_SEQ_NUM, 0, NULL);
+    	}
     }
 }
 
@@ -969,11 +1070,19 @@ void remoteCmdOnOff(u8 srcEp, u8 cmd) {
  */
 void cmdOnOff_set(bool status) {
 	sws_printf("cmdOnOff_set(%d)\n", status);
-	if(g_zcl_onOffAttrs.onOff != status) {
-		g_zcl_onOffAttrs.onOff = status;
-		if(g_zcl_onOffAttrs.startUpOnOff >= ZCL_START_UP_ONOFF_SET_ONOFF_TOGGLE) {
+	zcl_onOffAttr_t *pOnOff = zcl_onoffAttrGet();
+	if(pOnOff->onOff != status) {
+		pOnOff->onOff = status;
+		if(pOnOff->startUpOnOff >= ZCL_START_UP_ONOFF_SET_ONOFF_TOGGLE) {
 	      	zcl_onoffConfig_save();
 		}
+#if USE_REMOTE_ONOFF && (DEV_SERVICES & SERVICE_PIR)
+		if(status == ZCL_ONOFF_STATUS_OFF) {
+			if(pOnOff->remoteOnOff) {
+				remoteCmdOnOff(SENSOR_DEVICE_ENDPOINT, ZCL_CMD_ONOFF_OFF);
+			}
+		}
+#endif
     }
 }
 

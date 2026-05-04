@@ -187,11 +187,7 @@ status_t app_chk_report(u16 uptime_sec) {
  */
 void app_set_thb_report(void) {
 	if(zb_isDeviceJoinedNwk() && reportingTab.reportNum) {
-#if USE_SENSOR_TH
-		sensor_ht.flag |= FLG_REPEAT_REPORT;
-#else
-		g_sensorAppCtx.reportFlg = 1;
-#endif
+		g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 		for(u8 i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
 			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
 			if(pEntry->used && (

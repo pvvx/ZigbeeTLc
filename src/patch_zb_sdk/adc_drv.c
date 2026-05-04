@@ -114,6 +114,7 @@ u16 get_adc_mv(int flg) { // ADC_InputPchTypeDef
 	volatile unsigned int adc_dat_buf[ADC_BUF_COUNT];
 	u16 adc_sample[ADC_BUF_COUNT]; // = { 0 };
 	u16 temp;
+	u16 rp = 0;
 	int i, j;
 	adc_power_on_sar_adc(1); // + 0.4 mA
 	adc_reset_adc_module();
@@ -122,7 +123,6 @@ u16 get_adc_mv(int flg) { // ADC_InputPchTypeDef
 	}
 	adc_config_misc_channel_buf((u16 *) adc_dat_buf, sizeof(adc_dat_buf));
 	dfifo_enable_dfifo2();
-	u16 rp = reg_dfifo2_wptr;
 	for (i = 0; i < ADC_BUF_COUNT; i++) {
 		while(rp == reg_dfifo2_wptr);
 		rp = reg_dfifo2_wptr; // 0,4,8,c,10,14,18,1c

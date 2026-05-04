@@ -14,6 +14,9 @@
 #if (DEV_SERVICES & SERVICE_PLM)
 #include "sensor_rh.h"
 #endif
+#if USE_SENSOR_LX
+#include "sensor_lx.h"
+#endif
 
 #ifndef USE_GXHT4x
 #define USE_GXHT4x		0
@@ -179,6 +182,9 @@ get a byte of status word by sending 0x71. If the status word and 0x18 are not e
 initialize the 0x1B, 0x1C, 0x1E registers, details Please refer to our official website routine for
 the initialization process; if they are equal, proceed to the next step.*/
 #define AHT2x_DATA_LPWR		0x0800 // go into low power mode
+
+//#define WCHT20_CMD_INIT		0x0008BE // Initialization Command
+const u8 wht20_init[] = {	0xBE, 0x08, 0x00 };  // Initialization Command
 
 /* After power-on, the sensor needs less than 100ms stabilization time (SCL is
 high at this time) to reach the idle state and it is ready to receive commands sent by the host
@@ -369,6 +375,7 @@ inline void sensor_calk_and_offset(sensor_th_t *p, s32 t, u32 h) {
 		p->humi = 9999;
 	g_zcl_relHumidityAttrs.measuredValue = p->humi;
 	p->flag = 0xff; // read data ok
+	g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 }
 
 
@@ -668,7 +675,8 @@ static int check_sensor(void) {
 	 if ((sensor_ht.i2c_addr = (u8) scan_i2c_addr(AHT2x_I2C_ADDR << 1)) != 0) {
 		// AHT2x..30
 		// pm_wait_us(AHT2x_POWER_TIMEOUT_us);
-		if(!send_i2c_byte(sensor_ht.i2c_addr, AHT2x_CMD_RST)) { // Soft reset command
+		if(!send_i2c_bytes(sensor_ht.i2c_addr, (unsigned char *)wht20_init, 3) // WHT20_CMD_INI
+		 && !send_i2c_byte(sensor_ht.i2c_addr, AHT2x_CMD_RST)) { // Soft reset command
 			pm_wait_us(AHT2x_SOFT_RESET_us);
 			// 0401017071 -> I2C addres 0x70, write 1 bytes, read: 18
 //			if(!read_i2c_addr_bytes(sensor_ht.i2c_addr, AHT2x_RD_STATUS, buf, 1)) { // buf[0] = 0x18
@@ -804,7 +812,11 @@ int read_sensor(void) {
 			re = sensor_ht.stage1_measure((void *) &sensor_ht);
 		}
 		// battery +  wakeup time
+#if USE_SENSOR_LX == 2
+		read_illumi_sensor();
+#else
 		battery_detect(0);
+#endif
 		if(!re && sensor_ht.stage2_measure) { // start, next start
 			re = sensor_ht.stage2_measure((void *) &sensor_ht);
 		}
@@ -812,8 +824,13 @@ int read_sensor(void) {
 			sensor_ht.read_callback = sensor_ht.measure_callback;
 			sensor_ht.start_measure_tik = clock_time();
 		}
-	} else
+	} else {
+#if USE_SENSOR_LX == 2
+		read_illumi_sensor();
+#else
 		battery_detect(0);
+#endif
+	}
 #ifdef ZCL_POWER_CFG
 	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
     g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;

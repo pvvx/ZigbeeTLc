@@ -82,7 +82,7 @@ int cmd_parser(void * p) {
 			memcpy(&send_buf[1], &g_zcl_basicAttrs.manuName[1], olen);
 			olen++;
 #endif
-#ifdef ZCL_THERMOSTAT_UI_CFG
+#if ZCL_THERMOSTAT_UI_CFG
 		} else if (cmd == CMD_ID_ZB_CFG) {
 			if(len) {
 				if(len > sizeof(g_zcl_thermostatUICfgAttrs))

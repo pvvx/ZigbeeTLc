@@ -9,7 +9,7 @@
 
 #if (BOARD == BOARD_ZG_227Z)
 
-#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS)
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS | SERVICE_LED)
 
 /* https://pvvx.github.io/ZG-227Z/ | https://pvvx.github.io/ZG-103Z/
 

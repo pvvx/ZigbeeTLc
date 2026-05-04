@@ -14,6 +14,7 @@
 #endif
 
 #include "app_ui.h"
+#include "app_onoff.h"
 #include "zcl_relative_humidity.h"
 #include "zcl_illuminance_level_sensing.h"
 #include "chip_8258/timer.h"
@@ -38,6 +39,9 @@
 #endif
 #if (DEV_SERVICES & SERVICE_PIR)
 #include "sensor_pir.h"
+#endif
+#if USE_SENSOR_XBR818
+#include "sensor_xbr818.h"
 #endif
 
 
@@ -257,7 +261,7 @@ void show_th(void) {
 
 
 void read_sensor_and_show(void) {
-#if USE_SENSOR_LX
+#if USE_SENSOR_LX == 1
 	read_illumi_sensor();
 #ifdef ZCL_POWER_CFG
 	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
@@ -311,12 +315,12 @@ extern u8 blt_state;
  */
 s32 sensors_task(void *arg) {
 	(void) arg;
-#if USE_SENSOR_LX
+#if USE_SENSOR_LX == 1
 	u32 tt = clock_time();
 	if(tt - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measureInterval) {
 		g_sensorAppCtx.readSensorTime = tt;
 		read_sensor_and_show();
-		g_sensorAppCtx.reportFlg = 1;
+		g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 	}
 #endif
 #if USE_SENSOR_TH
@@ -371,22 +375,16 @@ void app_task(void)
 			if(!g_sensorAppCtx.timerLedEvt)
 				light_off();
 #endif // USE_DISPLAY
+#if USE_RETRY_ONOFF
+			taskRetryOnOff();
+#endif
 			rep_uptime_sec = g_sensorAppCtx.reportUpSec;
-#if USE_SENSOR_TH
-			if(rep_uptime_sec || (sensor_ht.flag & (FLG_REPEAT_REPORT | FLG_MEASURE_HT_RP))) {
-				g_sensorAppCtx.reportUpSec = 0;
-				if(app_chk_report(rep_uptime_sec) == ZCL_STA_SUCCESS)
-					sensor_ht.flag &= ~(FLG_MEASURE_HT_RP | FLG_REPEAT_REPORT);
-				else
-					sensor_ht.flag |= FLG_REPEAT_REPORT;
-#else
 			if(rep_uptime_sec || g_sensorAppCtx.reportFlg) {
 				g_sensorAppCtx.reportUpSec = 0;
 				if(app_chk_report(rep_uptime_sec) == ZCL_STA_SUCCESS)
 					g_sensorAppCtx.reportFlg = 0;
 				else
-					g_sensorAppCtx.reportFlg = 2;
-#endif
+					g_sensorAppCtx.reportFlg = FLG_REPEAT_REPORT;
 #if USE_TRIGGER
 				send_onoff();
 #endif
@@ -503,6 +501,9 @@ void user_app_init(void)
 	LCD_INIT_DELAY();
 #endif
 
+#if USE_SENSOR_XBR818
+	xbr818_init();
+#endif
 	init_sensor();
 
 #if	USE_DISPLAY
@@ -528,7 +529,7 @@ void user_app_init(void)
 	zcl_init(sensorDevice_zclProcessIncomingMsg);
 
 	/* Register endPoint */
-	af_endpointRegister(SENSOR_DEVICE_ENDPOINT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, zcl_rx_handler, NULL);
+	af_endpointRegister(SENSOR_DEVICE_ENDPOINT, (af_simple_descriptor_t *)&sensorDevice_simpleDesc, zcl_rx_handler, afTestOnOffCb);
 #if (DEV_SERVICES & SERVICE_PLM)
 	af_endpointRegister(SENSOR_DEVICE_ENDPOINT2, (af_simple_descriptor_t *)&sensorDevice_simpleDesc2, zcl_rx_handler, NULL);
 #endif

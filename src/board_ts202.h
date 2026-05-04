@@ -9,9 +9,9 @@
 
 #if (BOARD == BOARD_TS0202_PIR1)
 
-#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_PIR)
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_PIR | SERVICE_LED)
 
-#define USE_ONOFF	1
+#define USE_REMOTE_ONOFF			1
 #define READ_SENSOR_TIMER_SEC 		240 // default, second
 #define READ_SENSOR_TIMER_MAX_SEC 	240 // second
 #define DEF_OCCUPANCY_DELAY			35	// sec (PIR sensor)
@@ -90,7 +90,7 @@ GPIO_PD7 - PIR BS612 sens
 
 #elif (BOARD == BOARD_TS0202_PIR2)
 
-#define USE_ONOFF	1
+#define USE_REMOTE_ONOFF			1
 #define READ_SENSOR_TIMER_SEC 		240 // default, second
 #define READ_SENSOR_TIMER_MAX_SEC 	240 // second
 #define DEF_OCCUPANCY_DELAY			35	// sec (PIR sensor)

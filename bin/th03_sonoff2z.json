@@ -1,11 +1,11 @@
 [
     {
         "fileVersion": 278476295,
-        "fileSize": 135618,
+        "fileSize": 135650,
         "manufacturerCode": 4742,
         "imageType": 514,
-        "sha512": "d01973537cc60b10b134dd5141141feda3a37152fdd04efb14fc34e5d5dd70746ecef1e7ea1d91b7ae5be1e48339a2e977b402885112eb4f5e9dcce7aafa5d72",
+        "sha512": "bad390613878d24c5b36dbb126f70c9d5285252dc8a312291875daf4dfe2bf89746f4ab4e4d32a4b6174f84f91ee835a3f1a47e48b2606bdc051974d8a0cd311",
         "otaHeaderString": "Sonoff to ZigbeeTlc",
-        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1286-0202-10993607-TH03Zz_v0136.zigbee"
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1286-0202-10993607-TH03Zz_v0137.zigbee"
     }
 ]

@@ -27,8 +27,8 @@ typedef struct{
 	u8  key_on_flag; // new keyPressed and flags (task_keys() used)
 
 	u32 secTimeTik;	// used for calculate measure seconds
-	u32 readSensorTime; // read sensor timer (tik)
-	u32 keyPressedTime; // key pressed time (tik)
+	u32 readSensorTime; // read sensor timer (tick)
+	u32 keyPressedTime; // key pressed time (tick)
 	u32 measureInterval; // measure step
 
 	u16 ledOnTime;	// used blink
@@ -63,6 +63,11 @@ typedef struct{
 
 	app_linkKey_info_t tcLinkKey;
 } app_ctx_t;
+
+// g_sensorAppCtx.reportFlg:
+#define FLG_CHECK_REPORT		0x01	// check report table
+#define FLG_REPEAT_REPORT		0x02	// repeat report
+
 
 /**
  *  @brief Defined for basic cluster attributes
@@ -149,14 +154,23 @@ typedef struct {
  *  @brief Defined for Occupancy cluster attributes
  */
 typedef struct {
+#if !USE_SENSOR_XBR818
 	ev_timer_event_t *timerEvt;
+#endif
 	u16 delay;
 	u8  occupancy;
 	u8  sensor_type;
 	u8  state;
-//	u16 oc2un_delay;
-//	u8 thres;
+	u8  thres;
+	//	u16 oc2un_delay;
 } zcl_occupancyAttr_t;
+
+#if USE_SENSOR_XBR818
+typedef struct {
+	u16 delay;
+	u8  thres;
+} zcl_occupancy_save_t;
+#endif
 
 extern zcl_occupancyAttr_t zcl_occupAttr;
 
@@ -218,6 +232,7 @@ extern zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs;
 
 #define zcl_iasZoneAttrGet()	&g_zcl_iasZoneAttrs
 #define zcl_pollCtrlAttrGet()	&g_zcl_pollCtrlAttrs
+#define zcl_onoffAttrGet()      &g_zcl_onOffAttrs
 
 extern scomfort_t cmf;
 

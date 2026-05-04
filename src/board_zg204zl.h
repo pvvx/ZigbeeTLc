@@ -13,7 +13,7 @@
 
 //#define SWS_PRINTF_MODE	1
 
-#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_PIR | SERVICE_ILLUMI)
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_PIR | SERVICE_ILLUMI | SERVICE_LED)
 
 /* https://pvvx.github.io/ZG-204ZL-3.0/
 
@@ -23,8 +23,8 @@ GPIO_PA1 - KEY
 GPIO_PA7 - SWS, (debug TX)
 GPIO_PB1 - TX
 GPIO_PB7 - RX
-GPIO_PC4 - illuminance Sense
-GPIO_PD3 - illuminance Sense Power
+GPIO_PC4 - illuminance Sensor
+GPIO_PD3 - illuminance Sensor Power
 GPIO_PD4 - PIR
 GPIO_PD7 - LED to +Vbat
 */
@@ -38,7 +38,7 @@ GPIO_PD7 - LED to +Vbat
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_CR2450
 
-#define USE_ONOFF	1
+#define USE_REMOTE_ONOFF	1
 
 // DISPLAY
 #define	USE_DISPLAY			0
@@ -76,7 +76,9 @@ GPIO_PD7 - LED to +Vbat
 //#define PULL_WAKEUP_SRC_PD4	PM_PIN_PULLDOWN_100K
 
 // illuminance sensor
-#define USE_SENSOR_LX		1
+#define USE_SENSOR_LX		1 // =1 - ADC = Ur, =2 - ADC = Us
+#define GPIO_ADC_PULL		PM_PIN_PULLUP_10K
+
 #define DEF_MIN_LEVEL_ZLX		13000 // ILLUMINANCE_LEVEL_SENSING ~20 lx
 #define READ_SENSOR_TIMER_SEC 	20 // default, second
 

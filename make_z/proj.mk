@@ -18,9 +18,9 @@ $(OUT_PATH)/proj/os/ev_buffer.o \
 $(OUT_PATH)/proj/os/ev_poll.o \
 $(OUT_PATH)/proj/os/ev_queue.o \
 $(OUT_PATH)/proj/os/ev_timer.o \
-$(OUT_PATH)/proj/os/ev_rtc.o 
 
 
+#$(OUT_PATH)/proj/os/ev_rtc.o 
 #$(OUT_PATH)/proj/common/tlPrintf.o \
 #$(OUT_PATH)/proj/drivers/drv_nv.o \
 #$(OUT_PATH)/proj/drivers/drv_spi.o \

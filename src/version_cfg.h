@@ -96,10 +96,11 @@
 #define BOARD_RSH_HS03				48 // Tuya ZigBee Temperature/Humidity Sensor "TY0201_TZ3000_bjawzodf", PCB designator "RSH-HS03-V2.0-241018" https://pvvx.github.io/TY0201_TZ3000_bjawzodf
 //#define BOARD_LYWSD02MMC			49 // EInk display, Clock (BLE)
 #define BOARD_ZG204ZL				50 // HOBEIAN ZG-204ZL PIR + LUX sensor https://pvvx.github.io/ZG-204ZL-3.0
+#define BOARD_ZG204ZV				51 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_TS0202_PIR1 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_ZG204ZL // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -129,7 +130,7 @@
 #define APP_BUILD				0x15	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x36	//BCD app build "2.9"
+#define APP_BUILD				0x37	//BCD app build "2.9"
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

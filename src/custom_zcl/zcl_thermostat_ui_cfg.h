@@ -1,6 +1,6 @@
 
-#ifndef ZCL_THERMOSTAT_UI_CFG_H
-#define ZCL_THERMOSTAT_UI_CFG_H
+#ifndef _ZCL_THERMOSTAT_UI_CFG_H
+#define _ZCL_THERMOSTAT_UI_CFG_H
 
 /*********************************************************************
  * CONSTANTS
@@ -32,5 +32,5 @@ status_t zcl_thermostat_ui_cfg_register(u8 endpoint, u16 manuCode, u8 attrNum, c
 nv_sts_t zcl_thermostatConfig_save(void);
 //nv_sts_t zcl_thermostatConfig_restore(void);
 
-#endif	/* ZCL_THERMOSTAT_UI_CFG_H */
+#endif	/* _ZCL_THERMOSTAT_UI_CFG_H */
 
