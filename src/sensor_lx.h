@@ -13,11 +13,12 @@
 #define ZCL_CUSTOM_ATTRID_LX_SENSOR_ZERO	0x5001
 #define ZCL_CUSTOM_ATTRID_LX_SENSOR_COEF	0x5002
 
-#define ADC_LX_ZERO_DEF	0
 #if USE_SENSOR_LX == 2
+#define ADC_LX_ZERO_DEF	0
 #define ADC_LX_COEF_DEF	5000  // = max 5000 lx
 #else
-#define ADC_LX_COEF_DEF	2000  // = max 2000 lx
+#define ADC_LX_ZERO_DEF	29400
+#define ADC_LX_COEF_DEF	3000  // = max 3000 lx
 #endif
 
 /**

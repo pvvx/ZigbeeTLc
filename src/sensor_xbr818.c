@@ -9,7 +9,7 @@
 
 #define XBR818_I2C_ADDR (0x71<<1)
 
-#define I2C_TCLK_US	4	//
+#define I2C_TCLK_US	8	//
 
 static void drv_i2c_start(void) {
 	gpio_set_output_en(XBR818_SCL, 0); // SCL set "1"

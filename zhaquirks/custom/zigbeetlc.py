@@ -364,25 +364,5 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
         fallback_name="Measurement interval",
         mode="box",
     )
-"""
-    .number("illuminance_target_level",
-        cluster_id=0x0401,
-        endpoint_id=0x0000,
-        mode="box",
-        device_class=SensorDeviceClass.ILLUMINANCE,
-        min_value=0, max_value=65534, step=1,
-        translation_key="illuminance_target_level",
-        fallback_name="Illuminance Target Level")
-    .enum("level_status", LevelStatus,
-        cluster_id=0x0401,
-        endpoint_id=0x0010,
-        fallback_name="Illuminance Level Status",
-        translation_key="level_status")
-    .enum("pir_u_to_o_threshold", threshold,
-        cluster_id=0x0406,
-        endpoint_id=0x0012,
-        fallback_name="threshold",
-        translation_key="threshold")
-"""
     .add_to_registry()
 )
