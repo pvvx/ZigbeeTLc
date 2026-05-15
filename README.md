@@ -1,4 +1,6 @@
-# Custom firmware for Zigbee 3.0 IoT devices on the TLSR825x chip
+# Custom firmware for Zigbee 3.0 IoT devices on the Telink chipset.
+
+Supported chipset: TLSR8250, TLSR8251, TLSR8253, TLSR8258, TLSR8359, TLSR8656, Z2.
 
 Based on an example from  [Telink's Zigbee SDK](http://wiki.telink-semi.cn/wiki/chip-series/TLSR825x-Series/).
 
