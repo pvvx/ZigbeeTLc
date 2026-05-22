@@ -315,26 +315,21 @@ extern u8 blt_state;
  */
 s32 sensors_task(void *arg) {
 	(void) arg;
-#if USE_SENSOR_LX == 1
-	u32 tt = clock_time();
-	if(tt - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measureInterval) {
-		g_sensorAppCtx.readSensorTime = tt;
-		read_sensor_and_show();
-		g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
-	}
-#endif
 #if USE_SENSOR_TH
-	u32 tt;
 	if(sensor_ht.read_callback)
 		sensor_ht.read_callback();
-	else {
-		tt = clock_time();
+	else
+#endif
+	{
+		u32 tt = clock_time();
 		if(tt - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measureInterval) {
 			g_sensorAppCtx.readSensorTime = tt;
 			read_sensor_and_show();
+#if USE_SENSOR_LX == 1
+			g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
+#endif
 		}
 	}
-#endif
 #ifdef USE_EPD
 	task_lcd();
 #endif
@@ -668,9 +663,9 @@ void user_app_init(void)
 			(u8 *)&reportableChange
 		);
 #endif
-#if !USE_BLE
-	bdb_findBindMatchClusterSet(FIND_AND_BIND_CLUSTER_NUM, bdb_findBindClusterList);
-#endif
+//#if !USE_BLE
+//	bdb_findBindMatchClusterSet(FIND_AND_BIND_CLUSTER_NUM, bdb_findBindClusterList);
+//#endif
 	/* Initialize BDB */
 	bdb_init((af_simple_descriptor_t *)&sensorDevice_simpleDesc,
 			&g_bdbCommissionSetting, &g_zbDemoBdbCb, drv_pm_deepSleep_flag_get() ? 0 : 1);

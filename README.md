@@ -187,6 +187,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 37. Ver 0.1.3.7. Added ZG-204ZV
 
+38. Ver 0.1.3.8. Correction of the measurement interval. Correction Battery PIR sensor.
 
 ## Make
 

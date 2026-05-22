@@ -506,7 +506,7 @@ const zclAttrInfo_t occupancy_attrTbl[] = {
 zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs =
 {
 		.chkInInterval			= 3600*4, // 3600 sec, 1 hr
-		.longPollInterval		= READ_SENSOR_TIMER_SEC*4,  // 10..30 sec
+		.longPollInterval		= READ_SENSOR_TIMER_SEC*4,  // 3..240 sec
 		.shortPollInterval		= 2, 	// 2 qs
 		.fastPollTimeout		= 7*4,  // 7 sec
 		.chkInIntervalMin		= 0,
@@ -651,9 +651,6 @@ void zcl_illuminanceLevel_save(void) {
 }
 void zcl_illuminanceConfig_save(void) {
 	ilumi_cfg_t icfg;
-#if !ZCL_THERMOSTAT_UI_CFG
-	test_set_measure_longpoll_interval(g_zcl_illuminanceAttrs.cfg.measureInterval);
-#endif
 	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_ILLUMI_CFG, sizeof(icfg), (u8*)&icfg) != NV_SUCC){
 		g_zcl_illuminanceAttrs.cfg.z = ADC_LX_ZERO_DEF;
 		g_zcl_illuminanceAttrs.cfg.k = ADC_LX_COEF_DEF;
@@ -664,7 +661,7 @@ void zcl_illuminanceConfig_save(void) {
 	if(memcmp(&g_zcl_illuminanceAttrs.cfg, &icfg, sizeof(icfg))) {
 #if !ZCL_THERMOSTAT_UI_CFG
 		if(g_zcl_illuminanceAttrs.cfg.measureInterval != icfg.measureInterval) {
-			set_PollRate();
+			 test_set_measure_longpoll_interval(g_zcl_illuminanceAttrs.cfg.measureInterval);
 		}
 #endif
 		if(memcmp(&g_zcl_illuminanceAttrs.cfg, &icfg, sizeof(icfg))) {
@@ -726,15 +723,15 @@ nv_sts_t zcl_thermostatConfig_save(void)
 
 	if(memcmp(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs))) {
 #if USE_DISPLAY
-		if(zcl_nv_thermostatUiCfg.display_off ^ g_zcl_thermostatUICfgAttrs.display_off) {
+		if(zcl_nv_thermostatUiCfg.display_off != g_zcl_thermostatUICfgAttrs.display_off) {
 			init_lcd();
 			update_lcd();
 		}
 #endif
+		if(zcl_nv_thermostatUiCfg.measureInterval != g_zcl_thermostatUICfgAttrs.measureInterval) {
+			test_set_measure_longpoll_interval(g_zcl_thermostatUICfgAttrs.measureInterval);
+		}
 		memcpy(&zcl_nv_thermostatUiCfg, &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
-		test_set_measure_longpoll_interval((u32)&g_zcl_thermostatUICfgAttrs.measureInterval);
-//		if(zb_getPollRate() > g_zcl_pollCtrlAttrs.shortPollInterval * POLL_RATE_QUARTERSECONDS)
-//			zb_setPollRate(DEFAULT_POLL_RATE);
 		st = nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_THERMOSTAT_UI_CFG, sizeof(zcl_thermostatUICfgAttr_t), (u8*)&zcl_nv_thermostatUiCfg);
 	}
 #if USE_TRIGGER
@@ -845,14 +842,14 @@ void init_nv_app(void) {
 #if USE_TRIGGER
 	trigger_init();
 #endif
+	// set measureInterval
 #if ZCL_THERMOSTAT_UI_CFG
-	test_set_measure_longpoll_interval(g_zcl_thermostatUICfgAttrs.measureInterval);
+	test_set_measure_longpoll_interval((u32)g_zcl_thermostatUICfgAttrs.measureInterval);
+#elif defined(ZCL_ILLUMINANCE_LEVEL_SENSING)
+	test_set_measure_longpoll_interval((u32)g_zcl_illuminanceAttrs.cfg.measureInterval);
 #else
-#ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
-	test_set_measure_longpoll_interval(g_zcl_illuminanceAttrs.cfg.measureInterval);
+	test_set_measure_longpoll_interval(g_zcl_pollCtrlAttrs.longPollInterval >> 2);
 #endif
-#endif
-	set_PollRate();
 #if USE_CHG_NAME
 	read_dev_name();
 #endif

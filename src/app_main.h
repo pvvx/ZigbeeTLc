@@ -29,7 +29,7 @@ typedef struct{
 	u32 secTimeTik;	// used for calculate measure seconds
 	u32 readSensorTime; // read sensor timer (tick)
 	u32 keyPressedTime; // key pressed time (tick)
-	u32 measureInterval; // measure step
+	u32 measureInterval; // measure step (tick)
 
 	u16 ledOnTime;	// used blink
 	u16 ledOffTime; // used blink
