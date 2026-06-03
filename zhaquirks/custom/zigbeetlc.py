@@ -366,3 +366,4 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
     )
     .add_to_registry()
 )
+

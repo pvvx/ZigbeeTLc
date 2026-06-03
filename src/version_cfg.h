@@ -100,7 +100,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_ZG204ZL // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_TS0201_TZ3000 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -130,7 +130,7 @@
 #define APP_BUILD				0x16	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x38	//BCD app build "2.9"
+#define APP_BUILD				0x39	//BCD app build "3.9"
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

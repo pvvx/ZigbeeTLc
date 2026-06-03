@@ -487,6 +487,10 @@ void user_app_init(void)
 	init_nv_app();
 #endif
 
+	//TODO: set bool AUTO_QUICK_DATA_POLL_ENABLE = FALSE ? -> zb_config.c
+#if QUICK_POLL_DISABLE
+	AUTO_QUICK_DATA_POLL_ENABLE = FALSE; // look zb_config.c
+#endif
 	/* Initialize ZB stack */
 	zb_init();
 	/* Register stack CB */

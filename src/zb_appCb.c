@@ -80,43 +80,31 @@ s32 sensorSwitch_bdbFindAndBindStart(void *arg){
 }
 #endif
 
-#if REJOIN_FAILURE_TIMER
-
 #define REJOIN_FAILURE_COUNT  4 // рестарт с 2-x периодов по 10 sec
 /*
- * Первые 6 периодов по 10 секунд (~1 минута)
- * Далее 25 периодов по 55 секунды (~22 минуты)
- * Далее 96 пероиодов с увеличением на 2 секунды от 65 секунды до 262 секунд
- * (этот цикл длится ~261 минута, 4.4 часа)
- * Далее бесконечно с периодом в 262 секунды (4.4 минуты)
+ * Первые 6 периодов по 10.24 секунд (~1 минута)
+ * Далее 25 периодов по 56.32 секунды (~22 минуты)
+ * Далее 96 пероиодов с увеличением на 2 секунды от 65 секунды до 522 секунды
+ * Далее бесконечно с периодом в 522 секунды (8.7 минуты)
  */
 inline void sensorDevice_rejoin_faillure_timer_set(void) {
 	u32 period;
 	if(g_sensorAppCtx.timerSteerEvt) {
 		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
 	}
-	if(++g_sensorAppCtx.rejoin_cnt > 128) // max 128*2 = 256 sec
-		g_sensorAppCtx.rejoin_cnt = 128;
+	if(++g_sensorAppCtx.rejoin_cnt > 255) // max 255<<11 = 522240 ms = 522.24 sec
+		g_sensorAppCtx.rejoin_cnt = 255;
 
 	if(g_sensorAppCtx.rejoin_cnt < 7)
-		period = 10 << 10; // ~10 sec
+		period = 10 << 10; // 10.24 sec
 	else if(g_sensorAppCtx.rejoin_cnt < (7+25))
-		period = 55 << 10; // (ms), ~55 sec
+		period = 55 << 10; // (ms), 56.32 sec
 	else // g_sensorAppCtx.rejoin_cnt > 32 ...
-		period = g_sensorAppCtx.rejoin_cnt << 11; //(ms), 32*2048..128*2048, 65..262 sec
+		period = g_sensorAppCtx.rejoin_cnt << 11; //(ms), 32*2048..255*2048, 65..522 sec
 	g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, period);
 }
 
 static s32 sensorDevice_rejoinBackoff(void *arg){
-#if REJOIN_FAILURE_TIMER // & OLD_SDK
-	if(zb_isDeviceFactoryNew()){
-		g_sensorAppCtx.timerRejoinBackoffEvt = NULL;
-		return -1;
-	}
-
-    zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
-    return 0;
-#else
     static bool rejoinMode = REJOIN_SECURITY;
 
     if (zb_isDeviceFactoryNew()) {
@@ -124,16 +112,18 @@ static s32 sensorDevice_rejoinBackoff(void *arg){
         return -1;
     }
 
-    //printf("rejoin mode = %d\n", rejoinMode);
-
+#if !USE_BLE
+    sws_printf("rejoinBackoff(%d)\n", rejoinMode);
     zb_rejoinSecModeSet(rejoinMode);
+#else
+    sws_printf("rejoinBackoff()\n");
+#endif
+
     zb_rejoinReq(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
 
     rejoinMode = !rejoinMode;
-#endif
+    return 0;
 }
-
-#endif
 
 /*********************************************************************
  * @fn      zbdemo_bdbInitCb
@@ -162,7 +152,7 @@ void zb_bdbInitCb(u8 status, u8 joinedNetwork){
 			set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
 
 #ifdef ZCL_OTA
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL); // 15 * 60);	// 15 m
+			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL); // 30 * 60);	// 30 m
 #endif
 
 #ifdef ZCL_POLL_CTRL
@@ -177,33 +167,23 @@ void zb_bdbInitCb(u8 status, u8 joinedNetwork){
 			if(g_sensorAppCtx.timerSteerEvt){
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
 			}
-			///time_soff = 0;
+
 			g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
+
 #if USE_BLE
 			g_dualModeInfo.bleStart = 1;
 #endif
 		}
-	}
-#if REJOIN_FAILURE_TIMER
-	else
-	{
+	} else {
 		if(joinedNetwork) {
-#if 1	// OLD_SDK
-			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
-			if(!g_sensorAppCtx.timerRejoinBackoffEvt){
-				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerRejoinBackoffEvt);
+			if(!g_sensorAppCtx.timerRejoinBackoffEvt) {
+	            g_sensorAppCtx.timerRejoinBackoffEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 60 * 1000);
 			}
-#else
-			if(!g_sensorAppCtx.timerRejoinBackoffEvt){
-				g_sensorAppCtx.timerRejoinBackoffEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 60 * 1000);
-			}
-#endif
-		}
 #if USE_BLE
 			g_dualModeInfo.bleStart = 1;
 #endif
+		}
 	}
-#endif // REJOIN_FAILURE_TIMER
 }
 
 
@@ -246,10 +226,11 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 #if	USE_BLE
 			ble_task_stop();	// BLE off
 #endif
-			if(g_sensorAppCtx.timerSteerEvt){
+			if(g_sensorAppCtx.timerSteerEvt) {
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
 			}
-			if(g_sensorAppCtx.timerRejoinBackoffEvt){
+
+			if(g_sensorAppCtx.timerRejoinBackoffEvt) {
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerRejoinBackoffEvt);
 			}
 
@@ -284,26 +265,12 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 		case BDB_COMMISSION_STA_TCLK_EX_FAILURE:
 		case BDB_COMMISSION_STA_TARGET_FAILURE:
 			sws_puts("BDB: join\n");
-#if REJOIN_FAILURE_TIMER
 			sensorDevice_rejoin_faillure_timer_set();
-#else
-			u16 jitter = 0;
-			do {
-				jitter = zb_random() % 0x0fff;
-			} while(jitter == 0);
-
-			if(g_sensorAppCtx.timerSteerEvt) {
-				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
-			}
-			g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
-#endif
-#if	USE_DISPLAY
-			show_connected_symbol(false);
-#endif
 #if	USE_BLE
 			g_dualModeInfo.bleStart = 1;
 #else
 #if	USE_DISPLAY
+			show_connected_symbol(false);
 			if(!g_sensorAppCtx.timerTaskEvt)
 				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
@@ -319,47 +286,34 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 			break;
 		case BDB_COMMISSION_STA_NO_SCAN_RESPONSE:
 		case BDB_COMMISSION_STA_PARENT_LOST:
-			sws_puts("BDB: no response or parent lost\n");
-#if REJOIN_FAILURE_TIMER
-			sensorDevice_rejoinBackoff(NULL);
-#else
-			zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
-#endif
-#if	USE_DISPLAY
-				show_connected_symbol(false);
-#endif
+			sws_puts("BDB: no scan response or parent lost\n");
 #if	USE_BLE
-				g_dualModeInfo.bleStart = 1;
+			g_dualModeInfo.bleStart = 1;
 #else
-#if	USE_DISPLAY
-				if(!g_sensorAppCtx.timerTaskEvt)
-					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+			zb_rejoinSecModeSet(REJOIN_SECURITY);
 #endif
+			zb_rejoinReq(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
+#if	USE_DISPLAY
+			show_connected_symbol(false);
+			if(!g_sensorAppCtx.timerTaskEvt)
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
 			sws_puts("BDB: rejoin failure\n");
-			if(!zb_isDeviceFactoryNew()){
-#if REJOIN_FAILURE_TIMER
-                // sleep for 6 minutes before reconnect if rejoin failed
-				if(g_sensorAppCtx.timerRejoinBackoffEvt) {
-					TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerRejoinBackoffEvt);
+			if(!zb_isDeviceFactoryNew()) {
+                // sleep for 10 minutes before reconnect if rejoin failed
+				if(!g_sensorAppCtx.timerRejoinBackoffEvt) {
+		            g_sensorAppCtx.timerRejoinBackoffEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 10 * 60 * 1000);
 				}
-                g_sensorAppCtx.timerRejoinBackoffEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_rejoinBackoff, NULL, 360 * 1000);
-#else
-				zb_rejoinReqWithBackOff(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
-#endif
 			}
-#if	USE_DISPLAY
-				show_connected_symbol(false);
-#endif
 #if	USE_BLE
-				g_dualModeInfo.bleStart = 1;
-#else
-#if	USE_DISPLAY
-				if(!g_sensorAppCtx.timerTaskEvt)
-					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+			g_dualModeInfo.bleStart = 1;
 #endif
+#if	USE_DISPLAY
+			show_connected_symbol(false);
+			if(!g_sensorAppCtx.timerTaskEvt)
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		default:

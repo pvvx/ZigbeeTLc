@@ -46,21 +46,12 @@ typedef struct{
 #endif
 	ev_timer_event_t *timerLedEvt;
 	ev_timer_event_t *timerKeyEvt;
-#if REJOIN_FAILURE_TIMER
-	ev_timer_event_t *timerRejoinBackoffEvt;
-#endif
 	ev_timer_event_t *timerSteerEvt;
-#if REJOIN_FAILURE_TIMER
-	ev_timer_event_t *timerRejoinBackOffEvt;
-#endif
+	ev_timer_event_t *timerRejoinBackoffEvt;
 #ifdef ZCL_IDENTIFY
 	ev_timer_event_t *timerIdentifyEvt;
 #endif
-
-#if REJOIN_FAILURE_TIMER
 	u16	rejoin_cnt; // startup counter
-#endif
-
 	app_linkKey_info_t tcLinkKey;
 } app_ctx_t;
 

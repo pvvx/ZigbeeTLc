@@ -279,10 +279,7 @@ typedef enum{
 #if TOUCHLINK_SUPPORT
 #define ZCL_ZLL_COMMISSIONING_SUPPORT				1
 #endif
-#define REJOIN_FAILURE_TIMER						1
 #define USE_CHG_NAME								0
-
-//TODO: set bool AUTO_QUICK_DATA_POLL_ENABLE = FALSE ? -> zb_config.c
 
 // for consistency
 #if ZCL_RELATIVE_HUMIDITY_SUPPORT
