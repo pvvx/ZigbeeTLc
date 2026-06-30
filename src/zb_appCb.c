@@ -379,8 +379,8 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
 		}
 	}else if(evt == OTA_EVT_IMAGE_DONE){
-		water_leak_ota_stop();
-		set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
+		water_leak_ota_start();
+		zb_setPollRate(QUEUE_POLL_RATE);
 	}
 }
 #endif

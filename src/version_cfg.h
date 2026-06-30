@@ -132,7 +132,7 @@
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
 #if BOARD == BOARD_EWN8258_WATER
-#define APP_BUILD				0x40	//BCD app build "4.0"
+#define APP_BUILD				0x41	//BCD app build "4.1"
 #else
 #define APP_BUILD				0x39	//BCD app build "3.9"
 #endif

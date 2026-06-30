@@ -79,6 +79,11 @@ void water_leak_joined(void)
 void water_leak_ota_start(void)
 {
 	water_ota_active = true;
+	water_join_blink = false;
+	if(!water_state) {
+		light_blink_stop();
+		light_off();
+	}
 	zb_setPollRate(QUEUE_POLL_RATE);
 	water_fast_poll = true;
 }
@@ -245,7 +250,14 @@ void water_leak_task(void)
 		water_restore_poll_if_idle();
 	} else {
 		water_fast_poll = false;
-		if(!water_join_blink || !g_sensorAppCtx.timerLedEvt) {
+		if(water_ota_active) {
+			water_join_blink = false;
+			water_leak_hold_awake(WATER_JOIN_AWAKE_SEC);
+			if(!water_state && g_sensorAppCtx.timerLedEvt) {
+				light_blink_stop();
+				light_off();
+			}
+		} else if(!water_join_blink || !g_sensorAppCtx.timerLedEvt) {
 			water_leak_joining();
 		}
 	}
