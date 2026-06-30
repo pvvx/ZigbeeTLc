@@ -131,7 +131,11 @@
 #define APP_BUILD				0x16	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
+#if BOARD == BOARD_EWN8258_WATER
+#define APP_BUILD				0x40	//BCD app build "4.0"
+#else
 #define APP_BUILD				0x39	//BCD app build "3.9"
+#endif
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

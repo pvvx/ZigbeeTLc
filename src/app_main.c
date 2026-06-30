@@ -378,6 +378,7 @@ void app_task(void)
 			rep_uptime_sec = g_sensorAppCtx.reportUpSec;
 			if(rep_uptime_sec || g_sensorAppCtx.reportFlg) {
 				g_sensorAppCtx.reportUpSec = 0;
+				water_leak_periodic_report(rep_uptime_sec);
 				if(app_chk_report(rep_uptime_sec) == ZCL_STA_SUCCESS)
 					g_sensorAppCtx.reportFlg = 0;
 				else

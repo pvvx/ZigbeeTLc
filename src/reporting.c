@@ -63,6 +63,11 @@ status_t app_chk_report(u16 uptime_sec) {
 	if(reportingTab.reportNum) {
 		for(int i = 0; i < ZCL_REPORTING_TABLE_NUM; i++){
 			reportCfgInfo_t *pEntry = &reportingTab.reportCfgInfo[i];
+#if WATER_LEAK_SENSOR && defined(ZCL_POWER_CFG)
+			if(pEntry->used && pEntry->clusterID == ZCL_CLUSTER_GEN_POWER_CFG) {
+				continue;
+			}
+#endif
 /**
  *  @brief  If minInterval is 0, then there is no minimum limit;
  *  		if maxInterval is 0xffff, then the configuration info for that attribute need not be maintained;

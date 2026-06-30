@@ -17,8 +17,12 @@
 #define WATER_BOOT_AWAKE_SEC        90
 #define WATER_JOIN_AWAKE_SEC        120
 #define WATER_EVENT_AWAKE_SEC       10
+#ifndef WATER_PERIODIC_REPORT_SEC
+#define WATER_PERIODIC_REPORT_SEC   3600
+#endif
 
 static u8 water_state = 0xff;
+static u32 water_periodic_sec;
 static u32 water_last_enroll_tick;
 static u32 water_awake_tick;
 static u32 water_awake_us;
@@ -227,6 +231,7 @@ void water_leak_task(void)
 		}
 
 		water_send_status(leaking);
+		water_periodic_sec = 0;
 	}
 
 	if(zb_isDeviceJoinedNwk()) {
@@ -252,6 +257,25 @@ void water_leak_force_report(void)
 	water_update_attr(water_state);
 	water_set_wakeup(water_state);
 	water_send_status(water_state);
+	water_periodic_sec = 0;
+}
+
+void water_leak_periodic_report(u16 uptime_sec)
+{
+	if(!zb_isDeviceJoinedNwk() || !uptime_sec) {
+		return;
+	}
+
+	water_periodic_sec += uptime_sec;
+	if(water_periodic_sec < WATER_PERIODIC_REPORT_SEC) {
+		return;
+	}
+
+	water_state = water_read_pin();
+	water_update_attr(water_state);
+	water_set_wakeup(water_state);
+	water_send_status(water_state);
+	water_periodic_sec = 0;
 }
 
 void water_leak_prepare_sleep(void)
@@ -282,6 +306,11 @@ void water_leak_task(void)
 
 void water_leak_force_report(void)
 {
+}
+
+void water_leak_periodic_report(u16 uptime_sec)
+{
+	(void)uptime_sec;
 }
 
 void water_leak_hold_awake(u16 seconds)

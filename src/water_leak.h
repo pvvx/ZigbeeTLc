@@ -6,6 +6,7 @@
 void water_leak_init(void);
 void water_leak_task(void);
 void water_leak_force_report(void);
+void water_leak_periodic_report(u16 uptime_sec);
 void water_leak_hold_awake(u16 seconds);
 void water_leak_joining(void);
 void water_leak_joined(void);
