@@ -140,7 +140,11 @@ const u16 sensorDevice_outClusterList[] =
 const af_simple_descriptor_t sensorDevice_simpleDesc =
 {
 	HA_PROFILE_ID,                      	/* Application profile identifier */
+#if WATER_LEAK_SENSOR
+	HA_DEV_IAS_ZONE,                       /* Application device identifier */
+#else
 	HA_DEV_TEMPERATURE_SENSOR,              /* Application device identifier */
+#endif
 	SENSOR_DEVICE_ENDPOINT,         		/* Endpoint */
 	1,										/* Application device version */
 	0,										/* Reserved */
@@ -271,7 +275,11 @@ const zclAttrInfo_t onOff_attrTbl[] =
 zcl_iasZoneAttr_t g_zcl_iasZoneAttrs =
 {
 	.zoneState		= ZONE_STATE_NOT_ENROLLED,
+#if WATER_LEAK_SENSOR
+	.zoneType		= ZONE_TYPE_WATER_SENSOR,
+#else
 	.zoneType		= ZONE_TYPE_CONTACT_SWITCH,
+#endif
 	.zoneStatus		= 0x00,
 	.iasCieAddr		= {0x00},
 	.zoneId 		= ZCL_ZONE_ID_INVALID,

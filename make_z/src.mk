@@ -39,6 +39,7 @@ $(OUT_PATH)$(SRC_DIR)/sensor_xbr818.o \
 $(OUT_PATH)$(SRC_DIR)/zb_appCb.o \
 $(OUT_PATH)$(SRC_DIR)/zcl_appCb.o \
 $(OUT_PATH)$(SRC_DIR)/reporting.o \
+$(OUT_PATH)$(SRC_DIR)/water_leak.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_thermostat_ui_cfg.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_illuminance_level_sensing.o \

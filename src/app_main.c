@@ -23,6 +23,7 @@
 #include "lcd.h"
 #include "reporting.h"
 #include "ext_ota.h"
+#include "water_leak.h"
 //#include "zcl_thermostat_ui_cfg.h"
 #if USE_BLE
 #include "ble_cfg.h"
@@ -353,6 +354,7 @@ void app_task(void)
 #if (DEV_SERVICES & SERVICE_PIR)
 	task_pir();
 #endif
+	water_leak_task();
 	if(bdb_isIdle()) {
 		// report handler
 		if(zb_isDeviceJoinedNwk()) {
@@ -385,6 +387,7 @@ void app_task(void)
 #endif
 			}
 		} else { // Device not Joined
+#if !WATER_LEAK_SENSOR
 #if	USE_DISPLAY
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
 				if(!g_sensorAppCtx.timerLedEvt)
@@ -399,6 +402,7 @@ void app_task(void)
 				light_blink_start(1, 50, 10000);
 			//gpio_write(GPIO_LED, LED_ON); // - не включать PIN_PULLUP/PULLDOWN !
 #endif // USE_DISPLAY
+#endif // !WATER_LEAK_SENSOR
 		}
 #if PM_ENABLE
 #ifdef USE_EPD
@@ -412,7 +416,10 @@ void app_task(void)
 #endif // USE_SENSOR_TH
 		{
 			sws_buffer_flush();
-			drv_pm_lowPowerEnter();
+			water_leak_prepare_sleep();
+			if(!water_leak_keep_awake()) {
+				drv_pm_lowPowerEnter();
+			}
 		}
 #endif // !USE_BLE
 #endif // PM_ENABLE
@@ -551,6 +558,7 @@ void user_app_init(void)
 
 	// keys init
 	keys_init();
+	water_leak_init();
 
 	/* User's Task */
 #if ZBHCI_EN

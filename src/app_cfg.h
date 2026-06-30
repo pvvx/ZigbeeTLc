@@ -146,11 +146,17 @@
 #include "board_zg204zl.h"
 #elif BOARD == BOARD_ZG204ZV
 #include "board_zg204zv.h"
+#elif BOARD == BOARD_EWN8258_WATER
+#include "board_ewn8258_water.h"
 #else
 #error "Define BOARD!"
 #endif
 #else
 #error "Define BOARD!"
+#endif
+
+#ifndef WATER_LEAK_SENSOR
+#define WATER_LEAK_SENSOR		0
 #endif
 
 #ifndef USE_TRIGGER
