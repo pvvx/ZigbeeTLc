@@ -4,6 +4,9 @@
 ## For BLE-OTA in [TelinkMiFlasher](https://pvvx.github.io/ATC_MiThermometer/TelinkMiFlasher.html) use only "*.zigbee" files!
 
 
+** [ZigbeeTLc Index Configurator for Zigbee OTA](https://pvvx.github.io/ATC_MiThermometer/ZigbeeTlcIdxOTA.html)
+
+
 * 1141-02tt-nnnn3001-xxxxz_vNN.zigbee - ZigbeeTlc firmware
 * 1141-d3a3-01993001-xxxxz_vNN.zigbee - firmware for transferring Tuya to ZigbeeTlc
 * 1286-0202-10993607-TH03Zz_xxxx.zigbee - firmware for transferring TH03 Tuya/Sonoff to ZigbeeTlc
