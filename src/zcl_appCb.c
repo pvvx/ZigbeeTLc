@@ -517,7 +517,10 @@ status_t sensorDevice_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
  */
 static void sensorDevice_zclIasZoneEnrollRspCmdHandler(zoneEnrollRsp_t *pZoneEnrollRsp)
 {
-
+	if(pZoneEnrollRsp->code == ZONE_ENROLL_SUCC) {
+		g_zcl_iasZoneAttrs.zoneState = ZONE_STATE_ENROLLED;
+		g_zcl_iasZoneAttrs.zoneId = pZoneEnrollRsp->zoneId;
+	}
 }
 
 /*********************************************************************

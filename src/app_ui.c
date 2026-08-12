@@ -12,10 +12,13 @@
 #include "app_main.h"
 #include "sensor_th.h"
 #include "zb_api.h"
+#include "bdb.h"
 #include "zcl_include.h"
+#include "ota.h"
 #include "lcd.h"
 #include "app_ui.h"
 #include "reporting.h"
+#include "water_leak.h"
 #include "zcl_thermostat_ui_cfg.h"
 #if USE_BLE
 #include "stack/ble/ble_8258/ble.h"
@@ -147,7 +150,7 @@ void light_blink_stop(void)
 {
 	if(g_sensorAppCtx.timerLedEvt){
 		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerLedEvt);
-		//g_sensorAppCtx.timerLedEvt = NULL;
+		g_sensorAppCtx.timerLedEvt = NULL;
 		g_sensorAppCtx.times = 0;
 		if(g_sensorAppCtx.oriSta){
 			light_on();
@@ -196,7 +199,7 @@ void task_keys(void) {
 			drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 3*1000);
 		}
 		else if((g_sensorAppCtx.key_on_flag & 2)
-		 && clock_time_exceed(g_sensorAppCtx.keyPressedTime, 6900 * 1000)) { // 7 sec
+		 && clock_time_exceed(g_sensorAppCtx.keyPressedTime, 4900 * 1000)) { // 5 sec
 			g_sensorAppCtx.key_on_flag &= ~2;
 #if	USE_DISPLAY
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
@@ -204,6 +207,8 @@ void task_keys(void) {
 			}
 #endif // USE_DISPLAY
 			tl_bdbReset2FN();
+			water_leak_joining();
+			bdb_networkSteerStart();
 			//nv_resetAll();
 		}
 #if USE_DISPLAY && defined(ZCL_THERMOSTAT_UI_CFG)
@@ -229,6 +234,14 @@ void task_keys(void) {
 			light_on();
 			g_sensorAppCtx.key_on_flag = 0xff;
 			g_sensorAppCtx.keyPressedTime = clock_time();
+#if WATER_LEAK_SENSOR
+			read_sensor_and_show();
+			water_leak_force_report();
+			water_leak_hold_awake(180);
+#if ZCL_OTA_SUPPORT
+			ota_queryStart(1);
+#endif
+#endif
 			app_set_thb_report();
 #if USE_BLE
 			if(blt_state == BLS_LINK_STATE_ADV) {
@@ -248,8 +261,18 @@ void task_keys(void) {
 			// event button off
 			light_off();
 			if(g_sensorAppCtx.key_on_flag) {
+#if WATER_LEAK_SENSOR
+				if((g_sensorAppCtx.key_on_flag & 2) == 0) {
+					if(zb_isDeviceJoinedNwk()) {
+						water_leak_joined();
+					} else {
+						water_leak_joining();
+					}
+				}
+#else
 				if((g_sensorAppCtx.key_on_flag & 2) == 0)
 					drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 3*1000);
+#endif
 #if	USE_DISPLAY && defined(ZCL_THERMOSTAT_UI_CFG)
 				else if((g_sensorAppCtx.key_on_flag & 1) == 0)
 					zcl_thermostatConfig_save();

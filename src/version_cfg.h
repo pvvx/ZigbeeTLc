@@ -97,6 +97,7 @@
 //#define BOARD_LYWSD02MMC			49 // EInk display, Clock (BLE)
 #define BOARD_ZG204ZL				50 // HOBEIAN ZG-204ZL PIR + LUX sensor https://pvvx.github.io/ZG-204ZL-3.0
 #define BOARD_ZG204ZV				51 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
+#define BOARD_EWN8258_WATER			52 // AliExpress EWN-8258FAT1BA water leak sensor
 
 /* Board define */
 #ifndef BOARD
@@ -130,7 +131,11 @@
 #define APP_BUILD				0x16	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
+#if BOARD == BOARD_EWN8258_WATER
+#define APP_BUILD				0x41	//BCD app build "4.1"
+#else
 #define APP_BUILD				0x39	//BCD app build "3.9"
+#endif
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

@@ -17,6 +17,7 @@
 #include "ota.h"
 #include "app_main.h"
 #include "app_ui.h"
+#include "water_leak.h"
 #include "lcd.h"
 #if USE_BLE
 #include "zigbee_ble_switch.h"
@@ -64,6 +65,7 @@ ota_callBack_t sensorDevice_otaCb =
  */
 s32 sensorDevice_bdbNetworkSteerStart(void *arg){
 
+	water_leak_joining();
 	bdb_networkSteerStart();
 
 	g_sensorAppCtx.timerSteerEvt = NULL;
@@ -149,7 +151,9 @@ void zb_bdbInitCb(u8 status, u8 joinedNetwork){
 		 */
 		if(joinedNetwork){
 
-			set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
+			water_leak_hold_awake(120);
+			water_leak_joined();
+			zb_setPollRate(QUEUE_POLL_RATE);
 
 #ifdef ZCL_OTA
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL); // 30 * 60);	// 30 m
@@ -168,6 +172,7 @@ void zb_bdbInitCb(u8 status, u8 joinedNetwork){
 				TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerSteerEvt);
 			}
 
+			zb_setPollRate(REJOIN_POLL_RATE);
 			g_sensorAppCtx.timerSteerEvt = TL_ZB_TIMER_SCHEDULE(sensorDevice_bdbNetworkSteerStart, NULL, jitter);
 
 #if USE_BLE
@@ -236,10 +241,11 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 
 			g_sensorAppCtx.rejoin_cnt = REJOIN_FAILURE_COUNT;
 
-			light_blink_start(10, 500, 500);
+			water_leak_hold_awake(120);
+			water_leak_joined();
 
 			//zb_setPollRate(POLL_RATE * 3);
-			set_PollRate();
+			zb_setPollRate(QUEUE_POLL_RATE);
 
 #ifdef ZCL_POLL_CTRL
 		    sensorDevice_zclCheckInStart();
@@ -358,11 +364,13 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 {
 	if(evt == OTA_EVT_START){
 		if(status == ZCL_STA_SUCCESS){
+			water_leak_ota_start();
 			zb_setPollRate(QUEUE_POLL_RATE);
 		}else{
 
 		}
 	}else if(evt == OTA_EVT_COMPLETE){
+		water_leak_ota_stop();
 		set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
 
 		if(status == ZCL_STA_SUCCESS){
@@ -371,7 +379,8 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
 		}
 	}else if(evt == OTA_EVT_IMAGE_DONE){
-		set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
+		water_leak_ota_start();
+		zb_setPollRate(QUEUE_POLL_RATE);
 	}
 }
 #endif
