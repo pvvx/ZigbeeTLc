@@ -32,6 +32,7 @@ static s32 occupancyTimerCb(void *arg) {
 	g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 #if USE_REMOTE_ONOFF // USE_ONOFF
 	if(g_zcl_onOffAttrs.remoteOnOff) {
+		// old cmd = ZCL_CMD_ONOFF_ON -> ZCL_CMD_ONOFF_OFF
 		remoteCmdOnOff(SENSOR_DEVICE_ENDPOINT, ZCL_CMD_ONOFF_OFF);
 	}
 #endif
@@ -49,20 +50,28 @@ void task_pir(void) {
 	u8 pir_on = gpio_read(GPIO_PIR)? PIR_ON : !PIR_ON;
 	if(zcl_occupAttr.delay) {
 		if(pir_on) {
-			// On
+			// PIR On
 			if(!zcl_occupAttr.state) {
 				// event On
 				if(!zcl_occupAttr.occupancy) {
 					// event occupancy
+					// occupancy on
+					zcl_occupAttr.occupancy = 1;
+					g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 #ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
+#if !USE_SENSOR_XBR818
+#ifdef  GPIO_LED
+					gpio_write(GPIO_LED, LED_OFF);
+#endif
+#endif
 					read_illumi_sensor();
 					if(g_zcl_illuminanceAttrs.levelStatus != ILSC_ABOVE_TARGET)
-					// illuminance < minlevel
+					// if illuminance < minlevel
 #endif
 					{
 						// occupancy on
-						zcl_occupAttr.occupancy = 1;
-						g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
+//						zcl_occupAttr.occupancy = 1;
+//						g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 #if USE_REMOTE_ONOFF
 						if(pOnOff->onOff) {
 							// remote On/Off enable
@@ -76,6 +85,7 @@ void task_pir(void) {
 #endif
 			}
 #if !USE_SENSOR_XBR818
+			// set timer occupancy off
 			if(zcl_occupAttr.timerEvt) {
 				TL_ZB_TIMER_CANCEL(&zcl_occupAttr.timerEvt);
 			}
@@ -83,14 +93,15 @@ void task_pir(void) {
 #endif
 		}
 #if USE_SENSOR_XBR818
-		else if(zcl_occupAttr.state) { // Off
+	    else if(zcl_occupAttr.state) { // PIR Off, state = On?
 			// event Off
 			if(zcl_occupAttr.occupancy) {
-					// occupancy off
+				// occupancy off
 				zcl_occupAttr.occupancy = 0;
 				g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 #if USE_REMOTE_ONOFF
-				if(pOnOff->onOff) {
+				if(pOnOff->onOff && pOnOff->remoteOnOff) {
+					// remote On/Off enable, old cmd = ZCL_CMD_ONOFF_ON -> ZCL_CMD_ONOFF_OFF
 					remoteCmdOnOff(SENSOR_DEVICE_ENDPOINT, ZCL_CMD_ONOFF_OFF);
 				}
 #endif // USE_REMOTE_ONOFF

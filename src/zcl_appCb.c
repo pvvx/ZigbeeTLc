@@ -1055,6 +1055,7 @@ void cmdOnOff_set(bool status) {
 #if USE_REMOTE_ONOFF && (DEV_SERVICES & SERVICE_PIR)
 		if(status == ZCL_ONOFF_STATUS_OFF) {
 			if(pOnOff->remoteOnOff) {
+				// old cmd = ZCL_CMD_ONOFF_ON -> ZCL_CMD_ONOFF_OFF
 				remoteCmdOnOff(SENSOR_DEVICE_ENDPOINT, ZCL_CMD_ONOFF_OFF);
 			}
 		}

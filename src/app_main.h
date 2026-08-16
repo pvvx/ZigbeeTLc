@@ -153,7 +153,9 @@ typedef struct {
 	u8  sensor_type;
 	u8  state;
 	u8  thres;
-	//	u16 oc2un_delay;
+#if USE_SENSOR_XBR818
+	u16 oc2un_delay;
+#endif
 } zcl_occupancyAttr_t;
 
 #if USE_SENSOR_XBR818

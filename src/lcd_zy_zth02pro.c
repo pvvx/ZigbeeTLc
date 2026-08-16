@@ -1,6 +1,6 @@
 
 #include "tl_common.h"
-#if (BOARD == BOARD_ZYZTH01)
+#if (BOARD == BOARD_ZYZTH01) || (BOARD == BOARD_TS0201WING)
 #include "chip_8258/timer.h"
 #include "i2c_drv.h"
 #include "lcd.h"

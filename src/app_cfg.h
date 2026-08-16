@@ -146,6 +146,8 @@
 #include "board_zg204zl.h"
 #elif BOARD == BOARD_ZG204ZV
 #include "board_zg204zv.h"
+#elif BOARD == BOARD_TS0201WING
+#include "board_ts0201_wing.h"
 #else
 #error "Define BOARD!"
 #endif

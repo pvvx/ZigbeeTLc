@@ -293,7 +293,7 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 			zb_rejoinSecModeSet(REJOIN_SECURITY);
 #endif
 			zb_rejoinReq(zb_apsChannelMaskGet(), g_bdbAttrs.scanDuration);
-#if	USE_DISPLAY
+#if	!USE_BLE && USE_DISPLAY
 			show_connected_symbol(false);
 			if(!g_sensorAppCtx.timerTaskEvt)
 				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
@@ -310,7 +310,7 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 #if	USE_BLE
 			g_dualModeInfo.bleStart = 1;
 #endif
-#if	USE_DISPLAY
+#if	!USE_BLE && USE_DISPLAY
 			show_connected_symbol(false);
 			if(!g_sensorAppCtx.timerTaskEvt)
 				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);

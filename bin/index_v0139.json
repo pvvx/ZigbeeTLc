@@ -1,0 +1,353 @@
+[
+    {
+        "fileVersion": 20525057,
+        "fileSize": 134226,
+        "manufacturerCode": 4417,
+        "imageType": 513,
+        "sha512": "1f50bcecd6333bf5bd6502f592d115d07e999a391b73d2c321e6b5039159600879f1cce4e3160205c32f17f26b0a5330e6a5d28469a3c707b62b56637b42718d",
+        "otaHeaderString": "MiaoMiaoCe:MHO-C401-z",
+        "modelId": "MHO-C401-z",
+        "manufacturerName": [
+            "MiaoMiaoCe"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0201-01393001-ZMHOC401.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 134578,
+        "manufacturerCode": 4417,
+        "imageType": 514,
+        "sha512": "c92a0cae5576177dacebc857ba59cfb31be643f8cd9687987b47c1aa993eb9d71e208edcd76423255f687dab7ad49984b5487782c87d69de694d85ea219472a7",
+        "otaHeaderString": "Qingping:CGG1-z",
+        "modelId": "CGG1-z",
+        "manufacturerName": [
+            "Qingping"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0202-01393001-ZCGG1.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 133522,
+        "manufacturerCode": 4417,
+        "imageType": 518,
+        "sha512": "9747a96984419089e5f66939a72565a734af579161b3a23dd870781f0931d2f1932a421dd5f1755ae98b129348e7e167f26bac0fa5fb631e5e93e7cba2a61e28",
+        "otaHeaderString": "Qingping:CGDK2-z",
+        "modelId": "CGDK2-z",
+        "manufacturerName": [
+            "Qingping"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0206-01393001-ZCGDK2.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 134018,
+        "manufacturerCode": 4417,
+        "imageType": 519,
+        "sha512": "704778fd3425e0c302c8cc5b71cd8d750125721c77cbbb53605a1550a328b929db94a43b6ff5078dba096fba33eacf1a55c5e68d63466072994b344c3bc166a8",
+        "otaHeaderString": "Qingping:CGG1N-z",
+        "modelId": "CGG1N-z",
+        "manufacturerName": [
+            "Qingping"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0207-01393001-ZCGG1N.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 133666,
+        "manufacturerCode": 4417,
+        "imageType": 520,
+        "sha512": "f6068ea9176c47880173f22ce5d9fb75237ff0e66c09dc5200ae642e68f87064a2f0dd3716ab10c8e44f3e13c61d41552d69ba48715512ff43620f1845a8652f",
+        "otaHeaderString": "MiaoMiaoCe:MHO-C401N-z",
+        "modelId": "MHO-C401N-z",
+        "manufacturerName": [
+            "MiaoMiaoCe"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0208-01393001-ZMHOC401N.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 133938,
+        "manufacturerCode": 4417,
+        "imageType": 522,
+        "sha512": "8aa61c5aee553dab6b481bad35e82a7938782d02e8a5d108bb5cc73ddbab4271a343f72688970cbace19c31f999712fe2381ca25b416381f8afbadbe048fdf4a",
+        "otaHeaderString": "Xiaomi:LYWSD03MMC-z",
+        "modelId": "LYWSD03MMC-z",
+        "manufacturerName": [
+            "Xiaomi"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020a-01393001-Z03MMC.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 132882,
+        "manufacturerCode": 4417,
+        "imageType": 523,
+        "sha512": "03bd2ff698d44c12906c9e41966859e9682d972bcedb2df9004965a3a1adc76a661ae747223c046feac21d4ab5b27e103b7d2154fa83b82d5674a51b844d4d7e",
+        "otaHeaderString": "MiaoMiaoCe:MHO-C122-z",
+        "modelId": "MHO-C122-z",
+        "manufacturerName": [
+            "MiaoMiaoCe"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020b-01393001-ZMHOC122.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 132130,
+        "manufacturerCode": 4417,
+        "imageType": 525,
+        "sha512": "1f12085fec71e6af8c832bb1fb05da2c1f65948b570e9e5beed51e78e74402336976f24a2c331ccad1fea2429ee55630a618a314dc4844cb7df27ead32654c11",
+        "otaHeaderString": "Xiaomi:MJWSD06MMC-z",
+        "modelId": "MJWSD06MMC-z",
+        "manufacturerName": [
+            "Xiaomi"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-020d-01393001-Z06MMC.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 132546,
+        "manufacturerCode": 4417,
+        "imageType": 529,
+        "sha512": "4026a82fd25952791377403709b18a11d395353f9c5f3699b641c77acc329f7f70a52e941ed350a0faff2351bc8889bce40d7eb81aafb1ab7e7c0b1b0ee58574",
+        "otaHeaderString": "Tuya:TS0201-z",
+        "modelId": "TS0201-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0211-01393001-ZTS0201Z3000.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 131714,
+        "manufacturerCode": 4417,
+        "imageType": 534,
+        "sha512": "374a953f86c4b7c2e40d639d65d1c98fc353adc940b5cafe31501c868e7b5763fcdb94759c78c353a5d7f156e6cd979ec43cddbdad57f77a2e71ed9646295366",
+        "otaHeaderString": "Tuya:TH03Z-z",
+        "modelId": "TH03Z-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0216-01393001-ZTH03Z.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 132242,
+        "manufacturerCode": 4417,
+        "imageType": 539,
+        "sha512": "2a3d7b9fa72d5c8b4495f6b0819033b3b131c6df90fd14a719ecbca5508e1846e8038fa3efc71a9bc326180ac796878b700876f965dd8b6d2703600489742820",
+        "otaHeaderString": "Tuya:ZTH01-z",
+        "modelId": "ZTH01-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021b-01393001-ZTH01Z.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 132242,
+        "manufacturerCode": 4417,
+        "imageType": 540,
+        "sha512": "27d75122b65d7c6a3d24185958767df4a8dad7cc5e1f122361c36cedcc9d6e9987bc20064ea5af102b93c8219dfe89532c77c9317d66217986d865ba4adcc961",
+        "otaHeaderString": "Tuya:ZTH02-z",
+        "modelId": "ZTH02-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021c-01393001-ZTH02Z.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 135042,
+        "manufacturerCode": 4417,
+        "imageType": 542,
+        "sha512": "ac68f2d4f8392ab86151a1177dc762dcf4f3945a18f5105fb564a65e1c4745da92b56177b975bb6972595137508805e953397cdca079e3e0d5d1874c863a327c",
+        "otaHeaderString": "Sonoff:TH03-z",
+        "modelId": "TH03-z",
+        "manufacturerName": [
+            "Sonoff"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021e-01393001-TH03Z.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 132802,
+        "manufacturerCode": 4417,
+        "imageType": 543,
+        "sha512": "70185d953955f99d7b2d7cf8fdc07c8fbf19e51055e56d1aa310a304be9fb35b84d2d4cca702c055f4d2c3ffddfb755a627a35b5efea8fe8e82385278c6b5127",
+        "otaHeaderString": "Tuya:LKTMZL02-z",
+        "modelId": "LKTMZL02-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-021f-01393001-LKTMZL02Z.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 134594,
+        "manufacturerCode": 4417,
+        "imageType": 545,
+        "sha512": "a6fa57f0e088071b7fa96c42ae95f43689ba7b383c1df7b7c91ff6d75ed3c85f764ada390c9faa4fb05b1d42a04a5c1efd5dd99c2a26bab3cefa84858312e74c",
+        "otaHeaderString": "Tuya:TH05-z",
+        "modelId": "TH05-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0221-01393001-ZTH05.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 129074,
+        "manufacturerCode": 4417,
+        "imageType": 549,
+        "sha512": "47e622ad5936efce955586fe68afd521cb42662748ccf07ba96999f9a4871eb4b093b423bf2d1baf911a811aa45131a1a6263fb3aef7a6f68655122ec017d6eb",
+        "otaHeaderString": "Tuya:ZY-ZTH02-z",
+        "modelId": "ZY-ZTH02-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0225-01393001-ZYZTH02.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 130546,
+        "manufacturerCode": 4417,
+        "imageType": 550,
+        "sha512": "f9c3977e9859d55edd5beb60fe12b0542f4f5cf9e56dcfc5b37fd95b988e39e3fdc451424701688ae7e3ddf0e97f05492f578c572211a2710da456ef9070485b",
+        "otaHeaderString": "Tuya:ZY-ZTH01-z",
+        "modelId": "ZY-ZTH01-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0226-01393001-ZYZTH01.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 129538,
+        "manufacturerCode": 4417,
+        "imageType": 551,
+        "sha512": "f692f1cc09ced559e265fc10c64b21718a9fd8ae4fd40b885334300523e3193aa6a1d7f0fc3826e180a5796acf1dbdb1cf0c1c2904e195dcce1bdf3f97a1d80c",
+        "otaHeaderString": "Tuya:ZG-227Z-z",
+        "modelId": "ZG-227Z-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0227-01393001-ZG227Z.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 127458,
+        "manufacturerCode": 4417,
+        "imageType": 552,
+        "sha512": "aec58437c812a6afbd57c5993b68c74a3f228c217e625c6a02f9aed84937e2515eedab62ad93010c9a7a953dc132f6f281a52f5167aa1400b9dc97a0b3618719",
+        "otaHeaderString": "Tuya:TS202PIR1-z",
+        "modelId": "TS202PIR1-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0228-01393001-TS202PIR1.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 132770,
+        "manufacturerCode": 4417,
+        "imageType": 556,
+        "sha512": "eb6aaeeb6b7420f1d7dd64060bd2b861edaddb68c30535be1ffd3b305e12d94c81f2a45b204c4e5dcce08882b5e0ada1efe640a747e72230633a50620f243556",
+        "otaHeaderString": "Sonoff:ZG-303Z-z",
+        "modelId": "ZG-303Z-z",
+        "manufacturerName": [
+            "Sonoff"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-022c-01393001-ZG303Z.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 130274,
+        "manufacturerCode": 4417,
+        "imageType": 557,
+        "sha512": "88a798b2b46982cb00af4f839d87a556cb524383fe66f23adced803ae0827b13233152d7a60ef33fa71bd847b442919f1b0252f9ce65c2b4d791adcc25cd38b1",
+        "otaHeaderString": "ZBeacon:TH01-z",
+        "modelId": "TH01-z",
+        "manufacturerName": [
+            "ZBeacon"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-022d-01393001-ZBTH01.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 130274,
+        "manufacturerCode": 4417,
+        "imageType": 558,
+        "sha512": "97d586e2aeef821c4615912be7c960e98b589072b8e47d3d23b21789a373bb3604edcaa1c69efddf694662995eeb22276150fd3c9f565a77ac25590b3a8baefc",
+        "otaHeaderString": "ZBeacon:MC-z",
+        "modelId": "MC-z",
+        "manufacturerName": [
+            "ZBeacon"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-022e-01393001-ZB_MC.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 130274,
+        "manufacturerCode": 4417,
+        "imageType": 559,
+        "sha512": "7b160e5098e50d653a7c50822594303ee0bd0bbf7f62ce5972a0f7a25d86eacc359d7deeb79cbba4a54fdb2d7d4bba808bfe693065792654fd5a156ea627210e",
+        "otaHeaderString": "ZBeacon:TH01-2-z",
+        "modelId": "TH01-2-z",
+        "manufacturerName": [
+            "ZBeacon"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-022f-01393001-ZB2TH01.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 131026,
+        "manufacturerCode": 4417,
+        "imageType": 560,
+        "sha512": "f15b569b9c31779239e3b6836f711314704f9df18b0521797fc83964bfd40271e148df9192977d561b4192ae788153ff824791fad8c0a4056d11f0b3f3fd242c",
+        "otaHeaderString": "Tuya:TY0201-z",
+        "modelId": "TY0201-z",
+        "manufacturerName": [
+            "Tuya"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0230-01393001-ZTY0201.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 128802,
+        "manufacturerCode": 4417,
+        "imageType": 562,
+        "sha512": "851716f66f71d524b218bbf44beee714630134f5f1639d1151a1a39e58fb0cb3999d69d60a4e8ac5aef66744de30a0c9ba9cd5549bd919b527dca88411e4481d",
+        "otaHeaderString": "Sonoff:ZG-204ZL-z",
+        "modelId": "ZG-204ZL-z",
+        "manufacturerName": [
+            "Sonoff"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0232-01393001-ZG204ZL.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 131794,
+        "manufacturerCode": 4417,
+        "imageType": 563,
+        "sha512": "00e5a45ce8b3a33601e6d0b2821448422ea5fe96afc9872fc598a5c8c95e252202dcbe4dab6b048de5b7b80ad7c4e626db85d855b60de909e984a1df93d8e44e",
+        "otaHeaderString": "Sonoff:ZG-204ZV-z",
+        "modelId": "ZG-204ZV-z",
+        "manufacturerName": [
+            "Sonoff"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0233-01393001-ZG204ZV.zigbee"
+    },
+    {
+        "fileVersion": 20525057,
+        "fileSize": 129890,
+        "manufacturerCode": 4417,
+        "imageType": 564,
+        "sha512": "d01d9f43f89696c43fc25ce692a35d374707c939a9c696cda089f7dbb7335db8d499f73ae7cd2e2062f5c3bd765cff1b4b5651befae6ea1038ab808bb0a7fce3",
+        "otaHeaderString": "Wing:TS0201-z",
+        "modelId": "TS0201-z",
+        "manufacturerName": [
+            "Wing"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0234-01393001-TS0201W.zigbee"
+    }
+]

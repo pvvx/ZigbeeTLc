@@ -1,6 +1,6 @@
 @set TLPATH=D:\MCU\TelinkIoTStudio
 @set PATH=%TLPATH%\bin;%TLPATH%\opt\tc32\bin;%TLPATH%\mingw\bin;%TLPATH%\opt\tc32\tc32-elf\bin;%PATH%
-@set SWVER=_zb0016
+@set SWVER=_zb0017
 @del /Q .\bin_zb\*.bin
 @del /Q .\bin_zb\*.zigbee
 @del /Q .\build
@@ -70,6 +70,9 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZB_MC USE_ZB=1 POJECT_DEF="-DBOARD=B
 make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTY0201 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_RSH_HS03" ZNAME="Tuya:TY0201-z"
 @if not exist "bin_zb\ZTY0201%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=TS0201W USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_TS0201WING" ZNAME="Wing:TS0201-z"
+@if not exist "bin_zb\TS0201W%SWVER%.bin" goto :error
 cd .\zigpy_ota
 call update_zb.cmd %SWVER%
 cd ..

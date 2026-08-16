@@ -97,10 +97,11 @@
 //#define BOARD_LYWSD02MMC			49 // EInk display, Clock (BLE)
 #define BOARD_ZG204ZL				50 // HOBEIAN ZG-204ZL PIR + LUX sensor https://pvvx.github.io/ZG-204ZL-3.0
 #define BOARD_ZG204ZV				51 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
+#define BOARD_TS0201WING			52 // TS0201_TZ3000_dnpd6ayp, Tuya Zigbee "Temp & Humidity Sensor", Wing TS0201 2xAAA
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_TS0201_TZ3000 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_LYWSD03MMC // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -127,7 +128,7 @@
 
 #if USE_BLE
 #define APP_RELEASE				0x00	//BCD app release "0.0"
-#define APP_BUILD				0x16	//BCD app build "0.4"
+#define APP_BUILD				0x17	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
 #define APP_BUILD				0x39	//BCD app build "3.9"

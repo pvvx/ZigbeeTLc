@@ -80,6 +80,8 @@
 | 47 | 0x022F | [ZBEACON2-TH01](https://pvvx.github.io/Zbeacon-TH01-v2.0) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 48 | 0x0230 | [ZTY0201](https://pvvx.github.io/TY0201_TZ3000_bjawzodf)_TZ3000_bjawzodf | [ZigBeeTLc](https://github.com/pvvx/ZigbeeTLc) |
 | 50 | 0x0232 | [ZG-204ZL](https://pvvx.github.io/ZG-204ZL-3.0) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
+| 51 | 0x0233 | [ZG-204ZV](https://pvvx.github.io/ZG-204ZV) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
+| 52 | 0x0234 | [TS0201_TZ3000_dnpd6ayp](https://pvvx.github.io/TS0201_TZ3000_dnpd6ayp) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 
 * [Identification numbers of all firmwares](https://github.com/pvvx/pvvx.github.io?tab=readme-ov-file#id-numbers-of-alternative-firmware)
 

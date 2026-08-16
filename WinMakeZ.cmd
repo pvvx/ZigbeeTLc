@@ -82,6 +82,8 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZL POJECT_DEF="-DBOARD=BOARD_ZG
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV POJECT_DEF="-DBOARD=BOARD_ZG204ZV" ZNAME="Sonoff:ZG-204ZV-z"
 @if not exist "bin\ZG204ZV%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=TS0201W POJECT_DEF="-DBOARD=BOARD_TS0201WING" ZNAME="Wing:TS0201-z"
 @rem
 python3 make_z\zb_bin_ota.py bin\ZTS0201Z3000%SWVER%.bin bin\TS0201z%SWVER% -m0x1141 -i0xd3a3 -v0x01983001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZTH01Z%SWVER%.bin bin\TH01Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
@@ -89,6 +91,7 @@ python3 make_z\zb_bin_ota.py bin\ZTH02Z%SWVER%.bin bin\TH02Zz%SWVER% -m0x1141 -i
 python3 make_z\zb_bin_ota.py bin\ZTH03Z%SWVER%.bin bin\TH03Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\TH03Z%SWVER%.bin bin\TH03Zz%SWVER% -m0x1286 -i0x0202 -v0x10993607 -s"Sonoff to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\LKTMZL02Z%SWVER%.bin bin\LKTMZL02z%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
+python3 make_z\zb_bin_ota.py bin\ZYZTH02%SWVER%.bin bin\ZYZTH02z%SWVER% -m0x1002 -i0x0203 -v0x66993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZYZTH02%SWVER%.bin bin\ZYZTH02z%SWVER% -m0x1002 -i0xd3a3 -v0x66993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZYZTH01%SWVER%.bin bin\ZYZTH03pz%SWVER% -m0x1002 -i0xd3a3 -v0x66993001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZG227Z%SWVER%.bin bin\ZG227Zz%SWVER% -m0x1286 -i0x0203 -v0x10983001 -s"Sonoff to ZigbeeTlc"
@@ -99,11 +102,11 @@ python3 make_z\zb_bin_ota.py bin\ZTY0201%SWVER%.bin bin\ZTY0201z%SWVER% -m0x1141
 python3 make_z\zb_bin_ota.py bin\ZG204ZL%SWVER%.bin bin\ZG204ZLz%SWVER% -m0x1286 -i0x0203 -v0x99993001 -s"Sonoff to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\TS202PIR1%SWVER%.bin bin\TS202PIR1%SWVER% -m0x1141 -i0xd3a3 -v0x88993001 -s"Tuya to ZigbeeTlc"
 cd .\bin\devbis
-call convert.cmd %SWVER% 
+start /wait convert.cmd %SWVER% 
 cd ..\..
 @rem
 cd .\zigpy_ota
-call update.cmd %SWVER%
+start /wait update.cmd %SWVER%
 cd ..
 @exit
 :error
