@@ -43,7 +43,9 @@
 #if USE_SENSOR_XBR818
 #include "sensor_xbr818.h"
 #endif
-
+#if (BOARD == BOARD_ZG223Z)
+#include "sensors_zg223z.h"
+#endif
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -261,8 +263,12 @@ void show_th(void) {
 
 
 void read_sensor_and_show(void) {
-#if USE_SENSOR_LX == 1
+#if (USE_SENSOR_LX == 1) || (USE_SENSOR_RND)
+#if (USE_SENSOR_RND)
+	read_sensors();
+#else
 	read_illumi_sensor();
+#endif
 #ifdef ZCL_POWER_CFG
 	g_zcl_powerAttrs.batteryVoltage = (u8)((measured_battery.average_mv + 50) / 100);
 	g_zcl_powerAttrs.batteryPercentage = (u8)measured_battery.level;

@@ -82,6 +82,7 @@
 | 50 | 0x0232 | [ZG-204ZL](https://pvvx.github.io/ZG-204ZL-3.0) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 | 51 | 0x0233 | [ZG-204ZV](https://pvvx.github.io/ZG-204ZV) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 | 52 | 0x0234 | [TS0201_TZ3000_dnpd6ayp](https://pvvx.github.io/TS0201_TZ3000_dnpd6ayp) | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
+| 53 | 0x0235 | [ZG-223Z](https://pvvx.github.io/ZG-223Z) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 
 * [Identification numbers of all firmwares](https://github.com/pvvx/pvvx.github.io?tab=readme-ov-file#id-numbers-of-alternative-firmware)
 

@@ -1,13 +1,13 @@
 /*
- * senser_lx.c
+ * sensors_zg223z.c
  *
- *  Created on: 3 апр. 2026 г.
+ *  Created on: 16.08.2026
  *      Author: pvvx
  */
 
 
 #include "tl_common.h"
-#if (USE_SENSOR_LX == 1) || (USE_SENSOR_LX == 2)
+#if (BOARD == BOARD_ZG223Z) // USE_SENSOR_RND
 #include "app_main.h"
 #include "battery.h"
 #include "zcl_illuminance_level_sensing.h"
@@ -15,7 +15,7 @@
 
 extern u64 mul32x32_64(u32 a, u32 b); // hard function (in div_mod.S)
 
-//#define USE_ILLUMI_AVERAGE_SHL 	2 // 2
+#define USE_ILLUMI_AVERAGE_SHL 	2 // 2
 
 #ifdef USE_ILLUMI_AVERAGE_SHL
 struct {
@@ -23,7 +23,6 @@ struct {
 	u16 cnt;
 } illumi_summ;
 #endif
-
 
 // Коэффициенты полинома для 2^x, x∈[0,1) (масштаб 2^F)
 #define A1      726817U
@@ -106,32 +105,99 @@ u16 calk_10000_log10(u32 x) {
 	return (u16)(base + log_table[index] + add);
 }
 
-//u32 old_lx;
+#if USE_SOC_TEMP_SENSOR
+/*
+ * 0.9(V)/32768 = 0.0000274658203125 V in 1 adc
+ * 0.00051 V : 1 C -> 18.56853333 adc
+ * 0.130 V : -40 C -> 4733.155 adc
+ */
+#define TEMP_AVERAGE_COUNT_SHL	3
+#define TEMP_DEF_COEF	22059 // 4096*100*0.0000274658203125/0.00051 = 22058.8235294
+//#define TEMP_DEF_ZERO	27020 // +26C = ~5500 adc, (5500*22059)>>12 = 29620, 29620 - 2600 = 27020
+#define TEMP_DEF_ZERO	26500 // +24C = ~5400 adc, (5400*22059)>>12 = 29081, 29081 - 2600 = 26481
 
-int read_illumi_sensor(void) {
-	u32 adcvbat, adclx;
-	// turning on the sensor power
+#if TEMP_AVERAGE_COUNT_SHL
+typedef struct {
+	u32 summ;
+	u16 cnt;
+	s16 average;
+} temperature_t;
+#endif
+
+temperature_t soc_temperature;
+
+s16 calk_soc_temp(void) {
+	adc_channel_init(TEMPERATURE_SENSOR_P);
+	u32 adc = get_adc_mv(1);// adc value x4
+	// disable temperature sensor
+	analog_write(0x07, (analog_read(0x07) | 0x10));
+#if TEMP_AVERAGE_COUNT_SHL
+	soc_temperature.summ += (((s32)adc * (u32)TEMP_DEF_COEF) >> 12) - (u32)TEMP_DEF_ZERO;
+	soc_temperature.cnt++;
+
+	if(soc_temperature.cnt >= (1 << TEMP_AVERAGE_COUNT_SHL)) {
+		soc_temperature.average = soc_temperature.summ >> TEMP_AVERAGE_COUNT_SHL;
+		soc_temperature.summ -= soc_temperature.average;
+		soc_temperature.cnt--;
+	} else {
+		soc_temperature.average = soc_temperature.summ / soc_temperature.cnt;
+	}
+	sws_printf("Temp: %d C, ADC: %d\n", soc_temperature.average, adc);
+	return (s16)soc_temperature.average;
+#else
+	return (s16)((((s32)adc * (u32)temperature.cfg.coef) >> 12) - (u32)temperature.cfg.zero);
+#endif
+}
+
+#endif // USE_SOC_TEMP_SENSOR
+
+void read_sensors(void) {   // 1 ms
+	u32 adcvbat, adcrn, adclx;
+	// Enable pullup 1 MOm Raindrop sensor and +Vbat
+	gpio_setup_up_down_resistor(GPIO_RNDS, PM_PIN_PULLUP_1M);
+	// Turning on the lx sensor power
 	gpio_write(GPIO_ILLUMI_ON, ILLUMI_POWER_ON);
 	gpio_set_output_en(GPIO_ILLUMI_ON, 1);
-#ifdef GPIO_ADC_PULL
-	gpio_setup_up_down_resistor(GPIO_ILLUMI_ADC, GPIO_ADC_PULL);
-#endif
-	// sampling Ubat, Ux
+	// TODO: lx sensor - wait 3 ms !
+
+	// Measuring Ubat
 	battery_detect(0);
 	adcvbat = adc_average;
+	// Measuring Raindrop
+	adc_channel_init(SHL_ADC_RND);
+	adcrn = get_adc_mv(1);// adc value x4
+
+	g_zcl_temperatureAttrs.measuredValue = calk_soc_temp() + g_zcl_thermostatUICfgAttrs.temp_offset;
+
+	// Measuring illuminance
 	adc_channel_init(SHL_ADC_ILLUMI);
 	adclx = get_adc_mv(1);// adc value x4
-	// turning off the sensor power
-	gpio_write(GPIO_ILLUMI_ON, !ILLUMI_POWER_ON);
+	// Turning off the lx sensor power
+	gpio_write(GPIO_ILLUMI_ON, !(ILLUMI_POWER_ON));
 	gpio_set_output_en(GPIO_ILLUMI_ON, 0);
-#ifdef GPIO_ADC_PULL
-	gpio_setup_up_down_resistor(GPIO_ILLUMI_ADC, PM_PIN_UP_DOWN_FLOAT);
-#endif
-	// calculation of values
+	// Return GPIO_RNDS to GPIO
+	gpio_set_func(GPIO_RNDS, AS_GPIO);
+
+ 	sws_printf("Sensors bat, rn, t, lx: %d, %d, %d, %d\n", adcvbat, adcrn, g_zcl_temperatureAttrs.measuredValue, adclx);
+
+	if(adcvbat > adcrn) {
+		adcrn = adcvbat - adcrn;
+		adcrn <<= 16;
+		adcrn /= adcvbat; // Ub/Ur = 0..65535
+		adcrn *= 10240;
+		adcrn >>= 16;
+	} else {
+		adcrn = 0;
+	}
+	adcrn += g_zcl_thermostatUICfgAttrs.humi_offset;
+	if(adcrn > 9999)
+		adcrn = 9999;
+	g_zcl_relHumidityAttrs.measuredValue = adcrn;
+
+	sws_printf("RH: %d\n", adcrn);
+
+	// calculation of illuminance Lx & Zigbee Lx values
 	if(adcvbat > adclx) {
-#if USE_SENSOR_LX == 2 // =1 - ADC = Ur, =2 - ADC = Us
-		adclx = adcvbat - adclx; // Ubat - Usense = Ur
-#endif
 		adclx <<= 16;
 		adclx /= adcvbat; // Ub/Ur = 0..65535
 		adclx *= adclx;
@@ -146,11 +212,7 @@ int read_illumi_sensor(void) {
 			adclx >>= 16;
 		}
 	} else {
-#if USE_SENSOR_LX == 2 // =1 - ADC = Ur, =2 - ADC = Us
-		adclx = 0;
-#else
 		adclx = g_zcl_illuminanceAttrs.cfg.k;
-#endif
 	}
 #ifdef USE_ILLUMI_AVERAGE_SHL
 	illumi_summ.summ += adclx;
@@ -190,17 +252,19 @@ int read_illumi_sensor(void) {
 		il_status = ILSC_NONE;
 	}
 	g_zcl_illuminanceAttrs.levelStatus = il_status;
-	sws_printf("Sensor: %dzlx, %d\n", adclx, il_status);
+	sws_printf("Sensor lx: %d, %d\n", adclx, il_status);
 #else
-	sws_printf("Sensor: %dzlx\n", adclx);
+	sws_printf("Sensor lx: %dzlx\n", adclx);
 #endif // ZCL_ILLUMINANCE_LEVEL_SENSING
-	return 0;
 }
 
-#if USE_SENSOR_LX == 1 // =1 - ADC = Ur, =2 - ADC = Us
+
 void init_sensor(void) {
+	read_sensors();
+	if(GPIO_RNDS) {
 
+	}
 }
-#endif
 
-#endif // USE_SENSOR_LX
+
+#endif // USE_SENSOR_RND

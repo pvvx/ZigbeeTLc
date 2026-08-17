@@ -35,9 +35,6 @@
 /* PM */
 #define PM_ENABLE						1  // always = 1
 
-/* PA */
-#define PA_ENABLE						0  // not used !
-
 /**********************************************************************
  * Clock & Power
  */
@@ -81,6 +78,7 @@
 #define SERVICE_ZIGBEE		0x01000000	// ZB-version
 #define SERVICE_PIR			0x02000000	// use PIR sensor
 #define SERVICE_ILLUMI		0x04000000	// use Illuminance sensor
+#define SERVICE_RNDS		0x10000000	// use Raindrop sensor
 #define SERVICE_EXTENDED	0x80000000  //
 
 
@@ -91,6 +89,7 @@
 #define BATTERY_CR2430		1
 #define BATTERY_CR2450		2
 #define BATTERY_2AAA		3
+#define BATTERY_CR123A		4
 
 /* Board include */
 #if defined(BOARD)
@@ -148,12 +147,15 @@
 #include "board_zg204zv.h"
 #elif BOARD == BOARD_TS0201WING
 #include "board_ts0201_wing.h"
+#elif BOARD == BOARD_ZG223Z
+#include "board_zg223z.h"
 #else
 #error "Define BOARD!"
 #endif
 #else
 #error "Define BOARD!"
 #endif
+
 
 #ifndef USE_TRIGGER
 #define USE_TRIGGER				0 // develop
@@ -165,6 +167,9 @@
 #ifndef USE_BATTERY
 #define USE_BATTERY 	BATTERY_CR2032
 #endif
+
+/* PA */
+#ifndef PA_ENABLE
 
 #if USE_BATTERY == BATTERY_CR2032
 
@@ -186,6 +191,17 @@
 #define ZB_TX_POWER_IDX_DEF				RF_POWER_INDEX_P3p01dBm
 #define	BLE_TX_POWER_DEF				RF_POWER_P3p01dBm
 
+#elif USE_BATTERY == BATTERY_CR123A
+
+#define ZB_TX_POWER_IDX_DEF				RF_POWER_INDEX_P10p46dBm
+#define	BLE_TX_POWER_DEF				RF_POWER_P10p46dBm
+
+#endif // USE_BATTERY
+#define PA_ENABLE						0
+#else // PA_ENABLE
+// PA enabled:
+#define ZB_TX_POWER_IDX_DEF				RF_POWER_INDEX_P0p04dBm
+#define	BLE_TX_POWER_DEF				RF_POWER_P0p04dBm
 #endif
 
 #if USE_BLE

@@ -208,7 +208,7 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 		zcl_thermostatConfig_save();
 	} else
 #endif // ZCL_THERMOSTAT_UI_CFG
-#ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
+#if defined(ZCL_ILLUMINANCE_LEVEL_SENSING) && defined(ZCL_OCCUPANCY_SENSING)
 	if(clusterId == ZCL_CLUSTER_MS_OCCUPANCY_SENSING) {
 		zcl_occupanceConfig_save();
 	} else
@@ -941,7 +941,7 @@ void taskRetryOnOff(void) {
 			 && bind_tbl->srcEp == SENSOR_DEVICE_ENDPOINT) {
 			    sws_printf("RetryOnOff dst:%08p:%02x, ep:%02x, cmd:%02x\n",
 			    		&bind_tbl->dstExtAddrInfo, bind_tbl->used - 1,
-						SENSOR_DEVICE_ENDPOINT, pOnOff->onOffrm);
+						SENSOR_DEVICE_ENDPOINT, pOnOff->onOff);
 				epInfo_t dstEpInfo;
 			    TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 			    dstEpInfo.profileId = HA_PROFILE_ID;

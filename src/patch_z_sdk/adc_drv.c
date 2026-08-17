@@ -118,6 +118,39 @@ void adc_set_gpio_calib_vref(u16 x) {
 
 _attribute_ram_code_sec_
 void adc_channel_init(ADC_InputPchTypeDef p_ain) {
+#if USE_SOC_TEMP_SENSOR
+	adc_power_on_sar_adc(0); // power off sar adc
+	adc_reset_adc_module(); // reset whole digital adc module
+	adc_enable_clk_24m_to_sar_adc(1); // enable signal of 24M clock to sar adc
+	adc_set_sample_clk(5); // set adc clk as 4MHz
+	dfifo_disable_dfifo2(); // disable misc channel data dfifo
+	analog_write(areg_adc_pga_ctrl, 0xE5);
+	//adc_set_state_length(1023, 0, 15); 	// ADC_SAMPLE_RATE_23K: R_max_mc=1023,R_max_s=15
+	adc_set_state_length(240, 0, 10);   // ADC_SAMPLE_RATE_96K: R_max_mc=240, R_max_s=10
+	analog_write(areg_adc_chn_en, 0x24);
+	analog_write(areg_adc_vref_vbat_div, 0x10);
+	analog_write(anareg_adc_res_m, 0x43);
+	analog_write(areg_adc_tsmaple_m, 0x01);
+	if(p_ain == TEMPERATURE_SENSOR_P) {
+		//enable temperature sensor
+		analog_write(areg_adc_vref, 0x15);
+		analog_write(areg_ain_scale, 0x3D);
+		analog_write(0x07, (analog_read(0x07) & 0xef));
+		adc_set_ain_chn_misc(TEMPERATURE_SENSOR_P, TEMPERATURE_SENSOR_N);
+	} else {
+		analog_write(areg_adc_vref, 0x2A);
+		analog_write(areg_ain_scale, 0xFD);
+		if(p_ain == SHL_ADC_VBAT) {
+#ifndef USE_RC_VBAT
+			gpio_set_func(GPIO_VBAT, AS_GPIO);
+			gpio_set_input_en(GPIO_VBAT,0);
+			gpio_set_output_en(GPIO_VBAT,1);
+			gpio_write(GPIO_VBAT,1);
+#endif
+		}
+		adc_set_ain_chn_misc(p_ain, GND);
+	}
+#else
 #ifndef USE_RC_VBAT
 	if(p_ain == SHL_ADC_VBAT) {
 		// Set missing pin on case TLSR8251F512ET24/TLSR8253F512ET32
@@ -148,6 +181,7 @@ void adc_channel_init(ADC_InputPchTypeDef p_ain) {
 	adc_set_ain_pre_scaler(ADC_PRESCALER_1F8);
 	//set NORMAL mode
 	adc_set_mode(ADC_NORMAL_MODE);
+#endif
 }
 
 u32 adc_average;
