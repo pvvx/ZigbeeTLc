@@ -49,13 +49,13 @@
  *  @brief  ZCL: MAX number of cluster list, in cluster number add  + out cluster number
  *
  */
-#define	ZCL_CLUSTER_NUM_MAX						12
+#define	ZCL_CLUSTER_NUM_MAX						14 // 12
 
 /**
  *  @brief  ZCL: maximum number for zcl reporting table
  *
  */
-#define ZCL_REPORTING_TABLE_NUM					10
+#define ZCL_REPORTING_TABLE_NUM					12 // 10
 
 /**
  *  @brief  ZCL: maximum number for zcl scene table

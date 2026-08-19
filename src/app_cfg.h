@@ -263,6 +263,7 @@ typedef enum{
 	NV_ITEM_APP_ILLUMI_CFG,
 	NV_ITEM_APP_TRIGGER_UI_CFG,
 	NV_ITEM_APP_ONOFF_CFG,
+	NV_ITEM_APP_DHUM_CFG
 } nv_item_app_t;
 
 /**********************************************************************
@@ -270,6 +271,10 @@ typedef enum{
  */
 #ifndef USE_REMOTE_ONOFF
 #define USE_REMOTE_ONOFF		0
+#endif
+
+#ifndef USE_UPDATE_POLLRATE
+#define USE_UPDATE_POLLRATE 	0
 #endif
 
 #define ZCL_ON_OFF_SUPPORT				(USE_TRIGGER || USE_REMOTE_ONOFF)
@@ -306,6 +311,9 @@ typedef enum{
 #endif
 #if ZCL_THERMOSTAT_UI_CFG_SUPPORT
 #define ZCL_THERMOSTAT_UI_CFG				1
+#endif
+#if ZCL_DIHUMIDIFICATION_CONTROL_SUPPORT
+#define ZCL_DIHUMIDIFICATION_CONTROL		1
 #endif
 /**********************************************************************
  * BLE configuration

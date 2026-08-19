@@ -29,7 +29,7 @@
 
 
 status_t zcl_thermostat_ui_cfg_register(u8 endpoint, u16 manuCode, u8 attrNum, const zclAttrInfo_t attrTbl[], cluster_forAppCb_t cb);
-nv_sts_t zcl_thermostatConfig_save(void);
+nv_sts_t zcl_thermostatConfig_save(int init);
 //nv_sts_t zcl_thermostatConfig_restore(void);
 
 #endif	/* _ZCL_THERMOSTAT_UI_CFG_H */

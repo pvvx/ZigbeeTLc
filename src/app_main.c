@@ -17,6 +17,9 @@
 #include "app_onoff.h"
 #include "zcl_relative_humidity.h"
 #include "zcl_illuminance_level_sensing.h"
+#ifdef ZCL_DIHUMIDIFICATION_CONTROL
+#include "zcl_dehumidification_control.h"
+#endif
 #include "chip_8258/timer.h"
 #include "sensor_th.h"
 #include "battery.h"
@@ -592,6 +595,7 @@ void user_app_init(void)
 	);
 #endif
 #ifdef ZCL_ON_OFF
+#if !NOT_INPYT_ONOFF
     reportableChange = 0;
     bdb_defaultReportingCfg(
     	SENSOR_DEVICE_ENDPOINT,
@@ -600,6 +604,7 @@ void user_app_init(void)
 		ZCL_ATTRID_ONOFF,
         0, 3600,
 		(u8 *)&reportableChange);
+#endif
 #endif
 #ifdef ZCL_ILLUMINANCE_MEASUREMENT
         reportableChange = 10;
@@ -673,6 +678,19 @@ void user_app_init(void)
 			(u8 *)&reportableChange
 		);
 #endif
+#ifdef ZCL_DIHUMIDIFICATION_CONTROL
+    	reportableChange = 0;
+		bdb_defaultReportingCfg(
+			SENSOR_DEVICE_ENDPOINT,
+			HA_PROFILE_ID,
+			ZCL_CLUSTER_HAVC_DIHUMIDIFICATION_CONTROL,
+			ZCL_ATTRID_DHUM_COOLING,
+			0,
+			3600,
+			(u8 *)&reportableChange
+		);
+#endif
+
 //#if !USE_BLE
 //	bdb_findBindMatchClusterSet(FIND_AND_BIND_CLUSTER_NUM, bdb_findBindClusterList);
 //#endif

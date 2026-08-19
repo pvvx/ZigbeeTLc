@@ -30,7 +30,7 @@ typedef struct _attribute_packed_{
 void cmdOnOff_set(bool status);
 void remoteCmdOnOff(u8 srcEp, u8 cmd);
 status_t app_onOffCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
-void zcl_onoffConfig_save(void);
+void zcl_onoffConfig_save(int init);
 void taskRetryOnOff(void);
 #if USE_RETRY_ONOFF
 void afTestOnOffCb(void *arg);

@@ -178,9 +178,9 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 			} else if(attr[i].attrID == ZCL_ATTRID_LONG_POLL_INTERVAL) {
 				test_set_measure_longpoll_interval(g_zcl_pollCtrlAttrs.longPollInterval >> 2);
 #if ZCL_THERMOSTAT_UI_CFG
-				zcl_thermostatConfig_save();
+				zcl_thermostatConfig_save(0);
 #elif defined(ZCL_ILLUMINANCE_LEVEL_SENSING)
-				zcl_illuminanceConfig_save();
+				zcl_illuminanceConfig_save(0);
 #endif
 			}
 		}
@@ -188,29 +188,40 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 #endif // ZCL_POLL_CTRL
 #ifdef ZCL_ON_OFF
 	if(clusterId == ZCL_CLUSTER_GEN_ON_OFF) {
-		zcl_onoffConfig_save();
+		zcl_onoffConfig_save(0);
 	} else
 #endif
 #ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
 	if(clusterId == ZCL_CLUSTER_MS_ILLUMINANCE_LEVEL_SENSING_CONFIG) {
 		for(int i = 0; i < numAttr; i++) {
 			if(attr[i].attrID == ZCL_ATTRID_ILSC_TARGET_LEVEL) {
-				zcl_illuminanceLevel_save();
+				zcl_illuminanceLevel_save(0);
+				g_zcl_illuminanceAttrs.lxTargetLevel = pow10_fixed(g_zcl_illuminanceAttrs.TargetLevelzLx);
+			} else if(attr[i].attrID == ZCL_CUSTOM_ATTRID_LX_SENSOR_TAGET) {
+				g_zcl_illuminanceAttrs.TargetLevelzLx = calk_10000_log10(g_zcl_illuminanceAttrs.lxTargetLevel);
+				zcl_illuminanceLevel_save(0);
+#if !ZCL_THERMOSTAT_UI_CFG
 			} else if(attr[i].attrID >= ZCL_CUSTOM_ATTRID_MEASURE_INTERVAL
 					&& attr[i].attrID <= ZCL_CUSTOM_ATTRID_LX_SENSOR_COEF) {
-				zcl_illuminanceConfig_save();
+				zcl_illuminanceConfig_save(0);
+#endif
 			}
 		}
 	} else
 #endif
 #ifdef ZCL_THERMOSTAT_UI_CFG
 	if(clusterId == ZCL_CLUSTER_HAVC_USER_INTERFACE_CONFIG) {
-		zcl_thermostatConfig_save();
+		zcl_thermostatConfig_save(0);
 	} else
 #endif // ZCL_THERMOSTAT_UI_CFG
+#ifdef ZCL_DIHUMIDIFICATION_CONTROL
+	if(clusterId == ZCL_CLUSTER_HAVC_DIHUMIDIFICATION_CONTROL) {
+		zcl_dhumConfig_save(0);
+	} else
+#endif // ZCL_DIHUMIDIFICATION_CONTROL
 #if defined(ZCL_ILLUMINANCE_LEVEL_SENSING) && defined(ZCL_OCCUPANCY_SENSING)
 	if(clusterId == ZCL_CLUSTER_MS_OCCUPANCY_SENSING) {
-		zcl_occupanceConfig_save();
+		zcl_occupanceConfig_save(0);
 	} else
 #endif
 #if USE_BLE
@@ -922,7 +933,7 @@ status_t sensorDevice_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *
 }
 #endif	/* ZCL_GROUP */
 
-#ifdef ZCL_ON_OFF
+#if defined(ZCL_ON_OFF) || (USE_REMOTE_ONOFF)
 
 #if USE_RETRY_ONOFF
 extern u32 rtcSeconds;
@@ -1050,7 +1061,7 @@ void cmdOnOff_set(bool status) {
 	if(pOnOff->onOff != status) {
 		pOnOff->onOff = status;
 		if(pOnOff->startUpOnOff >= ZCL_START_UP_ONOFF_SET_ONOFF_TOGGLE) {
-	      	zcl_onoffConfig_save();
+	      	zcl_onoffConfig_save(0);
 		}
 #if USE_REMOTE_ONOFF && (DEV_SERVICES & SERVICE_PIR)
 		if(status == ZCL_ONOFF_STATUS_OFF) {

@@ -1,10 +1,10 @@
 [
     {
         "fileVersion": 1519617,
-        "fileSize": 165858,
+        "fileSize": 165778,
         "manufacturerCode": 4417,
         "imageType": 513,
-        "sha512": "1c5e6b7c493e651a11a0611d8632d573a4281bc7b8c14953eaf362285abc048a26b38b7e5a0601383af13865c135d60989803241da5eece401b40f1ad6175dc3",
+        "sha512": "b34c234dfc5cd7043a5aa81888f3dd94dc09d68097001ac8f85551cc3b37edcd31de07d068b1f63de8d5817a5b6932fa8fac7c2740fe3f415fef726d88819870",
         "otaHeaderString": "MiaoMiaoCe:MHO-C401-z",
         "modelId": "MHO-C401-z",
         "manufacturerName": [
@@ -14,10 +14,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 166194,
+        "fileSize": 166130,
         "manufacturerCode": 4417,
         "imageType": 514,
-        "sha512": "ead73ff4db43e27a32bdc394425b187c51effaae328f5347d73a2f62e33fd91ee21b85e899fc0425bb833276bf3aee4f9fd72808655561a092520ab62fcabcd4",
+        "sha512": "94092ffb9533f1f1d4eecaa45800c0563d9218cdbe22f70700e7b15bccf58bac497d663c714b58ab76baeb2bf5834d70fdebec2e46d1d08bf5e68bb719ce0996",
         "otaHeaderString": "Qingping:CGG1-z",
         "modelId": "CGG1-z",
         "manufacturerName": [
@@ -27,10 +27,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 165122,
+        "fileSize": 165090,
         "manufacturerCode": 4417,
         "imageType": 518,
-        "sha512": "98cd2e92f5423a75cf8ee59182ab796b8946413ce19dcafc86e7d7770e2226adeed78405e8bb347f449ab6959d6653ef744802629e3a30bf482cc8e98255c1fd",
+        "sha512": "83d8a338216919ea7a5ff03265988fe32d6064f0d0b53912c801996d0b0db36789065f5ecf1fd2d78b6d3f5a9b32ab9d9e738b5c329401d81887b633e7eea5bc",
         "otaHeaderString": "Qingping:CGDK2-z",
         "modelId": "CGDK2-z",
         "manufacturerName": [
@@ -40,10 +40,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 165634,
+        "fileSize": 165570,
         "manufacturerCode": 4417,
         "imageType": 519,
-        "sha512": "fad0261da805174e08ed887f6d230ab464c3575db04bc50eb77a6575bfe15633a547930568995d71ddbbea4c500470dd01677e28a46133788b7bb06bf585ef0e",
+        "sha512": "4961832ab4498506932ff2bca7aa7509db30e74f5e5adedcda2da0c4672203ce9e94111753f954487ff6be0db2601485e27e994a5be0f74144745137ff2619e1",
         "otaHeaderString": "Qingping:CGG1N-z",
         "modelId": "CGG1N-z",
         "manufacturerName": [
@@ -53,10 +53,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 165298,
+        "fileSize": 165218,
         "manufacturerCode": 4417,
         "imageType": 520,
-        "sha512": "9195ac828c768d26cb4fe294f9b0dc15157b72b09693ccde73e96bc89130c077e787f22d7773af745dc6c6ff2c0a8842ca0b3dd9089748befe45442557362043",
+        "sha512": "c3ddfa27136779b2e5353054c96578d70a4a49a48c630b9e12c274656913b5861e293b2bb51021cb3d7ca752d53f586a06779aa76cdc22e50547dc166298e444",
         "otaHeaderString": "MiaoMiaoCe:MHO-C401N-z",
         "modelId": "MHO-C401N-z",
         "manufacturerName": [
@@ -66,10 +66,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 165538,
+        "fileSize": 165458,
         "manufacturerCode": 4417,
         "imageType": 522,
-        "sha512": "9e0c508df934eea7ce388e8b84db20c491504a3d9b6fb044116b011b953040f7afdde2d764e78bf73e2ed16d0d19f38c94436284c217fcc6d21719ec8475cada",
+        "sha512": "911713e754c588a5d6ed4a43110b75ca6e4501db6de63b4ae12c1824cc2f243ce4c6001633e5fc914c5ce68125fbc9aa41c78d72ff48e73fb7c7e7ffacca8b3e",
         "otaHeaderString": "Xiaomi:LYWSD03MMC-z",
         "modelId": "LYWSD03MMC-z",
         "manufacturerName": [
@@ -79,10 +79,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 164482,
+        "fileSize": 164402,
         "manufacturerCode": 4417,
         "imageType": 523,
-        "sha512": "9c252879679929672dc4d2fd51b89a3bd22dd994b69112b6e7e973345254108176e67c3d5dcda917a314c608f4c3453d655a9c5bb0a4c41cbd324a3f2498a08b",
+        "sha512": "43f4e5504ce12e22efdb6817b4c72c402b851451a4c443c70f29092b6e17547852d06aad60cb9018a71cec5388279ea17dbed96a6638f93b8ab8f61d6dd0e4da",
         "otaHeaderString": "MiaoMiaoCe:MHO-C122-z",
         "modelId": "MHO-C122-z",
         "manufacturerName": [
@@ -92,10 +92,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 163698,
+        "fileSize": 163618,
         "manufacturerCode": 4417,
         "imageType": 525,
-        "sha512": "cc7e109dd354a963fea077ef1fbe33c43458d2c4ee7685642eb67d5be63a7fca9b32e984914a1d3bbcb2f90ad5853d7cae26cf8c6620b6fa208625de6fbaec72",
+        "sha512": "fc445f90479a8e16b7d622d43709a08703fe97855d11f96f6892c1f3970a40236b5bd724827ed18039c6e0ca56c5e7e3ff8fe6eeaf9a4701e983b8f6bc7a50ef",
         "otaHeaderString": "Xiaomi:MJWSD06MMC-z",
         "modelId": "MJWSD06MMC-z",
         "manufacturerName": [
@@ -105,10 +105,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 164178,
+        "fileSize": 164146,
         "manufacturerCode": 4417,
         "imageType": 529,
-        "sha512": "d8aec0bb75a7c53ce95f7ed382525501c3821bd6afc86594f925745407e585ed0ef734908c3cac48705ad34adcc1241a3513e5c4966e8916b88270037e4d30dc",
+        "sha512": "f8b0346a7a7a6d0c85b142ef5b73df1c02a48c00892f283c28ff77227a81cb0c3ea1824a9ede42066640a25af859e89d16abe39994c10f6cb16b55db1180511b",
         "otaHeaderString": "Tuya:TS0201-z",
         "modelId": "TS0201-z",
         "manufacturerName": [
@@ -118,10 +118,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 163330,
+        "fileSize": 163314,
         "manufacturerCode": 4417,
         "imageType": 534,
-        "sha512": "9348357922ed330b41a64457a8092d3d3fb286adc7e49174c8e8f575b395c3743c83de2de3bc8617a70c5c4f1f317a9e8f2f54e46f5154c1a71edce65f2b50de",
+        "sha512": "41522bdb2697def151e8368c8be11074a4d1a9d594639b346037c237558bf340371a12f3dd7f98429d422fd20180053da218ca2cee14bf3acd43923a56ccf7da",
         "otaHeaderString": "Tuya:TH03Z-z",
         "modelId": "TH03Z-z",
         "manufacturerName": [
@@ -131,10 +131,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 163874,
+        "fileSize": 163842,
         "manufacturerCode": 4417,
         "imageType": 539,
-        "sha512": "1c6682fc5150abf6f8ba7746afae6710b9f1a6a2ed1ab78124f34e197d7677a829906ccd0368169c056168fe9131a2ed56102ab45ba558992aef7e061f6ed8ea",
+        "sha512": "b228b4fefdfa85225cd4efab7e21c5e1aef019a6c5eee84b320b88916a5012aedef9b6c26d704aab4e060dddfb649ecad21dc68edc1e4cc404660a8ee2d6c411",
         "otaHeaderString": "Tuya:ZTH01-z",
         "modelId": "ZTH01-z",
         "manufacturerName": [
@@ -144,10 +144,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 163874,
+        "fileSize": 163842,
         "manufacturerCode": 4417,
         "imageType": 540,
-        "sha512": "8faebbcf861b6689b3fe3de93a03e6a434629a07766df567fdf4f5ba9c35a0c6e04589179396e94579f1288e84c6168de6fd936405775e3c9b8ba824d51f252a",
+        "sha512": "1bea0c98947374d500af2ec3990f5a6f31b2291369cb54820021eb5211185a1969fd12226abe76c2e165282b266b261c8e549e5ece13c2f433cc3ff967d65631",
         "otaHeaderString": "Tuya:ZTH02-z",
         "modelId": "ZTH02-z",
         "manufacturerName": [
@@ -157,10 +157,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 166626,
+        "fileSize": 166562,
         "manufacturerCode": 4417,
         "imageType": 542,
-        "sha512": "e2e50e1c52f5504c4f0e7a6612233ed8c71d62d61df94897bad7a7f2d013afd145e217f9a31163d500202325c80f099b7941b510b4ddd6e3141c23cdd25cd4f5",
+        "sha512": "a126fd239ec51550989980caa66a775c550f48b6b9a71dda8bd9a21a75c3b83f491b5f88ea6408fbb695480051b151f80d29d6727602bb12a481cd52a0233839",
         "otaHeaderString": "Sonoff:TH03-z",
         "modelId": "TH03-z",
         "manufacturerName": [
@@ -170,10 +170,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 164402,
+        "fileSize": 164354,
         "manufacturerCode": 4417,
         "imageType": 543,
-        "sha512": "db2e1ad4b36ef37c1a66e18eb8dfb717533e50b8afe5f36f9e3652856bbd31ac2e3951e7d04add6c114122f4f0fcebb4df7dc7550f9144209a1634684540c796",
+        "sha512": "81c773e9dcd4b773c1d1f32b10ecfa5b74e8f06a761e500b25a7441d7f183eb764bc62401a78cd028d80c895d086894e525de3df23ae1710393287d978983d75",
         "otaHeaderString": "Tuya:LKTMZL02-z",
         "modelId": "LKTMZL02-z",
         "manufacturerName": [
@@ -183,10 +183,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 166178,
+        "fileSize": 166098,
         "manufacturerCode": 4417,
         "imageType": 545,
-        "sha512": "bc7ea8e07f4f9245940d3089219b80cc3759f606775152a7d1c6690548ec9f19a87edc769ecc53c0579a42d874bc999bb6f212dc3d8940a7d24c2b63a2f9f572",
+        "sha512": "606741ccb5f85548077bfd17fc475c475176231bae82617612b2146da4b834e626c0a070b42e3a03517c00e7be8493a253a6ab358bfdae194680b15574e5e096",
         "otaHeaderString": "Tuya:TH05-z",
         "modelId": "TH05-z",
         "manufacturerName": [
@@ -196,10 +196,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 160546,
+        "fileSize": 160530,
         "manufacturerCode": 4417,
         "imageType": 549,
-        "sha512": "fd051d111131aa0dc497fa41b2b739bd0b64225a76591f1346195afc15668e1b3cda4b952756b700b459ddda6eeca0a3fadc2e1c9466cd32f7577d854f19aa6d",
+        "sha512": "b5eb673ec68cb775fcf907d840bdfc11fa84679b36921c84fc60bbb5d1e5230a0076fc1dfc46d98ee369f02175e2da487a6ef105560323a6b2ed0859acb6885d",
         "otaHeaderString": "Tuya:ZY-ZTH02-z",
         "modelId": "ZY-ZTH02-z",
         "manufacturerName": [
@@ -209,10 +209,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 161970,
+        "fileSize": 161938,
         "manufacturerCode": 4417,
         "imageType": 550,
-        "sha512": "2a353194f1a42277fbecf6f95809766c33dbd1d13775171d4b50d068a3d2538b9264cc15037faf962fc52b4856817fe690c57e1db1e0f8597d08969103b5d9b5",
+        "sha512": "c4d056699a47e8f7946e487ac737fe096069810895a1c7a7306d1a5654fae42f5a319d2f616fe6af4280f168e8912b701cc65500938be204449d6aaeba2e4773",
         "otaHeaderString": "Tuya:ZY-ZTH01-z",
         "modelId": "ZY-ZTH01-z",
         "manufacturerName": [
@@ -222,10 +222,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 161010,
+        "fileSize": 160994,
         "manufacturerCode": 4417,
         "imageType": 551,
-        "sha512": "12c3f6da7d8303a5da501e6bffcf0cb68ad9c2fddf59eb8a95f5863cc1e4f9c6f18c2eeb4e3a3d9443c02ea1b9b5ec5ee158cde45d5f7e080ff5c255d4380048",
+        "sha512": "2a2a967df51ed039e337077a91cac83b2dc619f2d538b77cb455dae3e791933a338ff8b4f08b85641c4d211a758a382efe3c4a674e278c321bd6e9f934008434",
         "otaHeaderString": "Tuya:ZG-227Z-z",
         "modelId": "ZG-227Z-z",
         "manufacturerName": [
@@ -235,10 +235,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 164434,
+        "fileSize": 164418,
         "manufacturerCode": 4417,
         "imageType": 556,
-        "sha512": "3617f62a03de13c532b7339ee2a4cf4e71619d3da8f8f254838e601c5008a68e00b184074f1e1280ff0a54129b16668b17f7afe6610e519fedca069ee96f15be",
+        "sha512": "5a03bc0eefcacf87110166f5d2ceb6d924879648d8f34c9f7cb8eda20746ce199932c3a8963c8949788e540c291cb5c329a173e03e345f8c9a61e9d96ca109ed",
         "otaHeaderString": "Sonoff:ZG-303Z-z",
         "modelId": "ZG-303Z-z",
         "manufacturerName": [
@@ -248,10 +248,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 161746,
+        "fileSize": 161730,
         "manufacturerCode": 4417,
         "imageType": 557,
-        "sha512": "41699d72ef7aa4581e1178fc3a5bf06bd9a2463570e662dc830e931abd15c54bc8f8f3bb838a528aaa31bcd472a9949435044ce843ace55ce41cafb4d0df57a4",
+        "sha512": "457655717590a65e2dafe810b187d16103076571d638597c7ce380149fd9416bcfb679caa6f5c5e8614e6828497f4ddbbf9e4c83e0758c0d4297c74e67273f99",
         "otaHeaderString": "ZBeacon:TH01-z",
         "modelId": "TH01-z",
         "manufacturerName": [
@@ -261,10 +261,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 161746,
+        "fileSize": 161714,
         "manufacturerCode": 4417,
         "imageType": 558,
-        "sha512": "4b5f7117fe851cb90b091cd8c2c44189a01132e63c25e1ad0b5bc2ed514071f7be2d8fa407a9a042170d652b92e73dc1744a9877211d0383e70913aa788ca22d",
+        "sha512": "3b7e4c6977f7161c4d803713420165603abd96224c0420027f8df9e02c1c421bca7b55db709d84d8d86df2f98bc6c9a4c8407a53aefc8696bcdcb9994c09f89a",
         "otaHeaderString": "ZBeacon:MC-z",
         "modelId": "MC-z",
         "manufacturerName": [
@@ -274,10 +274,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 162434,
+        "fileSize": 162402,
         "manufacturerCode": 4417,
         "imageType": 560,
-        "sha512": "3b99c550db41d75ab7dca555c5eb9b1837167bbb82d66512431b7f61047ea109ccb9ebefa5b3f2f76cf35909a4643be5b320d88abb298e47e8672b113c7c51de",
+        "sha512": "1ddfbf16b795393b567cb21ef1271a234ea0516816e809bc9f62032f9c5af031527966d34eee06a3305542f7f4ebdd9ec07f3cde7c5ea688a351bb59b1d38227",
         "otaHeaderString": "Tuya:TY0201-z",
         "modelId": "TY0201-z",
         "manufacturerName": [
@@ -287,10 +287,10 @@
     },
     {
         "fileVersion": 1519617,
-        "fileSize": 161330,
+        "fileSize": 161282,
         "manufacturerCode": 4417,
         "imageType": 564,
-        "sha512": "1f438b5a0af33db513f5b80a2a13e5ec2557b52d4bda2cabb2f5c96495c2d39475f24729848e308da5da6ab0dff26a6f2e9c67335f6637a872ea356951059dd2",
+        "sha512": "e24c6fa10e9e3bead67404907a0fc245594afa0d928b025c3a69efb2676fc5e476714f3a68ac8f6a4569e1d7a4d0d6a7058f51945ca08f83fee20adff6d504b3",
         "otaHeaderString": "Wing:TS0201-z",
         "modelId": "TS0201-z",
         "manufacturerName": [

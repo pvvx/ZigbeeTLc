@@ -208,5 +208,10 @@ void app_set_thb_report(void) {
 				pEntry->maxIntCnt = 0;
 			}
 		}
+#if USE_UPDATE_POLLRATE
+		up_PollRate(20008); // 20 sec
+#else
+		zb_endDeviceSyncReq();
+#endif
 	}
 }

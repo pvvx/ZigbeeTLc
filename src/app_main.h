@@ -140,6 +140,35 @@ typedef struct {
 	u8 measureInterval;
 }zcl_thermostatUICfgAttr_t;
 
+#ifdef ZCL_DIHUMIDIFICATION_CONTROL
+/**
+ *  @brief Defined for Dehumidification Control cluster attributes
+ */
+typedef struct {
+	u8 rh; 			// 0..100%
+	u8 cooling;		// 0..maxcool
+	u8 setpoint;	// 30..100% DHUM_SetpointMin..DHUM_SetpointMax
+	u8 rhmode;		// 0/1 DHUM_RH_ModeLocale/DHUM_RH_ModeNetwork
+	u8 lockout;		// 0/1 DHUM_LockoutNotAllowed/DHUM_LockoutAllowed
+	u8 hysteresis;	// 2..20% DHUM_HysteresisMin..DHUM_HysteresisMax
+	u8 maxcool;		// 20.100% DHUM_MaxCoolMin..DHUM_MaxCoolMax
+	u8 display;		// 0/1 DHUM_NotDisplayed/DHUM_Displayed
+} zcl_dhumCfgAttr_t;
+
+extern zcl_dhumCfgAttr_t zcl_dhumCfgAttr;
+
+#define DHUM_SetpointDef  	50	// %
+#define DHUM_HysteresisDef  2	// %
+
+typedef struct {
+	u8 setpoint;	// 30..100% DHUM_SetpointMin..DHUM_SetpointMax
+	u8 lockout;		// 0/1 DHUM_LockoutNotAllowed/DHUM_LockoutAllowed
+	u8 hysteresis;	// 2..20% DHUM_HysteresisMin..DHUM_HysteresisMax
+} zcl_dhumSaveCfg_t;
+
+extern zcl_dhumSaveCfg_t zcl_dhumSaveCfg;
+nv_sts_t zcl_dhumConfig_save(int init);
+#endif // ZCL_DIHUMIDIFICATION_CONTROL
 
 /**
  *  @brief Defined for Occupancy cluster attributes
@@ -251,7 +280,6 @@ status_t sensorDevice_powerCfgCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, voi
 status_t sensorDevice_pollCtrlCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 status_t sensorDevice_groupCb(zclIncomingAddrInfo_t *pAddrInfo, u8 cmdId, void *cmdPayload);
 void sensorDevice_zclCheckInStart(void);
-void set_PollRate(void);
 status_t test_set_measure_longpoll_interval(u32 measureInterval);
 
 void sensorDevice_leaveCnfHandler(nlme_leave_cnf_t *pLeaveCnf);
@@ -287,6 +315,12 @@ typedef struct {
 	bool isFastPollMode;
 } poll_ctrl_wrk_t;
 extern poll_ctrl_wrk_t poll_ctrl_wrk;
+#endif
+
+void set_PollRate(void);
+
+#if USE_UPDATE_POLLRATE
+void up_PollRate(u32 period_ms);
 #endif
 
 void scan_task(void);

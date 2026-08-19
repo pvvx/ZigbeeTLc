@@ -35,10 +35,9 @@ typedef struct __attribute__((packed)) _trigger_t {
 extern trigger_t trg;
 //extern const trigger_t def_trg;
 
-void trigger_init(void);
+nv_sts_t trigger_save(int init);
 void send_onoff(void);
 void set_trigger_out(void);
-nv_sts_t trigger_save(void);
 
 #endif // USE_TRIGGER
 

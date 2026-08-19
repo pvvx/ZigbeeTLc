@@ -185,8 +185,9 @@ void zb_bdbInitCb(u8 status, u8 joinedNetwork){
 		}
 	}
 }
-
-
+#if USE_UPDATE_POLLRATE
+ev_timer_event_t *timer_reinit_pollRate;
+#endif
 /*********************************************************************
  * @fn      set_PollRate
  *
@@ -203,9 +204,38 @@ void set_PollRate(void) {
 		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
 	}
 #endif
+#if USE_UPDATE_POLLRATE
+	if(timer_reinit_pollRate) {
+		TL_ZB_TIMER_CANCEL(&timer_reinit_pollRate);
+	}
+	zb_setPollRate(g_zcl_thermostatUICfgAttrs.measureInterval * 4 * POLL_RATE_QUARTERSECONDS);
+#else
 	zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
+#endif
 	sws_printf("set_PollRate: %dqt\n", g_zcl_pollCtrlAttrs.longPollInterval);
 }
+
+#if USE_UPDATE_POLLRATE
+
+static s32 restore_PollRate_evt(void *arg) {
+	if(poll_ctrl_wrk.zclFastPollTimeoutTimerEvt)
+		return 0;
+	set_PollRate();
+	// timer_reinit_pollRate = NULL;
+	return -1;
+}
+
+/* Set fast PollRate period (ms) */
+void up_PollRate(u32 period_ms) {
+	if(timer_reinit_pollRate) {
+		TL_ZB_TIMER_CANCEL(&timer_reinit_pollRate);
+	}
+	timer_reinit_pollRate = TL_ZB_TIMER_SCHEDULE(restore_PollRate_evt, NULL, period_ms);
+	if(!poll_ctrl_wrk.zclFastPollTimeoutTimerEvt) {
+		zb_setPollRate(4 * POLL_RATE_QUARTERSECONDS); // 2 sec
+	}
+}
+#endif
 
 /*********************************************************************
  * @fn      zbdemo_bdbCommissioningCb
@@ -237,9 +267,12 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 			g_sensorAppCtx.rejoin_cnt = REJOIN_FAILURE_COUNT;
 
 			light_blink_start(10, 500, 500);
-
 			//zb_setPollRate(POLL_RATE * 3);
+#if USE_UPDATE_POLLRATE
+			up_PollRate(32768); // 32 sec
+#else
 			set_PollRate();
+#endif
 
 #ifdef ZCL_POLL_CTRL
 		    sensorDevice_zclCheckInStart();

@@ -55,17 +55,20 @@ void send_onoff(void) {
 }
 
 void trigger_init(void) {
-	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_TRIGGER_UI_CFG, sizeof(trg) - 1, (u8*)&trg) != NV_SUCC){
-		memcpy(&trg, &def_trg, sizeof(def_trg));
-	}
-	memcpy(&trg_chk, &trg, sizeof(trg));
 }
 
-nv_sts_t trigger_save(void) {
+nv_sts_t trigger_save(int init) {
 	nv_sts_t st = NV_SUCC;
-	if(memcmp(&trg_chk, &trg, sizeof(trg_chk) - 1)) {
-		st = nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_TRIGGER_UI_CFG, sizeof(trg) - 1, (u8*)&trg);
+	if(init) {
+		if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_TRIGGER_UI_CFG, sizeof(trg) - 1, (u8*)&trg) != NV_SUCC){
+			memcpy(&trg, &def_trg, sizeof(def_trg));
+		}
 		memcpy(&trg_chk, &trg, sizeof(trg));
+	} else {
+		if(memcmp(&trg_chk, &trg, sizeof(trg_chk) - 1)) {
+			st = nv_flashWriteNew(1, NV_MODULE_APP,  NV_ITEM_APP_TRIGGER_UI_CFG, sizeof(trg) - 1, (u8*)&trg);
+			memcpy(&trg_chk, &trg, sizeof(trg));
+		}
 	}
 	return st;
 }

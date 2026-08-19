@@ -88,13 +88,13 @@ int cmd_parser(void * p) {
 				if(len > sizeof(g_zcl_thermostatUICfgAttrs))
 					len = sizeof(g_zcl_thermostatUICfgAttrs);
 				memcpy(&g_zcl_thermostatUICfgAttrs, &req->dat[1], len);
-				zcl_thermostatConfig_save();
+				zcl_thermostatConfig_save(0);
 			}
 			memcpy(&send_buf[1], &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
 			olen = sizeof(g_zcl_thermostatUICfgAttrs) + 1;
 		} else if (cmd == CMD_ID_ZB_DEF) {
 			memcpy(&g_zcl_thermostatUICfgAttrs, &g_zcl_thermostatUICfgDefault, sizeof(g_zcl_thermostatUICfgAttrs));
-			zcl_thermostatConfig_save();
+			zcl_thermostatConfig_save(0);
 			memcpy(&send_buf[1], &g_zcl_thermostatUICfgAttrs, sizeof(g_zcl_thermostatUICfgAttrs));
 			olen = sizeof(g_zcl_thermostatUICfgAttrs) + 1;
 #endif

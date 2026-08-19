@@ -187,7 +187,7 @@ void task_keys(void) {
 			TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerKeyEvt);
 			//g_sensorAppCtx.timerKeyEvt = NULL;
 			nv_resetModule(NV_MODULE_APP);
-			init_nv_app();
+			//init_nv_app();
 #if	USE_DISPLAY
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
 				show_reset_screen();
@@ -198,6 +198,10 @@ void task_keys(void) {
 		else if((g_sensorAppCtx.key_on_flag & 2)
 		 && clock_time_exceed(g_sensorAppCtx.keyPressedTime, 6900 * 1000)) { // 7 sec
 			g_sensorAppCtx.key_on_flag &= ~2;
+			light_on();
+#if USE_UPDATE_POLLRATE
+			set_PollRate();
+#endif
 #if	USE_DISPLAY
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
 				show_reset_screen();
@@ -212,7 +216,7 @@ void task_keys(void) {
 			g_sensorAppCtx.key_on_flag &= ~1;
 			g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode ^= 1;
 			g_zcl_thermostatUICfgAttrs.TemperatureDisplayMode &= 1;
-//			zcl_thermostatConfig_save();
+//			zcl_thermostatConfig_save(0);
 			sensor_ht.flag |= FLG_MEASURE_HT_LCD;
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
 				show_th();
@@ -252,13 +256,14 @@ void task_keys(void) {
 					drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 3*1000);
 #if	USE_DISPLAY && defined(ZCL_THERMOSTAT_UI_CFG)
 				else if((g_sensorAppCtx.key_on_flag & 1) == 0)
-					zcl_thermostatConfig_save();
+					zcl_thermostatConfig_save(0);
 #endif
 			}
 		}
 		g_sensorAppCtx.key_on_flag = 0;
-		if(g_sensorAppCtx.timerKeyEvt)
+		if(g_sensorAppCtx.timerKeyEvt) {
 			TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerKeyEvt);
+		}
 	}
 	g_sensorAppCtx.keyPressed = button_on;
 #if PM_ENABLE

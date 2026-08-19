@@ -11,7 +11,6 @@
 
 #if (BOARD == BOARD_ZG223Z)
 
-//#define SWS_PRINTF_MODE	1
 
 #define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_THS | SERVICE_ILLUMI | SERVICE_RNDS | SERVICE_LED)
 
@@ -35,19 +34,21 @@ PB6 -LXsensor + R 50k to GND
 #define ZCL_BASIC_MFG_NAME     {7,'H','O','B','E','L','A','N'} // HOBELAN
 #define ZCL_BASIC_MODEL_ID	   {9,'Z','G','-','2','2','3','Z','-','z'} // ZG-223Z
 
-// #define USE_REMOTE_ONOFF				1
-//#define ZCL_RELATIVE_HUMIDITY_SUPPORT	1
+#define USE_REMOTE_ONOFF		1
+#define NOT_INPYT_ONOFF			1
 
 #define USE_SOC_TEMP_SENSOR		1
-#define READ_SENSOR_TIMER_SEC 	20 // default, second
-
+#define READ_SENSOR_TIMER_SEC 	30 // default, second
+#define ZCL_DIHUMIDIFICATION_CONTROL_SUPPORT	1
 
 /* PA */
 #define PA_ENABLE           1
 #define PA_RX               GPIO_PC3
 #define PA_TX               GPIO_PC4
 #define PC3_DATA_OUT		0
+#define PC3_OUTPUT_ENABLE	1
 #define PC4_DATA_OUT		0
+#define PC4_OUTPUT_ENABLE	1
 #define PULL_WAKEUP_SRC_PC4 PM_PIN_PULLDOWN_100K
 #define PULL_WAKEUP_SRC_PC3 PM_PIN_PULLDOWN_100K
 
@@ -100,12 +101,12 @@ PB6 -LXsensor + R 50k to GND
 */
 
 // illuminance sensor
-#define USE_SENSOR_LX		    3 // =1 - ADC = Ur, =2 - ADC = Us, =3 ZG-223Z
+#define USE_SENSOR_LX		3 // =1 - ADC = Ur, =2 - ADC = Us, =3 ZG-223Z
 
 #define ADC_LX_ZERO_DEF	0
 #define ADC_LX_COEF_DEF	5000  // = max 5000 lx
 
-#define DEF_MIN_LEVEL_ZLX		13000 // ILLUMINANCE_LEVEL_SENSING ~20 lx
+#define DEF_MIN_LEVEL_ZLX	13000 // ILLUMINANCE_LEVEL_SENSING ~20 lx
 
 #define GPIO_ILLUMI_ADC		GPIO_PB6
 #define SHL_ADC_ILLUMI		B6P // see in adc.h ADC_InputPchTypeDef

@@ -8,10 +8,10 @@
 #ifndef _SENSOR_LX_H_
 #define _SENSOR_LX_H_
 
-
 #define ZCL_CUSTOM_ATTRID_MEASURE_INTERVAL	0x5000
 #define ZCL_CUSTOM_ATTRID_LX_SENSOR_ZERO	0x5001
 #define ZCL_CUSTOM_ATTRID_LX_SENSOR_COEF	0x5002
+#define ZCL_CUSTOM_ATTRID_LX_SENSOR_TAGET	0x5003
 
 #if USE_SENSOR_LX == 2
 #ifndef ADC_LX_ZERO_DEF
@@ -20,7 +20,7 @@
 #ifndef ADC_LX_COEF_DEF
 #define ADC_LX_COEF_DEF	5000  // = max 5000 lx
 #endif
-#else
+#else // USE_SENSOR_LX == 1
 #ifndef ADC_LX_ZERO_DEF
 #define ADC_LX_ZERO_DEF	29400
 #endif
@@ -53,20 +53,23 @@ typedef struct {
 	u8 lightSensorType;
 #endif
 #ifdef ZCL_ILLUMINANCE_LEVEL_SENSING
-	u16 minLevelLx;
+	u16 TargetLevelzLx; // zlx
+	u32 lxTargetLevel; // lx
 	u8 levelStatus;
 #endif
 } zcl_illuminanceAttr_t;
 
 extern zcl_illuminanceAttr_t g_zcl_illuminanceAttrs;
 
+u16 calk_10000_log10(u32 x);
+u32 pow10_fixed(u16 x);
 
 void init_sensor(void);
 
 int read_illumi_sensor(void);
 
-void zcl_illuminanceLevel_save(void);
-void zcl_illuminanceConfig_save(void);
-void zcl_occupanceConfig_save(void);
+void zcl_illuminanceLevel_save(int init);
+void zcl_illuminanceConfig_save(int init);
+void zcl_occupanceConfig_save(int init);
 
 #endif /* _SENSOR_LX_H_ */
