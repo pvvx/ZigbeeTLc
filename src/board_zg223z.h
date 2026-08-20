@@ -29,9 +29,9 @@ PB6 -LXsensor + R 50k to GND
 */
 
 #define BLE_MODEL_STR		"ZG-223Z"
-#define BLE_MAN_STR			"HOBELAN"
+#define BLE_MAN_STR			"HOBEIAN"
 
-#define ZCL_BASIC_MFG_NAME     {7,'H','O','B','E','L','A','N'} // HOBELAN
+#define ZCL_BASIC_MFG_NAME     {7,'H','O','B','E','I','A','N'} // HOBEIAN
 #define ZCL_BASIC_MODEL_ID	   {9,'Z','G','-','2','2','3','Z','-','z'} // ZG-223Z
 
 #define USE_REMOTE_ONOFF		1

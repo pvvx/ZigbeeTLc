@@ -554,7 +554,7 @@ class CustomIlluminanceLevelSensing(CustomCluster, IlluminanceLevelSensing):
 	.add_to_registry()
 )
 (
-	QuirkBuilder("HOBELAN", "ZG-223Z-z")
+	QuirkBuilder("HOBEIAN", "ZG-223Z-z")
 	.removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
 	.adds(CustomUserInterfaceCluster)
 	.number(

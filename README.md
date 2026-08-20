@@ -189,7 +189,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 38. Ver 0.1.3.8. Correction of the measurement interval. Correction Battery PIR sensor.
 
-39. Ver 0.1.3.9. Added [TS0201_TZ3000_dnpd6ayp](https://pvvx.github.io/TS0201_TZ3000_dnpd6ayp), [ZG-223Z](https://pvvx.github.io/ZG-223Z). Modification of the firmware relocation code during startup post Tuya.
+39. Ver 0.1.3.9. Added [TS0201_TZ3000_dnpd6ayp](https://pvvx.github.io/TS0201_TZ3000_dnpd6ayp), HOBEIAN [ZG-223Z](https://pvvx.github.io/ZG-223Z). Modification of the firmware relocation code during startup post Tuya.
 
 ## Make
 
