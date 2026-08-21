@@ -33,11 +33,11 @@ struct {
  * 0.00051 V : 1 C -> 18.56853333 adc
  * 0.130 V : -40 C -> 4733.155 adc
  */
-#define TEMP_AVERAGE_COUNT_SHL	4
-#define TEMP_DEF_COEF	11029 // 4096*100*0.0000274658203125/0.00051/2 = 11029.41
+#define TEMP_AVERAGE_COUNT_SHL	5 // 1<<5=32 
+#define TEMP_DEF_COEF	11000 // 4096*100*0.0000274658203125/0.00051/2 = 11029.41
 // Soc1: +26C = ~5500 adc, (5500*22059)>>12 = 29620, 29620 - 2600 = 27020
 // Soc2: +24C = ~5400 adc, (5400*22059)>>12 = 29081, 29081 - 2600 = 26481
-#define TEMP_DEF_ZERO	26600
+#define TEMP_DEF_ZERO	27000
 
 #if TEMP_AVERAGE_COUNT_SHL
 typedef struct {
@@ -107,7 +107,7 @@ void read_sensors(void) {   // 1 ms
 		adcrn = adcvbat - adcrn;
 		adcrn <<= 16;
 		adcrn /= adcvbat; // Ub/Ur = 0..65535
-		adcrn *= 10500;
+		adcrn *= 11000;
 		adcrn >>= 16;
 	} else {
 		adcrn = 0;

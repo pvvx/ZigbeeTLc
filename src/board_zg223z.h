@@ -103,10 +103,10 @@ PB6 -LXsensor + R 50k to GND
 // illuminance sensor
 #define USE_SENSOR_LX		3 // =1 - ADC = Ur, =2 - ADC = Us, =3 ZG-223Z
 
-#define ADC_LX_ZERO_DEF	0
-#define ADC_LX_COEF_DEF	5000  // = max 5000 lx
+#define ADC_LX_ZERO_DEF		0
+#define ADC_LX_COEF_DEF		1000  // = max 1000 lx 
 
-#define DEF_MIN_LEVEL_ZLX	13000 // ILLUMINANCE_LEVEL_SENSING ~20 lx
+#define DEF_MIN_LEVEL_ZLX	16021 // ILLUMINANCE_LEVEL_SENSING ~40 lx
 
 #define GPIO_ILLUMI_ADC		GPIO_PB6
 #define SHL_ADC_ILLUMI		B6P // see in adc.h ADC_InputPchTypeDef
