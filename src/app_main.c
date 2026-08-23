@@ -298,7 +298,9 @@ void read_sensor_and_show(void) {
 #endif
 #if	USE_DISPLAY
 #ifdef ZCL_THERMOSTAT_UI_CFG
-    if(!g_zcl_thermostatUICfgAttrs.display_off) {
+    if(!g_zcl_thermostatUICfgAttrs.display_off
+    	// no redraw over the reset screen while the button is held
+    	&& !(g_sensorAppCtx.keyPressed && clock_time_exceed(g_sensorAppCtx.keyPressedTime, BUTTON_ZIGBEE_RESET_MS * 1000))) {
 #endif // ZCL_THERMOSTAT_UI_CFG
     	if(sensor_ht.flag & FLG_MEASURE_HT_LCD) {
     		sensor_ht.flag &= ~FLG_MEASURE_HT_LCD;
@@ -370,8 +372,10 @@ void app_task(void)
 		if(zb_isDeviceJoinedNwk()) {
 #if	USE_DISPLAY
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
-				if(!g_sensorAppCtx.timerLedEvt)
+				if(!g_sensorAppCtx.timerLedEvt) {
 					show_connected_symbol(true);
+					update_lcd();
+				}
 			}
 #ifdef USE_BLINK_LED
 			if(!g_sensorAppCtx.timerLedEvt)
@@ -399,8 +403,10 @@ void app_task(void)
 		} else { // Device not Joined
 #if	USE_DISPLAY
 			if(!g_zcl_thermostatUICfgAttrs.display_off) {
-				if(!g_sensorAppCtx.timerLedEvt)
+				if(!g_sensorAppCtx.timerLedEvt) {
 					show_connected_symbol(false);
+					update_lcd();
+				}
 			}
 #ifdef USE_BLINK_LED
 			if(!g_sensorAppCtx.timerLedEvt)
