@@ -8,7 +8,31 @@
 #include "tl_common.h"
 #if USE_SENSOR_LX
 
-extern u64 mul32x32_64(u32 a, u32 b); // hard function (in div_mod.S)
+/* 32x32 -> 64 bit unsigned multiply.
+ * The image is linked with -nostdlib, so (u64)a*b would pull __muldi3
+ * from libgcc: keep it on 32-bit operations. */
+u64 mul32x32_64(u32 a, u32 b) {
+	union {
+		u64 value;
+		struct {
+			u32 lo;
+			u32 hi;
+		} word;
+	} result;
+	u32 al = a & 0xffff;
+	u32 ah = a >> 16;
+	u32 bl = b & 0xffff;
+	u32 bh = b >> 16;
+	u32 ll = al * bl;
+	u32 lh = al * bh;
+	u32 hl = ah * bl;
+	// three 16-bit halves fit into 32 bits, the carry goes to the high word
+	u32 mid = (ll >> 16) + (lh & 0xffff) + (hl & 0xffff);
+
+	result.word.lo = (ll & 0xffff) | (mid << 16);
+	result.word.hi = (ah * bh) + (lh >> 16) + (hl >> 16) + (mid >> 16);
+	return result.value;
+}
 
 // Коэффициенты полинома для 2^x, x∈[0,1) (масштаб 2^F)
 #define A1      726817U
