@@ -19,6 +19,7 @@ $(OUT_PATH)$(SRC_DIR)/app_main.o \
 $(OUT_PATH)$(SRC_DIR)/app_utils.o \
 $(OUT_PATH)$(SRC_DIR)/app_EpCfg.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_cgdk2.o \
+$(OUT_PATH)$(SRC_DIR)/lcd_kctw1z.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_lktmzl02.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_lywsd03mmc.o \
 $(OUT_PATH)$(SRC_DIR)/lcd_mho_c122.o \
