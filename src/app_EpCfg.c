@@ -733,7 +733,7 @@ void zcl_illuminanceConfig_save(int init) {
 			}
 #endif
 			if(memcmp(&g_zcl_illuminanceAttrs.cfg, &icfg, sizeof(icfg))) {
-				nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_PIR_CFG,
+				nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_ILLUMI_CFG,
 						sizeof(g_zcl_illuminanceAttrs.cfg), (u8*)&g_zcl_illuminanceAttrs.cfg);
 		    	sws_puts("NV: illumiCfg saved\n");
 			}
