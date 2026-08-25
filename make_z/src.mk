@@ -34,6 +34,7 @@ $(OUT_PATH)$(SRC_DIR)/battery.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_th.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_rh.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_pir.o \
+$(OUT_PATH)$(SRC_DIR)/zlx2lx.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_lx.o \
 $(OUT_PATH)$(SRC_DIR)/sensor_xbr818.o \
 $(OUT_PATH)$(SRC_DIR)/sensors_zg223z.o \
@@ -43,6 +44,7 @@ $(OUT_PATH)$(SRC_DIR)/reporting.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_relative_humidity.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_thermostat_ui_cfg.o \
 $(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_illuminance_level_sensing.o \
+$(OUT_PATH)$(SRC_DIR)/custom_zcl/zcl_dehumidification_control.o \
 $(OUT_PATH)$(SRC_DIR)/main.o \
 $(OUT_PATH)$(SRC_DIR)/sws_printf.o \
 $(OUT_PATH)$(SRC_DIR)/trigger.o
