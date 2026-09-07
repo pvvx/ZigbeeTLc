@@ -83,6 +83,12 @@ make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV POJECT_DEF="-DBOARD=BOARD_ZG204ZV" ZNAME="Sonoff:ZG-204ZV-z"
 @if not exist "bin\ZG204ZV%SWVER%.bin" goto :error
 make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZVN POJECT_DEF="-DBOARD=BOARD_ZG204ZVN" ZNAME="Sonoff:ZG-204ZVN-z"
+@if not exist "bin\ZG204ZVN%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZVH POJECT_DEF="-DBOARD=BOARD_ZG204ZVH" ZNAME="Sonoff:ZG-204ZV-z"
+@if not exist "bin\ZG204ZVH%SWVER%.bin" goto :error
+make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=TS0201W POJECT_DEF="-DBOARD=BOARD_TS0201WING" ZNAME="Wing:TS0201-z"
 @if not exist "bin\TS0201W%SWVER%.bin" goto :error
 make -s -j clean

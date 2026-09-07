@@ -99,6 +99,8 @@
 #define BOARD_ZG204ZV				51 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
 #define BOARD_TS0201WING			52 // TS0201_TZ3000_dnpd6ayp, Tuya Zigbee "Temp & Humidity Sensor", Wing TS0201 2xAAA
 #define BOARD_ZG223Z				53 // HOBEIAN ZG223Z, Zigbee "Raindrop Detection Senser" + Lx, CR123A
+#define BOARD_ZG204ZVN				54 // HOBEIAN-ZG-204ZV without T&H, LUX + Radar Sensor XBR818
+#define BOARD_ZG204ZVH				55 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818 (HOBEIAN GPIO)
 
 /* Board define */
 #ifndef BOARD

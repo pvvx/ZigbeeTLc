@@ -266,7 +266,7 @@ void show_th(void) {
 
 
 void read_sensor_and_show(void) {
-#if (USE_SENSOR_LX == 1) || (USE_SENSOR_RND)
+#if (USE_SENSOR_LX == 1) || ((USE_SENSOR_LX == 2) && !USE_SENSOR_TH) || (USE_SENSOR_RND)
 #if (USE_SENSOR_RND)
 	read_sensors();
 #else
@@ -334,7 +334,7 @@ s32 sensors_task(void *arg) {
 		if(tt - g_sensorAppCtx.readSensorTime >= g_sensorAppCtx.measureInterval) {
 			g_sensorAppCtx.readSensorTime = tt;
 			read_sensor_and_show();
-#if USE_SENSOR_LX == 1
+#if (USE_SENSOR_LX == 1) || ((USE_SENSOR_LX == 2) && !USE_SENSOR_TH)
 			g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
 #endif
 		}

@@ -48,7 +48,12 @@ static s32 occupancyTimerCb(void *arg) {
 void task_pir(void) {
 	zcl_onOffAttr_t *pOnOff = zcl_onoffAttrGet();
 	u8 pir_on = gpio_read(GPIO_PIR)? PIR_ON : !PIR_ON;
-	if(zcl_occupAttr.delay) {
+#if USE_SENSOR_XBR818
+	/* XBR818 handles the hold time in hardware; delay==0 is valid. */
+#else
+	if(zcl_occupAttr.delay)
+#endif
+	{
 		if(pir_on) {
 			// PIR On
 			if(!zcl_occupAttr.state) {

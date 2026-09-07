@@ -143,7 +143,7 @@
 #include "board_rsh_hs03.h"
 #elif BOARD == BOARD_ZG204ZL
 #include "board_zg204zl.h"
-#elif BOARD == BOARD_ZG204ZV
+#elif (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH || BOARD == BOARD_ZG204ZVN)
 #include "board_zg204zv.h"
 #elif BOARD == BOARD_TS0201WING
 #include "board_ts0201_wing.h"
