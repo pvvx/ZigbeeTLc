@@ -9,11 +9,15 @@
 
 #include "version_cfg.h"
 
-#if (BOARD == BOARD_ZG204ZV)
+#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH || BOARD == BOARD_ZG204ZVN)
 
 //#define SWS_PRINTF_MODE	1
 
+#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH)
 #define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_LED | SERVICE_OTA | SERVICE_THS | SERVICE_PIR | SERVICE_ILLUMI)
+#else
+#define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_LED | SERVICE_OTA | SERVICE_PIR | SERVICE_ILLUMI)
+#endif
 
 /* https://pvvx.github.io/ZG-204ZL-3.0/
  TLSR8253F512ET32 512K Flash
@@ -31,11 +35,15 @@
  GPIO_PA1 - XBR818 SDA
 */
 
-#define BLE_MODEL_STR		"ZG-204ZV"
 #define BLE_MAN_STR			"Sonoff"
-
 #define ZCL_BASIC_MFG_NAME     {6,'S','o','n','o','f','f'} // Sonoff
+#if (BOARD == BOARD_ZG204ZVN)
+#define BLE_MODEL_STR		"ZG-204ZVN"
+#define ZCL_BASIC_MODEL_ID	   {11,'Z','G','-','2','0','4','Z','V','N','-','z'} // ZG-204ZVN-z
+#else
+#define BLE_MODEL_STR		"ZG-204ZV"
 #define ZCL_BASIC_MODEL_ID	   {10,'Z','G','-','2','0','4','Z','V','-','z'} // ZG-204ZV-z
+#endif
 
 // Battery & RF Power
 #define USE_BATTERY 	BATTERY_2AAA
@@ -47,7 +55,11 @@
 
 #define USE_SENSOR_CHT8305		0
 #define USE_SENSOR_CHT8215		0
+#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH)
 #define USE_SENSOR_AHT20_30		1
+#else
+#define USE_SENSOR_AHT20_30		0
+#endif
 #define USE_SENSOR_SHT4X		0
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		0
@@ -89,13 +101,14 @@
 #define DEF_OCCUPANCY_DELAY		35	// sec (PIR sensor)
 
 #define PIR_ON				1
+#define USE_SENSOR_XBR818	1
+
+#if (BOARD == BOARD_ZG204ZV)
 #define GPIO_PIR			GPIO_PD7
 #define PD7_INPUT_ENABLE	1
 #define PD7_DATA_OUT		0
 #define PD7_OUTPUT_ENABLE	0
 #define PD7_FUNC			AS_GPIO
-
-#define USE_SENSOR_XBR818	1
 
 #define XBR818_SCL			GPIO_PA0
 #define PA0_INPUT_ENABLE	1
@@ -112,6 +125,29 @@
 #define PULL_WAKEUP_SRC_PA1 PM_PIN_PULLUP_10K
 
 #define XBR818_OUT			GPIO_PD7
+#else
+#define GPIO_PIR			GPIO_PA1
+#define PA1_INPUT_ENABLE	1
+#define PA1_DATA_OUT		0
+#define PA1_OUTPUT_ENABLE	0
+#define PA1_FUNC			AS_GPIO
+
+#define XBR818_SCL			GPIO_PD7
+#define PD7_INPUT_ENABLE	1
+#define PD7_DATA_OUT		0
+#define PD7_OUTPUT_ENABLE	0
+#define PD7_FUNC			AS_GPIO
+#define PULL_WAKEUP_SRC_PD7 PM_PIN_PULLUP_10K
+
+#define XBR818_SDA			GPIO_PA0
+#define PA0_INPUT_ENABLE	1
+#define PA0_DATA_OUT		0
+#define PA0_OUTPUT_ENABLE	0
+#define PA0_FUNC			AS_GPIO
+#define PULL_WAKEUP_SRC_PA0 PM_PIN_PULLUP_10K
+
+#define XBR818_OUT			GPIO_PA1
+#endif
 
 // illuminance sensor
 #define USE_SENSOR_LX		2 // =1 - ADC = Ur, =2 - ADC = Us

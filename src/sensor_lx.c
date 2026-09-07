@@ -113,7 +113,7 @@ int read_illumi_sensor(void) {
 	return 0;
 }
 
-#if USE_SENSOR_LX == 1 // =1 - ADC = Ur, =2 - ADC = Us
+#if (USE_SENSOR_LX == 1) || ((USE_SENSOR_LX == 2) && !USE_SENSOR_TH) // =1 - ADC = Ur, =2 - ADC = Us
 void init_sensor(void) {
 
 }

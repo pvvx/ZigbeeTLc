@@ -114,7 +114,6 @@ status_t app_chk_report(u16 uptime_sec) {
 							len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
 							len = (len > 8) ? (8): (len);
 							if(memcmp(pEntry->prevData, pAttrEntry->data, len) != SUCCESS) {
-								memcpy(pEntry->prevData, pAttrEntry->data, len);
 								flg_report = true;
 							}
 						}
@@ -139,12 +138,6 @@ status_t app_chk_report(u16 uptime_sec) {
 				            dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
 				            dstEpInfo.profileId = pEntry->profileID;
 
-				            if(!flg_chk_attr) {
-				            	len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
-				            	len = (len>8) ? (8):(len);
-				            	memcpy(pEntry->prevData, pAttrEntry->data, len);
-				            }
-
 				            if(zcl_sendReportCmd(pEntry->endPoint,
 									&dstEpInfo,
 									TRUE, ZCL_FRAME_SERVER_CLIENT_DIR,
@@ -157,6 +150,10 @@ status_t app_chk_report(u16 uptime_sec) {
 				            	status = ZCL_STA_INSUFFICIENT_SPACE;
 
 				            	pEntry->maxIntCnt = 0; // repeat after
+							} else {
+								len = zcl_getAttrSize(pAttrEntry->type, pAttrEntry->data);
+								len = (len > 8) ? (8): (len);
+								memcpy(pEntry->prevData, pAttrEntry->data, len);
 							}
 				            sws_printf("checkReport: %04x:%04x %d,%d,%d:%d %02x\n",
 				            		pEntry->clusterID, pAttrEntry->id,
