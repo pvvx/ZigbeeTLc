@@ -3,22 +3,15 @@
 see https://github.com/pvvx/ZigbeeTLc
 """
 
-from zigpy.quirks.v2 import QuirkBuilder
+from zigpy.quirks.v2 import QuirkBuilder, ReportingConfig
 from zigpy.quirks.v2.homeassistant import UnitOfTemperature, UnitOfTime
+from zhaquirks import CustomCluster
 from zha.units import PERCENTAGE, LIGHT_LUX
 import zigpy.types as t
 from zigpy.zcl import ClusterType
 from zigpy.zcl.clusters.hvac import ScheduleProgrammingVisibility, TemperatureDisplayMode, UserInterface, Dehumidification
 from zigpy.zcl.clusters.measurement import IlluminanceLevelSensing, LevelStatus
 from zigpy.zcl.foundation import ZCLAttributeDef, ZCL_REPORTING_STATUS_ATTR
-
-from zhaquirks.builder import (
-	#BinarySensorDeviceClass,
-	#EntityType,
-	QuirkBuilder,
-	ReportingConfig,
-)
-from zhaquirks import CustomCluster
 
 class Display(t.enum8):
 	"""Turn off the display."""
@@ -457,6 +450,7 @@ class CustomIlluminanceLevelSensing(CustomCluster, IlluminanceLevelSensing):
 )
 (
 	QuirkBuilder("Sonoff", "ZG-204ZV-z")
+	.applies_to("Sonoff", "ZG-204ZV2-TH-z")
 	.removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
 	.adds(CustomUserInterfaceCluster)
 	.number(
@@ -549,6 +543,79 @@ class CustomIlluminanceLevelSensing(CustomCluster, IlluminanceLevelSensing):
 		translation_key="illuminance_target_level",
 		#unit=LIGHT_LUX,
 		fallback_name="zlx target",
+		mode="box",
+	)
+	.add_to_registry()
+)
+(
+	QuirkBuilder("Sonoff", "ZG-204ZV1-z")
+	.applies_to("Sonoff", "ZG-204ZV2-z")
+	.replaces(CustomIlluminanceLevelSensing, endpoint_id=1)
+	.sensor(
+		IlluminanceLevelSensing.AttributeDefs.level_status.name,
+		IlluminanceLevelSensing.cluster_id,
+		attribute_converter=lxLevelStatus_converter,
+		#attribute_converter=lambda x: x == lxLevelStatus.Below,
+		translation_key="level_status",
+		fallback_name="Light level",
+		reporting_config=ReportingConfig(
+			min_interval=0,
+			max_interval=3600,
+			reportable_change=1,
+		),
+	)
+	.number(
+		IlluminanceLevelSensing.AttributeDefs.illuminance_target_level.name,
+		IlluminanceLevelSensing.cluster_id,
+		min_value=0,
+		max_value=65535,
+		step=1,
+		translation_key="illuminance_target_level",
+		#unit=LIGHT_LUX,
+		fallback_name="zlx target",
+		mode="box",
+	)
+	.number(
+		CustomIlluminanceLevelSensing.AttributeDefs.lx_ligth_level.name,
+		CustomIlluminanceLevelSensing.cluster_id,
+		min_value=0,
+		max_value=3576000,
+		step=1,
+		translation_key="lx_ligth_level",
+		unit=LIGHT_LUX,
+		fallback_name="Low Light Level",
+		mode="box",
+	)
+	.number(
+		CustomIlluminanceLevelSensing.AttributeDefs.lx_zero.name,
+		CustomIlluminanceLevelSensing.cluster_id,
+		min_value=0,
+		max_value=65535,
+		step=1,
+		translation_key="lx_sensor_offset",
+		fallback_name="Illuminance offset",
+		unit=LIGHT_LUX,
+		mode="box",
+	)
+	.number(
+		CustomIlluminanceLevelSensing.AttributeDefs.lx_coef.name,
+		CustomIlluminanceLevelSensing.cluster_id,
+		min_value=0,
+		max_value=65535,
+		step=1,
+		translation_key="lx_sensor_offset",
+		fallback_name="Illuminance maximum",
+		unit=LIGHT_LUX,
+		mode="box",
+	)
+	.number(
+		CustomIlluminanceLevelSensing.AttributeDefs.meas_interval.name,
+		CustomIlluminanceLevelSensing.cluster_id,
+		min_value=3,
+		max_value=255,
+		unit=UnitOfTime.SECONDS,
+		translation_key="measurement_interval",
+		fallback_name="Measurement interval",
 		mode="box",
 	)
 	.add_to_registry()

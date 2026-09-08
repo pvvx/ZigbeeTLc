@@ -76,7 +76,7 @@ GPIO_PD7 - LED to +Vbat
 //#define PULL_WAKEUP_SRC_PD4	PM_PIN_PULLDOWN_100K
 
 // illuminance sensor
-#define USE_SENSOR_LX		1 // =1 - ADC = Ur, =2 - ADC = Us
+#define USE_SENSOR_LX		1 // =1 - ADC = Ur, =2 - ADC = Us, =3 ZG-223Z
 #define GPIO_ADC_PULL		PM_PIN_PULLUP_10K
 
 #define DEF_MIN_LEVEL_ZLX		13000 // ILLUMINANCE_LEVEL_SENSING ~20 lx

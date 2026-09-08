@@ -1,19 +1,19 @@
 /********************************************************************************************************
- * @file    board_cb3s.h
+ * @file    board_zg204zv.h
  *
- * @brief   This is the header file for board_cb3s
+ * @brief   This is the header file for board_zg204zv
  *
  *******************************************************************************************************/
-#ifndef _BOARD_ZG204ZL_H_
-#define _BOARD_ZG204ZL_H_
+#ifndef _BOARD_ZG204ZV_H_
+#define _BOARD_ZG204ZV_H_
 
 #include "version_cfg.h"
 
-#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH || BOARD == BOARD_ZG204ZVN)
+#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZV1 || BOARD == BOARD_ZG204ZV2 || BOARD == BOARD_ZG204ZV2_TH)
 
 //#define SWS_PRINTF_MODE	1
 
-#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH)
+#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZV2_TH)
 #define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_LED | SERVICE_OTA | SERVICE_THS | SERVICE_PIR | SERVICE_ILLUMI)
 #else
 #define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_LED | SERVICE_OTA | SERVICE_PIR | SERVICE_ILLUMI)
@@ -30,19 +30,30 @@
  GPIO_PD4 - KEY (GND)
  GPIO_PC3 - SDA
  GPIO_PC4 - SCL
+ ver1:
  GPIO_PD7 - XBR818 OUT
  GPIO_PA0 - XBR818 SCL
  GPIO_PA1 - XBR818 SDA
+ ver2:
+ GPIO_PD7 - XBR818 SCL
+ GPIO_PA0 - XBR818 SDA
+ GPIO_PA1 - XBR818 OUT
 */
 
 #define BLE_MAN_STR			"Sonoff"
 #define ZCL_BASIC_MFG_NAME     {6,'S','o','n','o','f','f'} // Sonoff
-#if (BOARD == BOARD_ZG204ZVN)
-#define BLE_MODEL_STR		"ZG-204ZVN"
-#define ZCL_BASIC_MODEL_ID	   {11,'Z','G','-','2','0','4','Z','V','N','-','z'} // ZG-204ZVN-z
-#else
+#if (BOARD == BOARD_ZG204ZV)
 #define BLE_MODEL_STR		"ZG-204ZV"
 #define ZCL_BASIC_MODEL_ID	   {10,'Z','G','-','2','0','4','Z','V','-','z'} // ZG-204ZV-z
+#elif (BOARD == BOARD_ZG204ZV1)
+#define BLE_MODEL_STR		"ZG-204ZV1"
+#define ZCL_BASIC_MODEL_ID	   {11,'Z','G','-','2','0','4','Z','V','1','-','z'} // ZG-204ZV1-z
+#elif (BOARD == BOARD_ZG204ZV2)
+#define BLE_MODEL_STR		"ZG-204ZV2"
+#define ZCL_BASIC_MODEL_ID	   {11,'Z','G','-','2','0','4','Z','V','2','-','z'} // ZG-204ZV2-z
+#elif (BOARD == BOARD_ZG204ZV2_TH)
+#define BLE_MODEL_STR		"ZG-204ZV2-TH"
+#define ZCL_BASIC_MODEL_ID	   {14,'Z','G','-','2','0','4','Z','V','2','-','T','H','-','z'} // ZG-204ZV2-TH-z
 #endif
 
 // Battery & RF Power
@@ -55,11 +66,7 @@
 
 #define USE_SENSOR_CHT8305		0
 #define USE_SENSOR_CHT8215		0
-#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH)
 #define USE_SENSOR_AHT20_30		1
-#else
-#define USE_SENSOR_AHT20_30		0
-#endif
 #define USE_SENSOR_SHT4X		0
 #define USE_SENSOR_SHTC3		0
 #define USE_SENSOR_SHT30		0
@@ -103,7 +110,7 @@
 #define PIR_ON				1
 #define USE_SENSOR_XBR818	1
 
-#if (BOARD == BOARD_ZG204ZV)
+#if (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZV1)
 #define GPIO_PIR			GPIO_PD7
 #define PD7_INPUT_ENABLE	1
 #define PD7_DATA_OUT		0
@@ -125,7 +132,9 @@
 #define PULL_WAKEUP_SRC_PA1 PM_PIN_PULLUP_10K
 
 #define XBR818_OUT			GPIO_PD7
-#else
+
+#elif (BOARD == BOARD_ZG204ZV2 || BOARD == BOARD_ZG204ZV2_TH)
+
 #define GPIO_PIR			GPIO_PA1
 #define PA1_INPUT_ENABLE	1
 #define PA1_DATA_OUT		0
@@ -147,10 +156,12 @@
 #define PULL_WAKEUP_SRC_PA0 PM_PIN_PULLUP_10K
 
 #define XBR818_OUT			GPIO_PA1
+#else
+#error "board!"
 #endif
 
 // illuminance sensor
-#define USE_SENSOR_LX		2 // =1 - ADC = Ur, =2 - ADC = Us
+#define USE_SENSOR_LX		2 // =1 - ADC = Ur, =2 - ADC = Us, =3 ZG-223Z
 #define GPIO_ADC_PULL		PM_PIN_PULLUP_10K
 
 #define DEF_MIN_LEVEL_ZLX		13000 // ILLUMINANCE_LEVEL_SENSING ~20 lx
@@ -185,5 +196,5 @@
 #endif
 
 
-#endif // (BOARD == BOARD_ZG204ZL)
-#endif // _BOARD_ZG204ZL_H_
+#endif // (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZV1 || BOARD == BOARD_ZG204ZV2 || BOARD == BOARD_ZG204ZV2_TH)
+#endif // _BOARD_ZG204ZV_H_

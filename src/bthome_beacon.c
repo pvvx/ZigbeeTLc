@@ -49,6 +49,7 @@ u8 bthome_data_beacon(padv_bthome_ns_ht_t p, u32 count) {
 	p->pid = (u8)count;
 	p->data.b_id = BtHomeID_battery;
 	p->data.battery_level = measured_battery.batVal;
+#if USE_SENSOR_TH
 	if(sensor_ht.flag & FLG_MEASURE_HT_ADV) {
 		sensor_ht.flag &= ~FLG_MEASURE_HT_ADV;
 		p->data.t_id = BtHomeID_temperature;
@@ -59,20 +60,27 @@ u8 bthome_data_beacon(padv_bthome_ns_ht_t p, u32 count) {
 		p->data.m_id = BtHomeID_moisture16;
 		p->data.moisture = sensor_rh.rh; // x0.01 %
 #endif
+		p->data.v_id = BtHomeID_voltage;
 #if USE_OUT_AVERAGE_BATTERY
 		p->data.battery_mv = measured_battery.mv; // x mV
 #else
 		p->data.battery_mv = measured_battery.mv; // x mV
 #endif
 		p->head.size = sizeof(adv_bthome_ns_ht_t) - sizeof(p->head.size) - sizeof(p->flag);
-	} else {
-		p->data.t_id = BtHomeID_voltage;
+	} else
+#endif // (DEV_SERVICES & SERVICE_THS)
+#if (DEV_SERVICES & SERVICE_ILLUMI)
+		// TODO...
+#endif // (DEV_SERVICES & SERVICE_ILLUMI)
+	{
+		padv_bthome_ns_bt_t pb = (padv_bthome_ns_bt_t )p;
+		pb->data.v_id = BtHomeID_voltage;
 #if USE_OUT_AVERAGE_BATTERY
-		p->data.temperature = measured_battery.mv; // x mV
+		pb->data.battery_mv = measured_battery.mv; // x mV
 #else
-		p->data.temperature = measured_battery.mv; // x mV
+		pb->data.battery_mv = measured_battery.mv; // x mV
 #endif
-		p->head.size = sizeof(adv_bthome_ns_bt_t) - sizeof(p->head.size) - sizeof(p->flag);
+		pb->head.size = sizeof(adv_bthome_ns_bt_t) - sizeof(p->head.size) - sizeof(p->flag);
 	}
 	return p->head.size;
 }

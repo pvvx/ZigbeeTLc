@@ -191,6 +191,8 @@ The flashing "BT" icon is called by the "identify" command.
 
 39. Ver 0.1.3.9. Added [TS0201_TZ3000_dnpd6ayp](https://pvvx.github.io/TS0201_TZ3000_dnpd6ayp), HOBEIAN [ZG-223Z](https://pvvx.github.io/ZG-223Z). Modification of the firmware relocation code during startup post Tuya.
 
+40. Ver 0.1.4.0. Added 3 variants for [ZG-204ZV](https://pvvx.github.io/ZG-204ZV/). Modification of the reporting function. Update zhaquirks:zigbeetlc.py.
+
 ## Make
 
 To build under Linux, run:

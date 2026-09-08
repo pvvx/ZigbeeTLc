@@ -143,7 +143,7 @@
 #include "board_rsh_hs03.h"
 #elif BOARD == BOARD_ZG204ZL
 #include "board_zg204zl.h"
-#elif (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZVH || BOARD == BOARD_ZG204ZVN)
+#elif (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZV1 || BOARD == BOARD_ZG204ZV2 || BOARD == BOARD_ZG204ZV2_TH)
 #include "board_zg204zv.h"
 #elif BOARD == BOARD_TS0201WING
 #include "board_ts0201_wing.h"
@@ -220,7 +220,11 @@
  * Sensor configuration
  */
 #ifndef USE_SENSOR_TH
+#if (DEV_SERVICES & SERVICE_THS)
 #define USE_SENSOR_TH  (USE_SENSOR_CHT8305 || USE_SENSOR_CHT8215 || USE_SENSOR_AHT20_30 || USE_SENSOR_SHT4X || USE_SENSOR_SHTC3 || USE_SENSOR_SHT30)
+#else
+#define USE_SENSOR_TH 0
+#endif
 #endif
 
 #define READ_SENSOR_TIMER_MIN_SEC 	3 // second
@@ -341,7 +345,7 @@ typedef enum{
 	#define ZBHCI_EN								1
 #endif
 
-#if USE_REMOTE_ONOFF
+#if USE_REMOTE_ONOFF && (!USE_BLE)
 #ifndef USE_RETRY_ONOFF
 #define USE_RETRY_ONOFF		240 // sec, =0 Off
 #endif

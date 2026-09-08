@@ -99,12 +99,18 @@
 #define BOARD_ZG204ZV				51 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
 #define BOARD_TS0201WING			52 // TS0201_TZ3000_dnpd6ayp, Tuya Zigbee "Temp & Humidity Sensor", Wing TS0201 2xAAA
 #define BOARD_ZG223Z				53 // HOBEIAN ZG223Z, Zigbee "Raindrop Detection Senser" + Lx, CR123A
+//#define BOARD_DIY_SCD41			54 // reserved: BLE, DIY module TB03F + SCD41, Li(ion, pol,...) battery >= 800 mAh
+#define BOARD_ZG204ZV1				55 // ZigBee only, HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
+#define BOARD_ZG204ZV2				56 // ZigBee only, HOBEIAN-ZG-204ZV v2 LUX + Radar Sensor XBR818
+#define BOARD_ZG204ZV2_TH			57 // ZigBee only, HOBEIAN-ZG-204ZV v2 T&H + LUX + Radar Sensor XBR818 (HOBEIAN GPIO)
+//#define DEVICE_NEXT			58 // ?
+
 #define BOARD_ZG204ZVN				54 // HOBEIAN-ZG-204ZV without T&H, LUX + Radar Sensor XBR818
 #define BOARD_ZG204ZVH				55 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818 (HOBEIAN GPIO)
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_TS0202_PIR1 // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_ZG223Z // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
@@ -131,10 +137,10 @@
 
 #if USE_BLE
 #define APP_RELEASE				0x00	//BCD app release "0.0"
-#define APP_BUILD				0x17	//BCD app build "0.4"
+#define APP_BUILD				0x18	//BCD app build "0.4"
 #else
 #define APP_RELEASE				0x01	//BCD app release "0.1"
-#define APP_BUILD				0x39	//BCD app build "3.9"
+#define APP_BUILD				0x40	//BCD app build "3.9"
 #endif
 #define STACK_RELEASE			0x30	//BCD stack release 3.0
 #define STACK_BUILD				0x01	//BCD stack build 01

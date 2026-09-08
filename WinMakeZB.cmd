@@ -1,6 +1,6 @@
 @set TLPATH=D:\MCU\TelinkIoTStudio
 @set PATH=%TLPATH%\bin;%TLPATH%\opt\tc32\bin;%TLPATH%\mingw\bin;%TLPATH%\opt\tc32\tc32-elf\bin;%PATH%
-@set SWVER=_zb0017
+@set SWVER=_zb0018
 @del /Q .\bin_zb\*.bin
 @del /Q .\bin_zb\*.zigbee
 @del /Q .\build
@@ -73,6 +73,19 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTY0201 USE_ZB=1 POJECT_DEF="-DBOARD
 make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=TS0201W USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_TS0201WING" ZNAME="Wing:TS0201-z"
 @if not exist "bin_zb\TS0201W%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG223Z USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG223Z" ZNAME="HOBEIAN:ZG223Z-z"
+@if not exist "bin_zb\ZG223Z%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV1 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV1" ZNAME="Sonoff:ZG-204ZV1-z"
+@if not exist "bin_zb\ZG204ZV1%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV2" ZNAME="Sonoff:ZG-204ZV2-z"
+@if not exist "bin_zb\ZG204ZV2%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2-TH USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV2_TH" ZNAME="Sonoff:ZG-204ZV2-TH-z"
+@if not exist "bin_zb\ZG204ZV2-TH%SWVER%.bin" goto :error
+@rem
 cd .\zigpy_ota
 call update_zb.cmd %SWVER%
 cd ..

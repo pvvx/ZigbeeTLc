@@ -702,6 +702,26 @@ void user_ble_init(bool isRetention){
 		tbl_scanRsp.name[0] = 'Z';
 		tbl_scanRsp.name[1] = '2';
 		tbl_scanRsp.name[2] = '1';
+#elif BOARD == BOARD_ZG204ZV
+		tbl_scanRsp.name[0] = 'Z';
+		tbl_scanRsp.name[1] = 'V';
+		tbl_scanRsp.name[2] = 'H';
+#elif BOARD == BOARD_ZG223Z
+		tbl_scanRsp.name[0] = 'Z';
+		tbl_scanRsp.name[1] = 'G';
+		tbl_scanRsp.name[2] = '2';
+#elif BOARD == BOARD_ZG204ZV1
+		tbl_scanRsp.name[0] = 'Z';
+		tbl_scanRsp.name[1] = 'V';
+		tbl_scanRsp.name[2] = '1';
+#elif BOARD == BOARD_ZG204ZV2
+		tbl_scanRsp.name[0] = 'Z';
+		tbl_scanRsp.name[1] = 'V';
+		tbl_scanRsp.name[2] = '2';
+#elif BOARD == BOARD_ZG204ZV2_TH
+		tbl_scanRsp.name[0] = 'V';
+		tbl_scanRsp.name[1] = '2';
+		tbl_scanRsp.name[2] = 'H';
 #else
 #error "DEVICE_TYPE = ?"
 #endif
@@ -721,7 +741,21 @@ void user_ble_init(bool isRetention){
 		ble_attr.id.revision = 0;
 		ble_attr.id.hw_version = g_zcl_basicAttrs.hwVersion;
 		ble_attr.id.sw_version = (APP_RELEASE<<8) | APP_BUILD;
+#if USE_SENSOR_TH
 		ble_attr.id.dev_spec_data = sensor_ht.sensor_type;
+#else	// TODO...
+		ble_attr.id.dev_spec_data = 0
+#if (DEV_SERVICES & SERVICE_PLM)
+		| 1
+#endif
+#if (DEV_SERVICES & SERVICE_PIR)
+		| 2
+#endif
+#if (DEV_SERVICES & SERVICE_ILLUMI)
+		| 4
+#endif
+		;
+#endif
 		ble_attr.id.services = DEV_SERVICES;
 
 		bls_ll_setAdvEnable(BLC_ADV_DISABLE);

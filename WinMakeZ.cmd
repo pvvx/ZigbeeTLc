@@ -1,6 +1,6 @@
 @set TLPATH=D:\MCU\TelinkIoTStudio
 @set PATH=%TLPATH%\bin;%TLPATH%\opt\tc32\bin;%TLPATH%\mingw\bin;%TLPATH%\opt\tc32\tc32-elf\bin;%PATH%
-@set SWVER=_v0139
+@set SWVER=_v0140
 @del /Q .\bin\*.bin
 @del /Q .\bin\*.zigbee
 @del /Q .\build
@@ -83,17 +83,20 @@ make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV POJECT_DEF="-DBOARD=BOARD_ZG204ZV" ZNAME="Sonoff:ZG-204ZV-z"
 @if not exist "bin\ZG204ZV%SWVER%.bin" goto :error
 make -s -j clean
-make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZVN POJECT_DEF="-DBOARD=BOARD_ZG204ZVN" ZNAME="Sonoff:ZG-204ZVN-z"
-@if not exist "bin\ZG204ZVN%SWVER%.bin" goto :error
-make -s -j clean
-make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZVH POJECT_DEF="-DBOARD=BOARD_ZG204ZVH" ZNAME="Sonoff:ZG-204ZV-z"
-@if not exist "bin\ZG204ZVH%SWVER%.bin" goto :error
-make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=TS0201W POJECT_DEF="-DBOARD=BOARD_TS0201WING" ZNAME="Wing:TS0201-z"
 @if not exist "bin\TS0201W%SWVER%.bin" goto :error
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG223Z POJECT_DEF="-DBOARD=BOARD_ZG223Z" ZNAME="HOBEIAN:ZG223Z-z"
 @if not exist "bin\ZG223Z%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV1" ZNAME="Sonoff:ZG-204ZV1-z"
+@if not exist "bin\ZG204ZV1%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2 POJECT_DEF="-DBOARD=BOARD_ZG204ZV2" ZNAME="Sonoff:ZG-204ZV2-z"
+@if not exist "bin\ZG204ZV2%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2-TH POJECT_DEF="-DBOARD=BOARD_ZG204ZV2_TH" ZNAME="Sonoff:ZG-204ZV2-TH-z"
+@if not exist "bin\ZG204ZV2-TH%SWVER%.bin" goto :error
 @rem
 python3 make_z\zb_bin_ota.py bin\ZTS0201Z3000%SWVER%.bin bin\TS0201z%SWVER% -m0x1141 -i0xd3a3 -v0x01983001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZTH01Z%SWVER%.bin bin\TH01Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"

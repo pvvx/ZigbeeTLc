@@ -80,9 +80,12 @@ void app_pm_task(void) {
 	}
 
 	g_dualModeInfo.switch_to_ble = 0;
+#if USE_SENSOR_TH // (DEV_SERVICES & SERVICE_THS)
 	if(sensor_ht.read_callback) {
 		sensor_ht.read_callback();
-	} else if(CURRENT_SLOT_GET() == DUALMODE_SLOT_ZIGBEE && app_zigbeeIdle()){
+	} else
+#endif
+		if(CURRENT_SLOT_GET() == DUALMODE_SLOT_ZIGBEE && app_zigbeeIdle()){
 		// task_keys();
 		if(APP_BLE_STATE_GET() == BLS_LINK_STATE_IDLE){
 			if(g_dualModeInfo.bleStart) {
