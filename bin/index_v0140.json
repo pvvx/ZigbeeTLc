@@ -378,28 +378,28 @@
     },
     {
         "fileVersion": 20983809,
-        "fileSize": 129650,
-        "manufacturerCode": 4417,
-        "imageType": 568,
-        "sha512": "951fcb5597feca311009582863a22ed26fab155ac864fd0b9edba24f8f32fdfdcd13db8090ed795f5d478e9dc7236dea3af3d2142f8bbf5768b281861af93266",
-        "otaHeaderString": "Sonoff:ZG-204ZV2-z",
-        "modelId": "ZG-204ZV2-z",
-        "manufacturerName": [
-            "Sonoff"
-        ],
-        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0238-01403001-ZG204ZV2.zigbee"
-    },
-    {
-        "fileVersion": 20983809,
         "fileSize": 132034,
         "manufacturerCode": 4417,
-        "imageType": 569,
-        "sha512": "b5d3a809fee7ce0238fb6581be25e2265b78fdf73c1a2df480799b7b5f745576c70449b5766d15f1e920d7b613a9469d2b433feb14c8564ab52e698caf0b6b30",
+        "imageType": 568,
+        "sha512": "a7005bdc94ece7b4d34828453b2f74f99fec07d45683c8f468dfd5d09d77a73c75ad555d2bb5edadc3c1efd6c8c459009686214a0a0e2c4ad697d1f51ff953a2",
         "otaHeaderString": "Sonoff:ZG-204ZV2-TH-z",
         "modelId": "ZG-204ZV2-TH-z",
         "manufacturerName": [
             "Sonoff"
         ],
-        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0239-01403001-ZG204ZV2-TH.zigbee"
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0238-01403001-ZG204ZV2-TH.zigbee"
+    },
+    {
+        "fileVersion": 20983809,
+        "fileSize": 129650,
+        "manufacturerCode": 4417,
+        "imageType": 569,
+        "sha512": "32602f18fe8e9a07fbc6c166513d034518047d8f676327bee175f997f09bf6a697fbb2ae62af36ce1a6f5ad0e1548bb6c887c2be31432251747d975bdf96c69d",
+        "otaHeaderString": "Sonoff:ZG-204ZV2-z",
+        "modelId": "ZG-204ZV2-z",
+        "manufacturerName": [
+            "Sonoff"
+        ],
+        "url": "https://github.com/pvvx/ZigbeeTLc/raw/refs/heads/master/bin/1141-0239-01403001-ZG204ZV2.zigbee"
     }
 ]

@@ -80,11 +80,11 @@ make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV1 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV1" ZNAME="Sonoff:ZG-204ZV1-z"
 @if not exist "bin_zb\ZG204ZV1%SWVER%.bin" goto :error
 make -s -j clean USE_ZB=1
-make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV2" ZNAME="Sonoff:ZG-204ZV2-z"
-@if not exist "bin_zb\ZG204ZV2%SWVER%.bin" goto :error
-make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2-TH USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV2_TH" ZNAME="Sonoff:ZG-204ZV2-TH-z"
 @if not exist "bin_zb\ZG204ZV2-TH%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZG204ZV2" ZNAME="Sonoff:ZG-204ZV2-z"
+@if not exist "bin_zb\ZG204ZV2%SWVER%.bin" goto :error
 @rem
 cd .\zigpy_ota
 call update_zb.cmd %SWVER%

@@ -101,12 +101,9 @@
 #define BOARD_ZG223Z				53 // HOBEIAN ZG223Z, Zigbee "Raindrop Detection Senser" + Lx, CR123A
 //#define BOARD_DIY_SCD41			54 // reserved: BLE, DIY module TB03F + SCD41, Li(ion, pol,...) battery >= 800 mAh
 #define BOARD_ZG204ZV1				55 // ZigBee only, HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
-#define BOARD_ZG204ZV2				56 // ZigBee only, HOBEIAN-ZG-204ZV v2 LUX + Radar Sensor XBR818
-#define BOARD_ZG204ZV2_TH			57 // ZigBee only, HOBEIAN-ZG-204ZV v2 T&H + LUX + Radar Sensor XBR818 (HOBEIAN GPIO)
+#define BOARD_ZG204ZV2_TH			56 // ZigBee only, HOBEIAN-ZG-204ZV v2 T&H + LUX + Radar Sensor XBR818 (HOBEIAN GPIO)
+#define BOARD_ZG204ZV2				57 // ZigBee only, HOBEIAN-ZG-204ZV v2 LUX + Radar Sensor XBR818
 //#define DEVICE_NEXT			58 // ?
-
-#define BOARD_ZG204ZVN				54 // HOBEIAN-ZG-204ZV without T&H, LUX + Radar Sensor XBR818
-#define BOARD_ZG204ZVH				55 // HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818 (HOBEIAN GPIO)
 
 /* Board define */
 #ifndef BOARD
