@@ -16,7 +16,7 @@
 #endif
 
 
-extern u64 mul32x32_64(u32 a, u32 b); // hard function (in div_mod.S)
+extern u64 mul32x32_64(u32 a, u32 b); // in zlx2lx.c
 
 //#define USE_ILLUMI_AVERAGE_SHL 	2 // 2
 
