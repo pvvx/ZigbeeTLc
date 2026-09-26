@@ -103,7 +103,8 @@
 #define BOARD_ZG204ZV1				55 // ZigBee only, HOBEIAN-ZG-204ZV T&H + LUX + Radar Sensor XBR818
 #define BOARD_ZG204ZV2_TH			56 // ZigBee only, HOBEIAN-ZG-204ZV v2 T&H + LUX + Radar Sensor XBR818 (HOBEIAN GPIO)
 #define BOARD_ZG204ZV2				57 // ZigBee only, HOBEIAN-ZG-204ZV v2 LUX + Radar Sensor XBR818
-//#define DEVICE_NEXT			58 // ?
+#define BOARD_ZBEACON2_TH01_SHTC3	58 // ZBEACON-TH01-v2 PCB variant: SHTC3, SDA/SCL swapped, no TX pad (TS0201_TZ3000_rdhukkmi)
+//#define DEVICE_NEXT			59 // ?
 
 /* Board define */
 #ifndef BOARD
