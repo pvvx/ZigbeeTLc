@@ -301,6 +301,9 @@ typedef enum{
 #define ZCL_POLL_CTRL_SUPPORT						1
 #define ZCL_GROUP_SUPPORT							USE_TRIGGER
 #define ZCL_OTA_SUPPORT								1
+#ifndef OTA_QUERY_INTERVAL
+#define OTA_QUERY_INTERVAL							(6*60*60) // sec (u16): zigbee2mqtt checks for an update at most once a day
+#endif
 #define TOUCHLINK_SUPPORT							0
 #define FIND_AND_BIND_SUPPORT						0
 #if TOUCHLINK_SUPPORT

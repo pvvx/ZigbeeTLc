@@ -30,7 +30,7 @@ static void sensorDevice_otaQueryStart(void) {
 		ota_serverAddrPerprogrammed(ss_ib.trust_center_address, 1);
 		g_otaCtx.otaServerEpInfo.profileId = HA_PROFILE_ID;
 	}
-	ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+	ota_queryStart(OTA_QUERY_INTERVAL);
 }
 #endif
 #if USE_BLE
