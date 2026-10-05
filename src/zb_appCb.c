@@ -18,6 +18,21 @@
 #include "app_main.h"
 #include "app_ui.h"
 #include "lcd.h"
+
+#ifdef ZCL_OTA
+extern ota_ctx_t g_otaCtx;
+
+/* OTA from the trust center only: the SDK otherwise takes the first device answering its broadcast Match Descriptor */
+static void sensorDevice_otaQueryStart(void) {
+	if(zcl_attr_imageUpgradeStatus == IMAGE_UPGRADE_STATUS_NORMAL
+		&& !ZB_IEEE_ADDR_CMP(zcl_attr_upgradeServerID, ss_ib.trust_center_address)) {
+		ZB_IEEE_ADDR_INVALID(zcl_attr_upgradeServerID);
+		ota_serverAddrPerprogrammed(ss_ib.trust_center_address, 1);
+		g_otaCtx.otaServerEpInfo.profileId = HA_PROFILE_ID;
+	}
+	ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+}
+#endif
 #if USE_BLE
 #include "zigbee_ble_switch.h"
 #include "stack/ble/ble.h"
@@ -152,7 +167,7 @@ void zb_bdbInitCb(u8 status, u8 joinedNetwork){
 			set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
 
 #ifdef ZCL_OTA
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL); // 30 * 60);	// 30 m
+			sensorDevice_otaQueryStart();
 #endif
 
 #ifdef ZCL_POLL_CTRL
@@ -278,7 +293,7 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 		    sensorDevice_zclCheckInStart();
 #endif
 #ifdef ZCL_OTA
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+			sensorDevice_otaQueryStart();
 #endif
 #if	USE_DISPLAY
 			show_connected_symbol(true);
@@ -401,7 +416,7 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 		if(status == ZCL_STA_SUCCESS){
 			ota_mcuReboot();
 		}else{
-			ota_queryStart(OTA_PERIODIC_QUERY_INTERVAL);
+			sensorDevice_otaQueryStart();
 		}
 	}else if(evt == OTA_EVT_IMAGE_DONE){
 		set_PollRate(); // zb_setPollRate(DEFAULT_POLL_RATE);
