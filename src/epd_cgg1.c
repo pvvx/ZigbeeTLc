@@ -383,23 +383,26 @@ void show_small_number_x10(s16 number, bool percent){
 	}
 }
 
-void init_lcd(void) {
+static void reset_lcd(void) {
 	// pulse RST_N low for 110 microseconds
     gpio_write(EPD_RST, LOW);
     gpio_is_output_en(EPD_RST);
     pm_wait_us(110);
-	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
 #ifdef 	DEF_EPD_REFRESH_CNT
 	scr.refresh_cnt = DEF_EPD_REFRESH_CNT;
 #endif
     scr.updated = 0;
     scr.stage = 1;
     scr.init = 1;
+    gpio_write(EPD_RST, HIGH);
+    // EPD_BUSY: Low 866 us
+}
+
+void init_lcd(void) {
+	reset_lcd();
+	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
 	memset(scr.display_buff, 0, sizeof(scr.display_buff));
 	memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
-    gpio_write(EPD_RST, HIGH);
-    //bls_pm_setWakeupSource(PM_WAKEUP_PAD | PM_WAKEUP_TIMER);  // gpio pad wakeup suspend/deepsleep
-    // EPD_BUSY: Low 866 us
 #if PM_ENABLE
 	cpu_set_gpio_wakeup(EPD_BUSY, Level_High, 1);
 #endif
@@ -488,19 +491,15 @@ int task_lcd(void) {
 			if(!scr.display_off // g_zcl_thermostatUICfgAttrs.display_off
 			&& memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
 				memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff));
-//				lcd_flg.b.send_notify = lcd_flg.b.notify_on; // set flag LCD for send notify
 #ifdef DEF_EPD_REFRESH_CNT
 				if (scr.refresh_cnt) {
 					scr.refresh_cnt--;
 					scr.init = 0;
-					scr.stage = 1;
 				} else {
-					init_lcd(); // pulse RST_N low for 110 microseconds
-					// pm_wait_us(200); ?
+					reset_lcd(); // pulse RST_N low for 110 microseconds
 				}
-#else
-				scr.stage = 1;
 #endif
+				scr.stage = 1;
 			} else {
 				scr.stage = 0;
 			}

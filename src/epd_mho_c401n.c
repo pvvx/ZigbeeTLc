@@ -323,28 +323,32 @@ void show_small_number(s16 number, bool percent){
 	}
 }
 
-
-void init_lcd(void) {
+static void reset_lcd(void) {
 	// pulse RST_N low for 110 microseconds
     gpio_write(EPD_RST, LOW);
     sleep_us(110);
-	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
     scr.stage = 1; // Update/Init, stage 1
     scr.updated = 0;
 #ifdef 	DEF_EPD_REFRESH_CNT
     scr.refresh_cnt = DEF_EPD_REFRESH_CNT; // 1024
 #endif
-    //memset(scr.display_buff, 0, sizeof(scr.display_buff));
-    memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
-    gpio_write(EPD_RST, HIGH);
 	//scr.display_buff[15] = 0;
+    gpio_write(EPD_RST, HIGH);
+}
+
+void init_lcd(void) {
+	reset_lcd();
+	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
+    memset(scr.display_buff, 0, sizeof(scr.display_buff));
+    memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
 #if PM_ENABLE
 	cpu_set_gpio_wakeup(EPD_BUSY, Level_High, 1);
 #endif
 }
 
 _SCR_CODE_SEC_
-__attribute__((optimize("-Os"))) int task_lcd(void) {
+__attribute__((optimize("-Os")))
+int task_lcd(void) {
 	while (gpio_read(EPD_BUSY)) {
 		switch (scr.stage) {
 		case 1: // Update/Init, stage 1
@@ -378,18 +382,14 @@ __attribute__((optimize("-Os"))) int task_lcd(void) {
 			if((!scr.display_off) // g_zcl_thermostatUICfgAttrs.display_off
 			&& memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
 				memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_cmp_buff));
-				scr.stage = 1;
 #ifdef 	DEF_EPD_REFRESH_CNT
 				if (scr.refresh_cnt) {
 					scr.refresh_cnt--;
 				} else {
-				    gpio_write(EPD_RST, LOW);
-				    sleep_us(50);
-				    scr.refresh_cnt = DEF_EPD_REFRESH_CNT; // 1024
-				    scr.updated = 0;
-				    gpio_write(EPD_RST, HIGH);
+					reset_lcd(); // pulse RST_N low for 110 microseconds
 				}
 #endif
+				scr.stage = 1;
 			} else
 				scr.stage = 0;
 		}

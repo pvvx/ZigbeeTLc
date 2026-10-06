@@ -10,7 +10,7 @@
 RAM scr_data_t scr;
 
 #define DEF_EPD_SUMBOL_SIGMENTS	13
-//#define DEF_EPD_REFRESH_CNT	255
+//#define DEF_EPD_REFRESH_CNT	2048
 //----------------------------------
 // define segments
 // the data in the arrays consists of {byte, bit} pairs of each segment
@@ -342,22 +342,25 @@ void show_small_number_x10(s16 number, bool percent){
 	}
 }
 
-void init_lcd(void) {
+static void reset_lcd(void) {
 	gpio_write(EPD_RST, LOW); // pulse RST_N low for 110 microseconds
 	sleep_us(110);
-	//scr.lcd_refresh_cnt = DEF_EPD_REFRESH_CNT;
-	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
+	//scr.display_buff[15] = 0;
 	scr.updated = 0;
 	scr.stage = 1;
 #ifdef 	DEF_EPD_REFRESH_CNT
 	scr.refresh_cnt = DEF_EPD_REFRESH_CNT;
 #endif
-	//scr.display_buff[15] = 0;
-	memset(scr.display_buff, 0, sizeof(scr.display_buff));
-	memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
 	//bls_pm_setWakeupSource(PM_WAKEUP_PAD | PM_WAKEUP_TIMER);  // gpio pad wakeup suspend/deepsleep
 	gpio_write(EPD_RST, HIGH);
 	//sleep_us(200); // Waiting for EPD BUSY to be setting?
+}
+
+void init_lcd(void) {
+	reset_lcd();
+	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
+	memset(scr.display_buff, 0, sizeof(scr.display_buff));
+	memset(scr.display_cmp_buff, 0, sizeof(scr.display_cmp_buff));
 #if PM_ENABLE
 	cpu_set_gpio_wakeup(EPD_BUSY, Level_High, 1);
 #endif
@@ -394,7 +397,7 @@ int task_lcd(void) {
 			transmit(0, 0x0AE);
 			transmit(0, 0x028);
 			transmit(0, 0x0AD);
-			scr.init = 1;
+//			scr.init = 1;
 //			scr.stage = 0;
 //			break;
 		default:
@@ -402,15 +405,13 @@ int task_lcd(void) {
 			&& memcmp(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff))) {
 				memcpy(scr.display_cmp_buff, scr.display_buff, sizeof(scr.display_buff));
 #ifdef DEF_EPD_REFRESH_CNT
-				if (scr.lcd_refresh_cnt) {
-					scr.lcd_refresh_cnt--;
-					scr.stage_lcd = 1;
+				if (scr.refresh_cnt) {
+					scr.refresh_cnt--;
 				} else {
-					init_lcd(); // pulse RST_N low for 110 microseconds
+					reset_lcd(); // pulse RST_N low for 110 microseconds
 				}
-#else
-				scr.stage = 1;
 #endif
+				scr.stage = 1;
 			} else
 				scr.stage = 0;
 		}

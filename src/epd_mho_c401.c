@@ -365,18 +365,25 @@ void show_small_number(int16_t number, bool percent){
 	}
 }
 
-void init_lcd(void) {
+static void reset_lcd(void) {
 	// pulse RST_N low for 110 microseconds
     gpio_write(EPD_RST, LOW);
     pm_wait_us(110);
-	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
 	scr.refresh_cnt = DEF_EPD_REFRESH_CNT;
     scr.stage = 1;
     scr.updated = 0;
     scr.init = 3;
+    gpio_write(EPD_RST, HIGH);
+}
+
+void init_lcd(void) {
+	reset_lcd();
+	scr.display_off = g_zcl_thermostatUICfgAttrs.display_off;
 	memset(scr.display_buff, 0, LCD_BUF_SIZE);
 	memset(scr.display_cmp_buff, 0xff, LCD_BUF_SIZE);
-    gpio_write(EPD_RST, HIGH);
+#if PM_ENABLE
+	cpu_set_gpio_wakeup(EPD_BUSY, Level_High, 1);
+#endif
 }
 
 _SCR_CODE_SEC_
@@ -489,10 +496,10 @@ int task_lcd(void) {
 				if (scr.refresh_cnt) {
 					scr.refresh_cnt--;
 					scr.init = 0;
-					scr.stage = 1;
 				} else {
-					init_lcd(); // pulse RST_N low for 110 microseconds
+					reset_lcd(); // pulse RST_N low for 110 microseconds
 				}
+				scr.stage = 1;
 			} else {
 				scr.stage = 0;
 			}
