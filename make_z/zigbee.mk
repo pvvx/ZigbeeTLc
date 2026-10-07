@@ -27,7 +27,6 @@ OUT_DIR += \
 OBJS += \
 $(OUT_PATH)/zigbee/bdb/bdb.o \
 $(OUT_PATH)/zigbee/aps/aps_group.o \
-$(OUT_PATH)/zigbee/mac/mac_phy.o \
 $(OUT_PATH)/zigbee/mac/mac_pib.o \
 $(OUT_PATH)/zigbee/zdo/zdp.o \
 $(OUT_PATH)/zigbee/zcl/zcl.o \

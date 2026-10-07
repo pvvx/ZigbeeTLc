@@ -4,6 +4,7 @@
 #include "i2c_drv.h"
 #include "lcd.h"
 #include "app_main.h"
+#include "zb_api.h"
 
 #define VKL060_I2C_ADDR		0x3E // VKL060
 
@@ -202,7 +203,45 @@ void show_ble_symbol(bool state){
 #ifdef USE_DISPLAY_CONNECT_SYMBOL
 _SCR_CODE_SEC_
 void show_connected_symbol(bool state){
-#if USE_DISPLAY_CONNECT_SYMBOL == 2
+#if USE_DISPLAY_SIGNAL_LEVEL
+	// g_ack_rssi/g_ack_cnt: patch_z_sdk/mac_phy.c, updated by the ACKs of polls and reports - no extra radio traffic
+	extern volatile s8 g_ack_rssi;
+	extern volatile u8 g_ack_cnt;
+	static u8 ack_cnt;
+	static bool ack_seen;
+	static s16 rssi_x8; // average RSSI * 8, weight of a new sample 1/8
+	static u32 sec_tik;
+	static u16 no_ack_sec; // seconds since the last ACK or missed-ACK sample
+	u8 bars = 0;
+	while (clock_time() - sec_tik >= CLOCK_16M_SYS_TIMER_CLK_1S) {
+		sec_tik += CLOCK_16M_SYS_TIMER_CLK_1S;
+		if (no_ack_sec < 0xffff)
+			no_ack_sec++;
+	}
+	if (state) {
+		if (ack_cnt != g_ack_cnt) {
+			ack_cnt = g_ack_cnt;
+			no_ack_sec = 0;
+			if (!ack_seen) {
+				ack_seen = true;
+				rssi_x8 = g_ack_rssi * 8;
+			} else
+				rssi_x8 += g_ack_rssi - rssi_x8 / 8;
+		} else if (ack_seen && no_ack_sec > zb_getPollRate() * 5 / 2000) {
+			// two polls in a row without an ACK (parent gone or out of range): -110 dBm, weight 1/4
+			no_ack_sec = 0;
+			rssi_x8 += (-110 * 8 - rssi_x8) / 4;
+		}
+		if (!ack_seen || rssi_x8 < -85 * 8)
+			bars = 0x04; // bottom bar (bit 2), as in the stock Tuya firmware
+		else if (rssi_x8 < -70 * 8)
+			bars = 0x06;
+		else
+			bars = LCD_SYM_BLE; // all three
+	} else
+		ack_seen = false; // start over after a rejoin
+	scr.display_buff[0] = (scr.display_buff[0] & ~LCD_SYM_BLE) | bars;
+#elif USE_DISPLAY_CONNECT_SYMBOL == 2
 	show_ble_symbol(!state);
 #else
 	show_ble_symbol(state);
