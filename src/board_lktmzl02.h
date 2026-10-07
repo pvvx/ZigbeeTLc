@@ -115,7 +115,7 @@ LCD LKTMZL02 real buffer:  byte.bit
 #define USE_DISPLAY_BATTERY_LEVEL		1
 #define USE_DISPLAY_OFF					1
 #define USE_DISPLAY_CONNECT_SYMBOL		2 // =2 inverted
-#define USE_DISPLAY_SIGNAL_LEVEL		1 // joined: 1..3 bars from the RSSI of the parent's MAC ACKs
+#define USE_DISPLAY_SIGNAL_LEVEL		(!USE_BLE) // joined: 1..3 bars from the RSSI of the parent's MAC ACKs
 
 // KEY, BUTTON
 #define BUTTON1				GPIO_PC0

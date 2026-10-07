@@ -214,7 +214,6 @@ typedef struct _comfort_t {
 	u16 h[2];
 } scomfort_t;
 
-
 /**********************************************************************
  * GLOBAL VARIABLES
  */

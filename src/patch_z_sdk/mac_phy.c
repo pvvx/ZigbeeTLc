@@ -71,9 +71,15 @@ volatile u8 rf_busyFlag = 0;
 
 volatile s8 soft_rssi;
 volatile s32 sum_rssi, cnt_rssi = 1;
+
 /* RSSI of the last MAC ACK received while waiting for one: for an end device the parent's answer (LCD signal level) */
-volatile s8 g_ack_rssi = -110;
-volatile u8 g_ack_cnt;
+#if USE_DISPLAY_SIGNAL_LEVEL
+
+g_ack_t g_ack = {
+	.rssi = -110
+};
+
+#endif
 
 u8 fPaEn = 0;
 u32 rf_pa_txen_pin = 0;
@@ -742,12 +748,12 @@ void rf_rx_irq_handler(void)
 #if RF_SRX_MODE
     ZB_SWITCH_TO_RXMODE();
 #endif
-
+#if USE_DISPLAY_SIGNAL_LEVEL
     if (fAck) {
-        g_ack_rssi = ZB_RADION_PKT_RSSI_GET(p) - 110;
-        g_ack_cnt++;
+        g_ack.rssi = ZB_RADION_PKT_RSSI_GET(p) - 110;
+        g_ack.cnt++;
     }
-
+#endif
     /* zb_mac_receive_data handler */
     zb_macDataRecvHandler(p, macPld, len, fAck, ZB_RADIO_TIMESTAMP_GET(p), ZB_RADION_PKT_RSSI_GET(p) - 110);
 }
