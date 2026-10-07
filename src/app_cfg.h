@@ -379,15 +379,6 @@ typedef struct {
 	// updated by the ACKs of polls and reports - no extra radio traffic
 	signed char rssi; // current ack rssi, from mac_phy.c rf_rx_irq_handler()
 	unsigned char cnt; // current ack count, from mac_phy.c rf_rx_irq_handler()
-/*
-	unsigned char old_cnt;
-	unsigned char ack_seen;
-
-	unsigned int sec_tik;
-	unsigned int no_ack_sec; // seconds since the last ACK or missed-ACK sample
-
-	signed short rssi_x8; // average RSSI * 8, weight of a new sample 1/8
-*/
 } g_ack_t;
 
 extern g_ack_t g_ack;
