@@ -16,6 +16,7 @@
 * 1286-0202-10933607-ZBTH01z_xxxx.zigbee - firmware for transferring ZBTH01 Tuya/Sonoff to ZigbeeTlc
 * 1286-0203-20973001-ZG303Zz_xxxx.zigbee  - firmware for transferring ZG-303Z Tuya/Sonoff to ZigbeeTlc
 * 1286-0202-10933607-ZB2TH01z_xxxx.zigbee - firmware for transferring ZBTH01(v2) Tuya/Sonoff to ZigbeeTlc
+* 1286-0202-10933607-TH03ZBPSz_xxxx.zigbee - firmware for transferring TH03 (PCB TH03_ZBPS1.0, "Zbeacon TH01") Tuya to ZigbeeTlc
 * 1141-0203-10923001-ZTY0201z_xxxx.zigbee - firmware for transferring ZTY0201 Tuya to ZigbeeTlc
 
 * xxxxx_vNN.bin - firmware files for the hardware programmer
@@ -35,6 +36,7 @@
 * 1286-0202-10933607-ZBTH01z_xxxx.zigbee  - прошивки для перехода ZBTH01 из Tuya (Sonoff) в ZigbeeTlc
 * 1286-0203-20973001-ZG303Zz_xxxx.zigbee  - прошивки для перехода ZG-303Z из Tuya (Sonoff) в ZigbeeTlc
 * 1286-0202-10933607-ZB2TH01z_xxxx.zigbee  - прошивки для перехода ZBTH01(v2) из Tuya (Sonoff) в ZigbeeTlc
+* 1286-0202-10933607-TH03ZBPSz_xxxx.zigbee - прошивка для перехода TH03 (плата TH03_ZBPS1.0, "Zbeacon TH01") из Tuya в ZigbeeTlc
 * 1141-0203-10923001-ZTY0201z_xxxx.zigbee - прошивки для перехода ZTY0201 из Tuya в ZigbeeTlc
 
 * xxxxx_vNN.bin - файлы прошивки для программатора или BLE OTA
@@ -86,6 +88,7 @@
 | 55 | 0x0237 | [ZG-204ZV1](https://pvvx.github.io/ZG-204ZV) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 | 56 | 0x0238 | [ZG-204ZV2-TH](https://pvvx.github.io/ZG-204ZV) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 | 57 | 0x0239 | [ZG-204ZV2](https://pvvx.github.io/ZG-204ZV) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
+| 59 | 0x023B | TH03 (PCB TH03_ZBPS1.0, stock "Zbeacon TH01") LCD | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 
 * [Identification numbers of all firmwares](https://github.com/pvvx/pvvx.github.io?tab=readme-ov-file#id-numbers-of-alternative-firmware)
 
