@@ -147,6 +147,8 @@
 #include "board_zg204zl.h"
 #elif (BOARD == BOARD_ZG204ZV || BOARD == BOARD_ZG204ZV1 || BOARD == BOARD_ZG204ZV2 || BOARD == BOARD_ZG204ZV2_TH)
 #include "board_zg204zv.h"
+#elif BOARD == BOARD_ZG204ZS
+#include "board_zg204zs.h"
 #elif BOARD == BOARD_TS0201WING
 #include "board_ts0201_wing.h"
 #elif BOARD == BOARD_ZG223Z

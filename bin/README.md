@@ -87,6 +87,8 @@
 | 56 | 0x0238 | [ZG-204ZV2-TH](https://pvvx.github.io/ZG-204ZV) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 | 57 | 0x0239 | [ZG-204ZV2](https://pvvx.github.io/ZG-204ZV) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 | 58 | 0x023A | [ZBEACON2-TH01-SHTC3](https://github.com/pvvx/ZigbeeTLc/issues/211) ZBEACON-TH01 v2.0 variant (SHTC3, SDA/SCL swapped, no TX pad), also sold as TS0201_TZ3000_rdhukkmi | [BLE](https://github.com/pvvx/ATC_MiThermometer) & [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
+| 59 | 0x023B | [TH03-ZBPS](https://github.com/pvvx/ZigbeeTLc) Tuya TH03 Zigbee LCD (PCB TH03_ZBPS1.0) | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
+| 60 | 0x023C | [ZG-204ZS](https://pvvx.github.io/ZG-204ZS) Tuya / HOBEIAN Dual PIR + Skyrelay RC2417 mmWave Radar Presence Sensor | [ZigBee](https://github.com/pvvx/ZigbeeTLc) |
 
 * [Identification numbers of all firmwares](https://github.com/pvvx/pvvx.github.io?tab=readme-ov-file#id-numbers-of-alternative-firmware)
 

@@ -14,6 +14,9 @@
 #if USE_SENSOR_XBR818
 #include "sensor_xbr818.h"
 #endif
+#if USE_SENSOR_RC2417
+#include "sensor_rc2417.h"
+#endif
 #include "lcd.h"
 
 measured_battery_t measured_battery;
@@ -41,6 +44,9 @@ void battery_detect(bool startup_flg)
 #endif
 #if USE_SENSOR_XBR818
 		xbr818_go_sleep();
+#endif
+#if USE_SENSOR_RC2417
+		rc2417_go_sleep();
 #endif
 		drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, LOW_POWER_SLEEP_TIME_ms);
 #else

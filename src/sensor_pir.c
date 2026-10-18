@@ -15,6 +15,9 @@
 #ifdef ZCL_ON_OFF
 #include "app_onoff.h"
 #endif
+#if USE_SENSOR_RC2417
+#include "sensor_rc2417.h"
+#endif
 
 
 #if !USE_SENSOR_XBR818
@@ -22,11 +25,21 @@
  * @brief	Occupancy timer callback
  */
 static s32 occupancyTimerCb(void *arg) {
+#if USE_SENSOR_RC2417
+	if(rc2417_read_out() || (gpio_read(GPIO_PIR)? PIR_ON : !PIR_ON)) {
+		// occupancy maintained by mmWave radar or PIR
+		zcl_occupAttr.occupancy = 1;
+		return 0;
+	}
+	// occupancy timer off -> shut down radar to conserve power
+	rc2417_go_sleep();
+#else
 	if(gpio_read(GPIO_PIR)? PIR_ON : !PIR_ON) {
 		// occupancy
 		zcl_occupAttr.occupancy = 1;
 		return 0;
 	}
+#endif
 	// occupancy timer off
 	zcl_occupAttr.occupancy = 0;
 	g_sensorAppCtx.reportFlg = FLG_CHECK_REPORT; // check report table
@@ -58,6 +71,9 @@ void task_pir(void) {
 			// PIR On
 			if(!zcl_occupAttr.state) {
 				// event On
+#if USE_SENSOR_RC2417
+				rc2417_wake_and_start();
+#endif
 				if(!zcl_occupAttr.occupancy) {
 					// event occupancy
 					// occupancy on

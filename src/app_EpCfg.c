@@ -26,6 +26,9 @@
 #if USE_SENSOR_XBR818
 #include "sensor_xbr818.h"
 #endif
+#if USE_SENSOR_RC2417
+#include "sensor_rc2417.h"
+#endif
 
 /**********************************************************************
  * LOCAL CONSTANTS
@@ -524,7 +527,7 @@ zcl_occupancyAttr_t zcl_occupAttr = {
 	.occupancy		= 0, // 1 = occupied, 0 = unoccupied.
 	.sensor_type	= 0, // = PIR
 	.delay	= DEF_OCCUPANCY_DELAY,
-#if USE_SENSOR_XBR818
+#if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 	.oc2un_delay	= 0,
 	.thres	= DEF_OCCUPANCY_THRES
 #endif
@@ -534,7 +537,7 @@ const zclAttrInfo_t occupancy_attrTbl[] = {
 	{ ZCL_ATTRID_OCCUPANCY,  ZCL_DATA_TYPE_BITMAP8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_REPORTABLE,  (u8*)&zcl_occupAttr.occupancy},
 	{ ZCL_ATTRID_OCCUPANCY_SENSOR_TYPE,  ZCL_DATA_TYPE_ENUM8,   ACCESS_CONTROL_READ,  (u8*)&zcl_occupAttr.sensor_type},
 	{ ZCL_ATTRID_PIR_OCCU2UNOCCU_DELAY,  ZCL_DATA_TYPE_UINT16,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.delay},
-#if USE_SENSOR_XBR818
+#if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_DELAY,  ZCL_DATA_TYPE_UINT16,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.oc2un_delay},
 	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.thres},
 #endif
@@ -719,6 +722,11 @@ void zcl_illuminanceConfig_save(int init) {
 		icfg.measureInterval = READ_SENSOR_TIMER_SEC;
 #endif
 	}
+#if (BOARD == BOARD_ZG204ZS)
+	if(icfg.z == 29400) {
+		icfg.z = ADC_LX_ZERO_DEF;
+	}
+#endif
 	if(init) {
 		g_zcl_illuminanceAttrs.cfg.z = icfg.z;
 		g_zcl_illuminanceAttrs.cfg.k = icfg.k;
@@ -744,14 +752,14 @@ void zcl_illuminanceConfig_save(int init) {
 
 #ifdef ZCL_OCCUPANCY_SENSING
 void zcl_occupanceConfig_save(int init) {
-#if USE_SENSOR_XBR818
+#if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 	zcl_occupancy_save_t occupancy_save;
 	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_PIR_CFG,
 			sizeof(occupancy_save), (u8*)&occupancy_save) != NV_SUCC){
 		occupancy_save.delay = DEF_OCCUPANCY_DELAY;
 		occupancy_save.thres = DEF_OCCUPANCY_THRES;
 	}
-#else // !USE_SENSOR_XBR818
+#else // !USE_SENSOR_XBR818 && !USE_SENSOR_RC2417
 	u16 delay;
 	if(nv_flashReadNew(1, NV_MODULE_APP,  NV_ITEM_APP_PIR_CFG,
 			sizeof(delay), (u8*)&delay) != NV_SUCC){
@@ -759,30 +767,34 @@ void zcl_occupanceConfig_save(int init) {
 	}
 #endif
 	if(init) {
-#if USE_SENSOR_XBR818
+#if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 		zcl_occupAttr.delay = occupancy_save.delay;
 		zcl_occupAttr.thres = occupancy_save.thres;
-#else	//!USE_SENSOR_XBR818
+#else	//!USE_SENSOR_XBR818 && !USE_SENSOR_RC2417
 		zcl_occupAttr.delay = delay;
 #endif
 	} else {
-#if USE_SENSOR_XBR818
+#if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 		if(occupancy_save.delay != zcl_occupAttr.delay
 			|| occupancy_save.thres != zcl_occupAttr.thres) {
+#if USE_SENSOR_XBR818
 			xbr818_set_cfg();
+#elif USE_SENSOR_RC2417
+			rc2417_set_cfg();
+#endif
 			occupancy_save.delay = zcl_occupAttr.delay;
 			occupancy_save.thres = zcl_occupAttr.thres;
 			nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_PIR_CFG,
 					sizeof(occupancy_save), (u8*)&occupancy_save);
 			sws_puts("NV: OccupDelay saved\n");
 		}
-#else // !USE_SENSOR_XBR818
+#else // !USE_SENSOR_XBR818 && !USE_SENSOR_RC2417
 		if(zcl_occupAttr.delay != delay) {
 			nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_PIR_CFG,
 					sizeof(zcl_occupAttr.delay), (u8*)&zcl_occupAttr.delay);
 			sws_puts("NV: OccupDelay saved\n");
 		}
-#endif // USE_SENSOR_XBR818
+#endif // USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 	}
 }
 #endif // ZCL_OCCUPANCY_SENSING
