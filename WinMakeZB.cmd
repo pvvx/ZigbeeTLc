@@ -68,6 +68,9 @@ make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZB_MC USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZB_MC" ZNAME="ZBeacon:MC-z"
 @if not exist "bin_zb\ZB_MC%SWVER%.bin" goto :error
 make -s -j clean USE_ZB=1
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZB2TH01SHTC3 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_ZBEACON2_TH01_SHTC3" ZNAME="ZBeacon:TH01-2-z"
+@if not exist "bin_zb\ZB2TH01SHTC3%SWVER%.bin" goto :error
+make -s -j clean USE_ZB=1
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZTY0201 USE_ZB=1 POJECT_DEF="-DBOARD=BOARD_RSH_HS03" ZNAME="Tuya:TY0201-z"
 @if not exist "bin_zb\ZTY0201%SWVER%.bin" goto :error
 make -s -j clean USE_ZB=1

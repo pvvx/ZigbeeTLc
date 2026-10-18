@@ -26,7 +26,7 @@ sensor_th_t sensor_ht;
 
 #define _TH_SPEED_CODE_SEC_ _attribute_ram_code_sec_ // for speed
 
-#if USE_SENSOR_SHT30 || USE_SENSOR_SHT4X || USE_SENSOR_SHT30
+#if USE_SENSOR_SHT30 || USE_SENSOR_SHT4X || USE_SENSOR_SHTC3
 int read_sensor_sht30_shtc3_sht4x(void *cfg);
 #endif
 #if USE_GXHT4x
