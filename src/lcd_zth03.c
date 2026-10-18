@@ -3,7 +3,7 @@
  * Created: pvvx, 30.11.2024
  */
 #include "tl_common.h"
-#if (BOARD == BOARD_ZTH03)
+#if (BOARD == BOARD_ZTH03) || (BOARD == BOARD_TH03_ZBPS)
 #include "chip_8258/timer.h"
 #include "i2c_drv.h"
 #include "lcd.h"
@@ -11,9 +11,15 @@
 
 #define _SCR_CODE_SEC_
 
-#define TH03_I2C_ADDR		0x3E // BL55028
+#define TH03_I2C_ADDR	0x3E // BL55028
 
-#define I2C_TCLK_US	24 // 24 us
+#ifdef LCD_VKL060
+#define I2C_TCLK_US		2 // VKL060 NACKs at slow soft-I2C clocks
+#define LCD_RAM_ADDR	0x0B // VKL060: display RAM starts at 0x0B (ADSET)
+#else
+#define I2C_TCLK_US		24 // 24 us
+#define LCD_RAM_ADDR	0x00
+#endif
 
 scr_data_t scr;
 
@@ -52,7 +58,7 @@ const u8 display_numbers[] = {
 #define LCD_SYM_P  0b001110101 // "P"
 
 
-void soft_i2c_start(void) {
+static void lcd_soft_i2c_start(void) {
 	gpio_set_output_en(I2C_SCL_LCD, 0); // SCL set "1"
 	gpio_set_output_en(I2C_SDA_LCD, 0); // SDA set "1"
 	sleep_us(I2C_TCLK_US);
@@ -62,7 +68,7 @@ void soft_i2c_start(void) {
 	//sleep_us(10);
 }
 
-void soft_i2c_stop(void) {
+static void lcd_soft_i2c_stop(void) {
 	gpio_set_output_en(I2C_SDA_LCD, 1); // SDA set "0"
 	sleep_us(I2C_TCLK_US);
 	gpio_set_output_en(I2C_SCL_LCD, 0); // SCL set "1"
@@ -70,7 +76,7 @@ void soft_i2c_stop(void) {
 	gpio_set_output_en(I2C_SDA_LCD, 0); // SDA set "1"
 }
 
-int soft_i2c_wr_byte(u8 b) {
+static int lcd_soft_i2c_wr_byte(u8 b) {
 	int ret, i = 8;
 	while(i--) {
 		sleep_us(I2C_TCLK_US/2);
@@ -94,34 +100,34 @@ int soft_i2c_wr_byte(u8 b) {
 	return ret;
 }
 
-int soft_i2c_send_buf(u8 addr, u8 * pbuf, int size) {
+static int lcd_soft_i2c_send_buf(u8 addr, u8 * pbuf, int size) {
 	int ret = 0;
-	soft_i2c_start();
-	ret = soft_i2c_wr_byte(addr);
+	lcd_soft_i2c_start();
+	ret = lcd_soft_i2c_wr_byte(addr);
 	if(ret == 0) {
 		while(size--) {
-			ret = soft_i2c_wr_byte(*pbuf);
+			ret = lcd_soft_i2c_wr_byte(*pbuf);
 			if(ret)
 				break;
 			pbuf++;
 		}
 	}
-	soft_i2c_stop();
+	lcd_soft_i2c_stop();
 	return ret;
 }
 
-int soft_i2c_send_byte(u8 addr, u8 b) {
+static int lcd_soft_i2c_send_byte(u8 addr, u8 b) {
 	int ret;
-	soft_i2c_start();
-	ret = soft_i2c_wr_byte(addr);
+	lcd_soft_i2c_start();
+	ret = lcd_soft_i2c_wr_byte(addr);
 	if(ret == 0)
-		soft_i2c_wr_byte(b);
-	soft_i2c_stop();
+		lcd_soft_i2c_wr_byte(b);
+	lcd_soft_i2c_stop();
 	return ret;
 }
 
-#define lcd_send_i2c_byte(a)  soft_i2c_send_byte(scr.i2c_address, a)
-#define lcd_send_i2c_buf(b, a)  soft_i2c_send_buf(scr.i2c_address, (u8 *) b, a)
+#define lcd_send_i2c_byte(a)  lcd_soft_i2c_send_byte(scr.i2c_address, a)
+#define lcd_send_i2c_buf(b, a)  lcd_soft_i2c_send_buf(scr.i2c_address, (u8 *) b, a)
 
 const u8 lcd_init_cmd[]	=	{
 		// LCD controller initialize:
@@ -131,8 +137,12 @@ const u8 lcd_init_cmd[]	=	{
 		0x80, // load data pointer
 		0xf0, // blink control off,  0xf2 - blink
 		0xfc, // All pixel control (APCTL): Normal
+#ifdef LCD_VKL060
+		LCD_RAM_ADDR, // C=0, ADSET: RAM pointer, display data follows
+#else
 		0x60,
-		0x00, 0x00,000,0x00,0x00,0x00,0x00,0x00,0x00
+#endif
+		0x00, 0x00, 000, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
 };
 
 /* LCD controller off
@@ -142,7 +152,6 @@ const u8 lcd_off_cmd[]	=	{ // sleep all 3.0 uA
 		0xbc, // Display control (DISCTL): Power save mode 3, FRAME flip, Power save mode 1
 		0xd0  // Mode Set (MODE SET): Display disable, 1/3 Bias, power saving
 };
-
 
 _SCR_CODE_SEC_
 void send_to_lcd(void){
@@ -318,7 +327,7 @@ void show_small_number(s16 number, bool percent){
 
 void display_off(void) {
 	scr.display_off = 1;
-	send_i2c_bytes(TH03_I2C_ADDR << 1, (u8 *) lcd_off_cmd, sizeof(lcd_off_cmd));
+	lcd_soft_i2c_send_buf(TH03_I2C_ADDR << 1, (u8 *) lcd_off_cmd, sizeof(lcd_off_cmd));
 }
 
 void init_lcd(void){
@@ -327,15 +336,12 @@ void init_lcd(void){
 	if(scr.display_off) {
 		display_off();
 	} else {
-		if(lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd))) {
-			display_off();
-		} else {
-			sleep_us(200);
-			scr.blink_flg = 0;
-			scr.display_cmp_buff[0] = 0;
-			memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
-			update_lcd();
-		}
+		lcd_send_i2c_buf((u8 *) lcd_init_cmd, sizeof(lcd_init_cmd));
+		sleep_us(200);
+		scr.blink_flg = 0;
+		scr.display_cmp_buff[0] = LCD_RAM_ADDR;
+		memset(&scr.display_buff, 0xff, sizeof(scr.display_buff));
+		update_lcd();
 	}
 }
 

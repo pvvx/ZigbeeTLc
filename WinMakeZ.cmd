@@ -97,6 +97,9 @@ make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2-TH POJECT_DEF="-DBOARD=BOAR
 make -s -j clean
 make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=ZG204ZV2 POJECT_DEF="-DBOARD=BOARD_ZG204ZV2" ZNAME="Sonoff:ZG-204ZV2-z"
 @if not exist "bin\ZG204ZV2%SWVER%.bin" goto :error
+make -s -j clean
+make -s -j VERSION_BIN=%SWVER% PROJECT_NAME=TH03ZBPS POJECT_DEF="-DBOARD=BOARD_TH03_ZBPS" ZNAME="ZBeacon:TH03-ZBPS-z"
+@if not exist "bin\TH03ZBPS%SWVER%.bin" goto :error
 @rem
 python3 make_z\zb_bin_ota.py bin\ZTS0201Z3000%SWVER%.bin bin\TS0201z%SWVER% -m0x1141 -i0xd3a3 -v0x01983001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZTH01Z%SWVER%.bin bin\TH01Zz%SWVER% -m0x1141 -i0xd3a3 -v0x01993001 -s"Tuya to ZigbeeTlc"
@@ -114,6 +117,7 @@ python3 make_z\zb_bin_ota.py bin\ZB2TH01%SWVER%.bin bin\ZB2TH01z%SWVER% -m0x1286
 python3 make_z\zb_bin_ota.py bin\ZTY0201%SWVER%.bin bin\ZTY0201z%SWVER% -m0x1141 -i0x0203 -v0x10923001 -s"Tuya to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\ZG204ZL%SWVER%.bin bin\ZG204ZLz%SWVER% -m0x1286 -i0x0203 -v0x99993001 -s"Sonoff to ZigbeeTlc"
 python3 make_z\zb_bin_ota.py bin\TS202PIR1%SWVER%.bin bin\TS202PIR1%SWVER% -m0x1141 -i0xd3a3 -v0x88993001 -s"Tuya to ZigbeeTlc"
+python3 make_z\zb_bin_ota.py bin\TH03ZBPS%SWVER%.bin bin\TH03ZBPSz%SWVER% -m0x1286 -i0x0202 -v0x10933607 -s"ZBeacon TH03 to ZigbeeTlc"
 cd .\bin\devbis
 start /wait convert.cmd %SWVER% 
 cd ..\..
