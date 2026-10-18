@@ -109,7 +109,7 @@
 
 /* Board define */
 #ifndef BOARD
-#define BOARD					BOARD_ZG223Z // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
+#define BOARD					BOARD_TH03_ZBPS // BOARD_LYWSD03MMC or BOARD_CGDK2 or ...
 #endif
 
 /* Chip IDs */
