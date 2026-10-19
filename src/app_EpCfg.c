@@ -523,13 +523,36 @@ const zclAttrInfo_t dhum_attrTbl[] =
 #endif // ZCL_HVAC_DIHUMIDIFICATION_CONTROL
 
 #ifdef ZCL_OCCUPANCY_SENSING
+#if USE_SENSOR_RC2417
+#define ZCL_ATTRID_RADAR_ZONE1_M_THRES	0x5101
+#define ZCL_ATTRID_RADAR_ZONE1_S_THRES	0x5102
+#define ZCL_ATTRID_RADAR_ZONE2_M_THRES	0x5103
+#define ZCL_ATTRID_RADAR_ZONE2_S_THRES	0x5104
+#define ZCL_ATTRID_RADAR_ZONE3_M_THRES	0x5105
+#define ZCL_ATTRID_RADAR_ZONE3_S_THRES	0x5106
+#define ZCL_ATTRID_RADAR_TRITH			0x5107
+#endif
+
 zcl_occupancyAttr_t zcl_occupAttr = {
-	.occupancy		= 0, // 1 = occupied, 0 = unoccupied.
+	.occupancy		= 0, // bitmap
+#if (BOARD == BOARD_ZG204ZS)
+	.sensor_type	= 2, // 2 = PIR and Radar (Dual)
+#else
 	.sensor_type	= 0, // = PIR
+#endif
 	.delay	= DEF_OCCUPANCY_DELAY,
 #if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 	.oc2un_delay	= 0,
-	.thres	= DEF_OCCUPANCY_THRES
+	.thres	= DEF_OCCUPANCY_THRES,
+#endif
+#if USE_SENSOR_RC2417
+	.zone1_m_thres	= DEF_RC2417_ZONE1_M_THRES,
+	.zone1_s_thres	= DEF_RC2417_ZONE1_S_THRES,
+	.zone2_m_thres	= DEF_RC2417_ZONE2_M_THRES,
+	.zone2_s_thres	= DEF_RC2417_ZONE2_S_THRES,
+	.zone3_m_thres	= DEF_RC2417_ZONE3_M_THRES,
+	.zone3_s_thres	= DEF_RC2417_ZONE3_S_THRES,
+	.trith			= DEF_RC2417_TRITH,
 #endif
 };
 /* Attribute record list */
@@ -540,6 +563,15 @@ const zclAttrInfo_t occupancy_attrTbl[] = {
 #if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_DELAY,  ZCL_DATA_TYPE_UINT16,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.oc2un_delay},
 	{ ZCL_ATTRID_PIR_UNOCCU2OCCU_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.thres},
+#endif
+#if USE_SENSOR_RC2417
+	{ ZCL_ATTRID_RADAR_ZONE1_M_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.zone1_m_thres},
+	{ ZCL_ATTRID_RADAR_ZONE1_S_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.zone1_s_thres},
+	{ ZCL_ATTRID_RADAR_ZONE2_M_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.zone2_m_thres},
+	{ ZCL_ATTRID_RADAR_ZONE2_S_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.zone2_s_thres},
+	{ ZCL_ATTRID_RADAR_ZONE3_M_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.zone3_m_thres},
+	{ ZCL_ATTRID_RADAR_ZONE3_S_THRES,  ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.zone3_s_thres},
+	{ ZCL_ATTRID_RADAR_TRITH,          ZCL_DATA_TYPE_UINT8,   ACCESS_CONTROL_READ | ACCESS_CONTROL_WRITE,  (u8*)&zcl_occupAttr.trith},
 #endif
 	{ ZCL_ATTRID_GLOBAL_CLUSTER_REVISION, ZCL_DATA_TYPE_UINT16,  ACCESS_CONTROL_READ,  (u8*)&zcl_attr_global_clusterRevision},
 };
@@ -758,6 +790,15 @@ void zcl_occupanceConfig_save(int init) {
 			sizeof(occupancy_save), (u8*)&occupancy_save) != NV_SUCC){
 		occupancy_save.delay = DEF_OCCUPANCY_DELAY;
 		occupancy_save.thres = DEF_OCCUPANCY_THRES;
+#if USE_SENSOR_RC2417
+		occupancy_save.zone1_m_thres = DEF_RC2417_ZONE1_M_THRES;
+		occupancy_save.zone1_s_thres = DEF_RC2417_ZONE1_S_THRES;
+		occupancy_save.zone2_m_thres = DEF_RC2417_ZONE2_M_THRES;
+		occupancy_save.zone2_s_thres = DEF_RC2417_ZONE2_S_THRES;
+		occupancy_save.zone3_m_thres = DEF_RC2417_ZONE3_M_THRES;
+		occupancy_save.zone3_s_thres = DEF_RC2417_ZONE3_S_THRES;
+		occupancy_save.trith = DEF_RC2417_TRITH;
+#endif
 	}
 #else // !USE_SENSOR_XBR818 && !USE_SENSOR_RC2417
 	u16 delay;
@@ -770,13 +811,40 @@ void zcl_occupanceConfig_save(int init) {
 #if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 		zcl_occupAttr.delay = occupancy_save.delay;
 		zcl_occupAttr.thres = occupancy_save.thres;
+#if USE_SENSOR_RC2417
+		if(occupancy_save.zone1_m_thres > 99) occupancy_save.zone1_m_thres = DEF_RC2417_ZONE1_M_THRES;
+		if(occupancy_save.zone1_s_thres > 99) occupancy_save.zone1_s_thres = DEF_RC2417_ZONE1_S_THRES;
+		if(occupancy_save.zone2_m_thres > 99) occupancy_save.zone2_m_thres = DEF_RC2417_ZONE2_M_THRES;
+		if(occupancy_save.zone2_s_thres > 99) occupancy_save.zone2_s_thres = DEF_RC2417_ZONE2_S_THRES;
+		if(occupancy_save.zone3_m_thres > 99) occupancy_save.zone3_m_thres = DEF_RC2417_ZONE3_M_THRES;
+		if(occupancy_save.zone3_s_thres > 99) occupancy_save.zone3_s_thres = DEF_RC2417_ZONE3_S_THRES;
+		if(occupancy_save.trith == 0 || occupancy_save.trith > 10) occupancy_save.trith = DEF_RC2417_TRITH;
+
+		zcl_occupAttr.zone1_m_thres = occupancy_save.zone1_m_thres;
+		zcl_occupAttr.zone1_s_thres = occupancy_save.zone1_s_thres;
+		zcl_occupAttr.zone2_m_thres = occupancy_save.zone2_m_thres;
+		zcl_occupAttr.zone2_s_thres = occupancy_save.zone2_s_thres;
+		zcl_occupAttr.zone3_m_thres = occupancy_save.zone3_m_thres;
+		zcl_occupAttr.zone3_s_thres = occupancy_save.zone3_s_thres;
+		zcl_occupAttr.trith = occupancy_save.trith;
+#endif
 #else	//!USE_SENSOR_XBR818 && !USE_SENSOR_RC2417
 		zcl_occupAttr.delay = delay;
 #endif
 	} else {
 #if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 		if(occupancy_save.delay != zcl_occupAttr.delay
-			|| occupancy_save.thres != zcl_occupAttr.thres) {
+			|| occupancy_save.thres != zcl_occupAttr.thres
+#if USE_SENSOR_RC2417
+			|| occupancy_save.zone1_m_thres != zcl_occupAttr.zone1_m_thres
+			|| occupancy_save.zone1_s_thres != zcl_occupAttr.zone1_s_thres
+			|| occupancy_save.zone2_m_thres != zcl_occupAttr.zone2_m_thres
+			|| occupancy_save.zone2_s_thres != zcl_occupAttr.zone2_s_thres
+			|| occupancy_save.zone3_m_thres != zcl_occupAttr.zone3_m_thres
+			|| occupancy_save.zone3_s_thres != zcl_occupAttr.zone3_s_thres
+			|| occupancy_save.trith != zcl_occupAttr.trith
+#endif
+		) {
 #if USE_SENSOR_XBR818
 			xbr818_set_cfg();
 #elif USE_SENSOR_RC2417
@@ -784,6 +852,15 @@ void zcl_occupanceConfig_save(int init) {
 #endif
 			occupancy_save.delay = zcl_occupAttr.delay;
 			occupancy_save.thres = zcl_occupAttr.thres;
+#if USE_SENSOR_RC2417
+			occupancy_save.zone1_m_thres = zcl_occupAttr.zone1_m_thres;
+			occupancy_save.zone1_s_thres = zcl_occupAttr.zone1_s_thres;
+			occupancy_save.zone2_m_thres = zcl_occupAttr.zone2_m_thres;
+			occupancy_save.zone2_s_thres = zcl_occupAttr.zone2_s_thres;
+			occupancy_save.zone3_m_thres = zcl_occupAttr.zone3_m_thres;
+			occupancy_save.zone3_s_thres = zcl_occupAttr.zone3_s_thres;
+			occupancy_save.trith = zcl_occupAttr.trith;
+#endif
 			nv_flashWriteNew(1, NV_MODULE_APP, NV_ITEM_APP_PIR_CFG,
 					sizeof(occupancy_save), (u8*)&occupancy_save);
 			sws_puts("NV: OccupDelay saved\n");
