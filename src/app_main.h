@@ -182,15 +182,33 @@ typedef struct {
 	u8  sensor_type;
 	u8  state;
 	u8  thres;
-#if USE_SENSOR_XBR818
+#if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 	u16 oc2un_delay;
+#endif
+#if USE_SENSOR_RC2417
+	u8 zone1_m_thres;
+	u8 zone1_s_thres;
+	u8 zone2_m_thres;
+	u8 zone2_s_thres;
+	u8 zone3_m_thres;
+	u8 zone3_s_thres;
+	u8 trith;
 #endif
 } zcl_occupancyAttr_t;
 
-#if USE_SENSOR_XBR818
+#if USE_SENSOR_XBR818 || USE_SENSOR_RC2417
 typedef struct {
 	u16 delay;
 	u8  thres;
+#if USE_SENSOR_RC2417
+	u8 zone1_m_thres;
+	u8 zone1_s_thres;
+	u8 zone2_m_thres;
+	u8 zone2_s_thres;
+	u8 zone3_m_thres;
+	u8 zone3_s_thres;
+	u8 trith;
+#endif
 } zcl_occupancy_save_t;
 #endif
 

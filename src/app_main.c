@@ -46,6 +46,9 @@
 #if USE_SENSOR_XBR818
 #include "sensor_xbr818.h"
 #endif
+#if USE_SENSOR_RC2417
+#include "sensor_rc2417.h"
+#endif
 #if (BOARD == BOARD_ZG223Z)
 #include "sensors_zg223z.h"
 #endif
@@ -511,6 +514,9 @@ void user_app_init(void)
 
 #if USE_SENSOR_XBR818
 	xbr818_init();
+#endif
+#if USE_SENSOR_RC2417
+	rc2417_init();
 #endif
 	init_sensor();
 

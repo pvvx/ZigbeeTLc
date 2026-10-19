@@ -551,6 +551,7 @@ class CustomIlluminanceLevelSensing(CustomCluster, IlluminanceLevelSensing):
 (
 	QuirkBuilder("Sonoff", "ZG-204ZV1-z")
 	.applies_to("Sonoff", "ZG-204ZV2-z")
+	.applies_to("Sonoff", "ZG-204ZS-z")
 	.replaces(CustomIlluminanceLevelSensing, endpoint_id=1)
 	.sensor(
 		IlluminanceLevelSensing.AttributeDefs.level_status.name,

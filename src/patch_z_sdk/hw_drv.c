@@ -26,6 +26,9 @@
 #include "tl_common.h"
 #include "battery.h"
 #include "ext_ota.h"
+#if USE_SENSOR_RC2417
+#include "sensor_rc2417.h"
+#endif
 
 extern void drv_calib_adc_verf(void);
 /*
@@ -112,9 +115,14 @@ void _gpio_init(int anaRes_init_en) {
 	analog_write(areg_gpio_pb_ie, 	(PB0_INPUT_ENABLE<<0) 	| (PB1_INPUT_ENABLE<<1)	| (PB2_INPUT_ENABLE<<2)	| (PB3_INPUT_ENABLE<<3) |
 									(PB4_INPUT_ENABLE<<4)	| (PB5_INPUT_ENABLE<<5) | (PB6_INPUT_ENABLE<<6)	| (PB7_INPUT_ENABLE<<7) );
 	//dataO
+#if USE_SENSOR_RC2417
+	u8 pb5_out = rc2417_is_powered() ? 0 : PB5_DATA_OUT;
+#else
+	u8 pb5_out = PB5_DATA_OUT;
+#endif
 	reg_gpio_pb_out =
 		(PB0_DATA_OUT<<0)	| (PB1_DATA_OUT<<1)	| (PB2_DATA_OUT<<2)	| (PB3_DATA_OUT<<3) |
-		(PB4_DATA_OUT<<4)	| (PB5_DATA_OUT<<5)	| (PB6_DATA_OUT<<6)	| (PB7_DATA_OUT<<7) ;
+		(PB4_DATA_OUT<<4)	| (pb5_out<<5)	| (PB6_DATA_OUT<<6)	| (PB7_DATA_OUT<<7) ;
 	//oen
 	reg_gpio_pb_oen =
 		((PB0_OUTPUT_ENABLE?0:1)<<0)	| ((PB1_OUTPUT_ENABLE?0:1)<<1) | ((PB2_OUTPUT_ENABLE?0:1)<<2)	| ((PB3_OUTPUT_ENABLE?0:1)<<3) |
@@ -184,8 +192,13 @@ void _gpio_init(int anaRes_init_en) {
 							(PULL_WAKEUP_SRC_PB2<<4) |
 							(PULL_WAKEUP_SRC_PB3<<6));
 
+#if USE_SENSOR_RC2417
+		u8 pb5_pull = rc2417_is_powered() ? PM_PIN_PULLDOWN_100K : PULL_WAKEUP_SRC_PB5;
+#else
+		u8 pb5_pull = PULL_WAKEUP_SRC_PB5;
+#endif
 		analog_write (0x11,  PULL_WAKEUP_SRC_PB4 |
-							(PULL_WAKEUP_SRC_PB5<<2) |
+							(pb5_pull<<2) |
 							(PULL_WAKEUP_SRC_PB6<<4) |
 							(PULL_WAKEUP_SRC_PB7<<6));
 
