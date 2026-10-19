@@ -68,9 +68,13 @@ Power configuration (ClusterID: 0x0001), Battery Percentage Remaining (Attr: 0x0
 Temperature Measurement (ClusterID: 0x0402), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 10 (0.1°).<br>
 Relative Humidity Measurement (ClusterID: 0x0405), Measured Value (Attr: 0x0000). Min interval 30 sec, Max interval 180 sec, Tolerance 50 (0.5%).
 
+
+* To create and edit your own Quirk, use the “[ZHA Quirk Builder](https://github.com/faronov/zha-quirk-builder)”.
+
+
 ## Zigbee OTA
 
-[OTA update in ZHA](https://github.com/pvvx/ZigbeeTLc/issues/7)
+To update firmware in ZHA, you can use the “[ZHA Firmware Manager](https://github.com/ssp97/zha-firmware-manager)”.
 
 Before flashing the firmware, check the compliance of the “Manufacturer Code” and “Image Type” between the OTA file and those issued by the Zigbee device.
 
@@ -89,10 +93,6 @@ Sample: "1141-020a-01233001-Z03MMC.zigbee"
 
 * [ZigbeeTLc Index Configurator for Zigbee OTA](https://pvvx.github.io/ATC_MiThermometer/ZigbeeTlcIdxOTA.html)
 
-## Display decimal places for temperature, humidity and battery charge in ZHA.
-
-[ZHA patch for more precision display of data for all Zigbee devices.](https://github.com/pvvx/ZigbeeTLc/issues/6)
-
 ## Indication on LCD screen
 
 A solid "BT" icon indicates a connection loss or the thermometer is not registered with the Zigbee network.
@@ -104,10 +104,6 @@ The flashing "BT" icon is called by the "identify" command.
 ## Setting offsets for temperature and humidity, turn off the display, measurement interval.
 
 [ZHA: Setting offsets for temperature and humidity, turn off the display, measurement interval](https://github.com/pvvx/ZigbeeTLc/issues/30)
-
-## Change the device name
-
-[ZHA: Change the device name](https://github.com/pvvx/ZigbeeTLc/issues/84)
 
 ## Current additions
 
@@ -191,7 +187,7 @@ The flashing "BT" icon is called by the "identify" command.
 
 39. Ver 0.1.3.9. Added [TS0201_TZ3000_dnpd6ayp](https://pvvx.github.io/TS0201_TZ3000_dnpd6ayp), HOBEIAN [ZG-223Z](https://pvvx.github.io/ZG-223Z). Modification of the firmware relocation code during startup post Tuya.
 
-40. Ver 0.1.4.0. Added 3 variants for [ZG-204ZV](https://pvvx.github.io/ZG-204ZV/). Modification of the reporting function. Update zhaquirks:zigbeetlc.py. Fixed EPD reset for CGG1. Added TH03_ZBPS1.0 ("Zbeacon TH01"), ZBEACON-TH01 v2.0 PCB.
+40. Ver 0.1.4.0. Added 3 variants for [ZG-204ZV](https://pvvx.github.io/ZG-204ZV/). Modification of the reporting function. Update zhaquirks:zigbeetlc.py. Fixed EPD reset for CGG1. Added TH03_ZBPS1.0 ("Zbeacon TH01"), ZBEACON-TH01 v2.0 PCB, ZG-204ZS/ZG-204ZM.
 
 
 ## Make
