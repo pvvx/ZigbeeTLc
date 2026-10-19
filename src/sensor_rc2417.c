@@ -171,7 +171,7 @@ u8 rc2417_is_powered(void) {
 }
 
 void rc2417_init(void) {
-	// Configure power gate pin (PB4) as output, set HIGH (OFF)
+	// Configure power gate pin (PB5) as output, set HIGH (OFF)
 	gpio_set_func(RC2417_PWR_PIN, AS_GPIO);
 	gpio_set_input_en(RC2417_PWR_PIN, 0);
 	gpio_set_output_en(RC2417_PWR_PIN, 1);

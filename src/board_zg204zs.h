@@ -12,8 +12,6 @@
 
 #if (BOARD == BOARD_ZG204ZS)
 
-//#define SWS_PRINTF_MODE	1
-
 #define DEV_SERVICES (SERVICE_ZIGBEE | SERVICE_OTA | SERVICE_PIR | SERVICE_ILLUMI | SERVICE_LED)
 
 /* Pin assignments for ZG-204ZS V5.2 / ZG-204ZM:
@@ -84,7 +82,6 @@
 #define PD4_FUNC			AS_GPIO
 #define PD4_OUTPUT_ENABLE	0
 #define PD4_INPUT_ENABLE	1
-//#define PULL_WAKEUP_SRC_PD4	PM_PIN_PULLDOWN_100K
 
 // RC2417 mmWave Radar
 #define USE_SENSOR_RC2417	1
@@ -120,7 +117,6 @@
 
 // illuminance sensor
 #define USE_SENSOR_LX		1 // =1 - ADC = Ur, =2 - ADC = Us, =3 ZG-223Z
-//#define GPIO_ADC_PULL		PM_PIN_PULLUP_10K // external pulldown on PCB
 
 #define ADC_LX_ZERO_DEF		0
 #define ADC_LX_COEF_DEF		3000
