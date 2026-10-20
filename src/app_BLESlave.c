@@ -730,6 +730,10 @@ void user_ble_init(bool isRetention){
 		tbl_scanRsp.name[0] = 'T';
 		tbl_scanRsp.name[1] = 'H';
 		tbl_scanRsp.name[2] = '3';
+#elif BOARD == BOARD_KCTW1Z
+		tbl_scanRsp.name[0] = 'K';
+		tbl_scanRsp.name[1] = 'C';
+		tbl_scanRsp.name[2] = 'W';
 #else
 #error "DEVICE_TYPE = ?"
 #endif

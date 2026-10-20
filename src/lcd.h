@@ -37,6 +37,7 @@
 #define BU9792AFUV_I2C_ADDR		0x3E // BU9792AFUV
 #define BL55028_I2C_ADDR		0x3E // BL55028
 #define BL55072_I2C_ADDR		0x3E
+#define VKL144B_I2C_ADDR		0x3E
 
 typedef enum {
 	TEMP_SYMBOL_NONE = 0,	// "  "

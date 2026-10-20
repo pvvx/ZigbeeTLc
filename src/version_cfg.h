@@ -106,7 +106,8 @@
 #define BOARD_ZBEACON2_TH01_SHTC3	58 // ZBEACON-TH01-v2 PCB variant: SHTC3, SDA/SCL swapped, no TX pad (TS0201_TZ3000_rdhukkmi)
 #define BOARD_TH03_ZBPS				59 // Tuya TH03 Zigbee LCD, PCB TH03_ZBPS1.0, TLSR8656, LCD VKL060, GXHTV4 (SHT4x)
 #define BOARD_ZG204ZS				60 // ZigBee only, HOBEIAN/Tuya ZG-204ZS / ZG-204ZM PIR + mmWave Radar RC2417 + LUX
-//#define DEVICE_NEXT			61 // ?
+#define BOARD_KCTW1Z				61 // Tuya KCTW1Z / Moes ZSS-KB-TH, ZigBee LCD, SHT40, CR2032
+//#define DEVICE_NEXT			62 // ?
 
 /* Board define */
 #ifndef BOARD

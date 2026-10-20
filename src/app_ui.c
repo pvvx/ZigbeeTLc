@@ -196,7 +196,7 @@ void task_keys(void) {
 			drv_pm_longSleep(PM_SLEEP_MODE_DEEPSLEEP, PM_WAKEUP_SRC_TIMER, 3*1000);
 		}
 		else if((g_sensorAppCtx.key_on_flag & 2)
-		 && clock_time_exceed(g_sensorAppCtx.keyPressedTime, 6900 * 1000)) { // 7 sec
+		 && clock_time_exceed(g_sensorAppCtx.keyPressedTime, BUTTON_ZIGBEE_RESET_MS * 1000)) { // 7 sec
 			g_sensorAppCtx.key_on_flag &= ~2;
 			light_on();
 #if USE_UPDATE_POLLRATE

@@ -103,6 +103,7 @@ class CustomUserInterfaceCluster(CustomCluster, UserInterface):
 	.applies_to("Qingping", "CGG1N-z")
 	.applies_to("Tuya", "TH05-z")
 	.applies_to("ZBeacon", "TH03-ZBPS-z")
+	.applies_to("Tuya", "KCTW1Z-z")
 	.removes(CustomUserInterfaceCluster.cluster_id, cluster_type=ClusterType.Client)
 	.adds(CustomUserInterfaceCluster)
 	.number(
