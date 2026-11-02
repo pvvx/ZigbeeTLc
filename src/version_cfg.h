@@ -107,7 +107,8 @@
 #define BOARD_TH03_ZBPS				59 // Tuya TH03 Zigbee LCD, PCB TH03_ZBPS1.0, TLSR8656, LCD VKL060, GXHTV4 (SHT4x)
 #define BOARD_ZG204ZS				60 // ZigBee only, HOBEIAN/Tuya ZG-204ZS / ZG-204ZM PIR + mmWave Radar RC2417 + LUX
 #define BOARD_KCTW1Z				61 // Tuya KCTW1Z / Moes ZSS-KB-TH, ZigBee LCD, SHT40, CR2032
-//#define DEVICE_NEXT			62 // ?
+//#define BOARD_MJWSD07MMC			62 // Xiaomi Bloetooth Temp & Humidity & CO2 BLE Sensor
+//#define DEVICE_NEXT			63 // ?
 
 /* Board define */
 #ifndef BOARD
