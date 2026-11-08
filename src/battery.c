@@ -29,12 +29,16 @@ _BAT_SPEED_CODE_SEC_
 __attribute__((optimize("-Os")))
 void battery_detect(bool startup_flg)
 {
+	static u8 low_cnt;
 	u16 battery_level = BATTERY_LOW_POWER;
 	if(startup_flg)
 		battery_level = BATTERY_SAFETY_THRESHOLD;
 	adc_channel_init(SHL_ADC_VBAT);
 	measured_battery.mv = get_adc_mv(0);
 	if(measured_battery.mv < battery_level){
+		// runtime: 3 consecutive low samples
+		if(!startup_flg && ++low_cnt < 3)
+			return;
 #if PM_ENABLE
 #if USE_DISPLAY
 		display_off();
@@ -53,6 +57,7 @@ void battery_detect(bool startup_flg)
 		SYSTEM_RESET();
 #endif
 	}
+	low_cnt = 0;
 	measured_battery.summ += measured_battery.mv;
 	measured_battery.cnt++;
 	if(measured_battery.cnt >= (1<<BAT_AVERAGE_COUNT_SHL)) {
