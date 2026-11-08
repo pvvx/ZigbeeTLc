@@ -234,6 +234,14 @@ void task_keys(void) {
 			g_sensorAppCtx.key_on_flag = 0xff;
 			g_sensorAppCtx.keyPressedTime = clock_time();
 			app_set_thb_report();
+#if !USE_BLE
+			if(zb_isDeviceJoinedNwk()) {
+				app_fastPollWindow(30*1000);
+#ifdef ZCL_POLL_CTRL
+				sensorDevice_zclCheckInCmdSend();
+#endif
+			}
+#endif
 #if USE_BLE
 			if(blt_state == BLS_LINK_STATE_ADV) {
 				set_adv_time(ADV_INTERVAL_500MS);

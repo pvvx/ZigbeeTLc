@@ -18,6 +18,7 @@
 #include "app_main.h"
 #include "app_ui.h"
 #include "lcd.h"
+#include "reporting.h"
 
 #ifdef ZCL_OTA
 extern ota_ctx_t g_otaCtx;
@@ -173,6 +174,7 @@ void zb_bdbInitCb(u8 status, u8 joinedNetwork){
 #ifdef ZCL_POLL_CTRL
 			sensorDevice_zclCheckInStart();
 #endif
+			app_fastPollWindow(30*1000);
 		} else {
 			u16 jitter = 0;
 			do {
@@ -225,9 +227,58 @@ void set_PollRate(void) {
 	}
 	zb_setPollRate(g_zcl_thermostatUICfgAttrs.measureInterval * 4 * POLL_RATE_QUARTERSECONDS);
 #else
-	zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
+	app_pollRateApply();
 #endif
 	sws_printf("set_PollRate: %dqt\n", g_zcl_pollCtrlAttrs.longPollInterval);
+}
+
+static ev_timer_event_t *timerFastPollEvt;
+
+/*********************************************************************
+ * @fn      app_pollRateApply
+ *
+ * @brief   Set poll rate: OTA > PollControl fast poll > app fast poll > long poll
+ */
+void app_pollRateApply(void) {
+	u32 rate;
+#ifdef ZCL_OTA
+	if(zcl_attr_imageUpgradeStatus == IMAGE_UPGRADE_STATUS_DOWNLOAD_IN_PROGRESS)
+		rate = QUEUE_POLL_RATE;
+	else
+#endif
+#ifdef ZCL_POLL_CTRL
+	if(poll_ctrl_wrk.isFastPollMode)
+		rate = g_zcl_pollCtrlAttrs.shortPollInterval * POLL_RATE_QUARTERSECONDS;
+	else
+#endif
+	if(timerFastPollEvt)
+		rate = 1000;
+	else
+		rate = g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS;
+	zb_setPollRate(rate);
+}
+
+static s32 app_fastPollTimerCb(void *arg) {
+	timerFastPollEvt = NULL;
+	app_pollRateApply();
+	return -1;
+}
+
+/*********************************************************************
+ * @fn      app_fastPollWindow
+ *
+ * @brief   Poll every second for 'ms'
+ */
+void app_fastPollWindow(u32 ms) {
+	if(!zb_isDeviceJoinedNwk())
+		return;
+	if(timerFastPollEvt) {
+		if(timerFastPollEvt->timeout >= ms)
+			return;
+		TL_ZB_TIMER_CANCEL(&timerFastPollEvt);
+	}
+	timerFastPollEvt = TL_ZB_TIMER_SCHEDULE(app_fastPollTimerCb, NULL, ms);
+	app_pollRateApply();
 }
 
 #if USE_UPDATE_POLLRATE
@@ -298,6 +349,8 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 #if	USE_DISPLAY
 			show_connected_symbol(true);
 #endif
+			app_fastPollWindow(60*1000);
+			app_set_thb_report();
 #if FIND_AND_BIND_SUPPORT
 			//start Finding & Binding
 			if (!g_switchAppCtx.bdbFBTimerEvt) {
@@ -406,7 +459,7 @@ void sensorDevice_otaProcessMsgHandler(u8 evt, u8 status)
 {
 	if(evt == OTA_EVT_START){
 		if(status == ZCL_STA_SUCCESS){
-			zb_setPollRate(QUEUE_POLL_RATE);
+			app_pollRateApply();
 		}else{
 
 		}

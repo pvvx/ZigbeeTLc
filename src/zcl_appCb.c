@@ -657,13 +657,9 @@ void sensorDevice_zclCheckInStart(void)
 
 void sensorDevice_zclSetFastPollMode(bool fastPollMode)
 {
-	zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
-
 	poll_ctrl_wrk.isFastPollMode = fastPollMode;
-	u32 pollRate = fastPollMode ?
-			pPollCtrlAttr->shortPollInterval : pPollCtrlAttr->longPollInterval;
 
-	zb_setPollRate(pollRate * POLL_RATE_QUARTERSECONDS);
+	app_pollRateApply();
 }
 
 s32 sensorDevice_zclFastPollTimeoutCb(void *arg)
@@ -767,7 +763,7 @@ status_t test_set_measure_longpoll_interval(u32 measureInterval) {
 #endif
 	sws_printf("Set measureInterval: %d sec\n", measureInterval);
 	g_zcl_pollCtrlAttrs.longPollInterval = measureInterval << 2; // in 1/4 sec
-	zb_setPollRate(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS);
+	app_pollRateApply();
 #if ZCL_THERMOSTAT_UI_CFG
 	g_zcl_thermostatUICfgAttrs.measureInterval = (u8)measureInterval;
 #elif defined(ZCL_ILLUMINANCE_LEVEL_SENSING)
