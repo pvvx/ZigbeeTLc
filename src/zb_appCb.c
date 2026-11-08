@@ -214,7 +214,7 @@ ev_timer_event_t *timer_reinit_pollRate;
  * @return  None
  */
 void set_PollRate(void) {
-#if	!USE_BLE && USE_DISPLAY
+#if	!USE_BLE
 	if(g_sensorAppCtx.timerTaskEvt) {
 		TL_ZB_TIMER_CANCEL(&g_sensorAppCtx.timerTaskEvt);
 	}
@@ -320,7 +320,7 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 #if	USE_DISPLAY
 			show_connected_symbol(false);
 			if(!g_sensorAppCtx.timerTaskEvt)
-				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_timer_cb, NULL, READ_SENSOR_TIMER_MS);
 #endif
 #endif
 			break;
@@ -344,7 +344,7 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 #if	!USE_BLE && USE_DISPLAY
 			show_connected_symbol(false);
 			if(!g_sensorAppCtx.timerTaskEvt)
-				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_timer_cb, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		case BDB_COMMISSION_STA_REJOIN_FAILURE:
@@ -361,7 +361,7 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 #if	!USE_BLE && USE_DISPLAY
 			show_connected_symbol(false);
 			if(!g_sensorAppCtx.timerTaskEvt)
-				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_task, NULL, READ_SENSOR_TIMER_MS);
+				g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_timer_cb, NULL, READ_SENSOR_TIMER_MS);
 #endif
 			break;
 		default:
