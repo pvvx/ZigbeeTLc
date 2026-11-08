@@ -70,7 +70,6 @@ status_t app_chk_report(u16 uptime_sec) {
  */
 			if(pEntry->used
 				&& pEntry->maxInterval != 0xFFFF
-				&& zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)
 			    ) {
 				// used
 				flg_chk_attr = false;
@@ -99,9 +98,7 @@ status_t app_chk_report(u16 uptime_sec) {
 				if(flg_chk_attr || flg_report) {
 					pAttrEntry = zcl_findAttribute(pEntry->endPoint, pEntry->clusterID, pEntry->attrID);
 					if(!pAttrEntry){
-						// should not happen.
-						ZB_EXCEPTION_POST(SYS_EXCEPTTION_ZB_ZCL_ENTRY);
-						return ZCL_STA_FAILURE;
+						continue;
 					}
 					if(flg_chk_attr) {
 						// report pAttrEntry
@@ -135,7 +132,14 @@ status_t app_chk_report(u16 uptime_sec) {
 
 							TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
-				            dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+							if(zb_bindingTblSearched(pEntry->clusterID, pEntry->endPoint)) {
+								dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+							} else {
+								// no binding: report to the coordinator
+								dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+								dstEpInfo.dstAddr.shortAddr = 0x0000;
+								dstEpInfo.dstEp = 1;
+							}
 				            dstEpInfo.profileId = pEntry->profileID;
 
 				            if(zcl_sendReportCmd(pEntry->endPoint,

@@ -618,7 +618,13 @@ void sensorDevice_zclCheckInCmdSend(void)
 	epInfo_t dstEpInfo;
 	TL_SETSTRUCTCONTENT(dstEpInfo, 0);
 
-	dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+	if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, SENSOR_DEVICE_ENDPOINT)) {
+		dstEpInfo.dstAddrMode = APS_DSTADDR_EP_NOTPRESETNT;
+	} else {
+		// no binding: check in with the coordinator
+		dstEpInfo.dstAddrMode = APS_SHORT_DSTADDR_WITHEP;
+		dstEpInfo.dstAddr.shortAddr = 0x0000;
+	}
 	dstEpInfo.dstEp = SENSOR_DEVICE_ENDPOINT;
 	dstEpInfo.profileId = HA_PROFILE_ID;
 
@@ -642,7 +648,7 @@ s32 sensorDevice_zclCheckInTimerCb(void *arg)
 
 void sensorDevice_zclCheckInStart(void)
 {
-	if(zb_bindingTblSearched(ZCL_CLUSTER_GEN_POLL_CONTROL, SENSOR_DEVICE_ENDPOINT)){
+	if(zb_isDeviceJoinedNwk()){
 		zcl_pollCtrlAttr_t *pPollCtrlAttr = zcl_pollCtrlAttrGet();
 
 		if(!poll_ctrl_wrk.zclCheckInTimerEvt){
