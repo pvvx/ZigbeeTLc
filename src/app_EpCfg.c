@@ -590,7 +590,7 @@ zcl_pollCtrlAttr_t g_zcl_pollCtrlAttrs =
 		.fastPollTimeout		= 10*4,  // 10 sec
 		.chkInIntervalMin		= 0,
 		.longPollIntervalMin	= READ_SENSOR_TIMER_MIN_SEC*4, // 3 sec
-		.fastPollTimeoutMax		= 0 // 0 sec
+		.fastPollTimeoutMax		= 60*4 // 60 sec
 };
 
 const zclAttrInfo_t pollCtrl_attrTbl[] =

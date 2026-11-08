@@ -174,6 +174,8 @@ void sensorDevice_zclWriteReqCmd(u16 clusterId, zclWriteCmd_t *pWriteReqCmd)
 	 if(clusterId == ZCL_CLUSTER_GEN_POLL_CONTROL){
 		for(int i = 0; i < numAttr; i++) {
 			if(attr[i].attrID == ZCL_ATTRID_CHK_IN_INTERVAL) {
+				if(poll_ctrl_wrk.zclCheckInTimerEvt)
+					TL_ZB_TIMER_CANCEL(&poll_ctrl_wrk.zclCheckInTimerEvt);
 				sensorDevice_zclCheckInStart();
 			} else if(attr[i].attrID == ZCL_ATTRID_LONG_POLL_INTERVAL) {
 				test_set_measure_longpoll_interval(g_zcl_pollCtrlAttrs.longPollInterval >> 2);
@@ -790,7 +792,8 @@ static status_t sensorDevice_zclPollCtrlSetShortPollIntervalCmdHandler(zcl_setSh
 	&& (pCmd->newShortPollInterval <= pPollCtrlAttr->longPollInterval)
 		){
 		pPollCtrlAttr->shortPollInterval = pCmd->newShortPollInterval;
-		zb_setPollRate(pPollCtrlAttr->shortPollInterval * POLL_RATE_QUARTERSECONDS);
+		if(poll_ctrl_wrk.isFastPollMode)
+			zb_setPollRate(pPollCtrlAttr->shortPollInterval * POLL_RATE_QUARTERSECONDS);
 	}else{
 		return ZCL_STA_INVALID_VALUE;
 	}
