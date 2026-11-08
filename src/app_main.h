@@ -41,6 +41,7 @@ typedef struct{
 
 	u8  reportFlg;
 
+	u8  linkDown;	// =1: network lost, rejoin in progress
 #if	!USE_BLE && USE_DISPLAY
 	ev_timer_event_t *timerTaskEvt;
 #endif
@@ -335,6 +336,7 @@ extern poll_ctrl_wrk_t poll_ctrl_wrk;
 #endif
 
 void set_PollRate(void);
+void app_rejoinNow(void);
 
 #if USE_UPDATE_POLLRATE
 void up_PollRate(u32 period_ms);

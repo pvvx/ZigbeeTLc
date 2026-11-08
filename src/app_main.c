@@ -348,7 +348,7 @@ s32 sensors_task(void *arg) {
 	task_lcd();
 #endif
 #if !USE_BLE && USE_DISPLAY
-	if(zb_isDeviceJoinedNwk())
+	if(zb_isDeviceJoinedNwk() && !g_sensorAppCtx.linkDown)
 			return -1; // delete timer
 #endif
 	return 0;
