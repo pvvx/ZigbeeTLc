@@ -86,6 +86,4 @@ copy /Y index.json ..\bin\zty0201_tuya2z.json
 
 del *.zigbee
 del index.json
-
-
-
+@exit

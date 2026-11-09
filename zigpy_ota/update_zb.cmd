@@ -7,6 +7,7 @@ copy /Y index.json ..\bin_zb\index%1.json
 
 del *.zigbee
 del index.json
+@exit
 
 
 
