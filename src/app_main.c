@@ -351,8 +351,17 @@ s32 sensors_task(void *arg) {
 	if(zb_isDeviceJoinedNwk() && !g_sensorAppCtx.linkDown)
 			return -1; // delete timer
 #endif
+
+/* Clears the handle before the timer is deleted: the timer slot can be reused */
+s32 sensors_timer_cb(void *arg) {
+	sensors_task(arg);
+	if(zb_isDeviceJoinedNwk()) {
+		g_sensorAppCtx.timerTaskEvt = NULL;
+		return -1; // delete timer
+	}
 	return 0;
 }
+#endif
 
 /**********************************************************************
  * FUNCTIONS
@@ -429,6 +438,12 @@ void app_task(void)
 		} else
 #endif // USE_SENSOR_TH
 		{
+			// no timer: the device would sleep until a button press
+			if(!g_sensorAppCtx.timerTaskEvt) {
+				ev_timer_event_t *n = ev_timer_nearestGet();
+				if(!n || n->timeout > SENSORS_TIMER_MS + 1000)
+					g_sensorAppCtx.timerTaskEvt = TL_ZB_TIMER_SCHEDULE(sensors_timer_cb, NULL, SENSORS_TIMER_MS);
+			}
 			sws_buffer_flush();
 			drv_pm_lowPowerEnter();
 		}
