@@ -320,7 +320,7 @@ static s32 app_fastPollTimerCb(void *arg) {
  * @brief   Poll every second for 'ms'
  */
 void app_fastPollWindow(u32 ms) {
-	if(!zb_isDeviceJoinedNwk())
+	if(!zb_isDeviceJoinedNwk() || g_sensorAppCtx.linkDown)
 		return;
 	if(timerFastPollEvt) {
 		if(timerFastPollEvt->timeout >= ms)
@@ -404,6 +404,11 @@ void zb_bdbCommissioningCb(u8 status, void *arg){
 #endif
 			app_fastPollWindow(60*1000);
 			app_set_thb_report();
+#if !USE_BLE
+			if(timerDevAnnceEvt)
+				TL_ZB_TIMER_CANCEL(&timerDevAnnceEvt);
+			timerDevAnnceEvt = TL_ZB_TIMER_SCHEDULE(app_devAnnceTimerCb, NULL, 500);
+#endif
 #if FIND_AND_BIND_SUPPORT
 			//start Finding & Binding
 			if (!g_switchAppCtx.bdbFBTimerEvt) {

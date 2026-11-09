@@ -235,11 +235,13 @@ void task_keys(void) {
 			g_sensorAppCtx.keyPressedTime = clock_time();
 			app_set_thb_report();
 #if !USE_BLE
-			if(zb_isDeviceJoinedNwk()) {
+			if(zb_isDeviceJoinedNwk() && !g_sensorAppCtx.linkDown) {
 				app_fastPollWindow(30*1000);
 #ifdef ZCL_POLL_CTRL
 				sensorDevice_zclCheckInCmdSend();
 #endif
+			} else if(!zb_isDeviceFactoryNew()) {
+				app_rejoinNow();
 			}
 #endif
 #if USE_BLE
