@@ -41,6 +41,7 @@ typedef struct{
 
 	u8  reportFlg;
 
+	u8  linkDown;	// =1: network lost, rejoin in progress
 #if	!USE_BLE && USE_DISPLAY
 	ev_timer_event_t *timerTaskEvt;
 #endif
@@ -347,6 +348,9 @@ void up_PollRate(u32 period_ms);
 
 void scan_task(void);
 s32 sensors_task(void *arg);
+#if !USE_BLE
+s32 sensors_timer_cb(void *arg);
+#endif
 void read_sensor_and_show(void);
 #if	USE_DISPLAY
 void show_th(void);
