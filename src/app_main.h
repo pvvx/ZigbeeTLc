@@ -336,7 +336,11 @@ extern poll_ctrl_wrk_t poll_ctrl_wrk;
 #endif
 
 void set_PollRate(void);
-void app_rejoinNow(void);
+void app_pollRateApply(void);
+void app_fastPollWindow(u32 ms);
+#ifdef ZCL_POLL_CTRL
+void sensorDevice_zclCheckInCmdSend(void);
+#endif
 
 #if USE_UPDATE_POLLRATE
 void up_PollRate(u32 period_ms);
