@@ -347,14 +347,9 @@ s32 sensors_task(void *arg) {
 #ifdef USE_EPD
 	task_lcd();
 #endif
-	return 0;
-}
-
-#if !USE_BLE
-#if USE_DISPLAY
-#define SENSORS_TIMER_MS	(g_zcl_pollCtrlAttrs.longPollInterval * POLL_RATE_QUARTERSECONDS)
-#else
-#define SENSORS_TIMER_MS	(600 * 1000) // only keeps a wake-up timer
+#if !USE_BLE && USE_DISPLAY
+	if(zb_isDeviceJoinedNwk() && !g_sensorAppCtx.linkDown)
+			return -1; // delete timer
 #endif
 
 /* Clears the handle before the timer is deleted: the timer slot can be reused */
